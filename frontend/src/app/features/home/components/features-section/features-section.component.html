@@ -1,0 +1,89 @@
+<section id="features" class="features">
+  <app-section-aura tone="sand" />
+  <app-section-heading
+    appReveal
+    eyebrow="Features"
+    title="Everything included, out of the box"
+    accent="#8b5e34"
+  />
+
+  <div class="features__grid" appReveal revealStagger>
+    @for (feature of content.features; track feature.title) {
+      <article class="features__card">
+        <div class="features__icon" [style.--accent]="feature.accent">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            [attr.stroke]="feature.accent"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            @switch (feature.icon) {
+              @case ('eye') {
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              }
+              @case ('phone') {
+                <rect x="7" y="2" width="10" height="20" rx="2"></rect>
+                <line x1="11" y1="18" x2="13" y2="18"></line>
+              }
+              @case ('link') {
+                <path d="M9 15l6-6"></path>
+                <path d="M13 6l1-1a3 3 0 114 4l-1 1"></path>
+                <path d="M11 18l-1 1a3 3 0 11-4-4l1-1"></path>
+              }
+              @case ('gallery') {
+                <rect x="4" y="5" width="12" height="12" rx="1.5"></rect>
+                <rect x="8" y="9" width="12" height="12" rx="1.5"></rect>
+              }
+              @case ('music') {
+                <path d="M9 18V5l10-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="16" cy="16" r="3"></circle>
+              }
+              @case ('clock') {
+                <circle cx="12" cy="13" r="8"></circle>
+                <path d="M12 9v4l3 2"></path>
+                <path d="M9 2h6"></path>
+              }
+              @case ('pin') {
+                <path
+                  d="M12 21s-7-6.2-7-11.5A7 7 0 0112 2a7 7 0 017 7.5C19 14.8 12 21 12 21z"
+                ></path>
+                <circle cx="12" cy="9.5" r="2.4"></circle>
+              }
+              @case ('chat') {
+                <path d="M4 4h16v14H8l-4 4V4z"></path>
+                <path d="M8 10l3 2 5-4"></path>
+              }
+              @case ('users') {
+                <circle cx="9" cy="8" r="3"></circle>
+                <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"></path>
+                <circle cx="17" cy="9" r="2.4"></circle>
+                <path d="M15.5 14a5 5 0 014.5 5"></path>
+              }
+              @case ('globe') {
+                <circle cx="12" cy="12" r="9"></circle>
+                <ellipse cx="12" cy="12" rx="4" ry="9"></ellipse>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+              }
+              @case ('bolt') {
+                <path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"></path>
+              }
+              @case ('search') {
+                <circle cx="10" cy="10" r="6.5"></circle>
+                <line x1="15" y1="15" x2="20" y2="20"></line>
+              }
+            }
+          </svg>
+        </div>
+        <h3 class="features__title">{{ feature.title }}</h3>
+        <p class="features__desc">{{ feature.desc }}</p>
+      </article>
+    }
+  </div>
+</section>

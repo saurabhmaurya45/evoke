@@ -1,0 +1,81 @@
+@if (store.schema(); as schema) {
+  <div class="editor">
+    <header class="editor__bar">
+      <button type="button" class="editor__back" (click)="goBack()" aria-label="Back to preview">
+        <span aria-hidden="true">←</span>
+        <span class="editor__back-text">Back</span>
+      </button>
+
+      <div class="editor__title">
+        <span class="editor__eyebrow">Editing</span>
+        <h1 class="editor__name">{{ schema.name }}</h1>
+      </div>
+
+      <span class="editor__save" aria-live="polite">
+        @switch (saveState()) {
+          @case ('saving') {
+            Saving…
+          }
+          @case ('saved') {
+            Draft saved
+          }
+        }
+      </span>
+
+      <nav class="editor__tabs" aria-label="Editor panes">
+        <button
+          type="button"
+          class="editor__tab"
+          [class.editor__tab--active]="pane() === 'edit'"
+          (click)="setPane('edit')"
+        >
+          Edit
+        </button>
+        <button
+          type="button"
+          class="editor__tab"
+          [class.editor__tab--active]="pane() === 'preview'"
+          (click)="setPane('preview')"
+        >
+          Preview
+        </button>
+      </nav>
+
+      <button
+        type="button"
+        class="editor__publish"
+        [disabled]="!store.canPublish()"
+        [title]="store.canPublish() ? 'Publish your website' : 'Fill required fields first'"
+        (click)="publish()"
+      >
+        Publish
+      </button>
+    </header>
+
+    <div class="editor__panes" [attr.data-pane]="pane()">
+      <section class="editor__form" aria-label="Content form">
+        @if (store.missingRequired().length) {
+          <p class="editor__hint">
+            {{ store.missingRequired().length }} required field(s) left before you can publish.
+          </p>
+        }
+        <app-form-engine />
+      </section>
+
+      <section class="editor__preview" aria-label="Live preview">
+        <div class="editor__frame">
+          <app-template-renderer />
+        </div>
+      </section>
+    </div>
+  </div>
+} @else if (notFound()) {
+  <div class="editor__missing">
+    <h1>Template not found</h1>
+    <p>We couldn’t find a template to edit. Pick one from the gallery to get started.</p>
+  </div>
+} @else {
+  <div class="editor__missing">
+    <p>Loading template…</p>
+  </div>
+}

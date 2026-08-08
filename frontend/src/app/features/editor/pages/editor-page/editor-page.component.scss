@@ -1,0 +1,193 @@
+:host {
+  position: fixed;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 1.5rem;
+    border-bottom: 1px solid rgba(var(--glass-rgb), 0.16);
+    background: rgba(var(--glass-rgb), 0.04);
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font: inherit;
+    font-size: 0.82rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 0.6rem;
+    cursor: pointer;
+    color: var(--text);
+    border: 1px solid rgba(var(--glass-rgb), 0.2);
+    background: rgba(var(--glass-rgb), 0.05);
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+
+    &:hover {
+      background: rgba(201, 162, 39, 0.15);
+      transform: translateX(-2px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #c9a227;
+      outline-offset: 2px;
+    }
+  }
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__save {
+    margin-right: auto;
+    font-size: 0.78rem;
+    opacity: 0.6;
+    min-width: 6ch;
+  }
+
+  &__eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+
+  &__name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    margin: 0;
+  }
+
+  &__tabs {
+    display: none;
+    gap: 0.25rem;
+    padding: 0.2rem;
+    border-radius: 0.6rem;
+    background: rgba(var(--glass-rgb), 0.08);
+  }
+
+  &__tab {
+    font: inherit;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.9rem;
+    border: none;
+    border-radius: 0.45rem;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+
+    &--active {
+      background: var(--bg);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  &__publish {
+    font: inherit;
+    font-weight: 600;
+    padding: 0.55rem 1.25rem;
+    border-radius: 0.6rem;
+    border: none;
+    cursor: pointer;
+    color: #15120e;
+    background: linear-gradient(135deg, #e8c88a, #c9a227);
+    transition: opacity 0.2s ease;
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+  }
+
+  &__panes {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(340px, 42%) 1fr;
+    min-height: 0;
+  }
+
+  &__form {
+    overflow-y: auto;
+    padding: 1.5rem;
+    border-right: 1px solid rgba(var(--glass-rgb), 0.16);
+  }
+
+  &__hint {
+    margin: 0 0 1rem;
+    padding: 0.6rem 0.85rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    background: rgba(201, 123, 99, 0.14);
+    color: var(--text);
+  }
+
+  &__preview {
+    display: flex;
+    overflow: hidden;
+    padding: 1rem;
+    background: rgba(var(--glass-rgb), 0.03);
+  }
+
+  &__frame {
+    flex: 1;
+    height: 100%;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  }
+
+  &__missing {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    padding: 2rem;
+  }
+}
+
+// Collapse to tabbed panes on small screens.
+@media (max-width: 900px) {
+  .editor {
+    &__back-text {
+      display: none;
+    }
+
+    &__tabs {
+      display: flex;
+    }
+
+    &__panes {
+      grid-template-columns: 1fr;
+    }
+
+    &__form {
+      border-right: none;
+    }
+
+    &__panes[data-pane='edit'] .editor__preview {
+      display: none;
+    }
+
+    &__panes[data-pane='preview'] .editor__form {
+      display: none;
+    }
+  }
+}

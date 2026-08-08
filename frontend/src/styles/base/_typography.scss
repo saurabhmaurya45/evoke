@@ -1,0 +1,25 @@
+@use '../abstracts' as *;
+
+.font-serif {
+  font-family: $font-serif;
+}
+
+.font-sans {
+  font-family: $font-sans;
+}
+
+// Fluid display heading used across section titles.
+.display-heading {
+  font-family: $font-serif;
+  font-weight: $fw-bold;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+// Eyebrow label above section titles.
+.eyebrow {
+  font-size: 13px;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}

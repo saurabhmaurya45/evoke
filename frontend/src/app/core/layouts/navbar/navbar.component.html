@@ -1,0 +1,48 @@
+<nav class="nav" [class.nav--scrolled]="viewport.scrolled()" aria-label="Primary">
+  <div class="nav__bar">
+    <a class="nav__brand" [href]="href('hero')" aria-label="Evoke home">
+      <app-logo />
+    </a>
+
+    @if (!viewport.isMobile()) {
+      <ul class="nav__links">
+        @for (link of navLinks; track link.fragment) {
+          <li>
+            <a class="nav__link" [href]="href(link.fragment)">{{ link.label }}</a>
+          </li>
+        }
+      </ul>
+      <div class="nav__actions">
+        <app-theme-toggle />
+        <a class="nav__login" routerLink="/login">Log in</a>
+        <a class="nav__cta" routerLink="/signup" appMagnetic>Start Creating</a>
+      </div>
+    } @else {
+      <div class="nav__actions">
+        <app-theme-toggle />
+        <button
+          type="button"
+          class="nav__menu-btn"
+          [attr.aria-expanded]="mobileMenuOpen()"
+          aria-controls="mobile-menu"
+          aria-label="Toggle navigation menu"
+          (click)="toggleMobileMenu()"
+        >
+          <span aria-hidden="true">☰</span>
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (viewport.isMobile() && mobileMenuOpen()) {
+    <div class="nav__mobile" id="mobile-menu">
+      @for (link of navLinks; track link.fragment) {
+        <a class="nav__mobile-link" [href]="href(link.fragment)" (click)="closeMobileMenu()">
+          {{ link.label }}
+        </a>
+      }
+      <a class="nav__mobile-link nav__mobile-link--auth" routerLink="/login" (click)="closeMobileMenu()">Log in</a>
+      <a class="nav__mobile-cta" routerLink="/signup" (click)="closeMobileMenu()">Start Creating</a>
+    </div>
+  }
+</nav>

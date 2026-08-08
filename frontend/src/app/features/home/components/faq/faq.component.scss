@@ -1,0 +1,72 @@
+@use 'abstracts' as *;
+
+.faq {
+  max-width: $container-narrow;
+  margin-inline: auto;
+  padding: 80px 28px;
+  position: relative;
+  z-index: $z-content;
+}
+
+.faq__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq__item {
+  background: rgba(var(--glass-rgb), 0.04);
+  border: 1px solid rgba(var(--glass-rgb), 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.faq__heading {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.faq__trigger {
+  width: 100%;
+  text-align: left;
+  padding: 20px 24px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: $fw-semibold;
+  font-family: $font-sans;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.faq__icon {
+  flex-shrink: 0;
+  color: rgba(var(--text-rgb), 0.5);
+  transition: transform $transition-base;
+
+  .is-open & {
+    transform: rotate(45deg);
+  }
+}
+
+.faq__panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+
+  .is-open & {
+    max-height: 240px;
+  }
+}
+
+.faq__answer {
+  margin: 0;
+  padding: 0 24px 22px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: rgba(var(--text-rgb), 0.6);
+}

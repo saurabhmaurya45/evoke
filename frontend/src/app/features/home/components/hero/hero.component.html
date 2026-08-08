@@ -1,0 +1,106 @@
+<section id="hero" class="hero" #heroHost (mousemove)="onPointerMove($event, heroHost)">
+  <!-- Decorative parallax blobs -->
+  <div
+    class="hero__blob-layer"
+    [style.transform]="'translateY(' + parallax1() + 'px)'"
+    aria-hidden="true"
+  >
+    <div class="hero__blob hero__blob--1"></div>
+  </div>
+  <div
+    class="hero__blob-layer"
+    [style.transform]="'translateY(' + parallax2() + 'px)'"
+    aria-hidden="true"
+  >
+    <div class="hero__blob hero__blob--2"></div>
+  </div>
+  <div
+    class="hero__blob-layer"
+    [style.transform]="'translateY(' + parallax3() + 'px)'"
+    aria-hidden="true"
+  >
+    <div class="hero__blob hero__blob--3"></div>
+  </div>
+  <div class="hero__grid-mask" aria-hidden="true"></div>
+
+  <!-- Copy -->
+  <div class="hero__copy">
+    <div class="hero__badge">
+      <span class="hero__badge-dot" aria-hidden="true"></span>
+      The future of event invitations
+    </div>
+    <h1 class="hero__title">
+      Create Beautiful Invitation Websites
+      <span class="hero__title-accent">in Minutes</span>
+    </h1>
+    <p class="hero__lede">
+      Design personalized invitation websites for your special moments. Choose a template, customize
+      it, preview instantly, and share with your loved ones.
+    </p>
+    <div class="hero__actions">
+      <a class="hero__cta hero__cta--primary" href="#services" appMagnetic
+        >Create Your Invitation</a
+      >
+      <a class="hero__cta hero__cta--secondary" href="#templates" appMagnetic>Browse Templates</a>
+    </div>
+  </div>
+
+  <!-- Floating preview cards -->
+  <div class="hero__stage">
+    <div class="hero__card hero__card--1" #floatCard>
+      <div class="hero__card-inner">
+        <app-image-slot
+          [src]="content.heroCards[0].img"
+          alt="Wedding invitation preview"
+          [radius]="14"
+          [credit]="content.heroCards[0].credit.credit"
+          [creditHref]="content.heroCards[0].credit.creditHref"
+          priority
+        />
+        <div class="hero__card-title">{{ content.heroCards[0].title }}</div>
+        <div class="hero__card-sub">{{ content.heroCards[0].subtitle }}</div>
+      </div>
+    </div>
+
+    <div class="hero__card hero__card--2" #floatCard>
+      <div class="hero__card-inner">
+        <app-image-slot
+          [src]="content.heroCards[1].img"
+          alt="Engagement invitation preview"
+          [radius]="14"
+          [credit]="content.heroCards[1].credit.credit"
+          [creditHref]="content.heroCards[1].credit.creditHref"
+          priority
+        />
+        <div class="hero__card-title">{{ content.heroCards[1].title }}</div>
+        <div class="hero__card-sub">{{ content.heroCards[1].subtitle }}</div>
+      </div>
+    </div>
+
+    <div class="hero__card hero__card--3" #floatCard>
+      <div class="hero__card-inner">
+        <app-image-slot
+          [src]="content.heroCards[2].img"
+          alt="Save the date phone mockup"
+          [radius]="20"
+          [credit]="content.heroCards[2].credit.credit"
+          [creditHref]="content.heroCards[2].credit.creditHref"
+        />
+        <div class="hero__card-title">{{ content.heroCards[2].title }}</div>
+        <div class="hero__card-sub">{{ content.heroCards[2].subtitle }}</div>
+      </div>
+    </div>
+
+    <div class="hero__card hero__card--4" #floatCard>
+      <div class="hero__card-inner">
+        <app-image-slot
+          [src]="content.heroCards[3].img"
+          alt="Invitation website laptop mockup"
+          [radius]="10"
+          [credit]="content.heroCards[3].credit.credit"
+          [creditHref]="content.heroCards[3].credit.creditHref"
+        />
+      </div>
+    </div>
+  </div>
+</section>

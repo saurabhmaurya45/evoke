@@ -1,0 +1,32 @@
+<section id="pricing" class="pricing">
+  <app-section-aura tone="gold" />
+  <app-section-heading
+    appReveal
+    eyebrow="Pricing"
+    title="Simple, transparent pricing"
+    subtitle="One-time payment. No subscriptions. Your website, forever."
+    accent="#e8c88a"
+  />
+
+  <div class="pricing__grid" appReveal revealStagger>
+    @for (tier of content.pricing; track tier.name) {
+      <div class="pricing__card" [class]="'pricing__card--' + tier.surface">
+        @if (tier.featured) {
+          <span class="pricing__badge">MOST POPULAR</span>
+        }
+        <h3 class="pricing__name">{{ tier.name }}</h3>
+        <div class="pricing__price">{{ tier.price }}</div>
+        <ul class="pricing__perks">
+          @for (perk of tier.perks; track perk) {
+            <li class="pricing__perk">
+              <span class="pricing__tick" aria-hidden="true">✓</span>{{ perk }}
+            </li>
+          }
+        </ul>
+        <a class="pricing__cta" [class]="'pricing__cta--' + tier.surface" href="#hero" appMagnetic>
+          Choose {{ tier.name }}
+        </a>
+      </div>
+    }
+  </div>
+</section>

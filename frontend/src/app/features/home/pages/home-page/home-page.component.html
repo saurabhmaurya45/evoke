@@ -1,0 +1,48 @@
+<!-- Above the fold — render eagerly for fast LCP. -->
+<app-hero />
+<app-stats />
+<app-services-section />
+<app-how-it-works />
+
+<!-- Below the fold — hydrate on scroll to trim the initial payload. -->
+@defer (on viewport) {
+  <app-templates-section />
+} @placeholder {
+  <div class="section-skeleton" aria-hidden="true"></div>
+}
+
+@defer (on viewport) {
+  <app-features-section />
+} @placeholder {
+  <div class="section-skeleton" aria-hidden="true"></div>
+}
+
+@defer (on viewport) {
+  <app-comparison />
+} @placeholder {
+  <div class="section-skeleton" aria-hidden="true"></div>
+}
+
+@defer (on viewport) {
+  <app-testimonials />
+} @placeholder {
+  <div class="section-skeleton" aria-hidden="true"></div>
+}
+
+@defer (on viewport) {
+  <app-pricing />
+} @placeholder {
+  <div class="section-skeleton" aria-hidden="true"></div>
+}
+
+@defer (on viewport) {
+  <app-faq />
+} @placeholder {
+  <div class="section-skeleton" aria-hidden="true"></div>
+}
+
+@defer (on viewport) {
+  <app-cta />
+} @placeholder {
+  <div class="section-skeleton" aria-hidden="true"></div>
+}

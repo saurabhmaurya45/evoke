@@ -1,0 +1,2435 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SAMARPAN — A Royal Union | Samarth &amp; Arpan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Jost:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Evoke editor field manifest — the form is generated from these. -->
+    <script type="application/evoke-schema+json">
+      {
+        "id": "tpl-samarpan-royal",
+        "name": "Samarpan — Royal Wedding",
+        "category": "Wedding",
+        "version": 1,
+        "defaultsUrl": "/invitation-templates/samarpan-royal.defaults.json",
+        "sections": [
+          {
+            "key": "hero",
+            "label": "Hero",
+            "fields": [
+              { "key": "brideName", "label": "Bride’s name", "type": "text", "required": true },
+              { "key": "groomName", "label": "Groom’s name", "type": "text", "required": true },
+              { "key": "date", "label": "Wedding date", "type": "date", "required": true },
+              { "key": "tagline", "label": "Tagline", "type": "text", "placeholder": "Together with our families…" },
+              { "key": "heroImage", "label": "Hero image", "type": "image" },
+              { "key": "accent", "label": "Accent colour", "type": "color" }
+            ]
+          },
+          {
+            "key": "story",
+            "label": "Our Story",
+            "fields": [
+              { "key": "title", "label": "Section title", "type": "text" },
+              { "key": "body", "label": "Story", "type": "textarea", "placeholder": "How you met, the proposal…" }
+            ]
+          },
+          {
+            "key": "portraits",
+            "label": "Bride & Groom photos",
+            "fields": [
+              { "key": "bridePhoto", "label": "Bride’s photo", "type": "image" },
+              { "key": "groomPhoto", "label": "Groom’s photo", "type": "image" }
+            ]
+          },
+          {
+            "key": "events",
+            "label": "Events / Festivities",
+            "fields": [
+              {
+                "key": "items",
+                "label": "Events",
+                "type": "list",
+                "itemSchema": [
+                  { "key": "name", "label": "Event", "type": "text", "required": true },
+                  { "key": "date", "label": "Date", "type": "date" },
+                  { "key": "venue", "label": "Venue", "type": "text" },
+                  { "key": "mapUrl", "label": "Map link", "type": "text", "placeholder": "https://maps.…" },
+                  { "key": "image", "label": "Photo", "type": "image" }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "gallery",
+            "label": "Gallery",
+            "fields": [
+              {
+                "key": "items",
+                "label": "Photos",
+                "type": "list",
+                "itemSchema": [{ "key": "src", "label": "Photo", "type": "image" }]
+              }
+            ]
+          },
+          {
+            "key": "rsvp",
+            "label": "RSVP",
+            "fields": [
+              { "key": "enabled", "label": "Enable RSVP", "type": "toggle" },
+              { "key": "deadline", "label": "RSVP by", "type": "date" }
+            ]
+          },
+          {
+            "key": "music",
+            "label": "Background music",
+            "fields": [{ "key": "track", "label": "Music track", "type": "audio" }]
+          }
+        ]
+      }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <style>
+      :root {
+        --maroon: #570000;
+        --maroon-2: #800000;
+        --night: #1a0405;
+        --night-2: #2b090c;
+        --gold: #d4af37;
+        --gold-bright: #ffe088;
+        --gold-dim: #8a6d1f;
+        --ivory: #fdf6e3;
+        --rose: #ffdad4;
+        --ink: #efe3c8;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: 'Jost', sans-serif;
+        color: var(--ink);
+        line-height: 1.75;
+        background: linear-gradient(180deg, var(--night) 0%, var(--night-2) 40%, var(--night) 100%);
+        overflow-x: hidden;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: 'Cinzel', serif;
+        font-weight: 600;
+      }
+      .script {
+        font-family: 'Great Vibes', cursive;
+        font-weight: 400;
+      }
+      .serif-i {
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      ::selection {
+        background: var(--gold);
+        color: var(--night);
+      }
+
+      /* ---------- utilities ---------- */
+      .wrap {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .eyebrow {
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+        font-size: 0.72rem;
+        color: var(--gold);
+        font-weight: 500;
+      }
+      .gold-shimmer {
+        background: linear-gradient(
+          100deg,
+          var(--gold-dim) 20%,
+          var(--gold-bright) 40%,
+          #fff5cf 50%,
+          var(--gold-bright) 60%,
+          var(--gold-dim) 80%
+        );
+        background-size: 220% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        animation: shimmer 5s linear infinite;
+      }
+      @keyframes shimmer {
+        to {
+          background-position: -220% center;
+        }
+      }
+      .divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        margin: 20px auto 40px;
+      }
+      .divider .line {
+        height: 1px;
+        width: 80px;
+        background: linear-gradient(90deg, transparent, var(--gold));
+      }
+      .divider .line.r {
+        background: linear-gradient(90deg, var(--gold), transparent);
+      }
+      .divider .gem {
+        width: 10px;
+        height: 10px;
+        background: var(--gold);
+        transform: rotate(45deg);
+        box-shadow: 0 0 12px rgba(212, 175, 55, 0.8);
+        animation: gemGlow 3s ease-in-out infinite;
+      }
+      @keyframes gemGlow {
+        0%,
+        100% {
+          box-shadow: 0 0 6px rgba(212, 175, 55, 0.5);
+        }
+        50% {
+          box-shadow: 0 0 18px rgba(255, 224, 136, 0.95);
+        }
+      }
+
+      /* ---------- scroll reveal ---------- */
+      .reveal {
+        opacity: 0;
+        transform: translateY(42px);
+        transition:
+          opacity 1s ease,
+          transform 1s ease;
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: none;
+      }
+      .reveal.d1 {
+        transition-delay: 0.15s;
+      }
+      .reveal.d2 {
+        transition-delay: 0.3s;
+      }
+      .reveal.d3 {
+        transition-delay: 0.45s;
+      }
+      .reveal.d4 {
+        transition-delay: 0.6s;
+      }
+
+      /* ---------- nav ---------- */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 60;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 5vw;
+        transition:
+          background 0.4s ease,
+          box-shadow 0.4s ease;
+      }
+      nav.scrolled {
+        background: rgba(26, 4, 5, 0.88);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+      }
+      nav .brand {
+        font-family: 'Cinzel', serif;
+        letter-spacing: 0.35em;
+        color: var(--gold);
+        font-size: 1rem;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      nav .links {
+        display: flex;
+        gap: 34px;
+      }
+      nav .links a {
+        color: var(--ink);
+        text-decoration: none;
+        font-size: 0.72rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        position: relative;
+        padding-bottom: 4px;
+        transition: color 0.3s;
+      }
+      nav .links a::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 1px;
+        width: 0;
+        background: var(--gold);
+        transition: width 0.35s ease;
+      }
+      nav .links a:hover {
+        color: var(--gold-bright);
+      }
+      nav .links a:hover::after {
+        width: 100%;
+      }
+      @media (max-width: 760px) {
+        nav .links {
+          display: none;
+        }
+      }
+
+      /* ---------- hero ---------- */
+      #hero {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden;
+      }
+      #hero-canvas {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+      }
+      #hero .vignette {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+        background: radial-gradient(ellipse at center, transparent 30%, rgba(15, 2, 3, 0.75) 100%);
+      }
+      #hero .content {
+        position: relative;
+        z-index: 3;
+        padding: 100px 24px 60px;
+      }
+      #hero .names {
+        font-size: clamp(3rem, 10vw, 6.6rem);
+        line-height: 1.1;
+        margin: 22px 0 10px;
+      }
+      #hero .amp {
+        font-family: 'Great Vibes', cursive;
+        font-size: 0.6em;
+        vertical-align: middle;
+        padding: 0 0.12em;
+      }
+      #hero .sub {
+        letter-spacing: 0.45em;
+        text-transform: uppercase;
+        font-size: clamp(0.62rem, 2vw, 0.82rem);
+        color: var(--rose);
+        opacity: 0.9;
+      }
+      #hero .date-line {
+        margin-top: 26px;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.35rem;
+        color: var(--ivory);
+        font-style: italic;
+      }
+      .hero-btns {
+        margin-top: 44px;
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .btn {
+        display: inline-block;
+        padding: 16px 42px;
+        text-decoration: none;
+        cursor: pointer;
+        font-family: 'Jost', sans-serif;
+        font-size: 0.74rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease,
+          background 0.3s ease;
+        border: 1px solid var(--gold);
+      }
+      .btn:hover {
+        transform: translateY(-3px);
+      }
+      .btn-solid {
+        background: linear-gradient(135deg, #b5902a, var(--gold), #b5902a);
+        color: var(--night);
+        font-weight: 500;
+        box-shadow: 0 8px 28px rgba(212, 175, 55, 0.35);
+      }
+      .btn-solid:hover {
+        box-shadow: 0 14px 36px rgba(212, 175, 55, 0.55);
+      }
+      .btn-ghost {
+        background: rgba(26, 4, 5, 0.35);
+        color: var(--gold-bright);
+        backdrop-filter: blur(6px);
+      }
+      .btn-ghost:hover {
+        background: rgba(212, 175, 55, 0.15);
+      }
+      .load-seq {
+        opacity: 0;
+        transform: translateY(26px);
+        animation: riseIn 1.1s ease forwards;
+      }
+      .ls-1 {
+        animation-delay: 0.3s;
+      }
+      .ls-2 {
+        animation-delay: 0.6s;
+      }
+      .ls-3 {
+        animation-delay: 0.9s;
+      }
+      .ls-4 {
+        animation-delay: 1.2s;
+      }
+      .ls-5 {
+        animation-delay: 1.5s;
+      }
+      @keyframes riseIn {
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .scroll-cue {
+        position: absolute;
+        bottom: 34px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3;
+        color: var(--gold);
+        text-decoration: none;
+        font-size: 1.3rem;
+        animation: bob 2.4s ease-in-out infinite;
+      }
+      @keyframes bob {
+        0%,
+        100% {
+          transform: translate(-50%, 0);
+        }
+        50% {
+          transform: translate(-50%, 12px);
+        }
+      }
+
+      /* ---------- sections ---------- */
+      section {
+        padding: 110px 0;
+        position: relative;
+      }
+      .sec-head {
+        text-align: center;
+      }
+      .sec-head h2 {
+        font-size: clamp(1.9rem, 5vw, 3rem);
+        color: var(--gold-bright);
+        letter-spacing: 0.08em;
+      }
+
+      /* ---------- countdown ---------- */
+      .countdown {
+        background: linear-gradient(180deg, transparent, rgba(87, 0, 0, 0.28), transparent);
+        text-align: center;
+      }
+      .timer {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(120px, 160px));
+        gap: 22px;
+        justify-content: center;
+        margin-top: 14px;
+      }
+      .t-box {
+        padding: 30px 12px;
+        border: 1px solid rgba(212, 175, 55, 0.4);
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(8px);
+        position: relative;
+        transition:
+          transform 0.35s ease,
+          border-color 0.35s;
+      }
+      .t-box::before {
+        content: '';
+        position: absolute;
+        top: -1px;
+        left: 20%;
+        right: 20%;
+        height: 2px;
+        background: var(--gold);
+      }
+      .t-box:hover {
+        transform: translateY(-6px);
+        border-color: var(--gold);
+      }
+      .t-box .num {
+        font-family: 'Cinzel', serif;
+        font-size: clamp(2rem, 6vw, 3.1rem);
+        color: var(--gold-bright);
+        line-height: 1;
+        font-weight: 700;
+      }
+      .t-box .lbl {
+        margin-top: 10px;
+        font-size: 0.66rem;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--rose);
+      }
+
+      /* ---------- embrace (scroll-driven 3D) ---------- */
+      .embrace {
+        padding: 0;
+      }
+      .embrace-track {
+        height: 340vh;
+        position: relative;
+      }
+      .embrace-stage {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: hidden;
+      }
+      #embrace-canvas {
+        position: absolute;
+        inset: 0;
+      }
+      .embrace-head {
+        position: absolute;
+        top: 11vh;
+        left: 0;
+        right: 0;
+        text-align: center;
+        z-index: 2;
+        pointer-events: none;
+        padding: 0 20px;
+      }
+      .embrace-head h2 {
+        font-size: clamp(1.6rem, 4.6vw, 2.6rem);
+        color: var(--gold-bright);
+        letter-spacing: 0.08em;
+      }
+      .embrace-cap {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 10vh;
+        height: 60px;
+        text-align: center;
+        z-index: 2;
+        pointer-events: none;
+        padding: 0 20px;
+      }
+      .embrace-cap p {
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
+        font-size: clamp(1.15rem, 3.4vw, 1.8rem);
+        color: var(--gold-bright);
+        opacity: 0;
+        transition: opacity 0.7s ease;
+        position: absolute;
+        left: 0;
+        right: 0;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+      }
+      .embrace-cap p.on {
+        opacity: 1;
+      }
+      .embrace-hint {
+        position: absolute;
+        bottom: 3.5vh;
+        left: 0;
+        right: 0;
+        text-align: center;
+        z-index: 2;
+        pointer-events: none;
+        font-size: 0.62rem;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        color: var(--rose);
+        opacity: 0.65;
+      }
+
+      /* ---------- story / couple ---------- */
+      .couple-grid {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 40px;
+        align-items: center;
+        margin-top: 60px;
+      }
+      .portrait {
+        position: relative;
+        max-width: 360px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .arch {
+        aspect-ratio: 4/5;
+        border-radius: 999px 999px 8px 8px;
+        overflow: hidden;
+        position: relative;
+        border: 2px solid var(--gold);
+        padding: 10px;
+        background: rgba(212, 175, 55, 0.06);
+      }
+      .arch .inner {
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        overflow: hidden;
+        background: linear-gradient(160deg, #5c1015, #2b090c);
+      }
+      .arch img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 5s ease;
+      }
+      .portrait:hover .arch img {
+        transform: scale(1.08);
+      }
+      .portrait h3 {
+        margin-top: 24px;
+        font-size: 1.6rem;
+        color: var(--gold-bright);
+        letter-spacing: 0.08em;
+      }
+      .portrait p {
+        color: var(--rose);
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
+        font-size: 1.1rem;
+      }
+      .heart-connector {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .heart-connector svg {
+        width: 56px;
+        height: 56px;
+        color: var(--gold);
+        animation: heartbeat 1.8s ease-in-out infinite;
+        filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.7));
+      }
+      @keyframes heartbeat {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        14% {
+          transform: scale(1.2);
+        }
+        28% {
+          transform: scale(1);
+        }
+        42% {
+          transform: scale(1.18);
+        }
+        56% {
+          transform: scale(1);
+        }
+      }
+      @media (max-width: 860px) {
+        .couple-grid {
+          grid-template-columns: 1fr;
+        }
+        .heart-connector {
+          padding: 10px 0;
+        }
+      }
+
+      /* timeline */
+      .timeline {
+        max-width: 820px;
+        margin: 90px auto 0;
+        position: relative;
+      }
+      .timeline::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: linear-gradient(180deg, transparent, var(--gold), transparent);
+      }
+      .t-row {
+        display: grid;
+        grid-template-columns: 1fr 70px 1fr;
+        align-items: center;
+        margin-bottom: 60px;
+      }
+      .t-row .txt h4 {
+        color: var(--gold-bright);
+        font-size: 1.15rem;
+        letter-spacing: 0.06em;
+      }
+      .t-row .txt p {
+        color: var(--ink);
+        opacity: 0.85;
+        font-size: 0.95rem;
+        margin-top: 6px;
+      }
+      .t-row .txt.right {
+        text-align: right;
+      }
+      .t-row .node {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at 35% 30%, var(--maroon-2), var(--maroon));
+        border: 1px solid var(--gold);
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.35);
+        color: var(--gold-bright);
+      }
+      .t-row .node svg {
+        width: 22px;
+        height: 22px;
+      }
+      @media (max-width: 680px) {
+        .timeline::before {
+          left: 26px;
+        }
+        .t-row {
+          grid-template-columns: 52px 1fr;
+          gap: 18px;
+        }
+        .t-row .txt.right {
+          text-align: left;
+          grid-column: 2;
+        }
+        .t-row .node {
+          grid-column: 1;
+          grid-row: 1;
+          margin: 0;
+        }
+        .t-row .txt.left {
+          grid-column: 2;
+        }
+      }
+
+      /* ---------- events ---------- */
+      .events {
+        background: linear-gradient(180deg, transparent, rgba(87, 0, 0, 0.22), transparent);
+      }
+      .event-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 28px;
+        margin-top: 60px;
+      }
+      .event-card {
+        border: 1px solid rgba(212, 175, 55, 0.35);
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(8px);
+        padding: 34px 30px;
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.4s ease,
+          box-shadow 0.4s ease,
+          border-color 0.4s;
+      }
+      .event-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--gold);
+        box-shadow: 0 24px 50px rgba(0, 0, 0, 0.5);
+      }
+      .event-card .tag {
+        font-size: 0.64rem;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        color: var(--rose);
+      }
+      .event-card h3 {
+        font-size: 1.5rem;
+        color: var(--gold-bright);
+        margin: 8px 0 20px;
+        letter-spacing: 0.06em;
+      }
+      .event-card .photo {
+        height: 190px;
+        overflow: hidden;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+      }
+      .event-card .photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: saturate(0.35);
+        transition:
+          filter 0.6s ease,
+          transform 0.6s ease;
+      }
+      .event-card:hover .photo img {
+        filter: saturate(1);
+        transform: scale(1.06);
+      }
+      .event-card .meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 22px;
+        font-size: 0.78rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--gold);
+      }
+      .event-card .meta .arrow {
+        transition: transform 0.35s ease;
+      }
+      .event-card:hover .meta .arrow {
+        transform: translateX(8px);
+      }
+
+      /* ---------- gallery ---------- */
+      .gal-grid {
+        columns: 3;
+        column-gap: 22px;
+        margin-top: 60px;
+      }
+      .gal-item {
+        break-inside: avoid;
+        margin-bottom: 22px;
+        overflow: hidden;
+        border: 1px solid rgba(212, 175, 55, 0.35);
+        position: relative;
+      }
+      .gal-item img {
+        width: 100%;
+        transition: transform 0.9s ease;
+      }
+      .gal-item:hover img {
+        transform: scale(1.07);
+      }
+      .gal-item::after {
+        content: '';
+        position: absolute;
+        inset: 10px;
+        border: 1px solid rgba(255, 224, 136, 0.4);
+        pointer-events: none;
+      }
+      @media (max-width: 860px) {
+        .gal-grid {
+          columns: 2;
+        }
+      }
+      @media (max-width: 520px) {
+        .gal-grid {
+          columns: 1;
+        }
+      }
+
+      /* ---------- family ---------- */
+      .family-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 34px;
+        margin-top: 60px;
+      }
+      .family-card {
+        text-align: center;
+        padding: 50px 34px;
+        border: 1px double var(--gold);
+        outline: 1px solid rgba(212, 175, 55, 0.35);
+        outline-offset: 6px;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(6px);
+        transition: transform 0.4s ease;
+      }
+      .family-card:hover {
+        transform: translateY(-6px);
+      }
+      .family-card h3 {
+        color: var(--gold-bright);
+        font-size: 1.35rem;
+        letter-spacing: 0.08em;
+        margin-bottom: 18px;
+      }
+      .family-card p {
+        font-size: 0.8rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--rose);
+      }
+      .family-card .sep {
+        color: var(--gold);
+        padding: 0 12px;
+      }
+
+      /* ---------- rsvp ---------- */
+      .rsvp .panel {
+        max-width: 720px;
+        margin: 60px auto 0;
+        padding: 60px 46px;
+        border: 1px solid rgba(212, 175, 55, 0.45);
+        background: rgba(255, 255, 255, 0.035);
+        backdrop-filter: blur(10px);
+        position: relative;
+      }
+      .rsvp .panel::before {
+        content: '';
+        position: absolute;
+        inset: 10px;
+        border: 1px solid rgba(212, 175, 55, 0.25);
+        pointer-events: none;
+      }
+      .rsvp .fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 36px;
+      }
+      .rsvp input,
+      .rsvp select {
+        width: 100%;
+        background: transparent;
+        border: 0;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+        padding: 12px 4px;
+        color: var(--ivory);
+        font-family: 'Jost', sans-serif;
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+      .rsvp input::placeholder {
+        color: rgba(239, 227, 200, 0.5);
+      }
+      .rsvp input:focus,
+      .rsvp select:focus {
+        border-color: var(--gold-bright);
+      }
+      .rsvp select {
+        color: rgba(239, 227, 200, 0.85);
+      }
+      .rsvp select option {
+        background: var(--night-2);
+        color: var(--ivory);
+      }
+      .rsvp .btn {
+        width: 100%;
+        text-align: center;
+        border: none;
+      }
+      .rsvp .note {
+        text-align: center;
+        margin-top: 18px;
+        font-size: 0.8rem;
+        color: var(--rose);
+        opacity: 0;
+        transition: opacity 0.5s;
+      }
+      .rsvp .note.show {
+        opacity: 0.9;
+      }
+      @media (max-width: 620px) {
+        .rsvp .fields {
+          grid-template-columns: 1fr;
+        }
+        .rsvp .panel {
+          padding: 44px 24px;
+        }
+      }
+
+      /* ---------- footer ---------- */
+      footer {
+        text-align: center;
+        padding: 90px 24px 50px;
+        background: linear-gradient(180deg, transparent, rgba(87, 0, 0, 0.4));
+      }
+      footer .flames {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin-bottom: 26px;
+      }
+      .diya {
+        width: 34px;
+        height: 44px;
+        position: relative;
+      }
+      .diya .flame {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%);
+        width: 12px;
+        height: 20px;
+        border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
+        background: radial-gradient(
+          circle at 50% 75%,
+          #fff4c2,
+          #ffb340 55%,
+          rgba(255, 110, 20, 0) 78%
+        );
+        animation: flicker 1.6s ease-in-out infinite;
+        transform-origin: bottom center;
+        filter: drop-shadow(0 0 10px rgba(255, 180, 60, 0.8));
+      }
+      .diya:nth-child(2) .flame {
+        animation-delay: 0.4s;
+      }
+      .diya:nth-child(3) .flame {
+        animation-delay: 0.8s;
+      }
+      @keyframes flicker {
+        0%,
+        100% {
+          transform: translateX(-50%) scale(1) rotate(-2deg);
+        }
+        30% {
+          transform: translateX(-52%) scale(1.12, 1.2) rotate(2deg);
+        }
+        60% {
+          transform: translateX(-48%) scale(0.94, 0.9) rotate(-3deg);
+        }
+      }
+      .diya .bowl {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 18px;
+        border-radius: 0 0 50% 50%/0 0 100% 100%;
+        background: linear-gradient(180deg, var(--maroon-2), var(--maroon));
+        border: 1px solid var(--gold);
+      }
+      footer .brand {
+        font-family: 'Cinzel', serif;
+        letter-spacing: 0.4em;
+        font-size: 1.4rem;
+        color: var(--gold-bright);
+      }
+      footer .tagline {
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
+        color: var(--rose);
+        margin-top: 8px;
+      }
+      footer .fine {
+        margin-top: 36px;
+        font-size: 0.72rem;
+        letter-spacing: 0.2em;
+        color: rgba(239, 227, 200, 0.45);
+        text-transform: uppercase;
+      }
+
+      @media (max-width: 600px) {
+        section {
+          padding: 80px 0;
+        }
+        .timer {
+          grid-template-columns: repeat(2, 1fr);
+          max-width: 340px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+        .reveal,
+        .load-seq {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        html {
+          scroll-behavior: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============ NAV ============ -->
+    <nav id="mainNav">
+      <a class="brand" href="#hero">SAMARPAN</a>
+      <div class="links">
+        <a href="#story">Our Story</a>
+        <a href="#events">Events</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#rsvp">RSVP</a>
+      </div>
+    </nav>
+
+    <!-- ============ BACKGROUND MUSIC (editor-controlled) ============ -->
+    <audio id="evoke-music" loop preload="none"></audio>
+    <button
+      id="evoke-music-btn"
+      type="button"
+      aria-label="Play music"
+      hidden
+      style="position: fixed; bottom: 22px; right: 22px; z-index: 70; width: 48px; height: 48px; border-radius: 50%; background: rgba(26, 4, 5, 0.7); color: var(--gold); border: 1px solid var(--gold); cursor: pointer; font-size: 20px; backdrop-filter: blur(6px);"
+    >
+      ♪
+    </button>
+
+    <!-- ============ HERO with THREE.JS ============ -->
+    <section id="hero">
+      <div id="hero-canvas"></div>
+      <div class="vignette"></div>
+
+      <div class="content">
+        <p class="eyebrow load-seq ls-1">|| A Union Consecrated in Tradition ||</p>
+        <h1 class="names gold-shimmer load-seq ls-2" data-ev="names">
+          Samarth <span class="amp">&amp;</span> Arpan
+        </h1>
+        <p class="sub load-seq ls-3" data-ev="tagline">
+          The Strength of the Earth · The Grace of the Sun
+        </p>
+        <p class="date-line load-seq ls-4" data-ev="date">
+          Sunday, 24th January 2027 · Udaipur, Rajasthan
+        </p>
+        <div class="hero-btns load-seq ls-5">
+          <a class="btn btn-solid" href="#rsvp">RSVP Now</a>
+          <a class="btn btn-ghost" href="#story">View Invitation</a>
+        </div>
+      </div>
+
+      <a class="scroll-cue" href="#countdown" aria-label="Scroll down">▾</a>
+    </section>
+
+    <!-- ============ COUNTDOWN ============ -->
+    <section class="countdown" id="countdown">
+      <div class="wrap">
+        <p class="eyebrow reveal">Save the date</p>
+        <div class="sec-head reveal"><h2>Days Until Forever</h2></div>
+        <div class="divider reveal">
+          <span class="line"></span><span class="gem"></span><span class="line r"></span>
+        </div>
+        <div class="timer reveal d1" role="timer" aria-live="polite">
+          <div class="t-box">
+            <div class="num" id="cd-d">--</div>
+            <div class="lbl">Days</div>
+          </div>
+          <div class="t-box">
+            <div class="num" id="cd-h">--</div>
+            <div class="lbl">Hours</div>
+          </div>
+          <div class="t-box">
+            <div class="num" id="cd-m">--</div>
+            <div class="lbl">Minutes</div>
+          </div>
+          <div class="t-box">
+            <div class="num" id="cd-s">--</div>
+            <div class="lbl">Seconds</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ THE EMBRACE (scroll-driven 3D) ============ -->
+    <section class="embrace" id="embrace">
+      <div class="embrace-track" id="embrace-track">
+        <div class="embrace-stage">
+          <div id="embrace-canvas"></div>
+          <div class="embrace-head">
+            <p class="eyebrow">A moment in motion</p>
+            <h2>When Two Paths Meet</h2>
+          </div>
+          <div class="embrace-cap">
+            <p id="cap-1" class="on">Two hearts, walking their own journeys…</p>
+            <p id="cap-2">…until they meet in the middle.</p>
+            <p id="cap-3">One embrace. One forever.</p>
+          </div>
+          <p class="embrace-hint">Keep scrolling</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STORY ============ -->
+    <section id="story">
+      <div class="wrap">
+        <p class="eyebrow reveal" style="text-align: center; display: block">The couple</p>
+        <div class="sec-head reveal"><h2 data-ev="storyTitle">Two Souls, One Vow</h2></div>
+        <div class="divider reveal">
+          <span class="line"></span><span class="gem"></span><span class="line r"></span>
+        </div>
+        <p
+          class="story-body reveal"
+          data-ev="storyBody"
+          style="max-width: 640px; margin: 0 auto 2.5rem; text-align: center; display: none"
+        ></p>
+
+        <div class="couple-grid">
+          <div class="portrait reveal">
+            <div class="arch">
+              <div class="inner">
+                <img
+                  data-ev-img="groomPhoto"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5H8gbJLIOQkQ4Tw0NSGkMek-RYUYwCl-ZM5XKLO5OIvQ6zkT6TTNu8dXO9IwuUYMzuKwuN9Wc7xvEaGNY1ABOCI4CnuhNleui8v4TUqd-DigwA5y-MWlHpjaNiUdMhlPfKcViSkm49dXzLcmCRIECS_jcQywcP0bo0pCleoNYMvQuaJ9Z_NVJugIpxhldLJqd_73hwBLZv9pLPT4KIhshpqhxb01sB-Ib0x4Jv99UcDK1ADaYkQl6QKodIWtO6t5wvctT9hSjt0k"
+                  alt="Samarth Singh in a cream sherwani and maroon turban"
+                  loading="lazy"
+                  onerror="this.remove()"
+                />
+              </div>
+            </div>
+            <h3>Samarth Singh</h3>
+            <p>The Strength of the Earth</p>
+          </div>
+
+          <div class="heart-connector reveal d1" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 21s-7.5-4.9-9.7-9A5.6 5.6 0 0 1 12 6.4 5.6 5.6 0 0 1 21.7 12c-2.2 4.1-9.7 9-9.7 9z"
+              />
+            </svg>
+          </div>
+
+          <div class="portrait reveal d2">
+            <div class="arch">
+              <div class="inner">
+                <img
+                  data-ev-img="bridePhoto"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGb1nrNSfmkLWniCL-dpl95PTHp-9AOVkgkJTvu9LRFJ8UNzSKunrn0cuiSM0icuf3ziUyFrCVOs0Bq9_UkuMMYliHbTxhFJZPoemqK_MZcNAFWqKkeRcc9mIJNB6XcGsu1ya9Ih9XpOMAZpk2q7dLeAo6xVB6BI4kB0sCkOZt-YHkLTRVf8GbsT1JMwAF9fHAjRoWiUjBQAfKU348-4wiROIippPSYeAV09RfpCt-d4UV5RXBJNm4KgsopjG3LPft3A40vk-4tYI"
+                  alt="Arpan Kaur in a maroon and gold silk lehenga"
+                  loading="lazy"
+                  onerror="this.remove()"
+                />
+              </div>
+            </div>
+            <h3>Arpan Kaur</h3>
+            <p>The Grace of the Sun</p>
+          </div>
+        </div>
+
+        <!-- timeline -->
+        <div class="timeline">
+          <div class="t-row reveal">
+            <div class="txt right">
+              <h4>The First Meeting</h4>
+              <p>
+                Winter 2021, London. Amidst the morning fog, two souls found a common melody in a
+                crowded café.
+              </p>
+            </div>
+            <div class="node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M4 8h12v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8z" />
+                <path d="M16 9h2a2.5 2.5 0 0 1 0 5h-2" />
+                <path d="M7 4c0 1-1 1-1 2m4-2c0 1-1 1-1 2m4-2c0 1-1 1-1 2" />
+              </svg>
+            </div>
+            <div></div>
+          </div>
+          <div class="t-row reveal">
+            <div></div>
+            <div class="node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M6 3h12l3 6-9 12L3 9l3-6z" />
+                <path d="M3 9h18M9 3l3 6 3-6M12 21 9 9m6 0-3 12" />
+              </svg>
+            </div>
+            <div class="txt left">
+              <h4>The Proposal</h4>
+              <p>
+                Spring 2023, Udaipur. Under the moonlit Lake Palace, a question was asked, and a
+                forever began.
+              </p>
+            </div>
+          </div>
+          <div class="t-row reveal">
+            <div class="txt right">
+              <h4>The Royal Union</h4>
+              <p>
+                January 2027, Udaipur. Two families gather beneath the palace lamps to bless one
+                sacred bond.
+              </p>
+            </div>
+            <div class="node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <circle cx="9" cy="14" r="5.5" />
+                <circle cx="15" cy="14" r="5.5" />
+                <path d="M12 4.5 10 7h4l-2-2.5z" fill="currentColor" />
+              </svg>
+            </div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ EVENTS ============ -->
+    <section class="events" id="events">
+      <div class="wrap">
+        <p class="eyebrow reveal" style="text-align: center; display: block">Celebrations</p>
+        <div class="sec-head reveal"><h2>The Royal Festivities</h2></div>
+        <div class="divider reveal">
+          <span class="line"></span><span class="gem"></span><span class="line r"></span>
+        </div>
+
+        <div class="event-grid" data-ev-events>
+          <div class="event-card reveal">
+            <p class="tag">Morning Ritual</p>
+            <h3>The Haldi</h3>
+            <div class="photo">
+              <img
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfkWP7MNdfLmiAw1BhynSOMXTNBkhaPX3_yTxFOwlI6anHlA1lbiW5uKwQ2mAQKy55hWaoIWycg6p09H0qZjYLWwd5j6BROnG0_lK4nyL0zKClR-0aTmFBxJikIR9pwSigiaxc723-mILlfZur0y73mXUSFxbaAgOtigNeocr3Zid9f1NL_qEgj50QG1ir92PRJsUiLLCr5R9DJh_PziT2AsmPPq7VW2jRteppCU8c3QaQDx_nCAB_Bf1HSB7rpfMfLGlS3WAlEEU"
+                alt="Haldi ceremony"
+                loading="lazy"
+                onerror="
+                  this.parentElement.style.background = 'linear-gradient(150deg,#7c5f0e,#3d2e05)';
+                  this.remove();
+                "
+              />
+            </div>
+            <div class="meta"><span>24th Jan · 9:00 AM</span><span class="arrow">→</span></div>
+          </div>
+
+          <div class="event-card reveal d1">
+            <p class="tag">Afternoon Soirée</p>
+            <h3>The Mehendi</h3>
+            <div class="photo">
+              <img
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz-N_cWno3eJg55nwUZcgFgf49YFhL3zs43r4Y3rQOGB9keHQ5DoH_XFaNq2A6NBW0r5NELb4hDcVoqXZiTtlgYZWf-a0p0N2CHPnDkgk82MA8DT9_9uW18xFAPg3yzNTN3lChp8e0MP1Ebj5gNQewxmt15WKIOAK4NKSEokO2aVq0r4RmAPmLZt7MCSWhwhcvA_kQzBdTCQidw3yupymvxzIMf_wdG0G4Q6jZNm_2JeB6VAk_h6xRQeHz4be9Yv41S3qkt5UCP28"
+                alt="Mehendi ceremony"
+                loading="lazy"
+                onerror="
+                  this.parentElement.style.background = 'linear-gradient(150deg,#2f5d50,#12281f)';
+                  this.remove();
+                "
+              />
+            </div>
+            <div class="meta"><span>24th Jan · 2:00 PM</span><span class="arrow">→</span></div>
+          </div>
+
+          <div class="event-card reveal d2">
+            <p class="tag">Gala Night</p>
+            <h3>The Sangeet</h3>
+            <div class="photo">
+              <img
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsMj3My7ip-04jyVNy7eLZOwIED-gXcuEoe44QbSlSqkYLIjpWEYK5_dB6a5GUpyTIidsaVIELirzxUeXnDTQQfhPPcotErHZiN37Xgs5O1v0FpZ-9egQQIKL7Br8GCMdCkATKOhuTQ6XQ7ICM77R14t7kGKt02ECz4dKbQhVP9xygR17oQe30P32-DOaoBWpMS0thLLU-bqZOYair0QHA8Sjxq8HaQJ6Lyana8IKHQWWyINuMjhv0d0T4hFGIu_rssgbylGbrAxQ"
+                alt="Sangeet night"
+                loading="lazy"
+                onerror="
+                  this.parentElement.style.background = 'linear-gradient(150deg,#5c1015,#2b090c)';
+                  this.remove();
+                "
+              />
+            </div>
+            <div class="meta"><span>24th Jan · 7:00 PM</span><span class="arrow">→</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GALLERY ============ -->
+    <section id="gallery">
+      <div class="wrap">
+        <p class="eyebrow reveal" style="text-align: center; display: block">Memories</p>
+        <div class="sec-head reveal"><h2>Glimpses of Us</h2></div>
+        <div class="divider reveal">
+          <span class="line"></span><span class="gem"></span><span class="line r"></span>
+        </div>
+
+        <div class="gal-grid" data-ev-gallery>
+          <div class="gal-item reveal">
+            <img
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeqkkdAPLJoQG13warDw3KNeTsfevG8_F1uWztLkLbFbfIgJYfs3Szmu98CvLnq3ucFIx_Kv90T4fbeKWUIBqsCMZX3bUNj7q76CqZQSqOxPIS-FegiAjr05aM6S8cZ21Y0RrC0PruUYJ3Iog4HJMU-XJ6Hdoclv_adUCZGgcIgqJWFOSwFhpXgTBNDxD-4YCNr6wImqVmz4egcGkBZ9cpn8iw3MOBbhcoGb4fwRHNEV53p3LF5C_XXYbLXOuSNaAGTFMreDtP97E"
+              alt="Gallery photo 1"
+              loading="lazy"
+              onerror="this.closest('.gal-item').remove()"
+            />
+          </div>
+          <div class="gal-item reveal d1">
+            <img
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6sdJkhxd9mTwcM3piC4HUV7nQgY2ncz4Q58rc7iCuBbT4xHKvnJOo7TqFe6xor6Pw4OEuRs2U8T269Rky2JR5Sh2q9i7gPN54YXxHPKYfZbLJMTXA-Fqn_QT0QXwd4ub4wqrTooPmiodBfX9PQV48KKOoZcSGzzGcRe5jQrO1rGy_G62XQkAN7-n3WNz16bOZinO3q2DKxi1oRm3MQ1P4qU05gnf0KPkcxSKCvt1ToIWlUMKSKRUhdZo0NwtcN0sDxGc6-DwqNNQ"
+              alt="Gallery photo 2"
+              loading="lazy"
+              onerror="this.closest('.gal-item').remove()"
+            />
+          </div>
+          <div class="gal-item reveal d2">
+            <img
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqBhLCE76XIz_ouCfYBKN-SvcdiIc0cqTzAZmqJiqQOJk949UBIHNOojJoq45cQifajXvepUU0IH8c8NGq7dbeEgoSXYul5h8CkHoydkLXYjpi1xZUjAOBMhGQvn1NCDie59tBD3rza8N1tQ-fQwQFRw3ipSIgmvotwFvPAh8VOXyXd4BD1D7lYGhbuvJCNz7KZvGVXqKqlt0Vyw7mNN0rsP5PT0lkGumc0pp3rnQnpmwtCkm-yo-YNSzTtm0WEtraic4ZQdYbH_4"
+              alt="Gallery photo 3"
+              loading="lazy"
+              onerror="this.closest('.gal-item').remove()"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FAMILY ============ -->
+    <section>
+      <div class="wrap">
+        <p class="eyebrow reveal" style="text-align: center; display: block">
+          With the blessings of
+        </p>
+        <div class="sec-head reveal"><h2>The Pillars of Our Union</h2></div>
+        <div class="divider reveal">
+          <span class="line"></span><span class="gem"></span><span class="line r"></span>
+        </div>
+
+        <div class="family-grid">
+          <div class="family-card reveal">
+            <h3>The Singh Family</h3>
+            <p>Sardar Gurbir Singh <span class="sep">|</span> Sardarni Preeti Kaur</p>
+          </div>
+          <div class="family-card reveal d2">
+            <h3>The Kaur Family</h3>
+            <p>Sardar Amrit Singh <span class="sep">|</span> Sardarni Jasmeet Kaur</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RSVP ============ -->
+    <section class="rsvp" id="rsvp">
+      <div class="wrap">
+        <p class="eyebrow reveal" style="text-align: center; display: block">Kindly respond</p>
+        <div class="sec-head reveal"><h2>RSVP</h2></div>
+        <div class="divider reveal">
+          <span class="line"></span><span class="gem"></span><span class="line r"></span>
+        </div>
+
+        <div class="panel reveal d1">
+          <div class="fields">
+            <input id="rsvp-name" type="text" placeholder="Full Name" autocomplete="name" />
+            <input id="rsvp-email" type="email" placeholder="Email Address" autocomplete="email" />
+            <select id="rsvp-attend" aria-label="Will you attend?">
+              <option value="">Will you attend?</option>
+              <option>Joyfully accepts</option>
+              <option>Regretfully declines</option>
+            </select>
+            <select id="rsvp-guests" aria-label="Number of guests">
+              <option value="">Number of guests</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4+</option>
+            </select>
+          </div>
+          <button class="btn btn-solid" id="rsvp-btn" type="button">Send My Wishes</button>
+          <p class="note" id="rsvp-note"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer>
+      <div class="flames" aria-hidden="true">
+        <div class="diya">
+          <div class="flame"></div>
+          <div class="bowl"></div>
+        </div>
+        <div class="diya">
+          <div class="flame"></div>
+          <div class="bowl"></div>
+        </div>
+        <div class="diya">
+          <div class="flame"></div>
+          <div class="bowl"></div>
+        </div>
+      </div>
+      <p class="brand">SAMARPAN</p>
+      <p class="tagline">Joined in eternal grace · Crafted with love</p>
+      <p class="fine" data-ev="footerLine">Samarth &amp; Arpan · 24 January 2027 · Udaipur</p>
+    </footer>
+
+    <script>
+      /* ================================================================
+   THREE.JS HERO — interlocked golden wedding rings, floating
+   golden sparks, and 3D rose petals drifting through the scene
+   ================================================================ */
+      (function () {
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var holder = document.getElementById('hero-canvas');
+        if (!window.THREE || !holder) return;
+
+        var W = holder.clientWidth || window.innerWidth;
+        var H = holder.clientHeight || window.innerHeight;
+        var isMobile = W < 640;
+
+        var scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0x1a0405, 10, 34);
+
+        var camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 100);
+        camera.position.set(0, 0.4, 11);
+
+        var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(W, H);
+        holder.appendChild(renderer.domElement);
+
+        /* ---------- lights ---------- */
+        scene.add(new THREE.AmbientLight(0x40201a, 1.2));
+        var key = new THREE.PointLight(0xffe088, 1.6, 60);
+        key.position.set(6, 6, 8);
+        scene.add(key);
+        var warm = new THREE.PointLight(0xff6a3d, 0.9, 50);
+        warm.position.set(-7, -3, 6);
+        scene.add(warm);
+        var rim = new THREE.PointLight(0xffd27a, 1.1, 40);
+        rim.position.set(0, 5, -6);
+        scene.add(rim);
+
+        /* ---------- interlocked wedding rings ---------- */
+        var ringGroup = new THREE.Group();
+        var goldMat = new THREE.MeshStandardMaterial({
+          color: 0xd4af37,
+          metalness: 1,
+          roughness: 0.22,
+          emissive: 0x2a1c00,
+          emissiveIntensity: 0.5,
+        });
+        var roseGoldMat = new THREE.MeshStandardMaterial({
+          color: 0xd98a6a,
+          metalness: 1,
+          roughness: 0.28,
+          emissive: 0x2a0e05,
+          emissiveIntensity: 0.5,
+        });
+
+        var ringGeo = new THREE.TorusGeometry(1.9, 0.16, 40, 120);
+        var ringA = new THREE.Mesh(ringGeo, goldMat);
+        ringA.rotation.set(Math.PI / 2.4, 0.25, 0);
+        ringA.position.x = -1.05;
+
+        var ringB = new THREE.Mesh(ringGeo, roseGoldMat);
+        ringB.rotation.set(Math.PI / 2.1, -0.35, 0.4);
+        ringB.position.x = 1.05;
+
+        /* tiny "diamond" on ring A */
+        var gem = new THREE.Mesh(
+          new THREE.OctahedronGeometry(0.22, 0),
+          new THREE.MeshStandardMaterial({
+            color: 0xfff6d8,
+            metalness: 0.4,
+            roughness: 0.05,
+            emissive: 0xfff2c0,
+            emissiveIntensity: 0.9,
+          }),
+        );
+        gem.position.set(0, 1.9, 0);
+        ringA.add(gem);
+
+        ringGroup.add(ringA, ringB);
+        ringGroup.position.y = 0.6;
+        ringGroup.scale.setScalar(isMobile ? 0.72 : 1);
+        scene.add(ringGroup);
+
+        /* ---------- floating golden sparks (particles) ---------- */
+        var sparkCount = isMobile ? 180 : 420;
+        var pos = new Float32Array(sparkCount * 3);
+        var speeds = new Float32Array(sparkCount);
+        for (var i = 0; i < sparkCount; i++) {
+          pos[i * 3] = (Math.random() - 0.5) * 26;
+          pos[i * 3 + 1] = (Math.random() - 0.5) * 16;
+          pos[i * 3 + 2] = (Math.random() - 0.5) * 18 - 2;
+          speeds[i] = 0.002 + Math.random() * 0.006;
+        }
+        var sparkGeo = new THREE.BufferGeometry();
+        sparkGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        var sparkMat = new THREE.PointsMaterial({
+          color: 0xffe088,
+          size: 0.07,
+          transparent: true,
+          opacity: 0.85,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        });
+        var sparks = new THREE.Points(sparkGeo, sparkMat);
+        scene.add(sparks);
+
+        /* ---------- 3D rose petals ---------- */
+        var petalGroup = new THREE.Group();
+        var petalGeo = new THREE.SphereGeometry(0.16, 8, 6);
+        petalGeo.scale(1, 0.45, 0.12); /* flatten into petal shape */
+        var petalMats = [
+          new THREE.MeshStandardMaterial({
+            color: 0xffb4a8,
+            roughness: 0.7,
+            metalness: 0,
+            side: THREE.DoubleSide,
+          }),
+          new THREE.MeshStandardMaterial({
+            color: 0xd4af37,
+            roughness: 0.5,
+            metalness: 0.6,
+            side: THREE.DoubleSide,
+          }),
+          new THREE.MeshStandardMaterial({
+            color: 0xb0303a,
+            roughness: 0.75,
+            metalness: 0,
+            side: THREE.DoubleSide,
+          }),
+        ];
+        var petalCount = isMobile ? 26 : 55;
+        var petals = [];
+        for (var j = 0; j < petalCount; j++) {
+          var p = new THREE.Mesh(petalGeo, petalMats[j % 3]);
+          resetPetal(p, true);
+          petals.push(p);
+          petalGroup.add(p);
+        }
+        scene.add(petalGroup);
+
+        function resetPetal(p, randomY) {
+          p.position.set(
+            (Math.random() - 0.5) * 22,
+            randomY ? (Math.random() - 0.5) * 16 : 9 + Math.random() * 3,
+            (Math.random() - 0.5) * 12 - 1,
+          );
+          p.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+          p.userData = {
+            fall: 0.008 + Math.random() * 0.016,
+            sway: Math.random() * Math.PI * 2,
+            swaySpeed: 0.4 + Math.random() * 0.8,
+            spinX: (Math.random() - 0.5) * 0.03,
+            spinZ: (Math.random() - 0.5) * 0.03,
+          };
+        }
+
+        /* ---------- mouse parallax ---------- */
+        var targetX = 0,
+          targetY = 0;
+        window.addEventListener(
+          'pointermove',
+          function (e) {
+            targetX = (e.clientX / window.innerWidth - 0.5) * 1.4;
+            targetY = (e.clientY / window.innerHeight - 0.5) * 0.8;
+          },
+          { passive: true },
+        );
+
+        /* ---------- resize ---------- */
+        window.addEventListener('resize', function () {
+          W = holder.clientWidth || window.innerWidth;
+          H = holder.clientHeight || window.innerHeight;
+          camera.aspect = W / H;
+          camera.updateProjectionMatrix();
+          renderer.setSize(W, H);
+        });
+
+        /* ---------- animate ---------- */
+        var clock = new THREE.Clock();
+        function frame() {
+          var t = clock.getElapsedTime();
+
+          /* rings: slow ceremonial rotation + gentle float */
+          ringA.rotation.z += 0.0035;
+          ringB.rotation.z -= 0.003;
+          ringGroup.rotation.y = Math.sin(t * 0.25) * 0.35;
+          ringGroup.position.y = 0.6 + Math.sin(t * 0.8) * 0.18;
+          gem.rotation.y += 0.02;
+
+          /* sparks drift upward */
+          var arr = sparkGeo.attributes.position.array;
+          for (var i = 0; i < sparkCount; i++) {
+            arr[i * 3 + 1] += speeds[i];
+            if (arr[i * 3 + 1] > 9) arr[i * 3 + 1] = -9;
+          }
+          sparkGeo.attributes.position.needsUpdate = true;
+          sparks.rotation.y = t * 0.02;
+
+          /* petals fall, sway, tumble */
+          for (var j = 0; j < petals.length; j++) {
+            var p = petals[j],
+              u = p.userData;
+            p.position.y -= u.fall;
+            p.position.x += Math.sin(t * u.swaySpeed + u.sway) * 0.004;
+            p.rotation.x += u.spinX;
+            p.rotation.z += u.spinZ;
+            if (p.position.y < -8) resetPetal(p, false);
+          }
+
+          /* camera parallax */
+          camera.position.x += (targetX - camera.position.x) * 0.04;
+          camera.position.y += (0.4 - targetY - camera.position.y) * 0.04;
+          camera.lookAt(0, 0.5, 0);
+
+          renderer.render(scene, camera);
+          if (!reduced) requestAnimationFrame(frame);
+        }
+        frame(); /* renders once even with reduced motion */
+      })();
+
+      /* ================================================================
+   THE EMBRACE — scroll-driven scene: a low-poly groom and bride
+   built from primitives walk toward each other and hug as you
+   scroll. Scrolling back up reverses the moment.
+   ================================================================ */
+      (function () {
+        var holder = document.getElementById('embrace-canvas');
+        var track = document.getElementById('embrace-track');
+        if (!window.THREE || !holder || !track) return;
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        var W = holder.clientWidth || window.innerWidth;
+        var H = holder.clientHeight || window.innerHeight;
+        var isMobile = W < 640;
+
+        var scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0x1a0405, 9, 26);
+
+        var camera = new THREE.PerspectiveCamera(42, W / H, 0.1, 60);
+        camera.position.set(0, 2.0, 9);
+
+        var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(W, H);
+        holder.appendChild(renderer.domElement);
+
+        /* ---- lights ---- */
+        scene.add(new THREE.AmbientLight(0x50302a, 1.3));
+        var key = new THREE.PointLight(0xffe088, 1.5, 45);
+        key.position.set(5, 7, 7);
+        scene.add(key);
+        var warm = new THREE.PointLight(0xff7a4a, 0.8, 35);
+        warm.position.set(-6, 3, 5);
+        scene.add(warm);
+        var back = new THREE.PointLight(0xffd27a, 0.9, 30);
+        back.position.set(0, 4, -5);
+        scene.add(back);
+
+        /* ---- stage floor: dark disc + gold ring ---- */
+        var floor = new THREE.Mesh(
+          new THREE.CircleGeometry(7, 48),
+          new THREE.MeshStandardMaterial({ color: 0x230608, roughness: 0.9, metalness: 0.1 }),
+        );
+        floor.rotation.x = -Math.PI / 2;
+        scene.add(floor);
+        var ringMark = new THREE.Mesh(
+          new THREE.RingGeometry(2.3, 2.42, 64),
+          new THREE.MeshStandardMaterial({
+            color: 0xd4af37,
+            metalness: 0.9,
+            roughness: 0.3,
+            side: THREE.DoubleSide,
+          }),
+        );
+        ringMark.rotation.x = -Math.PI / 2;
+        ringMark.position.y = 0.01;
+        scene.add(ringMark);
+
+        /* ---- materials ---- */
+        var M = {
+          cream: new THREE.MeshStandardMaterial({ color: 0xf3e6c4, roughness: 0.72 }),
+          maroon: new THREE.MeshStandardMaterial({ color: 0x7a1220, roughness: 0.65 }),
+          maroon2: new THREE.MeshStandardMaterial({ color: 0x93182a, roughness: 0.65 }),
+          gold: new THREE.MeshStandardMaterial({
+            color: 0xd4af37,
+            metalness: 0.85,
+            roughness: 0.3,
+          }),
+          skin: new THREE.MeshStandardMaterial({ color: 0xc98d5f, roughness: 0.55 }),
+          skinF: new THREE.MeshStandardMaterial({ color: 0xd69b6c, roughness: 0.5 }),
+          hair: new THREE.MeshStandardMaterial({ color: 0x1c0e06, roughness: 0.85 }),
+          eyeW: new THREE.MeshStandardMaterial({ color: 0xf5f0e8, roughness: 0.2 }),
+          eyeD: new THREE.MeshStandardMaterial({ color: 0x140a04, roughness: 0.15 }),
+          lipsM: new THREE.MeshStandardMaterial({ color: 0x8d4a3f, roughness: 0.6 }),
+          lipsF: new THREE.MeshStandardMaterial({ color: 0xb54a55, roughness: 0.45 }),
+        };
+
+        /* ---- face builder: eyes, brows, nose, lips, ears ---- */
+        function addFace(head, r, skinMat, lipMat, feminine) {
+          function eye(x) {
+            var e = new THREE.Group();
+            var w = new THREE.Mesh(new THREE.SphereGeometry(r * 0.17, 10, 8), M.eyeW);
+            var pupil = new THREE.Mesh(new THREE.SphereGeometry(r * 0.09, 8, 8), M.eyeD);
+            pupil.position.z = r * 0.11;
+            e.add(w, pupil);
+            e.position.set(x, r * 0.14, r * 0.8);
+            e.scale.set(1, feminine ? 1.05 : 0.85, 0.5);
+            return e;
+          }
+          head.add(eye(-r * 0.38), eye(r * 0.38));
+          [-1, 1].forEach(function (s) {
+            var b = new THREE.Mesh(new THREE.BoxGeometry(r * 0.36, r * 0.06, r * 0.07), M.hair);
+            b.position.set(s * r * 0.38, r * 0.38, r * 0.84);
+            b.rotation.z = s * -0.14;
+            head.add(b);
+          });
+          var nose = new THREE.Mesh(new THREE.ConeGeometry(r * 0.1, r * 0.32, 8), skinMat);
+          nose.rotation.x = Math.PI / 2;
+          nose.position.set(0, -r * 0.06, r * 0.96);
+          head.add(nose);
+          var lips = new THREE.Mesh(new THREE.SphereGeometry(r * 0.14, 10, 8), lipMat);
+          lips.scale.set(1.5, 0.5, 0.5);
+          lips.position.set(0, -r * 0.42, r * 0.86);
+          head.add(lips);
+          [-1, 1].forEach(function (s) {
+            var ear = new THREE.Mesh(new THREE.SphereGeometry(r * 0.17, 8, 8), skinMat);
+            ear.scale.set(0.4, 1, 0.7);
+            ear.position.set(s * r * 0.95, 0, 0);
+            head.add(ear);
+            if (feminine) {
+              var jhumka = new THREE.Mesh(new THREE.SphereGeometry(r * 0.09, 8, 6), M.gold);
+              jhumka.position.set(s * r * 0.98, -r * 0.28, 0);
+              head.add(jhumka);
+            }
+          });
+        }
+
+        /* ---- arm builder: shoulder pivot + bending elbow + hand ---- */
+        function makeArm(sleeveMat, bareForearm, slim) {
+          var g = new THREE.Group();
+          var r = slim ? 0.08 : 0.1;
+          var shoulder = new THREE.Mesh(new THREE.SphereGeometry(r * 1.35, 10, 8), sleeveMat);
+          var upper = new THREE.Mesh(new THREE.CylinderGeometry(r, r * 0.9, 0.5, 10), sleeveMat);
+          upper.position.y = -0.25;
+          var elbow = new THREE.Group();
+          elbow.position.y = -0.5;
+          var joint = new THREE.Mesh(new THREE.SphereGeometry(r * 0.95, 8, 8), sleeveMat);
+          var foreMat = bareForearm ? M.skinF : sleeveMat;
+          var fore = new THREE.Mesh(
+            new THREE.CylinderGeometry(r * 0.85, r * 0.68, 0.48, 10),
+            foreMat,
+          );
+          fore.position.y = -0.24;
+          var hand = new THREE.Mesh(
+            new THREE.SphereGeometry(r * 1.15, 10, 8),
+            bareForearm ? M.skinF : M.skin,
+          );
+          hand.scale.set(0.8, 1.15, 0.5);
+          hand.position.y = -0.55;
+          elbow.add(joint, fore, hand);
+          g.add(shoulder, upper, elbow);
+          g.userData.elbow = elbow;
+          return g;
+        }
+
+        /* ---- GROOM: cream sherwani, maroon turban, mustache ---- */
+        function makeGroom() {
+          var g = new THREE.Group();
+          var lower = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.6, 1.55, 18), M.cream);
+          lower.position.y = 0.78;
+          var trim = new THREE.Mesh(new THREE.TorusGeometry(0.585, 0.03, 8, 30), M.gold);
+          trim.rotation.x = Math.PI / 2;
+          trim.position.y = 0.04;
+          var torso = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.47, 0.95, 18), M.cream);
+          torso.position.y = 2.02;
+          var chest = new THREE.Mesh(new THREE.SphereGeometry(0.42, 14, 12), M.cream);
+          chest.scale.set(1, 0.6, 0.85);
+          chest.position.y = 2.46;
+          for (var i = 0; i < 4; i++) {
+            var btn = new THREE.Mesh(new THREE.SphereGeometry(0.028, 8, 6), M.gold);
+            btn.position.set(0, 2.36 - i * 0.22, 0.45 - i * 0.02);
+            g.add(btn);
+          }
+          var sash = new THREE.Mesh(new THREE.TorusGeometry(0.45, 0.055, 10, 26), M.maroon);
+          sash.rotation.x = Math.PI / 2;
+          sash.position.y = 1.98;
+          var neck = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 0.22, 10), M.skin);
+          neck.position.y = 2.66;
+          var head = new THREE.Mesh(new THREE.SphereGeometry(0.32, 20, 16), M.skin);
+          head.position.y = 3.0;
+          addFace(head, 0.32, M.skin, M.lipsM, false);
+          var mo = new THREE.Mesh(new THREE.BoxGeometry(0.17, 0.032, 0.05), M.hair);
+          mo.position.set(0, -0.075, 0.3);
+          head.add(mo);
+          var turban = new THREE.Mesh(new THREE.SphereGeometry(0.37, 18, 14), M.maroon2);
+          turban.scale.set(1, 0.78, 1);
+          turban.position.y = 0.16;
+          var band = new THREE.Mesh(new THREE.TorusGeometry(0.33, 0.045, 8, 26), M.gold);
+          band.rotation.x = Math.PI / 2.6;
+          band.position.y = 0.02;
+          turban.add(band);
+          var kalgi = new THREE.Mesh(new THREE.OctahedronGeometry(0.07, 0), M.gold);
+          kalgi.position.set(0.02, 0.34, 0.26);
+          head.add(turban, kalgi);
+
+          var armL = makeArm(M.cream, false, false);
+          armL.position.set(-0.5, 2.46, 0);
+          var armR = makeArm(M.cream, false, false);
+          armR.position.set(0.5, 2.46, 0);
+
+          g.add(lower, trim, torso, chest, sash, neck, head, armL, armR);
+          g.userData = { isModel: false, head: head, armL: armL, armR: armR };
+          return g;
+        }
+
+        /* ---- BRIDE: maroon-gold lehenga, jewelry, dupatta ---- */
+        function makeBride() {
+          var g = new THREE.Group();
+          var skirt = new THREE.Mesh(new THREE.CylinderGeometry(0.27, 0.9, 1.75, 20), M.maroon);
+          skirt.position.y = 0.88;
+          var hem = new THREE.Mesh(new THREE.TorusGeometry(0.87, 0.05, 8, 34), M.gold);
+          hem.rotation.x = Math.PI / 2;
+          hem.position.y = 0.06;
+          var hem2 = new THREE.Mesh(new THREE.TorusGeometry(0.6, 0.035, 8, 30), M.gold);
+          hem2.rotation.x = Math.PI / 2;
+          hem2.position.y = 0.84;
+          var waist = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.27, 0.2, 14), M.skinF);
+          waist.position.y = 1.86;
+          var blouse = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.31, 0.55, 16), M.gold);
+          blouse.position.y = 2.24;
+          var bust = new THREE.Mesh(new THREE.SphereGeometry(0.3, 14, 12), M.gold);
+          bust.scale.set(1, 0.55, 0.85);
+          bust.position.y = 2.45;
+          var necklace = new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.028, 8, 22), M.gold);
+          necklace.rotation.x = Math.PI / 2.6;
+          necklace.position.set(0, 2.6, 0.06);
+          var neck = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.11, 0.2, 10), M.skinF);
+          neck.position.y = 2.66;
+          var head = new THREE.Mesh(new THREE.SphereGeometry(0.3, 20, 16), M.skinF);
+          head.position.y = 2.98;
+          addFace(head, 0.3, M.skinF, M.lipsF, true);
+          var hairBack = new THREE.Mesh(new THREE.SphereGeometry(0.315, 14, 12), M.hair);
+          hairBack.scale.set(1, 0.98, 1);
+          hairBack.position.set(0, 0.05, -0.07);
+          var part = new THREE.Mesh(
+            new THREE.SphereGeometry(0.31, 14, 10, 0, Math.PI * 2, 0, Math.PI / 3),
+            M.hair,
+          );
+          part.position.y = 0.03;
+          var bun = new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 8), M.hair);
+          bun.position.set(0, 0.02, -0.3);
+          var tikka = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 6), M.gold);
+          tikka.position.set(0, 0.15, 0.28);
+          var dupatta = new THREE.Mesh(
+            new THREE.SphereGeometry(0.37, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2.3),
+            new THREE.MeshStandardMaterial({
+              color: 0x93182a,
+              roughness: 0.6,
+              transparent: true,
+              opacity: 0.85,
+            }),
+          );
+          dupatta.position.y = 0.07;
+          head.add(hairBack, part, bun, tikka, dupatta);
+
+          var armL = makeArm(M.gold, true, true);
+          armL.position.set(-0.38, 2.5, 0);
+          var armR = makeArm(M.gold, true, true);
+          armR.position.set(0.38, 2.5, 0);
+          [armL, armR].forEach(function (a) {
+            var b = new THREE.Mesh(new THREE.TorusGeometry(0.09, 0.018, 6, 16), M.gold);
+            b.position.y = -0.4;
+            b.rotation.x = Math.PI / 2;
+            a.userData.elbow.add(b);
+          });
+
+          g.add(skirt, hem, hem2, waist, blouse, bust, necklace, neck, head, armL, armR);
+          g.userData = { isModel: false, head: head, armL: armL, armR: armR };
+          return g;
+        }
+
+        var groom = makeGroom();
+        groom.position.x = -4.6;
+        var bride = makeBride();
+        bride.position.x = 4.6;
+        var figScale = isMobile ? 0.78 : 1;
+        groom.scale.setScalar(figScale);
+        bride.scale.setScalar(figScale);
+        scene.add(groom, bride);
+
+        /* ---- optional realistic models: drop groom.glb / bride.glb
+     next to this HTML file (e.g. free avatars from Ready Player Me
+     or Sketchfab) and they replace the built-in figures. If the
+     GLB contains animation clips, a clip named "walk" plays during
+     the approach and one named "hug"/"embrace"/"idle" during the
+     embrace (otherwise first & last clips are used). ---- */
+        var G = { group: groom, data: groom.userData };
+        var B = { group: bride, data: bride.userData };
+
+        function normalizeModel(gltf) {
+          var model = gltf.scene;
+          var box = new THREE.Box3().setFromObject(model);
+          var hgt = Math.max(0.001, box.max.y - box.min.y);
+          model.scale.setScalar(3.3 / hgt);
+          box.setFromObject(model);
+          model.position.y -= box.min.y;
+          var wrap = new THREE.Group();
+          wrap.add(model);
+          var data = { isModel: true, mixer: null, walk: null, hug: null };
+          if (gltf.animations && gltf.animations.length) {
+            var clips = gltf.animations;
+            var find = function (re) {
+              for (var i = 0; i < clips.length; i++) if (re.test(clips[i].name)) return clips[i];
+              return null;
+            };
+            data.mixer = new THREE.AnimationMixer(model);
+            data.walk = data.mixer.clipAction(find(/walk/i) || clips[0]);
+            data.hug = data.mixer.clipAction(find(/hug|embrace|idle/i) || clips[clips.length - 1]);
+            data.walk.play();
+            data.hug.play();
+            data.hug.setEffectiveWeight(0);
+          }
+          return { group: wrap, data: data };
+        }
+
+        if (typeof THREE.GLTFLoader === 'function') {
+          var loader = new THREE.GLTFLoader();
+          [
+            ['groom.glb', G],
+            ['bride.glb', B],
+          ].forEach(function (cfg) {
+            loader.load(
+              cfg[0],
+              function (gltf) {
+                try {
+                  var res = normalizeModel(gltf);
+                  res.group.position.copy(cfg[1].group.position);
+                  res.group.scale.setScalar(figScale);
+                  scene.remove(cfg[1].group);
+                  scene.add(res.group);
+                  cfg[1].group = res.group;
+                  cfg[1].data = res.data;
+                } catch (e) {
+                  /* keep built-in figure */
+                }
+              },
+              undefined,
+              function () {
+                /* no file found: keep built-in figure */
+              },
+            );
+          });
+        }
+
+        /* ---- heart burst (revealed at the end of the hug) ---- */
+        var hearts = [];
+        var heartMatA = new THREE.MeshStandardMaterial({
+          color: 0xff8fa0,
+          emissive: 0x5c1220,
+          roughness: 0.5,
+        });
+        var heartMatB = new THREE.MeshStandardMaterial({
+          color: 0xffe088,
+          emissive: 0x4a3a00,
+          metalness: 0.6,
+          roughness: 0.35,
+        });
+        for (var i = 0; i < 16; i++) {
+          var hm = new THREE.Mesh(
+            new THREE.OctahedronGeometry(0.11, 0),
+            i % 2 ? heartMatA : heartMatB,
+          );
+          hm.scale.setScalar(0.001);
+          hm.userData = {
+            dir: new THREE.Vector3(
+              (Math.random() - 0.5) * 2,
+              0.6 + Math.random() * 1.2,
+              (Math.random() - 0.5) * 1.2,
+            ).normalize(),
+            dist: 1.2 + Math.random() * 1.6,
+            spin: 0.5 + Math.random(),
+          };
+          scene.add(hm);
+          hearts.push(hm);
+        }
+
+        /* ---- helpers ---- */
+        function clamp01(v) {
+          return Math.max(0, Math.min(1, v));
+        }
+        function smooth(a, b, v) {
+          v = clamp01((v - a) / (b - a));
+          return v * v * (3 - 2 * v);
+        }
+        function lerp(a, b, t) {
+          return a + (b - a) * t;
+        }
+
+        function getProgress() {
+          var rect = track.getBoundingClientRect();
+          var total = track.offsetHeight - window.innerHeight;
+          return clamp01(-rect.top / total);
+        }
+        function nearViewport() {
+          var r = track.getBoundingClientRect();
+          return r.bottom > -window.innerHeight && r.top < window.innerHeight * 2;
+        }
+
+        /* ---- captions ---- */
+        var cap1 = document.getElementById('cap-1'),
+          cap2 = document.getElementById('cap-2'),
+          cap3 = document.getElementById('cap-3');
+        function setCaptions(p) {
+          cap1.classList.toggle('on', p < 0.45);
+          cap2.classList.toggle('on', p >= 0.45 && p < 0.8);
+          cap3.classList.toggle('on', p >= 0.8);
+        }
+
+        /* ---- pose one figure (side: -1 groom/left, +1 bride/right) ---- */
+        var meetX = 0.6 * figScale;
+        function poseFigure(F, side, p, walk, hug, stride) {
+          var g = F.group,
+            ph0 = side > 0 ? 1.3 : 0;
+          g.position.x = lerp(side * 4.6, side * meetX, walk);
+
+          if (F.data.isModel) {
+            /* loaded GLB: move whole model, turn to face partner, lean in */
+            g.position.y = 0;
+            g.rotation.y = lerp(0, -side * 1.15, hug);
+            g.rotation.z = side * 0.09 * hug;
+            if (F.data.mixer) {
+              F.data.walk.setEffectiveWeight(Math.max(0.001, 1 - hug));
+              F.data.walk.timeScale = 0.3 + stride * 1.3;
+              F.data.hug.setEffectiveWeight(hug);
+            } else {
+              /* unanimated model: gentle walking bob */
+              g.position.y = Math.abs(Math.sin(p * 26 + ph0)) * 0.06 * stride;
+            }
+            return;
+          }
+
+          /* built-in articulated figure */
+          var u = F.data;
+          g.position.y = Math.abs(Math.sin(p * 26 + ph0)) * 0.09 * stride;
+          g.rotation.z = -side * Math.sin(p * 26 + ph0) * 0.04 * stride + side * 0.12 * hug;
+          g.rotation.y = lerp(0, -side * 0.35, hug);
+          u.head.rotation.z = side * 0.35 * hug;
+          u.head.rotation.x = 0.08 * hug;
+
+          var near = side < 0 ? u.armR : u.armL; /* arm toward partner */
+          var far = side < 0 ? u.armL : u.armR;
+
+          /* near arm reaches high around the partner's shoulders */
+          near.rotation.z = lerp(side * 0.18, -side * 1.5, hug);
+          near.rotation.x = lerp(0, 0.7, hug);
+          near.userData.elbow.rotation.x = lerp(0.12, 1.1, hug);
+
+          /* far arm wraps around the waist */
+          far.rotation.z = lerp(-side * 0.18, -side * 0.85, hug);
+          far.rotation.x = lerp(0, 0.55, hug);
+          far.userData.elbow.rotation.x = lerp(0.12, 0.85, hug);
+
+          /* natural arm swing while walking */
+          near.rotation.x += Math.sin(p * 26 + ph0) * 0.35 * stride;
+          far.rotation.x -= Math.sin(p * 26 + ph0) * 0.35 * stride;
+        }
+
+        /* ---- pose the scene for a given scroll progress ---- */
+        function pose(p, t) {
+          var walk = smooth(0, 0.62, p); /* approach */
+          var hug = smooth(0.6, 0.92, p); /* arms wrap, lean in */
+          var burst = smooth(0.88, 1, p); /* hearts */
+          var stride = (1 - hug) * walk;
+
+          poseFigure(G, -1, p, walk, hug, stride);
+          poseFigure(B, 1, p, walk, hug, stride);
+
+          /* hearts rise from between them */
+          for (var i = 0; i < hearts.length; i++) {
+            var hm = hearts[i],
+              u = hm.userData;
+            var d = u.dist * burst;
+            hm.position.set(u.dir.x * d, 2.6 * figScale + u.dir.y * d, u.dir.z * d + 0.3);
+            hm.scale.setScalar(burst > 0.02 ? 0.06 + burst * 0.12 : 0.001);
+            hm.rotation.y = t * u.spin + i;
+            hm.rotation.x = t * u.spin * 0.7;
+          }
+
+          /* camera pushes in gently as they meet */
+          camera.position.z = lerp(9.5, 7.6, smooth(0.1, 0.95, p));
+          camera.position.y = lerp(2.2, 1.9, hug);
+          camera.lookAt(0, 1.6 * figScale + 0.4, 0);
+
+          setCaptions(p);
+        }
+
+        /* ---- resize ---- */
+        window.addEventListener('resize', function () {
+          W = holder.clientWidth || window.innerWidth;
+          H = holder.clientHeight || window.innerHeight;
+          camera.aspect = W / H;
+          camera.updateProjectionMatrix();
+          renderer.setSize(W, H);
+        });
+
+        /* ---- loop ---- */
+        var clock = new THREE.Clock();
+        function step() {
+          var dt = clock.getDelta();
+          var t = clock.elapsedTime;
+          pose(getProgress(), t);
+          if (G.data.mixer) G.data.mixer.update(dt);
+          if (B.data.mixer) B.data.mixer.update(dt);
+          renderer.render(scene, camera);
+        }
+        if (reduced) {
+          pose(1, 0);
+          renderer.render(scene, camera);
+          /* re-render once if models arrive later */
+          setTimeout(function () {
+            pose(1, 0);
+            renderer.render(scene, camera);
+          }, 3000);
+        } else {
+          (function frame() {
+            if (nearViewport()) step();
+            requestAnimationFrame(frame);
+          })();
+        }
+      })();
+
+      /* ---------- nav scroll state ---------- */
+      (function () {
+        var nav = document.getElementById('mainNav');
+        function onScroll() {
+          nav.classList.toggle('scrolled', window.scrollY > 50);
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      })();
+
+      /* ---------- live countdown to 24 Jan 2027, 9:00 AM IST ---------- */
+      (function () {
+        var target = new Date('2027-01-24T09:00:00+05:30').getTime();
+        var d = document.getElementById('cd-d'),
+          h = document.getElementById('cd-h'),
+          m = document.getElementById('cd-m'),
+          s = document.getElementById('cd-s');
+        function pad(n) {
+          return n < 10 ? '0' + n : '' + n;
+        }
+        function tick() {
+          var diff = target - Date.now();
+          if (diff <= 0) {
+            d.textContent = h.textContent = m.textContent = s.textContent = '00';
+            clearInterval(iv);
+            return;
+          }
+          d.textContent = Math.floor(diff / 864e5);
+          h.textContent = pad(Math.floor(diff / 36e5) % 24);
+          m.textContent = pad(Math.floor(diff / 6e4) % 60);
+          s.textContent = pad(Math.floor(diff / 1e3) % 60);
+        }
+        tick();
+        var iv = setInterval(tick, 1000);
+      })();
+
+      /* ---------- scroll reveal ---------- */
+      (function () {
+        var els = document.querySelectorAll('.reveal');
+        if (!('IntersectionObserver' in window)) {
+          els.forEach(function (el) {
+            el.classList.add('in');
+          });
+          return;
+        }
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                e.target.classList.add('in');
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -50px 0px' },
+        );
+        els.forEach(function (el) {
+          io.observe(el);
+        });
+      })();
+
+      /* ---------- RSVP (front-end only) ---------- */
+      (function () {
+        var btn = document.getElementById('rsvp-btn'),
+          note = document.getElementById('rsvp-note');
+        btn.addEventListener('click', function () {
+          var name = document.getElementById('rsvp-name').value.trim();
+          if (!name) {
+            note.textContent = 'Please share your name so we know who to thank.';
+            note.classList.add('show');
+            return;
+          }
+          note.textContent = 'Thank you, ' + name + '! Your wishes have been noted with love. ✦';
+          note.classList.add('show');
+        });
+      })();
+    </script>
+
+    <!-- ============ EVOKE EDITOR LIVE-BIND ============ -->
+    <!--
+      Bridges this template to the Evoke editor. When embedded in the editor
+      iframe it announces `evoke:ready`, then applies every `evoke:update`
+      message (the editor's TemplateData) onto the DOM so edits appear live.
+      Loaded standalone (preview / published), it simply no-ops.
+    -->
+    <script>
+      (function () {
+        function esc(s) {
+          return String(s == null ? '' : s).replace(/[&<>]/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c];
+          });
+        }
+        function fmtDate(v) {
+          if (!v) return '';
+          var d = new Date(v);
+          if (isNaN(d.getTime())) return v;
+          return d.toLocaleDateString('en-GB', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          });
+        }
+        function setAll(key, value) {
+          document.querySelectorAll('[data-ev="' + key + '"]').forEach(function (el) {
+            el.textContent = value;
+          });
+        }
+
+        function apply(data) {
+          data = data || {};
+          var hero = data.hero || {};
+          var story = data.story || {};
+          var rsvp = data.rsvp || {};
+          var bride = hero.brideName || '';
+          var groom = hero.groomName || '';
+
+          var namesEl = document.querySelector('[data-ev="names"]');
+          if (namesEl) {
+            namesEl.innerHTML =
+              esc(bride) + ' <span class="amp">&amp;</span> ' + esc(groom);
+          }
+          if (hero.tagline != null && hero.tagline !== '') setAll('tagline', hero.tagline);
+
+          var when = fmtDate(hero.date);
+          if (when) {
+            setAll('date', when);
+            setAll('footerLine', esc(bride) + ' & ' + esc(groom) + ' · ' + when);
+          }
+          if (hero.accent) document.documentElement.style.setProperty('--gold', hero.accent);
+
+          if (story.title != null && story.title !== '') setAll('storyTitle', story.title);
+          var bodyEl = document.querySelector('[data-ev="storyBody"]');
+          if (bodyEl) {
+            bodyEl.textContent = story.body || '';
+            bodyEl.style.display = story.body ? 'block' : 'none';
+          }
+
+          // Portrait photos (bride / groom).
+          var portraits = data.portraits || {};
+          setImage('groomPhoto', portraits.groomPhoto);
+          setImage('bridePhoto', portraits.bridePhoto);
+
+          // Background music — show the toggle once a track is set.
+          var music = data.music || {};
+          var audioEl = document.getElementById('evoke-music');
+          var musicBtn = document.getElementById('evoke-music-btn');
+          if (audioEl && music.track && audioEl.getAttribute('src') !== music.track) {
+            audioEl.setAttribute('src', music.track);
+            if (musicBtn) musicBtn.hidden = false;
+          }
+          if (audioEl && !music.track) {
+            audioEl.removeAttribute('src');
+            if (musicBtn) musicBtn.hidden = true;
+          }
+
+          var events = (data.events && data.events.items) || [];
+          var grid = document.querySelector('[data-ev-events]');
+          if (grid && Array.isArray(events) && events.length) {
+            grid.innerHTML = events
+              .map(function (ev) {
+                var meta = [fmtDate(ev.date), ev.venue].filter(Boolean).join(' · ');
+                var photo = ev.image
+                  ? '<div class="photo"><img src="' + esc(ev.image) + '" alt="" loading="lazy" /></div>'
+                  : '<div class="photo" style="background:linear-gradient(150deg,#7c5f0e,#3d2e05)"></div>';
+                return (
+                  '<div class="event-card reveal">' +
+                  '<h3>' + esc(ev.name || 'Celebration') + '</h3>' +
+                  photo +
+                  '<div class="meta"><span>' + esc(meta) + '</span><span class="arrow">→</span></div>' +
+                  '</div>'
+                );
+              })
+              .join('');
+          }
+
+          // Gallery — a list of uploaded photos rebuilds the grid.
+          var photos = (data.gallery && data.gallery.items) || [];
+          var gal = document.querySelector('[data-ev-gallery]');
+          if (gal && Array.isArray(photos) && photos.length) {
+            gal.innerHTML = photos
+              .filter(function (p) {
+                return p && p.src;
+              })
+              .map(function (p, i) {
+                return (
+                  '<div class="gal-item reveal' + (i ? ' d' + (i % 3) : '') + '">' +
+                  '<img src="' + esc(p.src) + '" alt="Gallery photo ' + (i + 1) + '" loading="lazy" />' +
+                  '</div>'
+                );
+              })
+              .join('');
+          }
+        }
+
+        function setImage(key, src) {
+          if (!src) return;
+          document.querySelectorAll('[data-ev-img="' + key + '"]').forEach(function (img) {
+            img.src = src;
+          });
+        }
+
+        window.addEventListener('message', function (e) {
+          if (e && e.data && e.data.channel === 'evoke:preview-update' && e.data.version === 1) apply(e.data.data);
+        });
+
+        // Play / pause the background music (autoplay is blocked until a tap).
+        var musicToggle = document.getElementById('evoke-music-btn');
+        var musicAudio = document.getElementById('evoke-music');
+        if (musicToggle && musicAudio) {
+          musicToggle.addEventListener('click', function () {
+            if (musicAudio.paused) {
+              musicAudio.play();
+              musicToggle.textContent = '❚❚';
+              musicToggle.setAttribute('aria-label', 'Pause music');
+            } else {
+              musicAudio.pause();
+              musicToggle.textContent = '♪';
+              musicToggle.setAttribute('aria-label', 'Play music');
+            }
+          });
+        }
+
+        // Announce readiness so the editor pushes the current data immediately.
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ channel: 'evoke:preview-ready', version: 1 }, '*');
+          }
+        } catch (_) {}
+      })();
+    </script>
+  </body>
+</html>

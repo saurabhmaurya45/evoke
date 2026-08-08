@@ -1,0 +1,74 @@
+{
+  "id": "tpl-eternal-bond",
+  "name": "Eternal Bond — Royal Wedding",
+  "category": "Wedding",
+  "version": 1,
+  "defaultsUrl": "/invitation-templates/eternal-bond.defaults.json",
+  "sections": [
+    {
+      "key": "hero",
+      "label": "Couple",
+      "fields": [
+        { "key": "brideName", "label": "Bride’s name", "type": "text", "required": true },
+        { "key": "groomName", "label": "Groom’s name", "type": "text", "required": true },
+        { "key": "date", "label": "Wedding date", "type": "date", "required": true },
+        { "key": "tagline", "label": "Tagline", "type": "text", "placeholder": "Two hearts, one journey" }
+      ]
+    },
+    {
+      "key": "families",
+      "label": "Families",
+      "fields": [
+        { "key": "brideFamily", "label": "Bride’s family", "type": "text" },
+        { "key": "groomFamily", "label": "Groom’s family", "type": "text" }
+      ]
+    },
+    {
+      "key": "story",
+      "label": "Our Story",
+      "fields": [
+        { "key": "intro", "label": "Story intro", "type": "textarea", "placeholder": "A journey of chance meetings…" }
+      ]
+    },
+    {
+      "key": "venue",
+      "label": "Venue",
+      "fields": [
+        { "key": "name", "label": "Venue name", "type": "text", "placeholder": "The Royal Palace Gardens" },
+        { "key": "address", "label": "Address", "type": "text", "placeholder": "Street, City, State" }
+      ]
+    },
+    {
+      "key": "storyPhotos",
+      "label": "Story photos",
+      "fields": [
+        { "key": "firstMet", "label": "First met", "type": "image" },
+        { "key": "firstJourney", "label": "First journey", "type": "image" },
+        { "key": "proposal", "label": "The proposal", "type": "image" },
+        { "key": "engagement", "label": "Engagement", "type": "image" }
+      ]
+    },
+    {
+      "key": "gallery",
+      "label": "Gallery photos",
+      "fields": [
+        { "key": "walking", "label": "Walking together", "type": "image" },
+        { "key": "handsJoined", "label": "Hands joined", "type": "image" },
+        { "key": "dancing", "label": "Dancing", "type": "image" },
+        { "key": "laughing", "label": "Laughing together", "type": "image" },
+        { "key": "candlelight", "label": "Candlelight", "type": "image" },
+        { "key": "palace", "label": "Venue / city", "type": "image" }
+      ]
+    },
+    {
+      "key": "reveal",
+      "label": "Hidden reveal photo",
+      "fields": [{ "key": "hidden", "label": "Scratch-to-reveal photo", "type": "image" }]
+    },
+    {
+      "key": "music",
+      "label": "Background music",
+      "fields": [{ "key": "track", "label": "Music track", "type": "audio" }]
+    }
+  ]
+}

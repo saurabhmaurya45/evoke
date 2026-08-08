@@ -1,0 +1,39 @@
+<div class="preview">
+  <header class="preview__bar">
+    <a class="preview__back" routerLink="/" fragment="templates" aria-label="Back to templates">
+      <span aria-hidden="true">←</span>
+      <span class="preview__back-text">Templates</span>
+    </a>
+
+    <div class="preview__meta">
+      <span class="preview__dot" [style.background]="template().accent" aria-hidden="true"></span>
+      <span class="preview__name">{{ template().name }}</span>
+      <span class="preview__category">{{ template().category }}</span>
+    </div>
+
+    <div class="preview__actions">
+      <a
+        class="preview__open"
+        [href]="template().previewUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Open in new tab
+      </a>
+      <a class="preview__use" [routerLink]="['/editor', template().slotId]">
+        Use this template
+      </a>
+    </div>
+  </header>
+
+  <div class="preview__frame-wrap">
+    <iframe
+      class="preview__frame"
+      [src]="safeSrc()"
+      [title]="template().name + ' invitation template preview'"
+      loading="eager"
+      referrerpolicy="no-referrer"
+      sandbox="allow-scripts allow-same-origin allow-popups"
+    ></iframe>
+  </div>
+</div>

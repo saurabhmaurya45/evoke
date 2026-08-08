@@ -1,0 +1,23 @@
+// Theme contract exposed as CSS custom properties.
+// The ThemeService toggles `data-theme` on <html>; all theme-aware
+// styling reads these variables so switching is instant and cheap
+// (no Angular re-render required for pure presentation).
+
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #15120e;
+  --text: #f3ecdd;
+  --text-rgb: 243, 236, 221;
+  --glass-rgb: 243, 236, 221;
+  --nav-rgb: 21, 18, 14;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f7f2e7;
+  --text: #221c13;
+  --text-rgb: 34, 28, 19;
+  --glass-rgb: 34, 28, 19;
+  --nav-rgb: 247, 242, 231;
+}

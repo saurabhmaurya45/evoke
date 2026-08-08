@@ -1,0 +1,78 @@
+<section id="services" class="services">
+  <app-section-aura tone="clay" />
+  <app-section-heading
+    appReveal
+    eyebrow="Services"
+    title="One platform for every occasion"
+    subtitle="Starting with weddings and engagements — many more occasions on the way."
+    accent="#c9a227"
+  />
+
+  <div class="services__grid" appReveal revealStagger>
+    @for (service of content.services; track service.title) {
+      <article class="services__card" appTilt [style.background]="service.cardWash">
+        <div class="services__icon" [style.background]="service.iconGradient">
+          @switch (service.icon) {
+            @case ('heart') {
+              <svg
+                width="26"
+                height="26"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#1A1408"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M20.8 8.6c0-2.5-2-4.5-4.5-4.5-1.5 0-2.9.8-3.7 2-.8-1.2-2.2-2-3.7-2-2.5 0-4.5 2-4.5 4.5 0 4.7 8.2 9.9 8.2 9.9s8.2-5.2 8.2-9.9z"
+                ></path>
+              </svg>
+            }
+            @case ('rings') {
+              <svg
+                width="26"
+                height="26"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#1A1408"
+                stroke-width="1.7"
+                aria-hidden="true"
+              >
+                <circle cx="9" cy="13" r="5"></circle>
+                <circle cx="16" cy="9" r="5"></circle>
+              </svg>
+            }
+          }
+        </div>
+        <h3 class="services__card-title">{{ service.title }}</h3>
+        <p class="services__card-desc">{{ service.description }}</p>
+      </article>
+    }
+
+    <article class="services__card services__card--soon">
+      <div class="services__icon services__icon--muted">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="rgba(var(--text-rgb),0.8)"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M12 3v6M12 15v6M3 12h6M15 12h6"></path>
+          <path d="M6.5 6.5l3 3M14.5 14.5l3 3M17.5 6.5l-3 3M9.5 14.5l-3 3" opacity="0.5"></path>
+        </svg>
+      </div>
+      <h3 class="services__card-title">More Occasions Coming Soon</h3>
+      <ul class="services__tags">
+        @for (occasion of content.upcomingOccasions; track occasion) {
+          <li class="services__tag">{{ occasion }}</li>
+        }
+      </ul>
+    </article>
+  </div>
+</section>

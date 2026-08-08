@@ -1,0 +1,137 @@
+@use 'abstracts' as *;
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background: #15120e;
+}
+
+.preview__bar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 20px;
+  background: rgba(21, 18, 14, 0.92);
+  border-bottom: 1px solid rgba(243, 236, 221, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.preview__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: $fw-semibold;
+  color: rgba(243, 236, 221, 0.8);
+  padding: 9px 16px;
+  border-radius: $radius-pill;
+  background: rgba(243, 236, 221, 0.06);
+  border: 1px solid rgba(243, 236, 221, 0.12);
+  transition: background $transition-base;
+
+  &:hover {
+    background: rgba(243, 236, 221, 0.12);
+  }
+}
+
+.preview__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: #f3ecdd;
+}
+
+.preview__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.preview__name {
+  font-family: $font-serif;
+  font-size: 17px;
+  font-weight: $fw-semibold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.preview__category {
+  font-size: 11px;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: $radius-pill;
+  background: rgba(243, 236, 221, 0.08);
+  color: rgba(243, 236, 221, 0.65);
+  flex-shrink: 0;
+}
+
+.preview__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.preview__open {
+  font-size: 13px;
+  font-weight: $fw-semibold;
+  color: rgba(243, 236, 221, 0.75);
+  padding: 9px 16px;
+  border-radius: $radius-pill;
+  border: 1px solid rgba(243, 236, 221, 0.14);
+  transition: background $transition-base;
+
+  &:hover {
+    background: rgba(243, 236, 221, 0.1);
+  }
+}
+
+.preview__use {
+  font-size: 13px;
+  font-weight: $fw-bold;
+  color: #1a1408;
+  padding: 10px 20px;
+  border-radius: $radius-pill;
+  background: $gradient-gold;
+  box-shadow: $shadow-brand-sm;
+  white-space: nowrap;
+
+  &:hover {
+    filter: brightness(1.06);
+  }
+}
+
+.preview__frame-wrap {
+  flex: 1;
+  min-height: 0;
+}
+
+.preview__frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+// Collapse secondary text/actions on small screens.
+@include respond-below('md') {
+  .preview__back-text,
+  .preview__category,
+  .preview__open {
+    display: none;
+  }
+
+  .preview__name {
+    font-size: 15px;
+    max-width: 40vw;
+  }
+}

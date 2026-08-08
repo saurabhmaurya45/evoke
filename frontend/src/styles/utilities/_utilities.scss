@@ -1,0 +1,61 @@
+@use '../abstracts' as *;
+
+.container {
+  @include container;
+}
+
+.visually-hidden {
+  @include visually-hidden;
+}
+
+// Skip link for keyboard/screen-reader users.
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: $z-modal;
+  padding: 12px 20px;
+  border-radius: $radius-pill;
+  background: $gradient-brand-strong;
+  color: #fff;
+  font-weight: $fw-semibold;
+  transition: top 0.2s ease;
+
+  &:focus {
+    top: 16px;
+  }
+}
+
+.gradient-text {
+  @include gradient-text($gradient-gold);
+}
+
+// Reserves vertical space for deferred sections so scroll position and
+// layout stay stable while they hydrate (avoids CLS).
+.section-skeleton {
+  min-height: 320px;
+}
+
+// Scroll-reveal — driven by the `appReveal` directive. The hidden state
+// (`.reveal-init`) is only ever added from JS, so content stays visible
+// without JavaScript. Transform/opacity only for smooth 60fps.
+.reveal-init {
+  opacity: 0;
+  transform: translateY(28px);
+  will-change: opacity, transform;
+}
+
+.reveal-init.reveal-in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.7s $ease-out-expo,
+    transform 0.7s $ease-out-expo;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-init {
+    opacity: 1;
+    transform: none;
+  }
+}

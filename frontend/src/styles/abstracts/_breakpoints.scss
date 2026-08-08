@@ -1,0 +1,39 @@
+@use 'sass:map';
+
+// Mobile-first breakpoint system.
+$breakpoints: (
+  'sm': 480px,
+  // large phones
+  'md': 768px,
+  // tablets
+  'nav': 900px,
+  // desktop navigation threshold (matches source `isMobile < 900`)
+  'lg': 1024px,
+  // laptops
+  'xl': 1280px,
+  // desktops
+  'xxl': 1600px, // ultra-wide
+);
+
+/// Min-width media query (mobile-first).
+/// @param {String} $key - breakpoint key
+@mixin respond-to($key) {
+  @if map.has-key($breakpoints, $key) {
+    @media (min-width: map.get($breakpoints, $key)) {
+      @content;
+    }
+  } @else {
+    @error "Unknown breakpoint `#{$key}`.";
+  }
+}
+
+/// Max-width media query (use sparingly).
+@mixin respond-below($key) {
+  @if map.has-key($breakpoints, $key) {
+    @media (max-width: map.get($breakpoints, $key) - 1px) {
+      @content;
+    }
+  } @else {
+    @error "Unknown breakpoint `#{$key}`.";
+  }
+}

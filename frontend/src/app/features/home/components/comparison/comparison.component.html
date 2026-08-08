@@ -1,0 +1,33 @@
+<section class="compare">
+  <app-section-aura tone="gold" />
+  <app-section-heading
+    appReveal
+    eyebrow="Why Evoke"
+    title="A better way to invite"
+    accent="#e8c88a"
+  />
+
+  <div class="compare__grid" appReveal revealStagger>
+    <div class="compare__col compare__col--old">
+      <h3 class="compare__title">Traditional Invitation</h3>
+      <ul>
+        @for (row of content.traditionalRows; track row) {
+          <li class="compare__row">
+            <span aria-hidden="true">✕</span><span>{{ row }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="compare__col compare__col--new">
+      <h3 class="compare__title">Evoke Platform</h3>
+      <ul>
+        @for (row of content.platformRows; track row) {
+          <li class="compare__row">
+            <span class="compare__check" aria-hidden="true">✓</span><span>{{ row }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,19 @@
+<section id="how-it-works" class="how">
+  <app-section-aura tone="gold" />
+  <app-section-heading
+    appReveal
+    eyebrow="How It Works"
+    title="Six steps to your website"
+    accent="#e8c88a"
+  />
+
+  <ol class="how__grid" appReveal revealStagger>
+    @for (step of content.steps; track step.number) {
+      <li class="how__card">
+        <div class="how__step">STEP {{ step.number }}</div>
+        <h3 class="how__title">{{ step.title }}</h3>
+        <p class="how__desc">{{ step.desc }}</p>
+      </li>
+    }
+  </ol>
+</section>

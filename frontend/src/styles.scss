@@ -1,0 +1,11 @@
+// ─────────────────────────────────────────────────────────────
+// Global stylesheet — imports only cross-cutting, app-wide layers.
+// Component-scoped styles live beside their components.
+// Order matters: tokens/themes → fonts → reset → type → anim → utils.
+// ─────────────────────────────────────────────────────────────
+@use 'themes/themes';
+@use 'base/fonts';
+@use 'base/reset';
+@use 'base/typography';
+@use 'base/animations';
+@use 'utilities/utilities';

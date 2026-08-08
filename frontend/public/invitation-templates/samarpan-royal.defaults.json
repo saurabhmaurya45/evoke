@@ -1,0 +1,25 @@
+{
+  "hero": {
+    "brideName": "Aisha",
+    "groomName": "Rohan",
+    "date": "2027-01-24",
+    "tagline": "The Strength of the Earth · The Grace of the Sun",
+    "heroImage": "",
+    "accent": "#C9A227"
+  },
+  "story": {
+    "title": "Our Story",
+    "body": ""
+  },
+  "events": {
+    "items": [
+      { "name": "Haldi", "date": "2027-01-24", "venue": "Palace Courtyard", "mapUrl": "" },
+      { "name": "Sangeet", "date": "2027-01-24", "venue": "The Grand Hall", "mapUrl": "" },
+      { "name": "Reception", "date": "2027-01-25", "venue": "Lakeside Lawn", "mapUrl": "" }
+    ]
+  },
+  "rsvp": {
+    "enabled": true,
+    "deadline": "2027-01-01"
+  }
+}

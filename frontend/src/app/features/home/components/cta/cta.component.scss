@@ -1,0 +1,71 @@
+@use 'abstracts' as *;
+
+.cta-band {
+  max-width: $container-max;
+  margin-inline: auto;
+  padding: 40px 28px 100px;
+  position: relative;
+  z-index: $z-content;
+}
+
+.cta-band__inner {
+  position: relative;
+  border-radius: $radius-2xl;
+  overflow: hidden;
+  padding: 80px 40px;
+  text-align: center;
+  background: linear-gradient(135deg, #241c12, #1c140c, #100c08);
+  border: 1px solid rgba(var(--glass-rgb), 0.1);
+}
+
+.cta-band__blob {
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  filter: blur(20px);
+
+  &--1 {
+    top: -100px;
+    left: 20%;
+    background: radial-gradient(circle, rgba(201, 162, 39, 0.4), transparent 70%);
+    animation: blobMove1 10s ease-in-out infinite;
+  }
+
+  &--2 {
+    bottom: -120px;
+    right: 15%;
+    background: radial-gradient(circle, rgba(232, 200, 138, 0.35), transparent 70%);
+    animation: blobMove2 12s ease-in-out infinite;
+  }
+}
+
+.cta-band__title {
+  position: relative;
+  font-family: $font-serif;
+  font-size: clamp(30px, 4.2vw, 48px);
+  font-weight: $fw-bold;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+  color: #f3ecdd;
+}
+
+.cta-band__lede {
+  position: relative;
+  font-size: 17px;
+  color: rgba(243, 236, 221, 0.65);
+  margin: 0 0 36px;
+}
+
+.cta-band__btn {
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: $fw-bold;
+  padding: 18px 40px;
+  border-radius: $radius-pill;
+  background: $gradient-brand;
+  color: #fff;
+  box-shadow: $shadow-brand-lg;
+  will-change: transform;
+}

@@ -1,0 +1,5 @@
+// Aggregator so components can `@use 'abstracts' as *`
+// (resolved via angular.json stylePreprocessorOptions.includePaths).
+@forward 'tokens';
+@forward 'breakpoints';
+@forward 'mixins';

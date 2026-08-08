@@ -1,0 +1,42 @@
+<section class="testimonials">
+  <app-section-aura tone="sand" />
+  <app-section-heading
+    appReveal
+    eyebrow="Testimonials"
+    title="Loved by couples everywhere"
+    accent="#c9a227"
+  />
+
+  <figure
+    appReveal
+    class="testimonials__card"
+    (mouseenter)="pause()"
+    (mouseleave)="resume()"
+    (focusin)="pause()"
+    (focusout)="resume()"
+  >
+    <div class="testimonials__stars" aria-label="Rated 5 out of 5">{{ stars }}</div>
+    <blockquote class="testimonials__quote">"{{ active().quote }}"</blockquote>
+    <figcaption class="testimonials__author">
+      <div class="testimonials__avatar" aria-hidden="true">{{ active().initials }}</div>
+      <div class="testimonials__meta">
+        <div class="testimonials__name">{{ active().name }}</div>
+        <div class="testimonials__role">{{ active().role }}</div>
+      </div>
+    </figcaption>
+  </figure>
+
+  <div class="testimonials__dots" role="tablist" aria-label="Choose testimonial">
+    @for (item of content.testimonials; track item.name; let i = $index) {
+      <button
+        type="button"
+        role="tab"
+        class="testimonials__dot"
+        [class.is-active]="index() === i"
+        [attr.aria-selected]="index() === i"
+        [attr.aria-label]="'Show testimonial from ' + item.name"
+        (click)="select(i)"
+      ></button>
+    }
+  </div>
+</section>

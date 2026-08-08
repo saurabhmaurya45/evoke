@@ -1,0 +1,102 @@
+@use 'abstracts' as *;
+
+.pricing {
+  max-width: $container-max;
+  margin-inline: auto;
+  padding: 80px 28px;
+  position: relative;
+  z-index: $z-content;
+}
+
+.pricing__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  max-width: $container-mid;
+  margin-inline: auto;
+}
+
+.pricing__card {
+  border-radius: $radius-xl;
+  padding: 36px 28px;
+  position: relative;
+
+  &--glass {
+    background: rgba(var(--glass-rgb), 0.04);
+    border: 1px solid rgba(var(--glass-rgb), 0.1);
+  }
+
+  &--featured {
+    background: linear-gradient(160deg, rgba(201, 162, 39, 0.14), rgba(232, 200, 138, 0.06));
+    border: 1px solid rgba(201, 162, 39, 0.4);
+  }
+
+  &--luxury {
+    background: rgba(var(--glass-rgb), 0.04);
+    border: 1px solid rgba(232, 200, 138, 0.35);
+  }
+}
+
+.pricing__badge {
+  position: absolute;
+  top: -13px;
+  left: 28px;
+  font-size: 11px;
+  font-weight: $fw-bold;
+  padding: 5px 14px;
+  border-radius: $radius-pill;
+  background: $gradient-gold;
+  color: #1a1408;
+}
+
+.pricing__name {
+  font-family: $font-serif;
+  font-size: 19px;
+  font-weight: $fw-semibold;
+  margin: 0 0 8px;
+}
+
+.pricing__price {
+  font-family: $font-serif;
+  font-size: 38px;
+  font-weight: $fw-bold;
+  margin: 0 0 20px;
+}
+
+.pricing__perk {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 14px;
+  color: rgba(var(--text-rgb), 0.75);
+}
+
+.pricing__tick {
+  color: #e8c88a;
+}
+
+.pricing__cta {
+  display: block;
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  font-weight: $fw-semibold;
+  padding: 13px;
+  border-radius: $radius-pill;
+  will-change: transform;
+
+  &--glass {
+    background: rgba(var(--glass-rgb), 0.08);
+    color: var(--text);
+  }
+
+  &--featured {
+    background: linear-gradient(135deg, #c9a227, #a9752e);
+    color: #fff;
+  }
+
+  &--luxury {
+    background: linear-gradient(135deg, #e8c88a, #c9a227);
+    color: #1a1408;
+  }
+}

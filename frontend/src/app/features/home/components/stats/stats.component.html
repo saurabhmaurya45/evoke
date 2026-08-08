@@ -1,0 +1,11 @@
+<section id="stats-section" class="stats" appInView (enter)="start()" [threshold]="0.3">
+  <app-section-aura tone="gold" />
+  <div class="stats__grid" appReveal revealStagger>
+    @for (stat of content.stats; track stat.label; let i = $index) {
+      <div class="stats__card">
+        <div class="stats__value">{{ values()[i] }}</div>
+        <div class="stats__label">{{ stat.label }}</div>
+      </div>
+    }
+  </div>
+</section>

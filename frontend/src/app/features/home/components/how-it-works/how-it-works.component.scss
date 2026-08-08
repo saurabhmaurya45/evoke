@@ -1,0 +1,55 @@
+@use 'abstracts' as *;
+
+.how {
+  max-width: $container-max;
+  margin-inline: auto;
+  padding: 80px 28px;
+  position: relative;
+  z-index: $z-content;
+}
+
+.how__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.how__card {
+  flex: 1 1 260px;
+  min-width: 200px;
+  background: rgba(var(--glass-rgb), 0.04);
+  border: 1px solid rgba(var(--glass-rgb), 0.1);
+  border-radius: $radius-lg;
+  padding: 28px 24px;
+  transition:
+    background $transition-base,
+    transform $transition-base;
+
+  &:hover {
+    background: rgba(var(--glass-rgb), 0.07);
+    transform: translateY(-4px);
+  }
+}
+
+.how__step {
+  font-family: $font-serif;
+  font-size: 14px;
+  font-weight: $fw-bold;
+
+  @include gradient-text($gradient-gold);
+  margin-bottom: 14px;
+}
+
+.how__title {
+  font-family: $font-serif;
+  font-size: 18px;
+  font-weight: $fw-semibold;
+  margin: 0 0 8px;
+}
+
+.how__desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(var(--text-rgb), 0.55);
+  margin: 0;
+}

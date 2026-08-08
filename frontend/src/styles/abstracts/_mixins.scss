@@ -1,0 +1,65 @@
+@use 'tokens' as *;
+
+// ─────────────────────────────────────────────────────────────
+// Reusable style mixins built on top of the theme CSS variables.
+// `--glass-rgb`, `--text-rgb`, `--nav-rgb`, `--bg`, `--text` are
+// defined per-theme in themes/_themes.scss.
+// ─────────────────────────────────────────────────────────────
+
+/// Frosted-glass surface.
+@mixin glass($alpha-bg: 0.06, $alpha-border: 0.14, $blur: 16px) {
+  background: rgba(var(--glass-rgb), $alpha-bg);
+  border: 1px solid rgba(var(--glass-rgb), $alpha-border);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+}
+
+/// Gradient text (clipped background).
+@mixin gradient-text($gradient: $gradient-gold) {
+  background: $gradient;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/// Centered content container with responsive gutter.
+@mixin container($max: $container-max) {
+  width: 100%;
+  max-width: $max;
+  margin-inline: auto;
+  padding-inline: 28px;
+}
+
+/// Section vertical rhythm.
+@mixin section-padding($top: 80px, $bottom: 80px) {
+  padding-block: $top $bottom;
+  position: relative;
+  z-index: $z-content;
+}
+
+/// Visually hidden but accessible to screen readers.
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/// Focus ring honoring keyboard navigation.
+@mixin focus-ring($color: $color-gold) {
+  outline: 2px solid $color;
+  outline-offset: 3px;
+  border-radius: $radius-sm;
+}
+
+/// Respect reduced-motion preference.
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}

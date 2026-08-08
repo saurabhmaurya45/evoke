@@ -1,0 +1,19 @@
+{
+  "hero": {
+    "brideName": "Diya",
+    "groomName": "Aarav",
+    "date": "2026-11-22",
+    "tagline": "Two hearts, one journey"
+  },
+  "families": {
+    "brideFamily": "Kapoor",
+    "groomFamily": "Sharma"
+  },
+  "story": {
+    "intro": "A journey of chance meetings, chai, and countless blessings."
+  },
+  "venue": {
+    "name": "The Royal Palace Gardens",
+    "address": "Jorawar Singh Gate, Amer Road, Jaipur, Rajasthan"
+  }
+}

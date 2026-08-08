@@ -1,0 +1,68 @@
+@use 'abstracts' as *;
+
+.compare {
+  max-width: $container-max;
+  margin-inline: auto;
+  padding: 80px 28px;
+  position: relative;
+  z-index: $z-content;
+}
+
+.compare__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 900px;
+  margin-inline: auto;
+
+  @include respond-below('md') {
+    grid-template-columns: 1fr;
+  }
+}
+
+.compare__col {
+  border-radius: 22px;
+  padding: 32px;
+
+  &--old {
+    background: rgba(var(--glass-rgb), 0.03);
+    border: 1px solid rgba(var(--glass-rgb), 0.08);
+  }
+
+  &--new {
+    background: linear-gradient(160deg, rgba(201, 162, 39, 0.12), rgba(232, 200, 138, 0.06));
+    border: 1px solid rgba(201, 162, 39, 0.35);
+    box-shadow: 0 20px 50px rgba(139, 94, 52, 0.15);
+  }
+}
+
+.compare__title {
+  font-family: $font-serif;
+  font-size: 17px;
+  font-weight: $fw-semibold;
+  margin: 0 0 24px;
+
+  .compare__col--old & {
+    color: rgba(var(--text-rgb), 0.5);
+  }
+}
+
+.compare__row {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(var(--glass-rgb), 0.06);
+  font-size: 14.5px;
+
+  .compare__col--old & {
+    color: rgba(var(--text-rgb), 0.5);
+  }
+
+  .compare__col--new & {
+    border-top-color: rgba(var(--glass-rgb), 0.08);
+  }
+}
+
+.compare__check {
+  color: #e8c88a;
+}

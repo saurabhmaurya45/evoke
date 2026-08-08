@@ -1,0 +1,4 @@
+[
+  { "id": "tpl-samarpan-royal", "previewUrl": "/invitation-templates/samarpan-royal-wedding.html", "bindingMode": "legacy" },
+  { "id": "tpl-eternal-bond", "previewUrl": "/invitation-templates/eternal-bond-royal.html", "schemaUrl": "/invitation-templates/eternal-bond.schema.json", "bindingMode": "legacy" }
+]

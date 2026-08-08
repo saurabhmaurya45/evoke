@@ -1,0 +1,42 @@
+@use 'abstracts' as *;
+
+.coming {
+  max-width: $container-narrow;
+  margin-inline: auto;
+  padding: 200px 28px 160px;
+  text-align: center;
+}
+
+.coming__eyebrow {
+  font-size: 13px;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $color-gold;
+  margin-bottom: 14px;
+}
+
+.coming__title {
+  font-family: $font-serif;
+  font-size: clamp(34px, 5vw, 56px);
+  font-weight: $fw-bold;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+}
+
+.coming__desc {
+  font-size: 18px;
+  color: rgba(var(--text-rgb), 0.6);
+  margin: 0 0 36px;
+}
+
+.coming__back {
+  display: inline-block;
+  font-size: 15px;
+  font-weight: $fw-semibold;
+  padding: 14px 30px;
+  border-radius: $radius-pill;
+  background: $gradient-brand-strong;
+  color: #fff;
+  box-shadow: $shadow-brand-sm;
+}

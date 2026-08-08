@@ -1,0 +1,75 @@
+@use 'abstracts' as *;
+
+// Sits behind the section's in-flow content. Each host section establishes a
+// stacking context (`position: relative; z-index`), so `-1` stays clipped to
+// the section and never leaks behind neighbours.
+:host {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  display: block;
+}
+
+.aura {
+  position: absolute;
+  inset: 0;
+}
+
+.aura__layer {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+
+  &--1 {
+    // top-left region
+    display: block;
+  }
+
+  &--2 {
+    display: block;
+  }
+}
+
+.aura__blob {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.5;
+
+  .aura__layer--1 & {
+    top: -60px;
+    left: -40px;
+    width: 380px;
+    height: 380px;
+    animation: blobMove1 18s ease-in-out infinite;
+  }
+
+  .aura__layer--2 & {
+    bottom: -80px;
+    right: -30px;
+    width: 340px;
+    height: 340px;
+    animation: blobMove2 22s ease-in-out infinite;
+  }
+}
+
+.aura__blob--gold {
+  background: radial-gradient(circle, rgba(201, 162, 39, 0.22), transparent 70%);
+}
+
+.aura__blob--sand {
+  background: radial-gradient(circle, rgba(232, 200, 138, 0.18), transparent 70%);
+}
+
+.aura__blob--clay {
+  background: radial-gradient(circle, rgba(201, 123, 99, 0.18), transparent 70%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aura__blob {
+    animation: none;
+  }
+}
