@@ -3,14 +3,14 @@
 
 project:
   name: "evoke"
-  type: "brownfield"
+  type: "microservice"
   workspace_root: "/Users/saurabhmaurya/Desktop/personal/evoke"
   governance_enabled: true
   compliance_enabled: false
   created: "2026-08-08"
   last_updated: "2026-08-08"
 
-current_stage: "reverse-engineering"
+current_stage: "requirements-analysis"
 current_phase: "inception"
 
 inception:
