@@ -2402,8 +2402,9 @@
           });
         }
 
+        var parentOrigin = document.referrer ? new URL(document.referrer).origin : window.location.origin;
         window.addEventListener('message', function (e) {
-          if (e && e.data && e.data.channel === 'evoke:preview-update' && e.data.version === 1) apply(e.data.data);
+          if (e && e.source === window.parent && e.origin === parentOrigin && e.data && e.data.channel === 'evoke:preview-update' && e.data.version === 1) apply(e.data.data);
         });
 
         // Play / pause the background music (autoplay is blocked until a tap).
@@ -2426,7 +2427,7 @@
         // Announce readiness so the editor pushes the current data immediately.
         try {
           if (window.parent && window.parent !== window) {
-            window.parent.postMessage({ channel: 'evoke:preview-ready', version: 1 }, '*');
+            window.parent.postMessage({ channel: 'evoke:preview-ready', version: 1 }, parentOrigin);
           }
         } catch (_) {}
       })();

@@ -1598,7 +1598,9 @@
       }
     }
 
+    var parentOrigin = document.referrer ? new URL(document.referrer).origin : window.location.origin;
     window.addEventListener('message', function (e) {
+      if (!e || e.source !== window.parent || e.origin !== parentOrigin) return;
       if (e && e.data && e.data.channel === 'evoke:preview-update' && e.data.version === 1) {
         applyEditorData(e.data.data);
       }
@@ -1607,7 +1609,7 @@
     // Announce readiness so the editor pushes the current data immediately.
     try {
       if (window.parent && window.parent !== window) {
-        window.parent.postMessage({ channel: 'evoke:preview-ready', version: 1 }, '*');
+        window.parent.postMessage({ channel: 'evoke:preview-ready', version: 1 }, parentOrigin);
       }
     } catch (_) {}
   }

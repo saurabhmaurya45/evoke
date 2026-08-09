@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Bundled Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eternal Bond | Wedding Invitation</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #fbe9ea; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
@@ -316,8 +317,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
       }
     }
+    var parentOrigin = document.referrer ? new URL(document.referrer).origin : window.location.origin;
     window.addEventListener('message', function (e) {
-      if (e && e.data && e.data.channel === 'evoke:preview-update' && e.data.version === 1) apply(e.data.data);
+      if (e && e.source === window.parent && e.origin === parentOrigin && e.data && e.data.channel === 'evoke:preview-update' && e.data.version === 1) apply(e.data.data);
     });
     // Poll until the bundle has rendered the couple's names, then signal ready
     // so the editor pushes current data. Timers survive the DOM replace.
@@ -329,7 +331,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         clearInterval(poll);
         try {
           if (window.parent && window.parent !== window) {
-          window.parent.postMessage({ channel: 'evoke:preview-ready', version: 1 }, '*');
+          window.parent.postMessage({ channel: 'evoke:preview-ready', version: 1 }, parentOrigin);
           }
         } catch (_) {}
       } else if (tries > 300) {

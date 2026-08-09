@@ -254,7 +254,14 @@ export class TemplateRendererComponent {
     // The embedded template signals readiness before it can accept data.
     const onMessage = (event: MessageEvent): void => {
       const message = event.data as { channel?: string; version?: number } | null;
-      if (message?.channel === PREVIEW_READY && message.version === PREVIEW_PROTOCOL_VERSION) {
+      const frameWindow = this.frame()?.nativeElement.contentWindow;
+      const sameOrigin = event.origin === this.window?.location.origin;
+      if (
+        sameOrigin &&
+        event.source === frameWindow &&
+        message?.channel === PREVIEW_READY &&
+        message.version === PREVIEW_PROTOCOL_VERSION
+      ) {
         this.ready = true;
         this.push();
       }
@@ -318,7 +325,7 @@ export class TemplateRendererComponent {
     }
     this.frame()?.nativeElement.contentWindow?.postMessage(
       { channel: PREVIEW_UPDATE, version: PREVIEW_PROTOCOL_VERSION, data: this.store.data() },
-      '*',
+      this.window?.location.origin ?? '*',
     );
   }
 }

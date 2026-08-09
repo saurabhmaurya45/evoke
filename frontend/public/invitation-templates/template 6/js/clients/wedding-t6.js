@@ -257,6 +257,16 @@
     var token = el.getAttribute('data-token');
     var encoded = encodedStoragePath(storagePath);
 
+    // Template media is bundled locally. Keep the storage metadata attributes
+    // for editor compatibility, but never require Firebase for shipped assets.
+    var localName = decodedStoragePath(storagePath).split('/').pop();
+    var localUrl = 'static/assets/' + encodeURIComponent(localName).replace(/%2F/g, '/');
+    if (localName && /\.(mp3|mp4|png|jpe?g|webp|gif)$/i.test(localName)) {
+      el.setAttribute('src', localUrl);
+      if (el.tagName === 'SOURCE' && el.parentElement) el.parentElement.load();
+      return;
+    }
+
     function setSrc(url) {
       if (!url) {
         if (existingSrc && !el.getAttribute('src')) el.setAttribute('src', existingSrc);
@@ -1980,7 +1990,9 @@
       revealForEditor();
     }
 
+    var parentOrigin = document.referrer ? new URL(document.referrer).origin : window.location.origin;
     window.addEventListener('message', function (e) {
+      if (!e || e.source !== window.parent || e.origin !== parentOrigin) return;
       if (e && e.data && e.data.channel === 'evoke:preview-update' && e.data.version === 1) {
         apply(e.data.data);
       }
@@ -1988,14 +2000,15 @@
 
     try {
       if (window.parent && window.parent !== window) {
-        window.parent.postMessage({ channel: 'evoke:preview-ready', version: 1 }, '*');
+        window.parent.postMessage({ channel: 'evoke:preview-ready', version: 1 }, parentOrigin);
       }
     } catch (_) {}
   }
 
   /* Boot */
   hydrate();
-  runFirebaseInit();
+  // Resolve the bundled media paths locally; no remote storage is required.
+  initializeFirebaseImages();
   initMute();
   initOpening();
   warmIntroVideoBuffer();
@@ -2005,6 +2018,6 @@
   initGalleryReveal();
   initGalleryZoom();
   startCountdown();
-  initRsvp();
+  // RSVP submission is intentionally left for the host application's API.
   initEvokeBridge();
 })();

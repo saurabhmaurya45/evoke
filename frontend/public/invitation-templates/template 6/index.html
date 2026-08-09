@@ -6,10 +6,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Joe &amp; Serin — Wedding Invitation</title>
+  <meta http-equiv="Content-Security-Policy" content="img-src 'self' data: https://images.unsplash.com; media-src 'self';">
+  <title>Vikram &amp; Ananya — Wedding Invitation</title>
   <link rel="icon" type="image/png" href="static/images/my-beloved-icon.png">
-  <link rel="preconnect" href="https://firebasestorage.googleapis.com/" crossorigin>
-  <link rel="preload" as="video" type="video/mp4" href="https://firebasestorage.googleapis.com/v0/b/my-bel0ved.firebasestorage.app/o/templates%2Fshared%2Fimages%2Fwedding t6%2Fintro_video.mp4?alt=media&amp;token=98481d3c-dc9f-4d3d-9a29-08f498272321">
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/wedding-t6.css">
   <link rel="preconnect" href="https://fonts.googleapis.com/">
@@ -17,14 +16,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Allura&amp;family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&amp;family=Great+Vibes&amp;family=Nunito:wght@400;600;700&amp;family=Pinyon+Script&amp;family=Playfair+Display:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet">
 </head>
 <body
-  data-groom-name="Joe"
-  data-bride-name="Serin"
+  data-groom-name="Vikram"
+  data-bride-name="Ananya"
   data-groom-parent-prefix="Son of"
-  data-groom-parents-name="Mr Abel &amp; Mrs Christy"
+  data-groom-parents-name="Mr Mahesh &amp; Mrs Kavita Sharma"
   data-bride-parent-prefix="Daughter of"
-  data-bride-parents-name="Mr George &amp; Mrs Lia"
-  data-groom-place="Feroke, Calicut"
-  data-bride-place="Hati, Kollam"
+  data-bride-parents-name="Mr Ramesh &amp; Mrs Meena Iyer"
+  data-groom-place="Jaipur, Rajasthan"
+  data-bride-place="Udaipur, Rajasthan"
   data-event-date="2027-01-27"
   data-event-time="11:00 AM - 2:00 PM"
   data-event-address="Miami Convention Centre, Calicut"
@@ -66,19 +65,19 @@
   data-venue-2-map-embed="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3915.0344224660566!2d75.83706249999999!3d11.110812500000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba6516e87cbf971%3A0x628f6bbe91c8b3c!2sDazzle%20Avenue%20Auditorium!5e0!3m2!1sen!2sqa!4v1782972112175!5m2!1sen!2sqa"
   data-venue-2-map-link="https://maps.app.goo.gl/RXg7k5AEb2ZUfhY5A"
   data-rsvp-enabled="true"
-  data-rsvp-slug="joe-serin"
+  data-rsvp-slug="vikram-ananya"
   data-rsvp-mode="wishes"
   data-rsvp-thank-you="Thank you for your beautiful wish!"
   data-template-id="wedding-t6"
   data-music-volume="0.85">
 
-  <audio id="wed6-music" preload="auto" aria-label="Wedding background music">
+  <audio id="wed6-music" preload="none" aria-label="Wedding background music">
     <source data-storage-path="/templates%2Fshared%2Faudios%2Fwedding%20t6%2Fsong.mp3" data-token="4628d573-3a1f-4bb8-bcc1-12ecb7436f7a" type="audio/mpeg">
   </audio>
-  <audio id="wed6-knock-sfx" preload="auto" aria-hidden="true">
+  <audio id="wed6-knock-sfx" preload="none" aria-hidden="true">
     <source data-storage-path="/templates%2Fshared%2Fimages%2Fwedding%20t6%2Fdoor-tuck-sound.mp3" data-token="a1999f46-78ca-4c55-a266-4091c4015d6f" type="audio/mpeg">
   </audio>
-  <audio id="wed6-door-open-sfx" preload="auto" aria-hidden="true">
+  <audio id="wed6-door-open-sfx" preload="none" aria-hidden="true">
     <source data-storage-path="/templates%2Fshared%2Fimages%2Fwedding%20t6%2Fdoor_opening_sound.mp3" data-token="cc849549-533e-4245-8a1f-b7aaecb6c701" type="audio/mpeg">
   </audio>
 
@@ -94,7 +93,7 @@
           playsinline
           webkit-playsinline
           muted
-          preload="auto"
+          preload="metadata"
           aria-hidden="true"></video>
         <div class="wed6-opening-loader" id="wed6-opening-loader" aria-live="polite" aria-busy="true">
           <div class="wed6-opening-loader-card">
@@ -133,7 +132,7 @@
             webkit-playsinline
             muted
             loop
-            preload="auto"
+            preload="metadata"
             fetchpriority="high"
             aria-hidden="true"></video>
           <div class="wed6-hero-veil" aria-hidden="true"></div>
@@ -613,13 +612,7 @@
     </section>
   </main>
 
-  <script src="js/firebase-app-compat.js"></script>
-  <script src="js/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-storage-compat.js"></script>
-    <script src="js/brand-assets.js"></script>
-  <script src="js/firebase-config.js"></script>
-    <script src="js/rsvp-store.js"></script>
-  <script src="js/rsvp-form.js"></script>
+  <script src="js/brand-assets.js"></script>
   <script src="js/clients/wedding-t6.js"></script>
 </body>
 

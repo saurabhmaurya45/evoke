@@ -15,6 +15,7 @@
   var UPDATE = 'evoke:preview-update';
   var READY = 'evoke:preview-ready';
   var VERSION = 1;
+  var PARENT_ORIGIN = document.referrer ? new URL(document.referrer).origin : window.location.origin;
 
   var values = null; // current TemplateData (from defaults.json or the editor)
   var observer = null;
@@ -355,7 +356,7 @@
 
   // Editor pushes the live TemplateData; it wins over the fetched defaults.
   window.addEventListener('message', function (e) {
-    if (e && e.data && e.data.channel === UPDATE && e.data.version === VERSION) {
+    if (e && e.source === window.parent && e.origin === PARENT_ORIGIN && e.data && e.data.channel === UPDATE && e.data.version === VERSION) {
       useValues(e.data.data);
     }
   });
@@ -382,7 +383,7 @@
     var n = 0;
     function ping() {
       try {
-        window.parent.postMessage({ channel: READY, version: VERSION }, '*');
+        window.parent.postMessage({ channel: READY, version: VERSION }, PARENT_ORIGIN);
       } catch (_) {}
       if (++n < 12) window.setTimeout(ping, 250);
     }

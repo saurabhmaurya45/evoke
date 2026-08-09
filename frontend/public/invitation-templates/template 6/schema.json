@@ -9,8 +9,8 @@
       "key": "couple",
       "label": "Couple",
       "fields": [
-        { "key": "groomName", "label": "Groom’s name", "type": "text", "required": true, "placeholder": "Arjun" },
-        { "key": "brideName", "label": "Bride’s name", "type": "text", "required": true, "placeholder": "Priya" },
+        { "key": "groomName", "label": "Groom’s name", "type": "text", "required": true, "placeholder": "Vikram" },
+        { "key": "brideName", "label": "Bride’s name", "type": "text", "required": true, "placeholder": "Ananya" },
         { "key": "groomParentPrefix", "label": "Groom parents prefix", "type": "text", "placeholder": "Son of" },
         { "key": "groomParentsName", "label": "Groom’s parents", "type": "text" },
         { "key": "brideParentPrefix", "label": "Bride parents prefix", "type": "text", "placeholder": "Daughter of" },

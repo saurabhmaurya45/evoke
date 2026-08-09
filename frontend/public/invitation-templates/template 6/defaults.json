@@ -1,11 +1,11 @@
 {
   "couple": {
-    "groomName": "Arjun",
-    "brideName": "Priya",
+    "groomName": "Vikram",
+    "brideName": "Ananya",
     "groomParentPrefix": "Son of",
-    "groomParentsName": "Mr Rajesh & Mrs Sunita Sharma",
+    "groomParentsName": "Mr Mahesh & Mrs Kavita Sharma",
     "brideParentPrefix": "Daughter of",
-    "brideParentsName": "Mr Suresh & Mrs Lakshmi Iyer",
+    "brideParentsName": "Mr Ramesh & Mrs Meena Iyer",
     "groomPlace": "Jaipur, Rajasthan",
     "bridePlace": "Udaipur, Rajasthan"
   },
@@ -21,7 +21,7 @@
     "togetherQuote": "The Beginning of Forever",
     "invitationMessage": "With warm hearts, we invite you to celebrate with us.",
     "welcomeMessage": "We warmly welcome you to celebrate with us. Your presence and blessings will make our day truly complete.",
-    "blessingsFrom": "Aarav, Diya & Kabir"
+    "blessingsFrom": "Rahul, Neha & Rohan"
   },
   "timeline": {
     "items": [

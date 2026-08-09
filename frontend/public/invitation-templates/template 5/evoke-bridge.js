@@ -12,6 +12,14 @@
   var UPDATE = 'evoke:preview-update';
   var READY = 'evoke:preview-ready';
   var VERSION = 1;
+  var PARENT_ORIGIN = document.referrer ? new URL(document.referrer).origin : window.location.origin;
+
+  function isSafeUrl(value) {
+    try {
+      var url = new URL(String(value), window.location.href);
+      return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch (_) { return false; }
+  }
 
   // Flat data-path -> the value the hooks expect. Keys match schema.json.
   var TEXT = {
@@ -134,6 +142,7 @@
     Object.keys(IMG).forEach(function (path) {
       var v = get(data, path);
       if (!v) return;
+      if (!isSafeUrl(v)) return;
       setAll('[data-ev-img="' + IMG[path] + '"]', function (el) {
         el.src = String(v);
         el.style.display = '';
@@ -142,9 +151,9 @@
 
     // Venue map + directions.
     var mapEmbed = get(data, 'venue.mapEmbed');
-    if (mapEmbed) setAll('[data-ev-map]', function (el) { el.src = String(mapEmbed); });
+    if (mapEmbed && isSafeUrl(mapEmbed)) setAll('[data-ev-map]', function (el) { el.src = String(mapEmbed); });
     var dirUrl = get(data, 'venue.directionsUrl');
-    if (dirUrl) setAll('[data-ev-href="directionsUrl"]', function (el) { el.href = String(dirUrl); });
+    if (dirUrl && isSafeUrl(dirUrl)) setAll('[data-ev-href="directionsUrl"]', function (el) { el.href = String(dirUrl); });
 
     // Countdown target: combine date + time (local).
     var cd = data.countdown || {};
@@ -159,14 +168,14 @@
   }
 
   window.addEventListener('message', function (e) {
-    if (e && e.data && e.data.channel === UPDATE && e.data.version === VERSION) {
+    if (e && e.source === window.parent && e.origin === PARENT_ORIGIN && e.data && e.data.channel === UPDATE && e.data.version === VERSION) {
       applyEditorData(e.data.data);
     }
   });
 
   try {
     if (window.parent && window.parent !== window) {
-      window.parent.postMessage({ channel: READY, version: VERSION }, '*');
+      window.parent.postMessage({ channel: READY, version: VERSION }, PARENT_ORIGIN);
     }
   } catch (_) {}
 })();

@@ -5,18 +5,14 @@
 (function () {
   'use strict';
 
-  var STORAGE_BASE =
-    'https://firebasestorage.googleapis.com/v0/b/my-bel0ved.firebasestorage.app/o/';
-
   /** Favicon / tab icon (templates/shared/images/my_beloved_icon.png) */
   var ICON_PATH = 'templates%2Fshared%2Fimages%2Fmy_beloved_icon.png';
   var ICON_TOKEN = '0ce8a84b-4fce-44c5-a0a1-80841b152870';
 
   window.BrandAssets = {
-    storageBaseUrl: STORAGE_BASE,
     iconPath: '/' + ICON_PATH,
     iconToken: ICON_TOKEN,
-    iconUrl: STORAGE_BASE + ICON_PATH + '?alt=media&token=' + ICON_TOKEN
+    iconUrl: 'static/images/my-beloved-icon.png'
   };
 
   function isBrandIconLink(link) {
