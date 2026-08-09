@@ -1,0 +1,67 @@
+{
+  "id": "tpl-beloved-nikkah",
+  "name": "Beloved — Nikkah Invitation",
+  "category": "Wedding",
+  "version": 1,
+  "defaultsUrl": "/invitation-templates/template%203/defaults.json",
+  "sections": [
+    {
+      "key": "couple",
+      "label": "Couple",
+      "fields": [
+        { "key": "groomName", "label": "Groom’s name", "type": "text", "required": true, "placeholder": "Arjun" },
+        { "key": "brideName", "label": "Bride’s name", "type": "text", "required": true, "placeholder": "Priya" },
+        { "key": "groomParentPrefix", "label": "Groom parents prefix", "type": "text", "placeholder": "Son of" },
+        { "key": "groomParentsName", "label": "Groom’s parents", "type": "text", "placeholder": "Mr Rajesh & Mrs Sunita Sharma" },
+        { "key": "brideParentPrefix", "label": "Bride parents prefix", "type": "text", "placeholder": "Daughter of" },
+        { "key": "brideParentsName", "label": "Bride’s parents", "type": "text", "placeholder": "Mr Suresh & Mrs Lakshmi Iyer" }
+      ]
+    },
+    {
+      "key": "ceremony",
+      "label": "Ceremony",
+      "fields": [
+        { "key": "date", "label": "Wedding date", "type": "date", "required": true },
+        { "key": "time", "label": "Time", "type": "text", "placeholder": "11:00 AM - 3:00 PM" },
+        { "key": "quote", "label": "Quote / verse", "type": "textarea" },
+        { "key": "invitationMessage", "label": "Invitation message", "type": "textarea" }
+      ]
+    },
+    {
+      "key": "venue",
+      "label": "Venue",
+      "fields": [
+        { "key": "address", "label": "Address", "type": "text", "placeholder": "Hall name, Street, City" },
+        { "key": "mapLink", "label": "Google Maps link", "type": "text", "placeholder": "https://maps.app.goo.gl/…" },
+        { "key": "mapEmbed", "label": "Map embed URL", "type": "textarea", "placeholder": "https://www.google.com/maps/embed?…" }
+      ]
+    },
+    {
+      "key": "timeline",
+      "label": "Event Timeline",
+      "fields": [
+        {
+          "key": "items",
+          "label": "Events",
+          "type": "list",
+          "itemSchema": [
+            { "key": "title", "label": "Event", "type": "text", "required": true },
+            { "key": "time", "label": "Time", "type": "text" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery",
+      "label": "Photo captions",
+      "fields": [
+        {
+          "key": "items",
+          "label": "Polaroid captions",
+          "type": "list",
+          "itemSchema": [{ "key": "caption", "label": "Caption", "type": "text" }]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "couple": {
+    "groomName": "Arjun",
+    "brideName": "Priya"
+  },
+  "invite": {
+    "line1": "you to join us in the wedding celebrations of",
+    "line2": "On the following events",
+    "invites": "INVITES"
+  },
+  "family": {
+    "name": "The Sharma Family",
+    "blessings": "With the heavenly blessings of\nOur late grandparents,\nSmt. Savitri Sharma and Shri Mohanlal Sharma.",
+    "groomParents": "S/O\nRajesh Sharma and Sunita Sharma",
+    "brideParents": "D/O\nSuresh Iyer and Lakshmi Iyer"
+  },
+  "events": {
+    "items": [
+      { "name": "Haldi", "schedule": "Saturday, April 18th 2026\nJoin Us at 11 am\nThe Leela Palace, Udaipur", "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur", "photo": "" },
+      { "name": "Cocktail", "schedule": "Saturday, April 18th 2026\nJoin Us at 8 pm\nThe Leela Palace, Udaipur", "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur", "photo": "" },
+      { "name": "Engagement", "schedule": "Saturday, April 18th 2026\nJoin Us at 6 pm\nThe Leela Palace, Udaipur", "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur", "photo": "" },
+      { "name": "Vivah (Pheras)", "schedule": "Sunday, April 19th 2026\nJoin Us at 9 am\nThe Leela Palace, Udaipur", "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur", "photo": "" },
+      { "name": "Reception", "schedule": "Sunday, April 19th 2026\nJoin Us at 7 pm\nThe Leela Palace, Udaipur", "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur", "photo": "" },
+      { "name": "Mehendi", "schedule": "Friday, April 17th 2026\nJoin Us at 4 pm\nThe Leela Palace, Udaipur", "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur", "photo": "" }
+    ]
+  },
+  "gallery": {
+    "photo1": "",
+    "photo2": "",
+    "photo3": "",
+    "photo4": "",
+    "photo5": "",
+    "photo6": "",
+    "photo7": ""
+  },
+  "journey": {
+    "title": "The Journey Begins",
+    "subtitle": "Surrounded by family and friends, we can't wait to celebrate this beautiful moment with you."
+  },
+  "thanks": {
+    "title": "With\nLove From Us",
+    "body": "Thank you for being part of our journey.\n\nYour presence makes this celebration truly meaningful, and we look forward to sharing these cherished moments with you."
+  },
+  "rsvp": {
+    "title": "Awaiting the Pleasure\nof Your Company",
+    "link": "Share Your RSVP"
+  },
+  "intro": {
+    "small": "INTRODUCING",
+    "heading": "The Couple"
+  },
+  "info": {
+    "weatherTitle": "Weather",
+    "weatherBody": "A delightful day awaits with pleasant weather and mild temperatures.",
+    "staffTitle": "Staff",
+    "staffBody": "For those traveling from afar, Royal Orchid Suites offers a comfortable stay nearby.",
+    "parkingTitle": "Parking",
+    "parkingBody": "Guests can enjoy hassle free parking facilities available at the venue."
+  },
+  "guide": {
+    "title": "A Guide for Guests",
+    "subtitle": "Your presence means the world to us. To make your experience effortless and enjoyable, we have gathered a few useful details below."
+  }
+}

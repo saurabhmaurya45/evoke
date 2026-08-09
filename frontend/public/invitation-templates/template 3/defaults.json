@@ -1,0 +1,36 @@
+{
+  "couple": {
+    "groomName": "Arjun",
+    "brideName": "Priya",
+    "groomParentPrefix": "Son of",
+    "groomParentsName": "Mr Rajesh & Mrs Sunita Sharma",
+    "brideParentPrefix": "Daughter of",
+    "brideParentsName": "Mr Suresh & Mrs Lakshmi Iyer"
+  },
+  "ceremony": {
+    "date": "2027-08-15",
+    "time": "11:00 AM - 3:00 PM",
+    "quote": "And among His signs is that He created for you mates from among yourselves, that you may dwell in tranquility with them, and He has put love and mercy between your hearts.",
+    "invitationMessage": "With hearts full of joy, we request the honor of your presence as we begin our journey together. Your blessings and company would mean the world to us on this blessed day."
+  },
+  "venue": {
+    "address": "Grand Rose Event Hall, Garden Street, Chennai",
+    "mapLink": "https://maps.app.goo.gl/zbvrev1C6nx8YXk48",
+    "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.996!2d80.2707!3d13.0827!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDA0JzU3LjciTiA4MMKwMTYnMTQuNSJF!5e0!3m2!1sen!2sin!4v1700000000000"
+  },
+  "timeline": {
+    "items": [
+      { "title": "Nikkah Ceremony", "time": "11:00 AM" },
+      { "title": "Reception", "time": "12:00 PM" },
+      { "title": "Lunch", "time": "1:00 PM" }
+    ]
+  },
+  "gallery": {
+    "items": [
+      { "caption": "Together" },
+      { "caption": "Forever" },
+      { "caption": "Always" },
+      { "caption": "Blessed" }
+    ]
+  }
+}

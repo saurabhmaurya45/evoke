@@ -1,4 +1,8 @@
 [
-  { "id": "tpl-samarpan-royal", "previewUrl": "/invitation-templates/samarpan-royal-wedding.html", "bindingMode": "legacy" },
-  { "id": "tpl-eternal-bond", "previewUrl": "/invitation-templates/eternal-bond-royal.html", "schemaUrl": "/invitation-templates/eternal-bond.schema.json", "bindingMode": "legacy" }
+  { "id": "tpl-samarpan-royal", "previewUrl": "/invitation-templates/template%201/index.html", "bindingMode": "legacy" },
+  { "id": "tpl-eternal-bond", "previewUrl": "/invitation-templates/template%202/index.html", "schemaUrl": "/invitation-templates/template%202/schema.json", "bindingMode": "legacy" },
+  { "id": "tpl-beloved-nikkah", "previewUrl": "/invitation-templates/template%203/index.html", "schemaUrl": "/invitation-templates/template%203/schema.json", "bindingMode": "legacy" },
+  { "id": "tpl-harpreet-ritika", "previewUrl": "/invitation-templates/template%204/index.html", "schemaUrl": "/invitation-templates/template%204/schema.json", "bindingMode": "legacy" },
+  { "id": "tpl-karan-nisha", "previewUrl": "/invitation-templates/template%205/index.html", "schemaUrl": "/invitation-templates/template%205/schema.json", "bindingMode": "legacy" },
+  { "id": "tpl-joe-serin", "previewUrl": "/invitation-templates/template%206/index.html", "schemaUrl": "/invitation-templates/template%206/schema.json", "bindingMode": "legacy" }
 ]

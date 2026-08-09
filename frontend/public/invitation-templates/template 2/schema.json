@@ -3,7 +3,7 @@
   "name": "Eternal Bond — Royal Wedding",
   "category": "Wedding",
   "version": 1,
-  "defaultsUrl": "/invitation-templates/eternal-bond.defaults.json",
+  "defaultsUrl": "/invitation-templates/template%202/defaults.json",
   "sections": [
     {
       "key": "hero",

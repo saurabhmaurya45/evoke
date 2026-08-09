@@ -1,0 +1,58 @@
+/* ============================================
+   Valentine Sites - Global Styles
+   Use for shared reset, variables, and base.
+   Override in client-specific CSS as needed.
+   ============================================ */
+
+/* Simple reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100%;
+  max-height: 100vh;
+  max-height: 100dvh;
+  overflow: hidden;
+  overflow-x: hidden;
+  font-family: var(--font-body, 'Georgia', serif);
+  color: var(--text-primary, #fff);
+  background-color: var(--bg-primary, #1a0a0a);
+}
+
+/* Global variables - clients can override in their own CSS */
+:root {
+  --font-body: 'Georgia', 'Times New Roman', serif;
+  --font-display: 'Georgia', serif;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.85);
+  --bg-primary: #1a0a0a;
+  --accent: #e91e63;
+  --accent-soft: rgba(233, 30, 99, 0.3);
+}
+
+/* Utility: hide when needed (e.g. before answer) */
+.u-hidden {
+  display: none !important;
+}
+
+.u-no-pointer {
+  pointer-events: none;
+}

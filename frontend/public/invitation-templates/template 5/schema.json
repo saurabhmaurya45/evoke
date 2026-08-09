@@ -1,0 +1,109 @@
+{
+  "id": "tpl-karan-nisha",
+  "name": "Maroon & Gold — Royal Hindu Wedding",
+  "category": "Wedding",
+  "version": 1,
+  "defaultsUrl": "/invitation-templates/template%205/defaults.json",
+  "sections": [
+    {
+      "key": "hero",
+      "label": "Hero",
+      "fields": [
+        { "key": "groomName", "label": "Groom’s name", "type": "text", "required": true, "placeholder": "Arjun" },
+        { "key": "brideName", "label": "Bride’s name", "type": "text", "required": true, "placeholder": "Priya" },
+        { "key": "invocation", "label": "Invocation", "type": "text", "placeholder": "|| Shri Ganeshay Namah ||" },
+        { "key": "inviteLine", "label": "Invitation line", "type": "text" },
+        { "key": "tagline", "label": "Tagline", "type": "text", "placeholder": "Our Wedding" },
+        { "key": "dateChip", "label": "Date chip", "type": "text", "placeholder": "Wednesday · 22nd July 2026 · Mumbai" }
+      ]
+    },
+    {
+      "key": "countdown",
+      "label": "Countdown",
+      "fields": [
+        { "key": "subtitle", "label": "Subtitle", "type": "textarea" },
+        { "key": "bigDate", "label": "Displayed date", "type": "text", "placeholder": "Wednesday, 22nd July, 2026" },
+        { "key": "targetDate", "label": "Countdown date", "type": "date", "required": true },
+        { "key": "targetTime", "label": "Countdown time (HH:MM)", "type": "text", "placeholder": "19:00" }
+      ]
+    },
+    {
+      "key": "ceremony",
+      "label": "Ceremony",
+      "fields": [
+        { "key": "intro", "label": "Intro copy", "type": "textarea" },
+        { "key": "mid", "label": "Middle copy", "type": "textarea" },
+        { "key": "venue", "label": "Venue line", "type": "textarea" },
+        { "key": "photo", "label": "Ceremony photo", "type": "image" }
+      ]
+    },
+    {
+      "key": "events",
+      "label": "Wedding Events",
+      "fields": [
+        {
+          "key": "items",
+          "label": "Events",
+          "type": "list",
+          "itemSchema": [
+            { "key": "title", "label": "Event name", "type": "text", "required": true },
+            { "key": "when", "label": "Date", "type": "text" },
+            { "key": "time", "label": "Time", "type": "text" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "profiles",
+      "label": "Know Us",
+      "fields": [
+        { "key": "groomPhoto", "label": "Groom’s photo", "type": "image" },
+        { "key": "groomDesc", "label": "Groom details", "type": "textarea" },
+        { "key": "bridePhoto", "label": "Bride’s photo", "type": "image" },
+        { "key": "brideDesc", "label": "Bride details", "type": "textarea" }
+      ]
+    },
+    {
+      "key": "gallery",
+      "label": "Gallery",
+      "fields": [
+        {
+          "key": "items",
+          "label": "Photos",
+          "type": "list",
+          "itemSchema": [
+            { "key": "image", "label": "Photo", "type": "image" },
+            { "key": "caption", "label": "Caption", "type": "text" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "venue",
+      "label": "Venue",
+      "fields": [
+        { "key": "address", "label": "Address", "type": "textarea" },
+        { "key": "mapEmbed", "label": "Map embed URL", "type": "textarea" },
+        { "key": "directionsUrl", "label": "Directions link", "type": "text" }
+      ]
+    },
+    {
+      "key": "invitee",
+      "label": "Invitee",
+      "fields": [
+        { "key": "name", "label": "Invitee name", "type": "text" },
+        { "key": "address", "label": "Invitee address", "type": "textarea" },
+        { "key": "firmName", "label": "Firm name", "type": "text" },
+        { "key": "firmAddress", "label": "Firm address", "type": "textarea" }
+      ]
+    },
+    {
+      "key": "footer",
+      "label": "Footer",
+      "fields": [
+        { "key": "closing", "label": "Closing line", "type": "text" },
+        { "key": "small", "label": "Small line", "type": "text" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "couple": {
+    "groomName": "Arjun",
+    "brideName": "Priya",
+    "groomParentPrefix": "Son of",
+    "groomParentsName": "Mr Rajesh & Mrs Sunita Sharma",
+    "brideParentPrefix": "Daughter of",
+    "brideParentsName": "Mr Suresh & Mrs Lakshmi Iyer",
+    "groomPlace": "Jaipur, Rajasthan",
+    "bridePlace": "Udaipur, Rajasthan"
+  },
+  "ceremony": {
+    "date": "2027-01-27",
+    "time": "11:00 AM - 2:00 PM",
+    "address": "Miami Convention Centre, Calicut",
+    "mapLink": "https://maps.app.goo.gl/QoXqr2RUtiD9YQVP9",
+    "mapEmbed": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d125172.59037389707!2d75.687008!3d11.3607325!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba6607e88cb5ee7%3A0x4153c908118896c3!2sMiami%20Convention%20Centre!5e0!3m2!1sen!2sqa!4v1782972065796!5m2!1sen!2sqa"
+  },
+  "messages": {
+    "quote": "Every love story is beautiful, but ours is our favorite. Join us as we begin our next chapter together.",
+    "togetherQuote": "The Beginning of Forever",
+    "invitationMessage": "With warm hearts, we invite you to celebrate with us.",
+    "welcomeMessage": "We warmly welcome you to celebrate with us. Your presence and blessings will make our day truly complete.",
+    "blessingsFrom": "Aarav, Diya & Kabir"
+  },
+  "timeline": {
+    "items": [
+      { "title": "Wedding Ceremony", "date": "2027-01-27", "time": "11:00 AM" },
+      { "title": "Lunch Gathering", "date": "2027-01-27", "time": "1:00 PM" },
+      { "title": "Reception", "date": "2027-01-27", "time": "4:00 PM" }
+    ]
+  },
+  "venues": {
+    "items": [
+      {
+        "label": "Wedding Ceremony",
+        "address": "Miami Convention Centre, Calicut",
+        "mapEmbed": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d125172.59037389707!2d75.687008!3d11.3607325!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba6607e88cb5ee7%3A0x4153c908118896c3!2sMiami%20Convention%20Centre!5e0!3m2!1sen!2sqa!4v1782972065796!5m2!1sen!2sqa",
+        "mapLink": "https://maps.app.goo.gl/QoXqr2RUtiD9YQVP9"
+      },
+      {
+        "label": "Reception",
+        "address": "Dazzle Avenue Auditorium, Ananghadi",
+        "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3915.0344224660566!2d75.83706249999999!3d11.110812500000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba6516e87cbf971%3A0x628f6bbe91c8b3c!2sDazzle%20Avenue%20Auditorium!5e0!3m2!1sen!2sqa!4v1782972112175!5m2!1sen!2sqa",
+        "mapLink": "https://maps.app.goo.gl/RXg7k5AEb2ZUfhY5A"
+      }
+    ]
+  },
+  "gallery": {
+    "title": "A Glimpse of Us",
+    "items": [
+      { "image": "https://images.unsplash.com/photo-1587271407850-8d438ca9fdf2?auto=format&fit=crop&w=800&q=70" },
+      { "image": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?auto=format&fit=crop&w=800&q=70" },
+      { "image": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=70" },
+      { "image": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=70" },
+      { "image": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=70" }
+    ]
+  },
+  "contact": {
+    "phone": "+919000000000",
+    "phone2": "+919111111111"
+  },
+  "rsvp": {
+    "thankYou": "Thank you for your beautiful wish!"
+  }
+}

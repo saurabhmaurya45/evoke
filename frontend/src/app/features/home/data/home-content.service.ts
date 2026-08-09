@@ -37,8 +37,12 @@ const WASH_GOLD = 'linear-gradient(155deg, rgba(201,162,39,0.2), rgba(var(--glas
 // Full, rendered invitation templates served as static files from /public.
 // Only the Samarpan royal-wedding template ships today; the remaining cards
 // reuse it as a live demo until their own designs land.
-const SAMARPAN_TEMPLATE = '/invitation-templates/samarpan-royal-wedding.html';
-const ETERNAL_BOND_TEMPLATE = '/invitation-templates/eternal-bond-royal.html';
+const SAMARPAN_TEMPLATE = '/invitation-templates/template%201/index.html';
+const ETERNAL_BOND_TEMPLATE = '/invitation-templates/template%202/index.html';
+const BELOVED_NIKKAH_TEMPLATE = '/invitation-templates/template%203/index.html';
+const ROSEWOOD_TEMPLATE = '/invitation-templates/template%204/index.html';
+const MAROON_GOLD_TEMPLATE = '/invitation-templates/template%205/index.html';
+const DOORWAY_TEMPLATE = '/invitation-templates/template%206/index.html';
 
 /**
  * Single source of truth for the marketing homepage content. Isolated from
@@ -119,6 +123,50 @@ export class HomeContentService {
       photo: FLOWER_PHOTO,
       previewUrl: ETERNAL_BOND_TEMPLATE,
       ...FLOWER_CREDIT,
+    },
+    {
+      name: 'Beloved — Nikkah Invitation',
+      category: 'Wedding',
+      slotId: 'tpl-beloved-nikkah',
+      wash: WASH_ROSE,
+      accent: '#C97B63',
+      monogram: 'B',
+      photo: COUPLE_PHOTO,
+      previewUrl: BELOVED_NIKKAH_TEMPLATE,
+      ...COUPLE_CREDIT,
+    },
+    {
+      name: 'Rosewood — Punjabi Wedding',
+      category: 'Wedding',
+      slotId: 'tpl-harpreet-ritika',
+      wash: WASH_ROSE,
+      accent: '#C97B63',
+      monogram: 'R',
+      photo: FLOWER_PHOTO,
+      previewUrl: ROSEWOOD_TEMPLATE,
+      ...FLOWER_CREDIT,
+    },
+    {
+      name: 'Maroon & Gold — Royal Hindu Wedding',
+      category: 'Wedding',
+      slotId: 'tpl-karan-nisha',
+      wash: WASH_ROSE,
+      accent: '#6e1423',
+      monogram: 'K',
+      photo: COUPLE_PHOTO,
+      previewUrl: MAROON_GOLD_TEMPLATE,
+      ...COUPLE_CREDIT,
+    },
+    {
+      name: 'Doorway — Modern Wedding',
+      category: 'Wedding',
+      slotId: 'tpl-joe-serin',
+      wash: WASH_ROSE,
+      accent: '#8a6d1f',
+      monogram: 'D',
+      photo: COUPLE_PHOTO,
+      previewUrl: DOORWAY_TEMPLATE,
+      ...COUPLE_CREDIT,
     },
     {
       name: 'Golden Promise',

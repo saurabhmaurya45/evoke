@@ -1,0 +1,118 @@
+{
+  "id": "tpl-harpreet-ritika",
+  "name": "Rosewood — Hindu Wedding",
+  "category": "Wedding",
+  "version": 1,
+  "defaultsUrl": "/invitation-templates/template%204/defaults.json",
+  "sections": [
+    {
+      "key": "couple",
+      "label": "Couple",
+      "fields": [
+        { "key": "groomName", "label": "Groom’s name", "type": "text", "required": true, "placeholder": "Arjun" },
+        { "key": "brideName", "label": "Bride’s name", "type": "text", "required": true, "placeholder": "Priya" }
+      ]
+    },
+    {
+      "key": "invite",
+      "label": "Invitation",
+      "fields": [
+        { "key": "line1", "label": "Invitation line 1", "type": "text" },
+        { "key": "line2", "label": "Invitation line 2", "type": "text" },
+        { "key": "invites", "label": "‘Invites’ label", "type": "text" }
+      ]
+    },
+    {
+      "key": "family",
+      "label": "Family",
+      "fields": [
+        { "key": "name", "label": "Hosting family", "type": "text" },
+        { "key": "blessings", "label": "Blessings", "type": "textarea" },
+        { "key": "groomParents", "label": "Groom’s parents", "type": "textarea" },
+        { "key": "brideParents", "label": "Bride’s parents", "type": "textarea" }
+      ]
+    },
+    {
+      "key": "events",
+      "label": "Events",
+      "fields": [
+        {
+          "key": "items",
+          "label": "Events (6 cards)",
+          "type": "list",
+          "itemSchema": [
+            { "key": "name", "label": "Event name", "type": "text", "required": true },
+            { "key": "schedule", "label": "Date / time / venue", "type": "textarea" },
+            { "key": "directionsUrl", "label": "Directions link (URL)", "type": "text" },
+            { "key": "photo", "label": "Photo", "type": "image" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery",
+      "label": "Couple Gallery",
+      "fields": [
+        { "key": "photo1", "label": "Hero couple photo (Invites)", "type": "image" },
+        { "key": "photo2", "label": "Collage — left (tall)", "type": "image" },
+        { "key": "photo3", "label": "Collage — right (large)", "type": "image" },
+        { "key": "photo4", "label": "Collage — bottom", "type": "image" },
+        { "key": "photo5", "label": "Collage — top", "type": "image" },
+        { "key": "photo6", "label": "Journey (wide)", "type": "image" },
+        { "key": "photo7", "label": "Feature (sunset)", "type": "image" }
+      ]
+    },
+    {
+      "key": "journey",
+      "label": "The Journey",
+      "fields": [
+        { "key": "title", "label": "Title", "type": "text" },
+        { "key": "subtitle", "label": "Subtitle", "type": "textarea" }
+      ]
+    },
+    {
+      "key": "thanks",
+      "label": "Thank You",
+      "fields": [
+        { "key": "title", "label": "Title", "type": "textarea" },
+        { "key": "body", "label": "Message", "type": "textarea" }
+      ]
+    },
+    {
+      "key": "rsvp",
+      "label": "RSVP",
+      "fields": [
+        { "key": "title", "label": "Title", "type": "textarea" },
+        { "key": "link", "label": "RSVP link text", "type": "text" }
+      ]
+    },
+    {
+      "key": "intro",
+      "label": "Introducing",
+      "fields": [
+        { "key": "small", "label": "Small label", "type": "text" },
+        { "key": "heading", "label": "Heading", "type": "text" }
+      ]
+    },
+    {
+      "key": "info",
+      "label": "Guest Info",
+      "fields": [
+        { "key": "weatherTitle", "label": "Weather title", "type": "text" },
+        { "key": "weatherBody", "label": "Weather text", "type": "textarea" },
+        { "key": "staffTitle", "label": "Stay title", "type": "text" },
+        { "key": "staffBody", "label": "Stay text", "type": "textarea" },
+        { "key": "parkingTitle", "label": "Parking title", "type": "text" },
+        { "key": "parkingBody", "label": "Parking text", "type": "textarea" }
+      ]
+    },
+    {
+      "key": "guide",
+      "label": "Guide",
+      "fields": [
+        { "key": "title", "label": "Guide title", "type": "text" },
+        { "key": "subtitle", "label": "Guide subtitle", "type": "textarea" }
+      ]
+    }
+  ]
+}

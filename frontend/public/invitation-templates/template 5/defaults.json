@@ -1,0 +1,63 @@
+{
+  "hero": {
+    "groomName": "Karan",
+    "brideName": "Nisha",
+    "invocation": "|| Shri Ganeshay Namah ||",
+    "inviteLine": "Our families request the honour of your presence at",
+    "tagline": "Our Wedding",
+    "dateChip": "Wednesday · 22nd July 2026 · Mumbai"
+  },
+  "countdown": {
+    "subtitle": "The day when we will tie the knot and begin our new life as a happily married couple",
+    "bigDate": "Wednesday, 22nd July, 2026",
+    "targetDate": "2026-07-22",
+    "targetTime": "19:00"
+  },
+  "ceremony": {
+    "intro": "Mr. & Mrs. Sharma request the honour of your presence and blessings on the auspicious occasion of the wedding ceremony of their son",
+    "mid": "The day when Karan & Nisha will tie the knot and begin their new life as a happily married couple",
+    "venue": "on Wednesday, 22nd July, 2026<br>at Hotel The Taj Palace, Mumbai (M.H.)",
+    "photo": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1200&q=70"
+  },
+  "events": {
+    "items": [
+      { "title": "Haldi Ceremony", "when": "Tuesday, 21 July, 2026", "time": "11:30 a.m. onwards" },
+      { "title": "Mehandi Ceremony", "when": "Tuesday, 21 July, 2026", "time": "02:00 p.m. onwards" },
+      { "title": "Sangeet Night", "when": "Tuesday, 21 July, 2026", "time": "07:00 p.m. onwards" },
+      { "title": "Ring Ceremony", "when": "Wednesday, 22 July, 2026", "time": "10:00 a.m. onwards" },
+      { "title": "Mangal Phere", "when": "Wednesday, 22 July, 2026", "time": "07:00 p.m. onwards" },
+      { "title": "Reception & Dinner", "when": "Wednesday, 22 July, 2026", "time": "09:00 p.m. onwards" }
+    ]
+  },
+  "profiles": {
+    "groomPhoto": "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&w=500&q=70",
+    "groomDesc": "G/S — Puran Sharma<br>S/O — Ved Sharma<br>Pune (M.H.)",
+    "bridePhoto": "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=500&q=70",
+    "brideDesc": "G/D — Purushottam Verma<br>D/O — Shrikant Verma<br>Mumbai (M.H.)"
+  },
+  "gallery": {
+    "items": [
+      { "image": "https://images.unsplash.com/photo-1587271407850-8d438ca9fdf2?auto=format&fit=crop&w=700&q=70", "caption": "The art of mehndi" },
+      { "image": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?auto=format&fit=crop&w=700&q=70", "caption": "The exchange of rings" },
+      { "image": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=700&q=70", "caption": "Hand in hand, into forever" },
+      { "image": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=700&q=70", "caption": "Celebration evening" },
+      { "image": "https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=700&q=70", "caption": "Our first dance" },
+      { "image": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=700&q=70", "caption": "Blessings & traditions" }
+    ]
+  },
+  "venue": {
+    "address": "Hotel The Taj Mahal Palace,<br>Colaba, Mumbai (M.H.)",
+    "mapEmbed": "https://maps.google.com/maps?q=the%20taj%20mahal%20palace%20mumbai&t=m&z=16&output=embed&iwloc=near",
+    "directionsUrl": "https://maps.app.goo.gl/MReCpBXq311tdk5GA"
+  },
+  "invitee": {
+    "name": "Puran Ved Kumar Sharma",
+    "address": "Sita Nagar, Near Gigabyte Hospital,<br>Mumbai (M.H.)<br>+91 90000 00001",
+    "firmName": "P V Jewellers",
+    "firmAddress": "Road No 6, Gandhi Nagar, Mumbai (M.H.)"
+  },
+  "footer": {
+    "closing": "We look forward to celebrating with you on our big day!",
+    "small": "Made with love · 22 July 2026 · Mumbai"
+  }
+}
