@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# Private or session-dependent areas — no indexing value, and crawling them
+# just burns budget on pages that render empty without a session.
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /editor
+Disallow: /payment
+Disallow: /login
+Disallow: /signup
+Disallow: /verify-otp
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /check-email
+Disallow: /email-verified
+Disallow: /auth/
+
+# Rendered invitation templates are demo content, not pages we want ranking
+# against our own marketing pages.
+Disallow: /invitation-templates/
+
+Sitemap: https://evoke.app/sitemap.xml

@@ -35,14 +35,15 @@ const WASH_ROSE = 'linear-gradient(155deg, rgba(201,123,99,0.22), rgba(var(--gla
 const WASH_GOLD = 'linear-gradient(155deg, rgba(201,162,39,0.2), rgba(var(--glass-rgb),0.04))';
 
 // Full, rendered invitation templates served as static files from /public.
-// Only the Samarpan royal-wedding template ships today; the remaining cards
-// reuse it as a live demo until their own designs land.
+// Every card below points at its own design — placeholder cards that reused
+// another template as a stand-in have been removed.
 const SAMARPAN_TEMPLATE = '/invitation-templates/template%201/index.html';
 const ETERNAL_BOND_TEMPLATE = '/invitation-templates/template%202/index.html';
 const BELOVED_NIKKAH_TEMPLATE = '/invitation-templates/template%203/index.html';
 const ROSEWOOD_TEMPLATE = '/invitation-templates/template%204/index.html';
 const MAROON_GOLD_TEMPLATE = '/invitation-templates/template%205/index.html';
 const DOORWAY_TEMPLATE = '/invitation-templates/template%206/index.html';
+const GOLDEN_PROMISE_TEMPLATE = '/invitation-templates/template%207/index.html';
 
 /**
  * Single source of truth for the marketing homepage content. Isolated from
@@ -176,41 +177,8 @@ export class HomeContentService {
       accent: '#C9A227',
       monogram: 'G',
       photo: RING_PHOTO,
-      previewUrl: SAMARPAN_TEMPLATE,
+      previewUrl: GOLDEN_PROMISE_TEMPLATE,
       ...RING_CREDIT,
-    },
-    {
-      name: 'Azure Story',
-      category: 'Engagement',
-      slotId: 'tpl-azure-story',
-      wash: WASH_GOLD,
-      accent: '#C9A227',
-      monogram: 'A',
-      photo: RING_PHOTO,
-      previewUrl: SAMARPAN_TEMPLATE,
-      ...RING_CREDIT,
-    },
-    {
-      name: 'Rose Quartz',
-      category: 'Wedding',
-      slotId: 'tpl-rose-quartz',
-      wash: WASH_ROSE,
-      accent: '#C97B63',
-      monogram: 'R',
-      photo: FLOWER_PHOTO,
-      previewUrl: SAMARPAN_TEMPLATE,
-      ...FLOWER_CREDIT,
-    },
-    {
-      name: 'Modern Vow',
-      category: 'Engagement',
-      slotId: 'tpl-modern-vow',
-      wash: WASH_GOLD,
-      accent: '#C9A227',
-      monogram: 'V',
-      photo: COUPLE_PHOTO,
-      previewUrl: SAMARPAN_TEMPLATE,
-      ...COUPLE_CREDIT,
     },
   ];
 

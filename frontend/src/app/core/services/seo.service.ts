@@ -45,15 +45,36 @@ export class SeoService {
     this.setCanonical(data.canonical ?? url);
   }
 
-  /** Injects JSON-LD structured data for rich results. */
-  setStructuredData(schema: Record<string, unknown>): void {
+  /**
+   * Injects JSON-LD structured data for rich results. Pass an array to emit a
+   * `@graph`, which is how multiple entities (Organization + WebSite + FAQ)
+   * should be declared on one page.
+   */
+  setStructuredData(schema: Record<string, unknown> | readonly Record<string, unknown>[]): void {
     const id = 'evoke-structured-data';
     this.document.getElementById(id)?.remove();
     const script = this.document.createElement('script');
     script.type = 'application/ld+json';
     script.id = id;
-    script.text = JSON.stringify(schema);
+    script.text = JSON.stringify(
+      Array.isArray(schema) ? { '@context': 'https://schema.org', '@graph': schema } : schema,
+    );
     this.document.head.appendChild(script);
+  }
+
+  /**
+   * FAQPage markup from the on-page Q&A. Google requires the answers to be
+   * visible on the page, which they are — the FAQ section renders them.
+   */
+  faqSchema(items: readonly { question: string; answer: string }[]): Record<string, unknown> {
+    return {
+      '@type': 'FAQPage',
+      mainEntity: items.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: { '@type': 'Answer', text: item.answer },
+      })),
+    };
   }
 
   private setTag(attr: 'name' | 'property', key: string, content: string): void {

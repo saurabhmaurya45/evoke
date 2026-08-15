@@ -1,0 +1,89 @@
+@use 'abstracts' as *;
+
+.pm { position: relative; }
+
+.pm__avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  background: $gradient-brand-strong;
+  color: #fff;
+  font-size: 13px;
+  font-weight: $fw-bold;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform $transition-base, box-shadow $transition-base;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: $shadow-brand-sm;
+  }
+
+  &:focus-visible { @include focus-ring; }
+}
+
+.pm__panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 232px;
+  padding: 8px;
+  border-radius: $radius-md;
+  border: 1px solid rgba(var(--glass-rgb), 0.14);
+  background: rgb(var(--nav-rgb));
+  box-shadow: $shadow-card;
+  z-index: $z-modal;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pm__id {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 14px 14px;
+  border-bottom: 1px solid rgba(var(--glass-rgb), 0.1);
+  margin-bottom: 6px;
+
+  strong { font-size: 14px; font-weight: $fw-semibold; }
+  small { font-size: 12px; color: rgba(var(--text-rgb), 0.55); }
+}
+
+.pm__role {
+  align-self: flex-start;
+  margin-top: 5px;
+  padding: 3px 9px;
+  border-radius: $radius-pill;
+  font-size: 10px;
+  font-weight: $fw-bold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $color-gold;
+  background: rgba(201, 162, 39, 0.14);
+  border: 1px solid rgba(201, 162, 39, 0.32);
+}
+
+.pm__item {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  border-radius: $radius-sm;
+  background: transparent;
+  color: rgba(var(--text-rgb), 0.85);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background $transition-base, color $transition-base;
+
+  &:hover {
+    background: rgba(var(--glass-rgb), 0.07);
+    color: $color-gold;
+  }
+}
+
+.pm__item--danger:hover { color: $color-clay; }

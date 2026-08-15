@@ -24,10 +24,64 @@
   border-radius: 32px;
 }
 
-.templates__grid {
+.carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Native scroll-snap track: swipe on touch, arrows on desktop. */
+.carousel__track {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 3 * 22px) / 4);
   gap: 22px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding: 4px;
+  margin: -4px;
+
+  &::-webkit-scrollbar { display: none; }
+  &:focus-visible { @include focus-ring; }
+}
+
+.carousel__track > * {
+  scroll-snap-align: start;
+}
+
+.carousel__nav {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(210, 190, 153, 0.28);
+  background: rgba(var(--nav-rgb), 0.6);
+  color: #f3ecdd;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:hover:not(:disabled) {
+    border-color: $color-gold;
+    background: rgba(201, 162, 39, 0.16);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible { @include focus-ring; }
+}
+
+@include reduced-motion {
+  .carousel__track { scroll-behavior: auto; }
 }
 
 .templates__card {
@@ -142,9 +196,30 @@
   }
 }
 
+.templates__more {
+  display: flex;
+  justify-content: center;
+  margin-top: 36px;
+}
+
+.templates__more-link {
+  padding: 12px 28px;
+  border-radius: $radius-pill;
+  border: 1px solid rgba(210, 190, 153, 0.28);
+  color: #f3ecdd;
+  font-size: 13px;
+  font-weight: $fw-semibold;
+  transition: border-color $transition-base, background $transition-base;
+
+  &:hover {
+    border-color: $color-gold;
+    background: rgba(201, 162, 39, 0.12);
+  }
+}
+
 @media (max-width: 980px) {
-  .templates__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .carousel__track {
+    grid-auto-columns: calc((100% - 22px) / 2);
   }
 }
 
@@ -153,8 +228,13 @@
     padding-inline: 18px;
   }
 
-  .templates__grid {
-    grid-template-columns: 1fr;
+  .carousel__track {
+    grid-auto-columns: 100%;
+  }
+
+  /* Arrows would eat the card width on phones — swipe instead. */
+  .carousel__nav {
+    display: none;
   }
 
   .templates__preview {

@@ -2,7 +2,7 @@
   <div class="footer__inner">
     <div class="footer__grid">
       <div class="footer__brand">
-        <a class="footer__logo" [href]="href('hero')" aria-label="Evoke home">
+        <a class="footer__logo" routerLink="/" fragment="hero" aria-label="Evoke home">
           <app-logo [markSize]="26" [wordSize]="18" />
         </a>
         <p class="footer__desc">{{ description }}</p>
@@ -69,7 +69,11 @@
             <ul class="footer__col-links">
               @for (link of col.links; track link.label) {
                 <li>
-                  <a [href]="href(link.fragment)">{{ link.label }}</a>
+                  @if (link.path) {
+                    <a [routerLink]="link.path">{{ link.label }}</a>
+                  } @else {
+                    <a routerLink="/" [fragment]="link.fragment">{{ link.label }}</a>
+                  }
                 </li>
               }
             </ul>

@@ -1,21 +1,30 @@
 <nav class="nav" [class.nav--scrolled]="viewport.scrolled()" aria-label="Primary">
   <div class="nav__bar">
-    <a class="nav__brand" [href]="href('hero')" aria-label="Evoke home">
+    <a class="nav__brand" routerLink="/" fragment="hero" aria-label="Evoke home">
       <app-logo />
     </a>
 
     @if (!viewport.isMobile()) {
       <ul class="nav__links">
-        @for (link of navLinks; track link.fragment) {
+        @for (link of navLinks; track link.label) {
           <li>
-            <a class="nav__link" [href]="href(link.fragment)">{{ link.label }}</a>
+            @if (link.path) {
+              <a class="nav__link" [routerLink]="link.path">{{ link.label }}</a>
+            } @else {
+              <a class="nav__link" routerLink="/" [fragment]="link.fragment">{{ link.label }}</a>
+            }
           </li>
         }
       </ul>
       <div class="nav__actions">
         <app-theme-toggle />
-        <a class="nav__login" routerLink="/login">Log in</a>
-        <a class="nav__cta" routerLink="/signup" appMagnetic>Start Creating</a>
+        @if (auth.isAuthenticated()) {
+          <a class="nav__login" routerLink="/dashboard">Dashboard</a>
+          <app-profile-menu />
+        } @else {
+          <a class="nav__login" routerLink="/login">Log in</a>
+          <a class="nav__cta" routerLink="/signup" appMagnetic>Start Creating</a>
+        }
       </div>
     } @else {
       <div class="nav__actions">
@@ -36,13 +45,27 @@
 
   @if (viewport.isMobile() && mobileMenuOpen()) {
     <div class="nav__mobile" id="mobile-menu">
-      @for (link of navLinks; track link.fragment) {
-        <a class="nav__mobile-link" [href]="href(link.fragment)" (click)="closeMobileMenu()">
-          {{ link.label }}
-        </a>
+      @for (link of navLinks; track link.label) {
+        @if (link.path) {
+          <a class="nav__mobile-link" [routerLink]="link.path" (click)="closeMobileMenu()">
+            {{ link.label }}
+          </a>
+        } @else {
+          <a class="nav__mobile-link" routerLink="/" [fragment]="link.fragment" (click)="closeMobileMenu()">
+            {{ link.label }}
+          </a>
+        }
       }
-      <a class="nav__mobile-link nav__mobile-link--auth" routerLink="/login" (click)="closeMobileMenu()">Log in</a>
-      <a class="nav__mobile-cta" routerLink="/signup" (click)="closeMobileMenu()">Start Creating</a>
+      @if (auth.isAuthenticated()) {
+        <a class="nav__mobile-link nav__mobile-link--auth" routerLink="/dashboard" (click)="closeMobileMenu()">My dashboard</a>
+        @if (auth.isAdmin()) {
+          <a class="nav__mobile-link" routerLink="/admin" (click)="closeMobileMenu()">Admin dashboard</a>
+        }
+        <button class="nav__mobile-link" type="button" (click)="signOut()">Sign out</button>
+      } @else {
+        <a class="nav__mobile-link nav__mobile-link--auth" routerLink="/login" (click)="closeMobileMenu()">Log in</a>
+        <a class="nav__mobile-cta" routerLink="/signup" (click)="closeMobileMenu()">Start Creating</a>
+      }
     </div>
   }
 </nav>

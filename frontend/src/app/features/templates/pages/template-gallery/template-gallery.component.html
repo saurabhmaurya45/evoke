@@ -1,0 +1,87 @@
+<section class="gallery">
+  <header class="gallery__head">
+    <p class="gallery__eyebrow">Templates</p>
+    <h1 class="gallery__title">Invitation Card Templates</h1>
+    <p class="gallery__sub">
+      Ready-to-use digital invitation designs for weddings, engagements and every celebration.
+      Preview any template live, personalise it, and share the link on WhatsApp.
+    </p>
+  </header>
+
+  <div class="gallery__controls">
+    <div class="chips" role="group" aria-label="Filter templates by category">
+      @for (filter of filters(); track filter) {
+        <button
+          type="button"
+          class="chip"
+          [class.chip--active]="activeFilter() === filter"
+          [attr.aria-pressed]="activeFilter() === filter"
+          (click)="activeFilter.set(filter)"
+        >
+          {{ filter }} <span class="chip__count">{{ count(filter) }}</span>
+        </button>
+      }
+    </div>
+
+    <label class="search">
+      <span class="visually-hidden">Search templates</span>
+      <input
+        type="search"
+        placeholder="Search templates…"
+        [value]="query()"
+        (input)="onSearch($event)"
+      />
+    </label>
+  </div>
+
+  @if (visible().length) {
+    <div class="gallery__grid">
+      @for (tpl of visible(); track tpl.slotId) {
+        <article class="card" appTilt [style.--accent]="tpl.accent">
+          <div class="card__preview" [style.background]="tpl.wash">
+            <span class="card__monogram" aria-hidden="true">{{ tpl.monogram }}</span>
+            <app-image-slot
+              [src]="tpl.photo"
+              [alt]="tpl.name + ' template preview'"
+              [radius]="20"
+              [credit]="tpl.credit"
+              [creditHref]="tpl.creditHref"
+            />
+            <span class="card__badge">
+              <span class="card__badge-dot" [style.background]="tpl.accent"></span>
+              {{ tpl.category }}
+            </span>
+          </div>
+          <div class="card__body">
+            <div class="card__head">
+              <h2 class="card__name">{{ tpl.name }}</h2>
+              <span class="card__price" [class.card__price--free]="tpl.pricing === 'free'">
+                {{ price(tpl) }}
+              </span>
+            </div>
+            <div class="card__actions">
+              <a
+                class="btn btn--ghost"
+                [routerLink]="['/preview', tpl.slotId]"
+                [attr.aria-label]="'Preview the ' + tpl.name + ' template'"
+                >Preview</a
+              >
+              <a
+                class="btn btn--solid"
+                [routerLink]="['/preview', tpl.slotId]"
+                [queryParams]="{ mode: 'use' }"
+                [attr.aria-label]="'Use the ' + tpl.name + ' template'"
+                >Use Template</a
+              >
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <p class="gallery__empty">
+      No templates match “{{ query() }}”.
+      <button type="button" class="gallery__reset" (click)="clearFilters()">Clear filters</button>
+    </p>
+  }
+</section>

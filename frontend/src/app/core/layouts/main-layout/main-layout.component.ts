@@ -25,7 +25,14 @@ import { SceneBackdropComponent } from '../scene-backdrop/scene-backdrop.compone
     <main id="main-content" class="shell">
       <router-outlet />
     </main>
-    @if (!isAuthRoute()) { <app-footer /> }
+    @if (!isAuthRoute()) {
+      <!-- Always below the fold: load the footer chunk when it scrolls near. -->
+      @defer (on viewport) {
+        <app-footer />
+      } @placeholder {
+        <div class="footer-skeleton" aria-hidden="true"></div>
+      }
+    }
   `,
   styles: [
     `
@@ -35,6 +42,12 @@ import { SceneBackdropComponent } from '../scene-backdrop/scene-backdrop.compone
         display: block;
         min-height: 60vh;
         overflow-x: hidden;
+      }
+
+      /* Reserves footer height so the viewport trigger has something to
+         intersect and the page does not jump when the chunk arrives. */
+      .footer-skeleton {
+        min-height: 320px;
       }
     `,
   ],

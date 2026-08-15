@@ -1,0 +1,36 @@
+[build]
+  publish = "dist/wedding-website/browser"
+  command = "npm run build"
+
+# Prerendered marketing routes (/, /templates, /pricing, …) exist as real files
+# and are served directly. Everything else falls back to the client-side shell
+# — NOT to /index.html, which now holds prerendered homepage markup and would
+# flash the wrong content before the router corrects it.
+#
+# Note: this deploys the prerendered (static) half of the SSR build. Routes
+# marked RenderMode.Server in app.routes.server.ts render on the client here.
+# For true on-demand SSR on Netlify, add @netlify/angular-runtime, which wires
+# dist/wedding-website/server to a Netlify Function.
+[[redirects]]
+  from = "/*"
+  to = "/index.csr.html"
+  status = 200
+
+# Self-hosted fonts carry content-hashed filenames from Google, so a given URL
+# never changes contents — safe to cache permanently.
+[[headers]]
+  for = "/invitation-templates/*/static/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Template media is not content-hashed: cache for a day, then revalidate, so a
+# replaced image or video reaches visitors without a deploy-wide cache bust.
+[[headers]]
+  for = "/invitation-templates/*/static/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+  for = "/invitation-templates/*/static/media/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"

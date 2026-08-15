@@ -4,5 +4,6 @@
   { "id": "tpl-beloved-nikkah", "previewUrl": "/invitation-templates/template%203/index.html", "schemaUrl": "/invitation-templates/template%203/schema.json", "bindingMode": "legacy" },
   { "id": "tpl-harpreet-ritika", "previewUrl": "/invitation-templates/template%204/index.html", "schemaUrl": "/invitation-templates/template%204/schema.json", "bindingMode": "legacy" },
   { "id": "tpl-karan-nisha", "previewUrl": "/invitation-templates/template%205/index.html", "schemaUrl": "/invitation-templates/template%205/schema.json", "bindingMode": "legacy" },
-  { "id": "tpl-joe-serin", "previewUrl": "/invitation-templates/template%206/index.html", "schemaUrl": "/invitation-templates/template%206/schema.json", "bindingMode": "legacy" }
+  { "id": "tpl-joe-serin", "previewUrl": "/invitation-templates/template%206/index.html", "schemaUrl": "/invitation-templates/template%206/schema.json", "bindingMode": "legacy" },
+  { "id": "tpl-golden-promise", "previewUrl": "/invitation-templates/template%207/index.html", "schemaUrl": "/invitation-templates/template%207/schema.json", "bindingMode": "legacy" }
 ]

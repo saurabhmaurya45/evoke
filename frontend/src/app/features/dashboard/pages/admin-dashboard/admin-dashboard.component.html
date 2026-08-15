@@ -1,0 +1,212 @@
+<section class="admin">
+  <header class="admin__head">
+    <div>
+      <p class="admin__eyebrow">Admin</p>
+      <h1 class="admin__title">Platform overview</h1>
+      <p class="admin__sub">Signed in as {{ auth.user()?.email }}</p>
+    </div>
+  </header>
+
+  <div class="admin__metrics">
+    @for (metric of metrics; track metric.label) {
+      <div class="metric">
+        <span class="metric__label">{{ metric.label }}</span>
+        <span class="metric__value">{{ metric.value }}</span>
+        <span class="metric__foot">
+          @if (metric.delta) { <b class="metric__delta">{{ metric.delta }}</b> }
+          {{ metric.hint }}
+        </span>
+      </div>
+    }
+  </div>
+
+  <div class="tabs" role="tablist">
+    @for (name of tabs; track name) {
+      <button
+        type="button"
+        role="tab"
+        class="tabs__btn"
+        [class.tabs__btn--active]="tab() === name"
+        [attr.aria-selected]="tab() === name"
+        (click)="tab.set(name)"
+      >
+        {{ name }} <span class="tabs__count">{{ tabCount()[name] }}</span>
+      </button>
+    }
+  </div>
+
+  @if (tab() === 'templates') {
+    <div class="tpl-bar">
+      <p class="tpl-bar__note">
+        Unpublished templates are hidden from the homepage and the public gallery.
+      </p>
+      <button type="button" class="btn-ghost" (click)="resetCatalog()">Reset to defaults</button>
+    </div>
+  }
+
+  <div class="table-wrap">
+    @switch (tab()) {
+      @case ('templates') {
+        <table class="table">
+          <thead>
+            <tr><th>Template</th><th>Category</th><th>Pricing</th><th>Status</th><th class="num">Actions</th></tr>
+          </thead>
+          <tbody>
+            @for (tpl of templates(); track tpl.slotId) {
+              <tr [class.row--muted]="!tpl.published">
+                <td>
+                  <div class="tpl-cell">
+                    <img class="tpl-thumb" [src]="tpl.photo" [alt]="" loading="lazy" />
+                    <div>
+                      <b>{{ tpl.name }}</b>
+                      <small class="mono">{{ tpl.slotId }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ tpl.category }}</td>
+                <td>
+                  <span class="badge" [class]="tpl.pricing === 'free' ? 'badge--paid' : 'badge--pending'">
+                    {{ price(tpl) }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge" [class]="tpl.published ? 'badge--published' : 'badge--draft'">
+                    {{ tpl.published ? 'published' : 'unpublished' }}
+                  </span>
+                </td>
+                <td class="num">
+                  <button type="button" class="btn-ghost" (click)="openEditor(tpl)">Edit</button>
+                  <button type="button" class="btn-ghost" (click)="togglePublished(tpl)">
+                    {{ tpl.published ? 'Unpublish' : 'Publish' }}
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+      @case ('customers') {
+        <table class="table">
+          <thead>
+            <tr><th>Customer</th><th>Email</th><th>Plan</th><th>Joined</th><th class="num">Sites</th><th class="num">Revenue</th></tr>
+          </thead>
+          <tbody>
+            @for (customer of customers; track customer.userId) {
+              <tr>
+                <td>{{ customer.name }}</td>
+                <td class="mono">{{ customer.email }}</td>
+                <td>{{ customer.plan }}</td>
+                <td>{{ date(customer.joinedAt) }}</td>
+                <td class="num">{{ customer.sites }}</td>
+                <td class="num">{{ revenue(customer) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+      @case ('sites') {
+        <table class="table">
+          <thead>
+            <tr><th>Template</th><th>Occasion</th><th>URL</th><th>Status</th><th class="num">Views</th><th class="num">RSVPs</th></tr>
+          </thead>
+          <tbody>
+            @for (site of sites; track site.id) {
+              <tr>
+                <td>{{ site.templateName }}</td>
+                <td>{{ site.occasion }}</td>
+                <td><a class="link" [href]="site.url" target="_blank" rel="noopener noreferrer">{{ site.url }}</a></td>
+                <td><span class="badge" [class]="'badge--' + site.status">{{ site.status }}</span></td>
+                <td class="num">{{ site.views.toLocaleString('en-IN') }}</td>
+                <td class="num">{{ site.rsvps }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+      @default {
+        <table class="table">
+          <thead>
+            <tr><th>Invoice</th><th>Plan</th><th>Method</th><th>Date</th><th>Status</th><th class="num">Amount</th></tr>
+          </thead>
+          <tbody>
+            @for (payment of payments; track payment.id) {
+              <tr>
+                <td class="mono">{{ payment.invoiceNo }}</td>
+                <td>{{ payment.plan }}</td>
+                <td>{{ payment.method }}</td>
+                <td>{{ date(payment.paidAt) }}</td>
+                <td><span class="badge" [class]="'badge--' + payment.status">{{ payment.status }}</span></td>
+                <td class="num">{{ amount(payment) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    }
+  </div>
+
+  @if (draft(); as d) {
+    <div class="drawer-scrim" (click)="closeEditor()"></div>
+    <aside class="drawer" role="dialog" aria-label="Edit template card">
+      <header class="drawer__head">
+        <h2>Edit card</h2>
+        <button type="button" class="drawer__close" aria-label="Close" (click)="closeEditor()">×</button>
+      </header>
+
+      <div class="drawer__preview" [style.background]="editing()?.wash">
+        <img [src]="d.photo" alt="Card image preview" onerror="this.style.visibility='hidden'" />
+        <span class="drawer__badge" [style.border-color]="d.accent">{{ d.category }}</span>
+      </div>
+
+      <label class="field">Card title
+        <input type="text" [ngModel]="d.name" (ngModelChange)="patch({ name: $event })" />
+      </label>
+
+      <label class="field">Category
+        <select [ngModel]="d.category" (ngModelChange)="patch({ category: $event })">
+          <option value="Wedding">Wedding</option>
+          <option value="Engagement">Engagement</option>
+        </select>
+      </label>
+
+      <label class="field">Card image URL
+        <input
+          type="url"
+          [ngModel]="d.photo"
+          (ngModelChange)="patch({ photo: $event })"
+          placeholder="https://… or /invitation-templates/…"
+        />
+      </label>
+
+      <div class="field-row">
+        <label class="field">Monogram
+          <input type="text" maxlength="1" [ngModel]="d.monogram" (ngModelChange)="patch({ monogram: $event })" />
+        </label>
+        <label class="field">Accent
+          <input type="color" [ngModel]="d.accent" (ngModelChange)="patch({ accent: $event })" />
+        </label>
+      </div>
+
+      <fieldset class="field">
+        <legend>Pricing</legend>
+        <label class="radio">
+          <input type="radio" name="pricing" value="free" [ngModel]="d.pricing" (ngModelChange)="patch({ pricing: 'free' })" /> Free
+        </label>
+        <label class="radio">
+          <input type="radio" name="pricing" value="paid" [ngModel]="d.pricing" (ngModelChange)="patch({ pricing: 'paid' })" /> Paid
+        </label>
+      </fieldset>
+
+      @if (d.pricing === 'paid') {
+        <label class="field">Price (₹)
+          <input type="number" min="0" step="100" [ngModel]="d.priceRupees" (ngModelChange)="patch({ priceRupees: $event })" />
+        </label>
+      }
+
+      <div class="drawer__actions">
+        <button type="button" class="btn-ghost" (click)="closeEditor()">Cancel</button>
+        <button type="button" class="btn-solid" (click)="saveEditor()">Save changes</button>
+      </div>
+    </aside>
+  }
+</section>

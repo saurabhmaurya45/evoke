@@ -1,0 +1,92 @@
+{
+  "hero": {
+    "image": "/invitation-templates/template%207/static/images/hero-couple.png",
+    "entryVideo": "/invitation-templates/template%207/static/media/entry.mp4",
+    "audioTrack": "/invitation-templates/template%207/static/media/background-music.mp3"
+  },
+  "family": {
+    "deityImage": "/invitation-templates/template%207/static/images/ganesh.png",
+    "invocation": "वक्रतुंड महाकाय सूर्यकोटि समप्रभा<br>निर्विघ्न कुरुमेदव सर्वकार्येषु सर्वदा",
+    "blessingsLabel": "With Divine Blessings Of",
+    "blessingsNames": "Late Smt. Anuradha Bhartiya and Shri Satya Prakash Bhartiya",
+    "inviteLine": "Request your gracious presence and blessings on the auspicious occasion of the wedding celebration of their beloved grand daughter",
+    "brideName": "Khushboo",
+    "brideFamily": "(D/O Mrs. Roma Bhartiya &amp; Mr. Anoop Bhartiya)",
+    "joiner": "With",
+    "groomName": "Pranshul",
+    "groomFamily": "(S/O Mrs. Sangeeta Agarwal &amp; Mr. Arvind Agarwal)<br>Grand S/o Late Kusum &amp; Late Rajendra Agarwal"
+  },
+  "saveTheDate": {
+    "day": "07",
+    "month": "July",
+    "year": "2026",
+    "surpriseMessage": "The start of a beautiful journey...",
+    "targetDate": "2026-07-07",
+    "targetTime": "10:00"
+  },
+  "events": {
+    "label": "The Celebration Unfolds",
+    "heading": "Four Sacred<br>Ceremonies",
+    "items": [
+      {
+        "title": "Phoolon ki Mehfil",
+        "date": "6th July 2026",
+        "venue": "Eve Lawn (Aamira Pool Side)",
+        "dressCode": "Light Shades of Pink",
+        "image": "/invitation-templates/template%207/static/images/event-haldi.png"
+      },
+      {
+        "title": "Sparkling Night",
+        "date": "6th July 2026",
+        "venue": "Aamantran Banquet Hall",
+        "dressCode": "Glitz and Glam",
+        "image": "/invitation-templates/template%207/static/images/event-sangeet.png"
+      },
+      {
+        "title": "Threads of Traditional",
+        "date": "7th July 2026",
+        "time": "10:00 AM",
+        "venue": "Aavednam Conference Hall",
+        "dressCode": "Bandhej, Lahriya or Gharchola",
+        "image": "/invitation-templates/template%207/static/images/event-mayra.png"
+      },
+      {
+        "title": "Two Souls, One Journey",
+        "date": "7th July 2026",
+        "time": "5:00 PM Baarat · 7:00 PM Varmala",
+        "venue": "Sky Lawn",
+        "dressCode": "Indian Traditional",
+        "image": "/invitation-templates/template%207/static/images/event-wedding.png"
+      }
+    ]
+  },
+  "venue": {
+    "label": "Where Love Awaits",
+    "heading": "Our Cherished<br>Venue",
+    "image": "/invitation-templates/template%207/static/images/venue.png",
+    "name": "Anantum Gateway Resort",
+    "address": "Jim Corbett, Ramnagar, Uttarakhand",
+    "directionsUrl": "https://maps.google.com/?q=Anantum+Gateway+Resort+Jim+Corbett+Ramnagar"
+  },
+  "memories": {
+    "label": "A Glimpse of Us",
+    "heading": "Our Beautiful<br>Moments",
+    "video": "/invitation-templates/template%207/static/media/memories.mp4",
+    "caption": "A moment captured in time, forever in our hearts"
+  },
+  "footer": {
+    "coupleName": "Pranshul & Khushboo",
+    "rsvpHeading": "RSVP",
+    "rsvpContacts": [
+      { "text": "Sunita - Tej Naryan Bhartiya" },
+      { "text": "Kiran - Dheeraj Bhartiya" },
+      { "text": "Roma - Anoop Bhartiya" },
+      { "text": "Priyanka - Kamal Bhartiya" }
+    ],
+    "wishesHeading": "Heartfelt Wishes From",
+    "wishesFrom": [
+      { "text": "Sonakshi - Prashant Agarwal" },
+      { "text": "Gopal, Shivam, Prakhar, Aarav, Surbhi, Shweta & Shrestha" }
+    ]
+  }
+}

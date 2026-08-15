@@ -1,0 +1,84 @@
+<section class="dash">
+  <header class="dash__head">
+    <div>
+      <p class="dash__eyebrow">Dashboard</p>
+      <h1 class="dash__title">Welcome back, {{ auth.user()?.firstName || 'there' }}</h1>
+      <p class="dash__sub">
+        {{ account()?.plan || 'Free' }} plan · member since
+        {{ account() ? date(account()!.memberSince) : '—' }}
+      </p>
+    </div>
+    <a class="dash__cta" routerLink="/templates">Create new invitation</a>
+  </header>
+
+  <div class="dash__stats">
+    <div class="stat"><span class="stat__value">{{ sites().length }}</span><span class="stat__label">Invitations</span></div>
+    <div class="stat"><span class="stat__value">{{ totalViews() }}</span><span class="stat__label">Page views</span></div>
+    <div class="stat"><span class="stat__value">{{ totalRsvps() }}</span><span class="stat__label">RSVPs</span></div>
+    <div class="stat"><span class="stat__value">{{ totalPaid() }}</span><span class="stat__label">Total paid</span></div>
+  </div>
+
+  <h2 class="dash__section">Your invitation pages</h2>
+  @if (sites().length) {
+    <div class="sites">
+      @for (site of sites(); track site.id) {
+        <article class="site">
+          <div class="site__top">
+            <div>
+              <h3 class="site__name">{{ site.templateName }}</h3>
+              <p class="site__meta">{{ site.occasion }} · created {{ date(site.createdAt) }}</p>
+            </div>
+            <span class="badge" [class]="'badge--' + site.status">{{ site.status }}</span>
+          </div>
+
+          <div class="site__url">
+            <span class="site__url-text">{{ site.url }}</span>
+            <button type="button" class="site__copy" (click)="copyUrl(site)">
+              {{ copiedSiteId() === site.id ? 'Copied' : 'Copy' }}
+            </button>
+          </div>
+
+          <div class="site__figures">
+            <span><b>{{ site.views.toLocaleString('en-IN') }}</b> views</span>
+            <span><b>{{ site.rsvps }}</b> RSVPs</span>
+            @if (site.expiresAt) { <span>expires {{ date(site.expiresAt) }}</span> }
+          </div>
+
+          <div class="site__actions">
+            <a class="btn btn--ghost" [routerLink]="['/editor', site.templateId]">Edit</a>
+            <a class="btn btn--ghost" [href]="site.url" target="_blank" rel="noopener noreferrer">Open page</a>
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <p class="dash__empty">
+      You haven't created an invitation yet. <a routerLink="/templates">Browse templates</a> to begin.
+    </p>
+  }
+
+  <h2 class="dash__section">Payment history</h2>
+  @if (payments().length) {
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr><th>Invoice</th><th>Plan</th><th>Method</th><th>Date</th><th>Status</th><th class="num">Amount</th></tr>
+        </thead>
+        <tbody>
+          @for (payment of payments(); track payment.id) {
+            <tr>
+              <td class="mono">{{ payment.invoiceNo }}</td>
+              <td>{{ payment.plan }}</td>
+              <td>{{ payment.method }}</td>
+              <td>{{ date(payment.paidAt) }}</td>
+              <td><span class="badge" [class]="'badge--' + payment.status">{{ payment.status }}</span></td>
+              <td class="num">{{ amount(payment) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <p class="dash__empty">No payments on this account yet.</p>
+  }
+</section>

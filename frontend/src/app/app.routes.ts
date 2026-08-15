@@ -40,13 +40,8 @@ export const routes: Routes = [
       },
       {
         path: 'templates',
-        component: ComingSoonComponent,
-        title: 'Templates • Evoke',
-        data: {
-          eyebrow: 'Templates',
-          heading: 'Template Gallery',
-          description: 'A full, filterable template gallery is coming soon.',
-        },
+        loadChildren: () =>
+          import('./features/templates/templates.routes').then((m) => m.TEMPLATES_ROUTES),
       },
       {
         path: 'pricing',
@@ -92,6 +87,10 @@ export const routes: Routes = [
         path: 'dashboard',
         loadChildren: () =>
           import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
+      },
+      {
+        path: 'admin',
+        loadChildren: () => import('./features/dashboard/admin.routes').then((m) => m.ADMIN_ROUTES),
       },
       {
         path: '',

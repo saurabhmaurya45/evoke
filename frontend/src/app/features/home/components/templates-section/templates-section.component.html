@@ -8,42 +8,68 @@
     accent="#c97b63"
   />
 
-  <div class="templates__grid" appReveal revealStagger>
-    @for (tpl of content.templates; track tpl.slotId) {
-      <article class="templates__card" appTilt [style.--accent]="tpl.accent">
-        <div class="templates__preview" [style.background]="tpl.wash">
-          <span class="templates__monogram" aria-hidden="true">{{ tpl.monogram }}</span>
-          <app-image-slot
-            [src]="tpl.photo"
-            [alt]="tpl.name + ' template preview'"
-            [radius]="20"
-            [credit]="tpl.credit"
-            [creditHref]="tpl.creditHref"
-          />
-          <span class="templates__badge">
-            <span class="templates__badge-dot" [style.background]="tpl.accent"></span>
-            {{ tpl.category }}
-          </span>
-        </div>
-        <div class="templates__body">
-          <h3 class="templates__name">{{ tpl.name }}</h3>
-          <div class="templates__actions">
-            <a
-              class="templates__btn templates__btn--ghost"
-              [routerLink]="['/preview', tpl.slotId]"
-              [attr.aria-label]="'Preview the ' + tpl.name + ' template'"
-              >Preview</a
-            >
-            <a
-              class="templates__btn templates__btn--solid"
-              [routerLink]="['/preview', tpl.slotId]"
-              [queryParams]="{ mode: 'use' }"
-              [attr.aria-label]="'Use the ' + tpl.name + ' template'"
-              >Use Template</a
-            >
+  <div class="carousel" appReveal>
+    <button
+      type="button"
+      class="carousel__nav carousel__nav--prev"
+      aria-label="Previous templates"
+      [disabled]="atStart()"
+      (click)="scrollBy(-1)"
+    >
+      ‹
+    </button>
+
+    <div class="carousel__track" #track (scroll)="onScroll()" tabindex="0" aria-label="Template carousel">
+      @for (tpl of templates(); track tpl.slotId) {
+        <article class="templates__card" appTilt [style.--accent]="tpl.accent">
+          <div class="templates__preview" [style.background]="tpl.wash">
+            <span class="templates__monogram" aria-hidden="true">{{ tpl.monogram }}</span>
+            <app-image-slot
+              [src]="tpl.photo"
+              [alt]="tpl.name + ' template preview'"
+              [radius]="20"
+              [credit]="tpl.credit"
+              [creditHref]="tpl.creditHref"
+            />
+            <span class="templates__badge">
+              <span class="templates__badge-dot" [style.background]="tpl.accent"></span>
+              {{ tpl.category }}
+            </span>
           </div>
-        </div>
-      </article>
-    }
+          <div class="templates__body">
+            <h3 class="templates__name">{{ tpl.name }}</h3>
+            <div class="templates__actions">
+              <a
+                class="templates__btn templates__btn--ghost"
+                [routerLink]="['/preview', tpl.slotId]"
+                [attr.aria-label]="'Preview the ' + tpl.name + ' template'"
+                >Preview</a
+              >
+              <a
+                class="templates__btn templates__btn--solid"
+                [routerLink]="['/preview', tpl.slotId]"
+                [queryParams]="{ mode: 'use' }"
+                [attr.aria-label]="'Use the ' + tpl.name + ' template'"
+                >Use Template</a
+              >
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+
+    <button
+      type="button"
+      class="carousel__nav carousel__nav--next"
+      aria-label="More templates"
+      [disabled]="atEnd()"
+      (click)="scrollBy(1)"
+    >
+      ›
+    </button>
+  </div>
+
+  <div class="templates__more" appReveal>
+    <a class="templates__more-link" routerLink="/templates">View all templates →</a>
   </div>
 </section>

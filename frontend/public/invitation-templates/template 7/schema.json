@@ -1,0 +1,110 @@
+{
+  "id": "tpl-golden-promise",
+  "name": "Golden Promise",
+  "category": "Wedding",
+  "version": 1,
+  "defaultsUrl": "/invitation-templates/template%207/defaults.json",
+  "sections": [
+    {
+      "key": "hero",
+      "label": "Hero",
+      "fields": [
+        { "key": "image", "label": "Hero image", "type": "image" },
+        { "key": "entryVideo", "label": "Entry video URL", "type": "text" },
+        { "key": "audioTrack", "label": "Background music URL", "type": "audio" }
+      ]
+    },
+    {
+      "key": "family",
+      "label": "Invitation & Family",
+      "fields": [
+        { "key": "deityImage", "label": "Deity image", "type": "image" },
+        { "key": "invocation", "label": "Invocation (shloka)", "type": "textarea" },
+        { "key": "blessingsLabel", "label": "Blessings label", "type": "text", "placeholder": "With Divine Blessings Of" },
+        { "key": "blessingsNames", "label": "Blessings names", "type": "textarea" },
+        { "key": "inviteLine", "label": "Invitation line", "type": "textarea" },
+        { "key": "brideName", "label": "Bride’s name", "type": "text", "required": true, "placeholder": "Khushboo" },
+        { "key": "brideFamily", "label": "Bride’s family line", "type": "textarea" },
+        { "key": "joiner", "label": "Joining word", "type": "text", "placeholder": "With" },
+        { "key": "groomName", "label": "Groom’s name", "type": "text", "required": true, "placeholder": "Pranshul" },
+        { "key": "groomFamily", "label": "Groom’s family line", "type": "textarea" }
+      ]
+    },
+    {
+      "key": "saveTheDate",
+      "label": "Save The Date",
+      "fields": [
+        { "key": "day", "label": "Scratch card — day", "type": "text", "placeholder": "07" },
+        { "key": "month", "label": "Scratch card — month", "type": "text", "placeholder": "July" },
+        { "key": "year", "label": "Scratch card — year", "type": "text", "placeholder": "2026" },
+        { "key": "surpriseMessage", "label": "Reveal message", "type": "textarea" },
+        { "key": "targetDate", "label": "Countdown date", "type": "date" },
+        { "key": "targetTime", "label": "Countdown time (HH:MM)", "type": "text", "placeholder": "10:00" }
+      ]
+    },
+    {
+      "key": "events",
+      "label": "Ceremonies",
+      "fields": [
+        { "key": "label", "label": "Section label", "type": "text" },
+        { "key": "heading", "label": "Section heading", "type": "textarea" },
+        {
+          "key": "items",
+          "label": "Ceremonies",
+          "type": "list",
+          "itemSchema": [
+            { "key": "title", "label": "Ceremony name", "type": "text", "required": true },
+            { "key": "date", "label": "Date", "type": "text" },
+            { "key": "time", "label": "Time", "type": "text" },
+            { "key": "venue", "label": "Venue", "type": "text" },
+            { "key": "dressCode", "label": "Dress code", "type": "text" },
+            { "key": "image", "label": "Ceremony card image", "type": "image" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "venue",
+      "label": "Venue",
+      "fields": [
+        { "key": "label", "label": "Section label", "type": "text" },
+        { "key": "heading", "label": "Section heading", "type": "textarea" },
+        { "key": "image", "label": "Venue photo", "type": "image" },
+        { "key": "name", "label": "Venue name", "type": "text" },
+        { "key": "address", "label": "Venue address", "type": "textarea" },
+        { "key": "directionsUrl", "label": "Directions link", "type": "text" }
+      ]
+    },
+    {
+      "key": "memories",
+      "label": "Memories",
+      "fields": [
+        { "key": "label", "label": "Section label", "type": "text" },
+        { "key": "heading", "label": "Section heading", "type": "textarea" },
+        { "key": "video", "label": "Memories video URL", "type": "text" },
+        { "key": "caption", "label": "Caption", "type": "textarea" }
+      ]
+    },
+    {
+      "key": "footer",
+      "label": "Footer",
+      "fields": [
+        { "key": "coupleName", "label": "Couple signature", "type": "text" },
+        { "key": "rsvpHeading", "label": "RSVP heading", "type": "text" },
+        {
+          "key": "rsvpContacts",
+          "label": "RSVP contacts",
+          "type": "list",
+          "itemSchema": [{ "key": "text", "label": "Name", "type": "text" }]
+        },
+        { "key": "wishesHeading", "label": "Wishes heading", "type": "text" },
+        {
+          "key": "wishesFrom",
+          "label": "Wishes from",
+          "type": "list",
+          "itemSchema": [{ "key": "text", "label": "Name", "type": "text" }]
+        }
+      ]
+    }
+  ]
+}

@@ -12,6 +12,9 @@ import { FaqComponent } from '../../components/faq/faq.component';
 import { CtaComponent } from '../../components/cta/cta.component';
 import { SeoService } from '../../../../core/services/seo.service';
 import { APP_DESCRIPTION, APP_NAME } from '../../../../core/constants/app.constants';
+import { HOME_KEYWORDS, ORGANISATION } from '../../../../core/constants/seo.constants';
+import { environment } from '../../../../../environments/environment';
+import { HomeContentService } from '../../data/home-content.service';
 
 /**
  * Home page — composition only. Each section is an isolated, single-purpose
@@ -38,31 +41,62 @@ import { APP_DESCRIPTION, APP_NAME } from '../../../../core/constants/app.consta
 })
 export class HomePageComponent implements OnInit {
   private readonly seo = inject(SeoService);
+  private readonly content = inject(HomeContentService);
 
   ngOnInit(): void {
+    const url = environment.appUrl;
+
     this.seo.apply({
-      title: `${APP_NAME} — Create Beautiful Invitation Websites in Minutes`,
+      title: `${APP_NAME} — Digital Invitation Cards & Invitation Websites`,
       description: APP_DESCRIPTION,
       type: 'website',
-      keywords: [
-        'wedding invitation website',
-        'engagement invitation',
-        'digital invitations',
-        'event management platform',
-        'RSVP',
-      ],
+      keywords: HOME_KEYWORDS,
     });
-    this.seo.setStructuredData({
-      '@context': 'https://schema.org',
-      '@type': 'WebApplication',
-      name: APP_NAME,
-      applicationCategory: 'LifestyleApplication',
-      description: APP_DESCRIPTION,
-      offers: {
-        '@type': 'Offer',
-        price: '49',
-        priceCurrency: 'USD',
+
+    // A @graph, so Organization / WebSite / WebApplication / FAQPage are all
+    // declared once and can reference each other by @id.
+    this.seo.setStructuredData([
+      {
+        '@type': 'Organization',
+        '@id': `${url}/#organization`,
+        name: APP_NAME,
+        legalName: ORGANISATION.legalName,
+        url,
+        description: APP_DESCRIPTION,
+        areaServed: { '@type': 'Country', name: 'India' },
+        sameAs: ORGANISATION.sameAs,
       },
-    });
+      {
+        '@type': 'WebSite',
+        '@id': `${url}/#website`,
+        name: APP_NAME,
+        url,
+        inLanguage: ORGANISATION.language,
+        publisher: { '@id': `${url}/#organization` },
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: { '@type': 'EntryPoint', urlTemplate: `${url}/templates?q={search_term_string}` },
+          'query-input': 'required name=search_term_string',
+        },
+      },
+      {
+        '@type': 'WebApplication',
+        name: APP_NAME,
+        applicationCategory: 'LifestyleApplication',
+        operatingSystem: 'Web',
+        description: APP_DESCRIPTION,
+        publisher: { '@id': `${url}/#organization` },
+        offers: this.content.pricing.map((tier) => ({
+          '@type': 'Offer',
+          name: tier.name,
+          price: tier.price.replace(/[^\d.]/g, ''),
+          // Follows the price actually shown on the page — mismatched currency
+          // in structured data is a rich-result violation, not a detail.
+          priceCurrency: tier.price.includes('₹') ? 'INR' : 'USD',
+          availability: 'https://schema.org/InStock',
+        })),
+      },
+      this.seo.faqSchema(this.content.faqs),
+    ]);
   }
 }

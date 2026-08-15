@@ -4,7 +4,7 @@ import type { FooterColumn, NavLink, SocialLink } from '../models';
 export const PRIMARY_NAV: readonly NavLink[] = [
   { label: 'Home', fragment: 'hero' },
   { label: 'Services', fragment: 'services' },
-  { label: 'Templates', fragment: 'templates' },
+  { label: 'Templates', path: '/templates' },
   { label: 'How It Works', fragment: 'how-it-works' },
   { label: 'Pricing', fragment: 'pricing' },
   { label: 'FAQ', fragment: 'faq' },
@@ -16,7 +16,7 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
     title: 'Product',
     links: [
       { label: 'Services', fragment: 'services' },
-      { label: 'Templates', fragment: 'templates' },
+      { label: 'Templates', path: '/templates' },
       { label: 'Pricing', fragment: 'pricing' },
       { label: 'How It Works', fragment: 'how-it-works' },
     ],
