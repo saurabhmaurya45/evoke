@@ -6,7 +6,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.shared.audit import log_action
-from app.shared.errors import ConflictError, NotFoundError
+from app.shared.errors import ConflictError, NotFoundError, ValidationFailedError
 from app.shared.pagination import Page, PageParams, make_page
 from app.templates.models import (
     Template,
@@ -227,7 +227,56 @@ async def get_template(db: AsyncSession, template_id: uuid.UUID) -> Template:
     return template
 
 
+async def _validate_catalog_refs(
+    db: AsyncSession, *, category_id: uuid.UUID | None, currency_id: uuid.UUID | None
+) -> None:
+    """Cross-field validation that needs the database — a category/currency id must
+    reference an existing, active row. Pydantic alone can't check this (no DB
+    access), so a bad id would otherwise surface as a raw FK-constraint error at
+    commit time instead of a clean 422."""
+    if category_id is not None:
+        category = await db.get(Category, category_id)
+        if category is None or not category.is_active:
+            raise ValidationFailedError(
+                "categoryId does not reference an active category.",
+                details={"categoryId": str(category_id)},
+            )
+    if currency_id is not None:
+        currency = await db.get(Currency, currency_id)
+        if currency is None or not currency.is_active:
+            raise ValidationFailedError(
+                "currencyId does not reference an active currency.",
+                details={"currencyId": str(currency_id)},
+            )
+
+
+def _validate_pricing_invariant(template: Template) -> None:
+    """Re-checks the same PAID/FREE invariant `TemplateCreate`/`TemplateUpdate`
+    enforce at the schema level, but against the template's final merged state —
+    a partial update payload alone can't see fields it didn't touch (e.g. clearing
+    currencyId on an already-PAID template)."""
+    if template.pricing_model == PricingModel.PAID:
+        if template.price_amount_minor is None or template.price_amount_minor <= 0:
+            raise ValidationFailedError(
+                "priceAmountMinor is required and must be positive when pricingModel is PAID."
+            )
+        if template.currency_id is None:
+            raise ValidationFailedError("currencyId is required when pricingModel is PAID.")
+    elif template.price_amount_minor is not None or template.currency_id is not None:
+        raise ValidationFailedError(
+            "priceAmountMinor and currencyId must not be set when pricingModel is FREE."
+        )
+
+
 async def create_template(db: AsyncSession, admin_user: User, data: TemplateCreate) -> Template:
+    existing = (
+        await db.execute(select(Template).where(Template.slug == data.slug))
+    ).scalar_one_or_none()
+    if existing is not None:
+        raise ConflictError("TEMPLATE_SLUG_EXISTS", "A template with this slug already exists.")
+
+    await _validate_catalog_refs(db, category_id=data.category_id, currency_id=data.currency_id)
+
     template = Template(
         slug=data.slug,
         name=data.name,
@@ -260,9 +309,16 @@ async def update_template(
 ) -> Template:
     template = await get_template(db, template_id)
     changes = data.model_dump(exclude_unset=True)
+
+    await _validate_catalog_refs(
+        db, category_id=changes.get("category_id"), currency_id=changes.get("currency_id")
+    )
+
     for field, value in changes.items():
         setattr(template, field, value)
+
     if changes:
+        _validate_pricing_invariant(template)
         await log_action(
             db,
             action="TEMPLATE_UPDATED",

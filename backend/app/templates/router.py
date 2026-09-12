@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.shared.auth.dependencies import get_current_user_optional, require_role
 from app.shared.database import get_db
 from app.shared.envelope import Envelope
+from app.shared.openapi_responses import FORBIDDEN, UNAUTHORIZED, conflict, merge, not_found, validation_failed
 from app.shared.pagination import Page, PageParams, page_params
 from app.templates.schemas import (
     TemplateCreate,
@@ -73,6 +74,11 @@ async def list_categories_route(db: AsyncSession = Depends(get_db)) -> Envelope[
     status_code=status.HTTP_201_CREATED,
     tags=["template-categories"],
     summary="Create a category",
+    responses=merge(
+        UNAUTHORIZED,
+        FORBIDDEN,
+        conflict("CATEGORY_SLUG_EXISTS", "A category with this slug already exists."),
+    ),
 )
 async def create_category_route(
     data: CategoryCreate,
@@ -93,6 +99,9 @@ async def create_category_route(
     response_model=Envelope[CategoryOut],
     tags=["template-categories"],
     summary="Update a category",
+    responses=merge(
+        UNAUTHORIZED, FORBIDDEN, not_found("CATEGORY_NOT_FOUND", "Category not found.")
+    ),
 )
 async def update_category_route(
     category_id: uuid.UUID,
@@ -115,6 +124,9 @@ async def update_category_route(
     status_code=status.HTTP_204_NO_CONTENT,
     tags=["template-categories"],
     summary="Deactivate a category",
+    responses=merge(
+        UNAUTHORIZED, FORBIDDEN, not_found("CATEGORY_NOT_FOUND", "Category not found.")
+    ),
 )
 async def delete_category_route(
     category_id: uuid.UUID,
@@ -160,6 +172,11 @@ async def list_currencies_route(db: AsyncSession = Depends(get_db)) -> Envelope[
     status_code=status.HTTP_201_CREATED,
     tags=["template-currencies"],
     summary="Create a currency",
+    responses=merge(
+        UNAUTHORIZED,
+        FORBIDDEN,
+        conflict("CURRENCY_CODE_EXISTS", "A currency with this code already exists."),
+    ),
 )
 async def create_currency_route(
     data: CurrencyCreate,
@@ -181,6 +198,9 @@ async def create_currency_route(
     response_model=Envelope[CurrencyOut],
     tags=["template-currencies"],
     summary="Update a currency",
+    responses=merge(
+        UNAUTHORIZED, FORBIDDEN, not_found("CURRENCY_NOT_FOUND", "Currency not found.")
+    ),
 )
 async def update_currency_route(
     currency_id: uuid.UUID,
@@ -204,6 +224,9 @@ async def update_currency_route(
     status_code=status.HTTP_204_NO_CONTENT,
     tags=["template-currencies"],
     summary="Deactivate a currency",
+    responses=merge(
+        UNAUTHORIZED, FORBIDDEN, not_found("CURRENCY_NOT_FOUND", "Currency not found.")
+    ),
 )
 async def delete_currency_route(
     currency_id: uuid.UUID,
@@ -268,6 +291,7 @@ async def list_templates_route(
     response_model=Envelope[TemplateOut],
     tags=["templates"],
     summary="Get template details",
+    responses=merge(not_found("TEMPLATE_NOT_FOUND", "Template not found.")),
 )
 async def get_template_route(
     template_id: uuid.UUID, db: AsyncSession = Depends(get_db)
@@ -288,6 +312,15 @@ async def get_template_route(
     response_model=Envelope[TemplateOut],
     tags=["templates"],
     summary="Update template metadata",
+    responses=merge(
+        UNAUTHORIZED,
+        FORBIDDEN,
+        not_found("TEMPLATE_NOT_FOUND", "Template not found."),
+        validation_failed(
+            "categoryId/currencyId reference an inactive or nonexistent row, or the "
+            "merged pricingModel/priceAmountMinor/currencyId state is inconsistent."
+        ),
+    ),
 )
 async def update_template_route(
     template_id: uuid.UUID,
@@ -313,6 +346,14 @@ async def update_template_route(
     status_code=status.HTTP_201_CREATED,
     tags=["templates"],
     summary="Create a template",
+    responses=merge(
+        UNAUTHORIZED,
+        FORBIDDEN,
+        conflict("TEMPLATE_SLUG_EXISTS", "A template with this slug already exists."),
+        validation_failed(
+            "categoryId/currencyId reference an inactive or nonexistent row."
+        ),
+    ),
 )
 async def create_template_route(
     data: TemplateCreate,
@@ -344,6 +385,7 @@ async def create_template_route(
     response_model=Envelope[list[TemplateVersionOut]],
     tags=["templates"],
     summary="List a template's versions",
+    responses=merge(not_found("TEMPLATE_NOT_FOUND", "Template not found.")),
 )
 async def list_template_versions_route(
     template_id: uuid.UUID,
@@ -367,6 +409,13 @@ async def list_template_versions_route(
     response_model=Envelope[TemplateVersionOut],
     tags=["templates"],
     summary="Get a specific template version",
+    responses=merge(
+        not_found(
+            "TEMPLATE_VERSION_NOT_FOUND",
+            "Template version not found (also returned for a DRAFT version requested "
+            "by a non-admin, to avoid leaking its existence).",
+        )
+    ),
 )
 async def get_template_version_route(
     template_id: uuid.UUID,
@@ -391,6 +440,9 @@ async def get_template_version_route(
     status_code=status.HTTP_201_CREATED,
     tags=["templates"],
     summary="Create a new template version",
+    responses=merge(
+        UNAUTHORIZED, FORBIDDEN, not_found("TEMPLATE_NOT_FOUND", "Template not found.")
+    ),
 )
 async def create_template_version_route(
     template_id: uuid.UUID,
@@ -414,6 +466,12 @@ async def create_template_version_route(
     response_model=Envelope[TemplateVersionOut],
     tags=["templates"],
     summary="Publish a template version",
+    responses=merge(
+        UNAUTHORIZED,
+        FORBIDDEN,
+        not_found("TEMPLATE_VERSION_NOT_FOUND", "Template version not found."),
+        conflict("TEMPLATE_VERSION_ARCHIVED", "An archived template version cannot be published."),
+    ),
 )
 async def publish_template_version_route(
     template_id: uuid.UUID,
