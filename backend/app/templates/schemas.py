@@ -16,6 +16,14 @@ class TemplateCreate(CamelModel):
     category: str | None = None
 
 
+class TemplateUpdate(CamelModel):
+    """ADMIN-only partial update. Only provided fields are applied."""
+
+    name: str | None = None
+    category: str | None = None
+    status: TemplateStatus | None = None
+
+
 class TemplateOut(CamelModel):
     id: uuid.UUID
     slug: str

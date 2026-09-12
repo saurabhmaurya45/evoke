@@ -1,7 +1,19 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
+import { catchError, of } from 'rxjs';
+import { AuthService } from '../../../core/services/auth.service';
 import { WINDOW } from '../../../core/tokens/window.token';
 import { HomeContentService } from '../../home/data/home-content.service';
 import type { TemplateCard } from '../../home/models/home-content.model';
+
+interface BackendTemplateApiOut {
+  id: string;
+  slug: string;
+  status: string;
+}
+interface ApiPage<T> { data: T[]; }
+/** Minimal backend record cached in memory for UUID lookups. */
+interface BackendEntry { id: string; status: string; }
 
 /** A catalogue entry: the card plus the commercial state admins control. */
 export interface CatalogTemplate extends TemplateCard {
@@ -38,6 +50,11 @@ const STORAGE_KEY = 'evoke:catalog';
 export class TemplateCatalogService {
   private readonly window = inject(WINDOW);
   private readonly content = inject(HomeContentService);
+  private readonly http = inject(HttpClient);
+  private readonly auth = inject(AuthService);
+
+  /** slug → backend {id, status}, populated once the admin user is confirmed. */
+  private readonly _backendMap = signal<Record<string, BackendEntry>>({});
 
   private readonly _templates = signal<readonly CatalogTemplate[]>(this.seed());
 
@@ -47,6 +64,16 @@ export class TemplateCatalogService {
     this.window?.addEventListener('storage', (event) => {
       if (event.key === STORAGE_KEY) {
         this._templates.set(this.seed());
+      }
+    });
+
+    // When the current user is confirmed as admin, pull the authoritative
+    // publish status from the backend and merge it over the local overrides.
+    effect(() => {
+      const admin = this.auth.isAdmin();
+      console.log('[TemplateCatalog] isAdmin =', admin);
+      if (admin) {
+        this.syncFromBackend();
       }
     });
   }
@@ -65,7 +92,18 @@ export class TemplateCatalogService {
 
   togglePublished(slotId: string): void {
     const current = this._templates().find((template) => template.slotId === slotId);
-    if (current) this.setPublished(slotId, !current.published);
+    if (!current) return;
+    const newPublished = !current.published;
+    this.setPublished(slotId, newPublished);
+    const backendId = this._backendMap()[slotId]?.id;
+    console.log('[TemplateCatalog] togglePublished', slotId, '→', newPublished ? 'ACTIVE' : 'ARCHIVED', '| backendId =', backendId ?? 'NOT FOUND (backendMap empty)');
+    console.log('[TemplateCatalog] full backendMap =', JSON.stringify(this._backendMap()));
+    if (backendId) {
+      this.http
+        .patch(`v1/templates/${backendId}`, { status: newPublished ? 'ACTIVE' : 'ARCHIVED' })
+        .pipe(catchError((err) => { console.error('[TemplateCatalog] PATCH failed:', err.status, err.message); return of(null); }))
+        .subscribe((res) => console.log('[TemplateCatalog] PATCH response:', res));
+    }
   }
 
   /** Apply an admin edit. Paid templates keep their price; free ones reset to 0. */
@@ -75,12 +113,49 @@ export class TemplateCatalogService {
       const price = pricing === 'free' ? 0 : (changes.price ?? template.price);
       return { ...changes, pricing, price };
     });
+    const backendId = this._backendMap()[slotId]?.id;
+    if (backendId) {
+      const payload: Record<string, string> = {};
+      if (changes.name !== undefined) payload['name'] = changes.name;
+      if (changes.category !== undefined) payload['category'] = changes.category;
+      if (Object.keys(payload).length) {
+        this.http
+          .patch(`v1/templates/${backendId}`, payload)
+          .pipe(catchError(() => of(null)))
+          .subscribe();
+      }
+    }
   }
 
   /** Discard every admin change and return to the seeded catalogue. */
   reset(): void {
     this._templates.set(this.seed(true));
     this.persist();
+  }
+
+  private syncFromBackend(): void {
+    console.log('[TemplateCatalog] syncFromBackend() called — fetching v1/templates?include_all=true');
+    this.http
+      .get<ApiPage<BackendTemplateApiOut>>('v1/templates?page_size=100&include_all=true')
+      .pipe(catchError((err) => { console.error('[TemplateCatalog] GET templates failed:', err.status, err.message); return of({ data: [] }); }))
+      .subscribe((page) => {
+        console.log('[TemplateCatalog] GET templates returned', page.data.length, 'items:', page.data.map(t => t.slug));
+        if (!page.data.length) { console.warn('[TemplateCatalog] backendMap NOT populated — empty response'); return; }
+        const map: Record<string, BackendEntry> = {};
+        for (const t of page.data) {
+          map[t.slug] = { id: t.id, status: t.status };
+        }
+        this._backendMap.set(map);
+        console.log('[TemplateCatalog] backendMap set:', Object.keys(map));
+        // Merge authoritative publish status; local overrides for other fields are kept.
+        this._templates.update((templates) =>
+          templates.map((t) => {
+            const backend = map[t.slotId];
+            return backend ? { ...t, published: backend.status === 'ACTIVE' } : t;
+          }),
+        );
+        this.persist();
+      });
   }
 
   private update(

@@ -47,6 +47,16 @@
           <div class="site__actions">
             <a class="btn btn--ghost" [routerLink]="['/editor', site.templateId]">Edit</a>
             <a class="btn btn--ghost" [href]="site.url" target="_blank" rel="noopener noreferrer">Open page</a>
+            @if (site.status !== 'expired') {
+              <button
+                type="button"
+                class="btn btn--ghost btn--danger"
+                [disabled]="archivingSiteId() === site.id"
+                (click)="archiveSite(site.id)"
+              >
+                {{ archivingSiteId() === site.id ? 'Archiving…' : 'Archive' }}
+              </button>
+            }
           </div>
         </article>
       }

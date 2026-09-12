@@ -7,8 +7,12 @@
     </div>
   </header>
 
+  @if (content.loadError()) {
+    <p class="admin__error">{{ content.loadError() }}</p>
+  }
+
   <div class="admin__metrics">
-    @for (metric of metrics; track metric.label) {
+    @for (metric of metrics(); track metric.label) {
       <div class="metric">
         <span class="metric__label">{{ metric.label }}</span>
         <span class="metric__value">{{ metric.value }}</span>
@@ -91,7 +95,10 @@
             <tr><th>Customer</th><th>Email</th><th>Plan</th><th>Joined</th><th class="num">Sites</th><th class="num">Revenue</th></tr>
           </thead>
           <tbody>
-            @for (customer of customers; track customer.userId) {
+            @if (content.loading() && !customers().length) {
+              <tr><td colspan="6" class="table__loading">Loading…</td></tr>
+            }
+            @for (customer of customers(); track customer.userId) {
               <tr>
                 <td>{{ customer.name }}</td>
                 <td class="mono">{{ customer.email }}</td>
@@ -107,10 +114,13 @@
       @case ('sites') {
         <table class="table">
           <thead>
-            <tr><th>Template</th><th>Occasion</th><th>URL</th><th>Status</th><th class="num">Views</th><th class="num">RSVPs</th></tr>
+            <tr><th>Title</th><th>Occasion</th><th>URL</th><th>Status</th><th class="num">Views</th><th class="num">RSVPs</th></tr>
           </thead>
           <tbody>
-            @for (site of sites; track site.id) {
+            @if (content.loading() && !sites().length) {
+              <tr><td colspan="6" class="table__loading">Loading…</td></tr>
+            }
+            @for (site of sites(); track site.id) {
               <tr>
                 <td>{{ site.templateName }}</td>
                 <td>{{ site.occasion }}</td>
@@ -129,7 +139,12 @@
             <tr><th>Invoice</th><th>Plan</th><th>Method</th><th>Date</th><th>Status</th><th class="num">Amount</th></tr>
           </thead>
           <tbody>
-            @for (payment of payments; track payment.id) {
+            @if (content.loading()) {
+              <tr><td colspan="6" class="table__loading">Loading…</td></tr>
+            } @else if (!payments().length) {
+              <tr><td colspan="6" class="table__loading">No payments recorded yet.</td></tr>
+            }
+            @for (payment of payments(); track payment.id) {
               <tr>
                 <td class="mono">{{ payment.invoiceNo }}</td>
                 <td>{{ payment.plan }}</td>

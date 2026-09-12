@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, type OnInit, computed, inject, signal } from '@angular/core';
+import { catchError, of } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { SeoService } from '../../../../core/services/seo.service';
@@ -19,7 +20,7 @@ import type { InvitationSite, PaymentRecord } from '../../models/dashboard.model
 })
 export class UserDashboardComponent implements OnInit {
   private readonly seo = inject(SeoService);
-  private readonly content = inject(DashboardContentService);
+  protected readonly content = inject(DashboardContentService);
   protected readonly auth = inject(AuthService);
 
   protected readonly account = computed(() => {
@@ -49,12 +50,16 @@ export class UserDashboardComponent implements OnInit {
   /** Id of the site whose URL was just copied, for the transient "Copied" label. */
   protected readonly copiedSiteId = signal<string | null>(null);
 
+  /** Id of the site currently being archived (disables the button during the request). */
+  protected readonly archivingSiteId = signal<string | null>(null);
+
   ngOnInit(): void {
     this.seo.apply({
       title: 'Your dashboard',
       description: 'Manage your invitation websites, payments, and RSVPs.',
       robots: 'noindex, nofollow',
     });
+    this.content.loadUserData();
   }
 
   protected amount(payment: PaymentRecord): string {
@@ -63,6 +68,15 @@ export class UserDashboardComponent implements OnInit {
 
   protected date(iso: string): string {
     return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  protected archiveSite(siteId: string): void {
+    if (!confirm('Archive this invitation? It will no longer be publicly visible.')) return;
+    this.archivingSiteId.set(siteId);
+    this.content
+      .archiveEvent(siteId)
+      .pipe(catchError(() => of(null)))
+      .subscribe(() => this.archivingSiteId.set(null));
   }
 
   protected async copyUrl(site: InvitationSite): Promise<void> {

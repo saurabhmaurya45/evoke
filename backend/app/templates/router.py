@@ -10,6 +10,7 @@ from app.shared.pagination import Page, PageParams, page_params
 from app.templates.schemas import (
     TemplateCreate,
     TemplateOut,
+    TemplateUpdate,
     TemplateVersionCreate,
     TemplateVersionOut,
 )
@@ -20,6 +21,7 @@ from app.templates.service import (
     get_template_version,
     list_templates,
     publish_template_version,
+    update_template,
 )
 from app.users.models import User, UserRole
 
@@ -31,9 +33,15 @@ async def list_templates_route(
     params: PageParams = Depends(page_params),
     category: str | None = Query(None),
     search: str | None = Query(None),
+    include_all: bool = Query(False, description="Admin only: return all statuses, not just ACTIVE."),
+    current_user: User | None = Depends(get_current_user_optional),
     db: AsyncSession = Depends(get_db),
 ) -> Page[TemplateOut]:
-    page = await list_templates(db, params, category=category, search=search)
+    is_admin = current_user is not None and current_user.role == UserRole.ADMIN
+    page = await list_templates(
+        db, params, category=category, search=search,
+        include_all=include_all and is_admin,
+    )
     return Page[TemplateOut](
         data=[TemplateOut.model_validate(template) for template in page.data],
         pagination=page.pagination,
@@ -58,6 +66,17 @@ async def get_template_version_route(
     is_admin = current_user is not None and current_user.role == UserRole.ADMIN
     template_version = await get_template_version(db, template_id, version, is_admin=is_admin)
     return Envelope(data=TemplateVersionOut.model_validate(template_version))
+
+
+@router.patch("/{template_id}", response_model=Envelope[TemplateOut])
+async def update_template_route(
+    template_id: uuid.UUID,
+    data: TemplateUpdate,
+    admin_user: User = Depends(require_role(UserRole.ADMIN)),
+    db: AsyncSession = Depends(get_db),
+) -> Envelope[TemplateOut]:
+    template = await update_template(db, admin_user, template_id, data)
+    return Envelope(data=TemplateOut.model_validate(template))
 
 
 @router.post("", response_model=Envelope[TemplateOut], status_code=status.HTTP_201_CREATED)

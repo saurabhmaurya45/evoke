@@ -18,8 +18,10 @@ import { SceneBackdropComponent } from '../scene-backdrop/scene-backdrop.compone
   imports: [RouterOutlet, NavbarComponent, FooterComponent, SceneBackdropComponent],
   template: `
     <a class="skip-link" href="#main-content">Skip to content</a>
-    @defer (on idle) {
-      <app-scene-backdrop />
+    @if (!isDashboardRoute()) {
+      @defer (on idle) {
+        <app-scene-backdrop />
+      }
     }
     @if (!isAuthRoute()) { <app-navbar /> }
     <main id="main-content" class="shell">
@@ -56,9 +58,13 @@ export class MainLayoutComponent {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   protected readonly isAuthRoute = signal(this.router.url.startsWith('/login') || this.router.url.startsWith('/signup') || this.router.url.startsWith('/verify-otp') || this.router.url.startsWith('/forgot-password') || this.router.url.startsWith('/reset-password') || this.router.url.startsWith('/check-email') || this.router.url.startsWith('/email-verified') || this.router.url.startsWith('/auth/'));
+  protected readonly isDashboardRoute = signal(this.router.url.startsWith('/dashboard') || this.router.url.startsWith('/admin'));
 
   constructor() {
-    const subscription = this.router.events.pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd)).subscribe((event) => this.isAuthRoute.set(event.urlAfterRedirects.startsWith('/login') || event.urlAfterRedirects.startsWith('/signup') || event.urlAfterRedirects.startsWith('/verify-otp') || event.urlAfterRedirects.startsWith('/forgot-password') || event.urlAfterRedirects.startsWith('/reset-password') || event.urlAfterRedirects.startsWith('/check-email') || event.urlAfterRedirects.startsWith('/email-verified') || event.urlAfterRedirects.startsWith('/auth/')));
+    const subscription = this.router.events.pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd)).subscribe((event) => {
+      this.isAuthRoute.set(event.urlAfterRedirects.startsWith('/login') || event.urlAfterRedirects.startsWith('/signup') || event.urlAfterRedirects.startsWith('/verify-otp') || event.urlAfterRedirects.startsWith('/forgot-password') || event.urlAfterRedirects.startsWith('/reset-password') || event.urlAfterRedirects.startsWith('/check-email') || event.urlAfterRedirects.startsWith('/email-verified') || event.urlAfterRedirects.startsWith('/auth/'));
+      this.isDashboardRoute.set(event.urlAfterRedirects.startsWith('/dashboard') || event.urlAfterRedirects.startsWith('/admin'));
+    });
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
 }

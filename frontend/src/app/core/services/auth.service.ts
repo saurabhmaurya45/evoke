@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import type { AuthChangeEvent, AuthError, Provider, Session } from '@supabase/supabase-js';
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { SupabaseClientService } from './supabase-client.service';
 
@@ -220,6 +220,17 @@ export class AuthService {
   }
 
   logout(): void {
+    // Capture token before clearing — the interceptor reads the signal, which
+    // we're about to null out. Pass it manually so the header is always sent.
+    const token = this._session()?.token;
+    if (token) {
+      this.http
+        .post(`${environment.apiBaseUrl}/v1/auth/logout`, {}, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .pipe(catchError(() => of(null)))
+        .subscribe();
+    }
     this._session.set(null);
     void this.supabase.auth.signOut();
   }
