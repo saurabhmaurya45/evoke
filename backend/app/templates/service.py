@@ -3,7 +3,6 @@ from __future__ import annotations
 import uuid
 
 from sqlalchemy import func, select
-from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.shared.audit import log_action
@@ -19,58 +18,16 @@ from app.templates.models import (
     StorefrontStatus,
     PricingModel,
 )
-from app.templates.schemas import TemplateCreate, TemplateUpdate, TemplateVersionCreate
+from app.templates.schemas import (
+    CategoryCreate,
+    CategoryUpdate,
+    CurrencyCreate,
+    CurrencyUpdate,
+    TemplateCreate,
+    TemplateUpdate,
+    TemplateVersionCreate,
+)
 from app.users.models import User
-
-
-async def seed_categories(db: AsyncSession) -> None:
-    """Seed initial categories. Safe to call on every startup."""
-    categories = [
-        {"slug": "wedding", "name": "Wedding", "display_order": 1},
-        {"slug": "engagement", "name": "Engagement", "display_order": 2},
-        {"slug": "birthday", "name": "Birthday", "display_order": 3},
-        {"slug": "anniversary", "name": "Anniversary", "display_order": 4},
-        {"slug": "corporate", "name": "Corporate Event", "display_order": 5},
-    ]
-    for cat in categories:
-        stmt = (
-            pg_insert(Category)
-            .values(
-                id=uuid.uuid4(),
-                slug=cat["slug"],
-                name=cat["name"],
-                display_order=cat["display_order"],
-                is_active=True,
-            )
-            .on_conflict_do_nothing(index_elements=["slug"])
-        )
-        await db.execute(stmt)
-    await db.commit()
-
-
-async def seed_currencies(db: AsyncSession) -> None:
-    """Seed initial currencies. Safe to call on every startup."""
-    currencies = [
-        {"code": "INR", "name": "Indian Rupee", "symbol": "₹", "minor_unit": 100},
-        {"code": "USD", "name": "US Dollar", "symbol": "$", "minor_unit": 1},
-        {"code": "EUR", "name": "Euro", "symbol": "€", "minor_unit": 1},
-        {"code": "GBP", "name": "British Pound", "symbol": "£", "minor_unit": 1},
-    ]
-    for curr in currencies:
-        stmt = (
-            pg_insert(Currency)
-            .values(
-                id=uuid.uuid4(),
-                code=curr["code"],
-                name=curr["name"],
-                symbol=curr["symbol"],
-                minor_unit=curr["minor_unit"],
-                is_active=True,
-            )
-            .on_conflict_do_nothing(index_elements=["code"])
-        )
-        await db.execute(stmt)
-    await db.commit()
 
 
 async def list_categories(db: AsyncSession) -> list[Category]:
@@ -83,12 +40,151 @@ async def list_categories(db: AsyncSession) -> list[Category]:
     return list(result.scalars().all())
 
 
+async def get_category(db: AsyncSession, category_id: uuid.UUID) -> Category:
+    category = await db.get(Category, category_id)
+    if category is None:
+        raise NotFoundError("CATEGORY_NOT_FOUND", "Category not found.")
+    return category
+
+
+async def create_category(db: AsyncSession, admin_user: User, data: CategoryCreate) -> Category:
+    existing = (
+        await db.execute(select(Category).where(Category.slug == data.slug))
+    ).scalar_one_or_none()
+    if existing is not None:
+        raise ConflictError("CATEGORY_SLUG_EXISTS", "A category with this slug already exists.")
+
+    category = Category(
+        slug=data.slug,
+        name=data.name,
+        description=data.description,
+        icon_url=data.icon_url,
+        display_order=data.display_order,
+    )
+    db.add(category)
+    await db.flush()
+    await log_action(
+        db,
+        action="CATEGORY_CREATED",
+        resource_type="category",
+        resource_id=category.id,
+        actor_user_id=admin_user.id,
+    )
+    await db.commit()
+    await db.refresh(category)
+    return category
+
+
+async def update_category(
+    db: AsyncSession, admin_user: User, category_id: uuid.UUID, data: CategoryUpdate
+) -> Category:
+    category = await get_category(db, category_id)
+    changes = data.model_dump(exclude_unset=True)
+    for field, value in changes.items():
+        setattr(category, field, value)
+    if changes:
+        await log_action(
+            db,
+            action="CATEGORY_UPDATED",
+            resource_type="category",
+            resource_id=category.id,
+            actor_user_id=admin_user.id,
+        )
+    await db.commit()
+    await db.refresh(category)
+    return category
+
+
+async def delete_category(db: AsyncSession, admin_user: User, category_id: uuid.UUID) -> None:
+    """Soft delete — categories may be referenced by templates, so we deactivate
+    rather than hard-delete."""
+    category = await get_category(db, category_id)
+    category.is_active = False
+    await log_action(
+        db,
+        action="CATEGORY_DEACTIVATED",
+        resource_type="category",
+        resource_id=category.id,
+        actor_user_id=admin_user.id,
+    )
+    await db.commit()
+
+
 async def list_currencies(db: AsyncSession) -> list[Currency]:
     """List all active currencies."""
     result = await db.execute(
         select(Currency).where(Currency.is_active == True).order_by(Currency.code)
     )
     return list(result.scalars().all())
+
+
+async def get_currency(db: AsyncSession, currency_id: uuid.UUID) -> Currency:
+    currency = await db.get(Currency, currency_id)
+    if currency is None:
+        raise NotFoundError("CURRENCY_NOT_FOUND", "Currency not found.")
+    return currency
+
+
+async def create_currency(db: AsyncSession, admin_user: User, data: CurrencyCreate) -> Currency:
+    existing = (
+        await db.execute(select(Currency).where(Currency.code == data.code))
+    ).scalar_one_or_none()
+    if existing is not None:
+        raise ConflictError("CURRENCY_CODE_EXISTS", "A currency with this code already exists.")
+
+    currency = Currency(
+        code=data.code,
+        name=data.name,
+        symbol=data.symbol,
+        minor_unit=data.minor_unit,
+    )
+    db.add(currency)
+    await db.flush()
+    await log_action(
+        db,
+        action="CURRENCY_CREATED",
+        resource_type="currency",
+        resource_id=currency.id,
+        actor_user_id=admin_user.id,
+    )
+    await db.commit()
+    await db.refresh(currency)
+    return currency
+
+
+async def update_currency(
+    db: AsyncSession, admin_user: User, currency_id: uuid.UUID, data: CurrencyUpdate
+) -> Currency:
+    currency = await get_currency(db, currency_id)
+    changes = data.model_dump(exclude_unset=True)
+    for field, value in changes.items():
+        setattr(currency, field, value)
+    if changes:
+        await log_action(
+            db,
+            action="CURRENCY_UPDATED",
+            resource_type="currency",
+            resource_id=currency.id,
+            actor_user_id=admin_user.id,
+        )
+    await db.commit()
+    await db.refresh(currency)
+    return currency
+
+
+async def delete_currency(db: AsyncSession, admin_user: User, currency_id: uuid.UUID) -> None:
+    """Soft delete — currencies may be referenced by templates, so we deactivate
+    rather than hard-delete."""
+    currency = await get_currency(db, currency_id)
+    currency.is_active = False
+    await log_action(
+        db,
+        action="CURRENCY_DEACTIVATED",
+        resource_type="currency",
+        resource_id=currency.id,
+        actor_user_id=admin_user.id,
+    )
+    await db.commit()
 
 
 async def list_templates(
@@ -103,10 +199,8 @@ async def list_templates(
     include_draft is True (admin only)."""
     filters = []
     if not include_draft:
-        filters.extend([
-            Template.status == TemplateStatus.ACTIVE,
-            Template.storefront_status == StorefrontStatus.LISTED,
-        ])
+        filters.append(Template.status == TemplateStatus.ACTIVE)
+        filters.append(Template.storefront_status == StorefrontStatus.LISTED)
     if category_id:
         filters.append(Template.category_id == category_id)
     if search:
@@ -215,6 +309,23 @@ async def create_template_version(
     await db.commit()
     await db.refresh(version)
     return version
+
+
+async def list_template_versions(
+    db: AsyncSession, template_id: uuid.UUID, *, is_admin: bool
+) -> list[TemplateVersion]:
+    """List versions for a template. Non-admins only see published versions —
+    draft versions aren't leaked to the public."""
+    await get_template(db, template_id)  # 404s if the template doesn't exist
+
+    filters = [TemplateVersion.template_id == template_id]
+    if not is_admin:
+        filters.append(TemplateVersion.status == TemplateVersionStatus.PUBLISHED)
+
+    result = await db.execute(
+        select(TemplateVersion).where(*filters).order_by(TemplateVersion.version.desc())
+    )
+    return list(result.scalars().all())
 
 
 async def _get_version(db: AsyncSession, template_id: uuid.UUID, version: int) -> TemplateVersion | None:

@@ -71,16 +71,12 @@ class Template(Base):
     category_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), ForeignKey("categories.id"), nullable=True
     )
-    pricing_model: Mapped[PricingModel] = mapped_column(
-        Enum(PricingModel, name="pricing_model"), nullable=False, default=PricingModel.FREE
-    )
+    pricing_model: Mapped[str] = mapped_column(String(20), nullable=False, default="FREE")
     price_amount_minor: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
     currency_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), ForeignKey("currencies.id"), nullable=True
     )
-    storefront_status: Mapped[StorefrontStatus] = mapped_column(
-        Enum(StorefrontStatus, name="storefront_status"), nullable=False, default=StorefrontStatus.LISTED
-    )
+    storefront_status: Mapped[str] = mapped_column(String(20), nullable=False, default="LISTED")
     thumbnail_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
     preview_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
     # Content/catalog readiness only (is this template visible in the public catalog?),

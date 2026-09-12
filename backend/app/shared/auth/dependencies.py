@@ -1,6 +1,5 @@
-from typing import Annotated
-
-from fastapi import Depends, Header
+from fastapi import Depends
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.shared.auth.identity_provider import IdentityProvider, InvalidTokenError
@@ -10,9 +9,15 @@ from app.shared.errors import AuthForbiddenError, AuthRequiredError
 from app.users.models import User, UserRole
 from app.users.service import get_or_provision_user
 
+# auto_error=False so the optional-auth dependency can fall back to None instead of
+# FastAPI raising its own 403 before we get a chance to. Registering this as a real
+# security scheme (rather than parsing the Authorization header by hand) is what
+# makes Swagger UI show the padlock icon and "Authorize" button.
+bearer_scheme = HTTPBearer(auto_error=False, description="Supabase-issued JWT access token.")
+
 
 async def get_current_user(
-    authorization: Annotated[str | None, Header()] = None,
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
     db: AsyncSession = Depends(get_db),
     identity_provider: IdentityProvider = Depends(get_identity_provider),
 ) -> User:
@@ -23,12 +28,11 @@ async def get_current_user(
     the user's first authenticated request — the local `users` row keyed on
     `auth_user_id`. Never keys on email.
     """
-    if not authorization or not authorization.lower().startswith("bearer "):
+    if credentials is None:
         raise AuthRequiredError()
 
-    token = authorization.split(" ", 1)[1]
     try:
-        identity = await identity_provider.validate_token(token)
+        identity = await identity_provider.validate_token(credentials.credentials)
     except InvalidTokenError as exc:
         raise AuthRequiredError(str(exc)) from exc
 
@@ -36,7 +40,7 @@ async def get_current_user(
 
 
 async def get_current_user_optional(
-    authorization: Annotated[str | None, Header()] = None,
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
     db: AsyncSession = Depends(get_db),
     identity_provider: IdentityProvider = Depends(get_identity_provider),
 ) -> User | None:
@@ -44,12 +48,11 @@ async def get_current_user_optional(
     raising when no bearer token is present (or it's invalid) — for endpoints that are
     public but behave differently for an authenticated (e.g. ADMIN) caller.
     """
-    if not authorization or not authorization.lower().startswith("bearer "):
+    if credentials is None:
         return None
 
-    token = authorization.split(" ", 1)[1]
     try:
-        identity = await identity_provider.validate_token(token)
+        identity = await identity_provider.validate_token(credentials.credentials)
     except InvalidTokenError:
         return None
 
