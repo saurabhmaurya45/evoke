@@ -5,8 +5,10 @@ import type { AppEnvironment } from './environment.model';
 export const environment: AppEnvironment = {
   production: false,
   name: 'development',
-  apiBaseUrl: 'http://localhost:3000/api',
+  apiBaseUrl: 'http://localhost:8000',
   appUrl: 'http://localhost:4200',
+  supabaseUrl: 'https://jcyogzcqifqukleqtbtw.supabase.co',
+  supabasePublishableKey: 'sb_publishable_XBcDrgEjVQfygZ4bnUOoxQ_YoFX7wlp',
   features: {
     analytics: false,
     themeToggle: true,

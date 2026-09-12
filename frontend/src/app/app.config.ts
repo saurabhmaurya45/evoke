@@ -1,5 +1,7 @@
 import {
   type ApplicationConfig,
+  inject,
+  provideAppInitializer,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
@@ -15,6 +17,7 @@ import { routes } from './app.routes';
 import { apiBaseUrlInterceptor } from './core/interceptors/api-base-url.interceptor';
 import { authTokenInterceptor } from './core/interceptors/auth-token.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { AuthService } from './core/services/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -32,5 +35,9 @@ export const appConfig: ApplicationConfig = {
       withFetch(),
       withInterceptors([apiBaseUrlInterceptor, authTokenInterceptor, errorInterceptor]),
     ),
+    // Restores/validates the Supabase session (and OAuth/email-link callback tokens in
+    // the URL) before the router activates the first route, so auth guards never see a
+    // stale "logged out" state on a hard refresh.
+    provideAppInitializer(() => inject(AuthService).init()),
   ],
 };

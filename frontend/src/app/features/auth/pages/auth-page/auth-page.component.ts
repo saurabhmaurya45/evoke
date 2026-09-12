@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LogoComponent } from '../../../../shared/components/logo/logo.component';
-import { AuthService, DEMO_CREDENTIALS, type SocialProvider } from '../../../../core/services/auth.service';
+import { AuthService, type AuthErrorCode, type SocialProvider } from '../../../../core/services/auth.service';
 
 type AuthMode = 'login' | 'signup' | 'otp' | 'forgot' | 'reset' | 'check-email' | 'verified' | 'callback';
 type FormModel = { firstName: FormControl<string>; lastName: FormControl<string>; email: FormControl<string>; password: FormControl<string>; confirmPassword: FormControl<string>; remember: FormControl<boolean>; terms: FormControl<boolean>; otp: FormControl<string> };
@@ -35,9 +35,6 @@ type FormModel = { firstName: FormControl<string>; lastName: FormControl<string>
               </form>
               <div class="divider"><span>or continue with</span></div><div class="socials">@for (provider of providers; track provider) { <button class="social" type="button" (click)="social(provider)" [attr.aria-label]="'Continue with ' + provider"><span class="social__icon" [class]="'social__icon--' + provider" aria-hidden="true">{{ provider === 'google' ? 'G' : provider === 'apple' ? '●' : provider === 'facebook' ? 'f' : provider === 'github' ? '◆' : 'M' }}</span><span class="social__label">{{ provider }}</span></button> }</div>
               <p class="switch">{{ mode() === 'login' ? 'New to Evoke?' : 'Already have an account?' }} <a [routerLink]="mode() === 'login' ? '/signup' : '/login'">{{ mode() === 'login' ? 'Create account' : 'Sign in' }}</a></p>
-              @if (mode() === 'login') {
-                <p class="demo">Demo accounts:@for (cred of demoCredentials; track cred.email) { <button type="button" (click)="useDemo(cred.email, cred.password)">{{ cred.role }} — {{ cred.email }} / {{ cred.password }}</button> }</p>
-              }
             } @else if (mode() === 'otp') { <form [formGroup]="form" (ngSubmit)="submitOtp()"><label>6-digit verification code<input class="otp" inputmode="numeric" maxlength="6" formControlName="otp" autocomplete="one-time-code" placeholder="000000" /></label><button class="primary" type="submit">Verify code</button></form><p class="switch"><a routerLink="/login">Change email</a></p> }
             @else if (mode() === 'forgot') { <form [formGroup]="form" (ngSubmit)="sendReset()"><label>Email address<input type="email" formControlName="email" autocomplete="email" /></label><button class="primary" type="submit">Send reset link</button></form><p class="switch"><a routerLink="/login">Back to sign in</a></p> }
             @else { <form [formGroup]="form" (ngSubmit)="reset()"><label>New password<input type="password" formControlName="password" autocomplete="new-password" /></label><label>Confirm password<input type="password" formControlName="confirmPassword" autocomplete="new-password" /></label><button class="primary" type="submit">Reset password</button></form> }
@@ -52,7 +49,7 @@ type FormModel = { firstName: FormControl<string>; lastName: FormControl<string>
     .auth-art { position:relative; overflow:hidden; display:grid; place-items:center; background:radial-gradient(circle at 40% 40%, rgba(201,162,39,.2), transparent 38%), linear-gradient(145deg,#241c0e,#100f0d); }
     .auth-art__nav { position:absolute;z-index:3;top:34px;left:clamp(28px,5vw,72px);display:flex;flex-direction:column;gap:12px;align-items:flex-start; } .auth-art__nav .back-home { margin:0;color:rgba(255,255,255,.68); } .auth-art__nav .brand { margin:0;color:#fff; } .auth-mobile-nav { display:none; } .orb { position:absolute; border-radius:50%; filter:blur(1px); border:1px solid rgba(232,200,138,.25); } .orb--one { width:360px;height:360px;top:12%;left:8%;background:rgba(201,162,39,.09); } .orb--two { width:220px;height:220px;right:8%;bottom:10%;background:rgba(201,123,99,.12); } .sparkle { position:absolute;color:rgba(232,200,138,.75);font:20px $font-serif; } .sparkle--one { top:18%;right:22%; } .sparkle--two { bottom:20%;left:18%;font-size:14px; }
     .invite-card { position:relative; z-index:1; width:min(340px,65%); aspect-ratio:.72; padding:34px 28px 25px; display:flex; flex-direction:column; justify-content:flex-end; border:1px solid rgba(232,200,138,.55); border-radius:28px; background:radial-gradient(circle at 50% 28%,rgba(232,200,138,.13),transparent 28%),linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.03)),linear-gradient(145deg,#5a4520,#21170d); box-shadow:0 30px 80px rgba(0,0,0,.45), inset 0 0 45px rgba(255,220,150,.05); transform:rotate(-6deg); } .invite-card__top { display:flex;justify-content:space-between;align-items:center;align-self:stretch; } .invite-card__top span,.eyebrow { color:$color-sand; font-size:11px;letter-spacing:.18em;font-weight:700; } .invite-card__top b { color:rgba(255,255,255,.48);font-size:8px;letter-spacing:.14em;font-weight:500; } .invite-card__monogram { position:absolute;top:19%;left:50%;transform:translateX(-50%);display:grid;place-items:center;width:76px;height:76px;border:1px solid rgba(232,200,138,.55);border-radius:50%;color:$color-sand;font:italic 46px $font-serif; } .invite-card__rule { display:flex;align-items:center;gap:9px;margin-bottom:17px;color:$color-sand; } .invite-card__rule i { height:1px;flex:1;background:rgba(232,200,138,.45); } .invite-card strong { font:700 clamp(30px,4vw,56px)/.95 $font-serif; margin:0 0 12px; letter-spacing:-.03em; } .invite-card small { color:rgba(255,255,255,.68);font-size:11px;line-height:1.4; } .invite-card__footer { margin-top:20px;color:rgba(255,255,255,.4);font-size:7px;letter-spacing:.18em; } .invite-card__frame { position:absolute;inset:18px;border:1px solid rgba(255,255,255,.18);border-radius:18px;pointer-events:none; }
-    .back-home { display:block; margin-bottom:16px; font-size:13px; color:rgba(var(--text-rgb),.62); } .auth-panel { width:min(520px,100%); padding:clamp(28px,6vw,76px); margin:auto; } .brand { display:inline-block;margin-bottom:48px;color:inherit;text-decoration:none; } .auth-card { padding:clamp(24px,4vw,42px); border:1px solid rgba(var(--glass-rgb),.14); border-radius:$radius-xl; background:rgba(var(--glass-rgb),.045); box-shadow:$shadow-card; backdrop-filter:blur(22px); } h1 { font:700 clamp(34px,4vw,48px)/1 $font-serif; margin:8px 0 12px; } .intro,.legal { color:rgba(var(--text-rgb),.62); line-height:1.6; } label { display:grid;gap:8px;margin:18px 0;font-size:13px;font-weight:600; } input { width:100%;box-sizing:border-box;padding:14px 15px;border:1px solid rgba(var(--glass-rgb),.16);border-radius:10px;background:rgba(var(--glass-rgb),.06);color:var(--text);font:inherit;outline:none; } input:focus { border-color:$color-gold;box-shadow:0 0 0 3px rgba(201,162,39,.16); } small { color:#d99585;min-height:16px;font-weight:400; } .row { display:grid;grid-template-columns:1fr 1fr;gap:14px; } .password { position:relative; } .password input { padding-right:70px; } .password button { position:absolute;right:8px;top:8px;border:0;background:transparent;color:$color-sand;padding:7px;cursor:pointer; } .primary,.secondary { display:inline-flex;justify-content:center;align-items:center;width:100%;padding:15px;border:0;border-radius:$radius-pill;font:600 15px $font-sans;cursor:pointer; } .primary { color:#fff;background:$gradient-brand-strong;box-shadow:$shadow-brand-sm; } .secondary { color:var(--text);background:rgba(var(--glass-rgb),.1);border:1px solid rgba(var(--glass-rgb),.16); } button:disabled { opacity:.55;cursor:not-allowed; } .check { display:flex;align-items:center;gap:9px;font-size:13px;font-weight:400; } .check input { width:auto; } .form-meta { display:flex;justify-content:space-between;align-items:center;font-size:13px; } a { color:$color-sand;text-decoration:none; } a:hover { text-decoration:underline; } .divider { display:flex;align-items:center;gap:12px;margin:25px 0;color:rgba(var(--text-rgb),.45);font-size:12px; } .divider:before,.divider:after { content:'';height:1px;flex:1;background:rgba(var(--glass-rgb),.14); } .socials { display:grid;grid-template-columns:repeat(3,1fr);gap:8px; } .socials button { padding:11px 5px;border:1px solid rgba(var(--glass-rgb),.14);border-radius:9px;background:rgba(var(--glass-rgb),.05);color:var(--text);cursor:pointer;text-transform:capitalize; } .switch,.legal { text-align:center;font-size:13px;margin-top:24px; } .error { padding:12px;border-radius:10px;background:rgba(190,65,50,.15);color:#f0a293;margin:18px 0;font-size:13px; } .status { text-align:center;padding:28px 0; } .success,.mail { display:grid;place-items:center;width:64px;height:64px;margin:0 auto 22px;border-radius:50%;background:rgba(201,162,39,.18);color:$color-sand;font-size:30px; } .spinner { display:block;width:36px;height:36px;margin:0 auto 24px;border:3px solid rgba(255,255,255,.2);border-top-color:$color-gold;border-radius:50%;animation:spin 1s linear infinite; } .status .primary { margin-top:24px; } .otp { text-align:center;letter-spacing:.5em;font-size:28px; } .demo { margin-top:14px;text-align:center;font-size:11px;color:rgba(var(--text-rgb),.5); } .demo button { border:0;background:none;padding:2px 5px;color:$color-sand;font:inherit;cursor:pointer;text-decoration:underline; } @keyframes spin { to { transform:rotate(360deg); } }
+    .back-home { display:block; margin-bottom:16px; font-size:13px; color:rgba(var(--text-rgb),.62); } .auth-panel { width:min(520px,100%); padding:clamp(28px,6vw,76px); margin:auto; } .brand { display:inline-block;margin-bottom:48px;color:inherit;text-decoration:none; } .auth-card { padding:clamp(24px,4vw,42px); border:1px solid rgba(var(--glass-rgb),.14); border-radius:$radius-xl; background:rgba(var(--glass-rgb),.045); box-shadow:$shadow-card; backdrop-filter:blur(22px); } h1 { font:700 clamp(34px,4vw,48px)/1 $font-serif; margin:8px 0 12px; } .intro,.legal { color:rgba(var(--text-rgb),.62); line-height:1.6; } label { display:grid;gap:8px;margin:18px 0;font-size:13px;font-weight:600; } input { width:100%;box-sizing:border-box;padding:14px 15px;border:1px solid rgba(var(--glass-rgb),.16);border-radius:10px;background:rgba(var(--glass-rgb),.06);color:var(--text);font:inherit;outline:none; } input:focus { border-color:$color-gold;box-shadow:0 0 0 3px rgba(201,162,39,.16); } small { color:#d99585;min-height:16px;font-weight:400; } .row { display:grid;grid-template-columns:1fr 1fr;gap:14px; } .password { position:relative; } .password input { padding-right:70px; } .password button { position:absolute;right:8px;top:8px;border:0;background:transparent;color:$color-sand;padding:7px;cursor:pointer; } .primary,.secondary { display:inline-flex;justify-content:center;align-items:center;width:100%;padding:15px;border:0;border-radius:$radius-pill;font:600 15px $font-sans;cursor:pointer; } .primary { color:#fff;background:$gradient-brand-strong;box-shadow:$shadow-brand-sm; } .secondary { color:var(--text);background:rgba(var(--glass-rgb),.1);border:1px solid rgba(var(--glass-rgb),.16); } button:disabled { opacity:.55;cursor:not-allowed; } .check { display:flex;align-items:center;gap:9px;font-size:13px;font-weight:400; } .check input { width:auto; } .form-meta { display:flex;justify-content:space-between;align-items:center;font-size:13px; } a { color:$color-sand;text-decoration:none; } a:hover { text-decoration:underline; } .divider { display:flex;align-items:center;gap:12px;margin:25px 0;color:rgba(var(--text-rgb),.45);font-size:12px; } .divider:before,.divider:after { content:'';height:1px;flex:1;background:rgba(var(--glass-rgb),.14); } .socials { display:grid;grid-template-columns:repeat(3,1fr);gap:8px; } .socials button { padding:11px 5px;border:1px solid rgba(var(--glass-rgb),.14);border-radius:9px;background:rgba(var(--glass-rgb),.05);color:var(--text);cursor:pointer;text-transform:capitalize; } .switch,.legal { text-align:center;font-size:13px;margin-top:24px; } .error { padding:12px;border-radius:10px;background:rgba(190,65,50,.15);color:#f0a293;margin:18px 0;font-size:13px; } .status { text-align:center;padding:28px 0; } .success,.mail { display:grid;place-items:center;width:64px;height:64px;margin:0 auto 22px;border-radius:50%;background:rgba(201,162,39,.18);color:$color-sand;font-size:30px; } .spinner { display:block;width:36px;height:36px;margin:0 auto 24px;border:3px solid rgba(255,255,255,.2);border-top-color:$color-gold;border-radius:50%;animation:spin 1s linear infinite; } .status .primary { margin-top:24px; } .otp { text-align:center;letter-spacing:.5em;font-size:28px; } @keyframes spin { to { transform:rotate(360deg); } }
     .auth-panel { height:100%; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; padding:14px clamp(18px,4vw,48px); } .auth-panel--signup { justify-content:flex-start; padding-top:100px; transform:scale(.78); transform-origin:top center; } .back-home { margin-bottom:8px; } .brand { margin-bottom:14px; } .auth-card { padding:20px 26px; } h1 { font-size:clamp(30px,3.2vw,40px); margin-block:4px 6px; } .intro { margin:0 0 8px; } label { margin-block:7px; gap:4px; } input { padding:10px 12px; } .primary,.secondary { padding:11px; } .divider { margin-block:11px; } .socials { grid-template-columns:repeat(5,1fr); gap:6px; } .social { display:grid; place-items:center; gap:2px; padding:6px 2px; border:1px solid rgba(var(--glass-rgb),.14); border-radius:8px; background:rgba(var(--glass-rgb),.05); color:var(--text); cursor:pointer; } .social__icon { display:grid; place-items:center; width:20px; height:20px; border-radius:5px; font-weight:800; font-size:14px; } .social__icon--google { color:#4285f4; background:#fff; } .social__icon--apple { color:#fff; background:#000; } .social__icon--facebook { color:#fff; background:#1877f2; } .social__icon--github { color:#fff; background:#24292f; } .social__icon--microsoft { color:#333; background:linear-gradient(135deg,#f25022 50%,#7fba00 50%); } .social__label { font-size:9px; } .switch,.legal { margin-top:10px; } :host-context(:root[data-theme='light']) .auth-shell { background:#f7f2e7; } :host-context(:root[data-theme='light']) .auth-panel { color:#2b241b; } :host-context(:root[data-theme='light']) .auth-card { border-color:rgba(43,36,27,.16); background:rgba(255,255,255,.62); box-shadow:0 20px 50px rgba(75,57,31,.18); } :host-context(:root[data-theme='light']) .auth-card h1 { color:#241c13; } :host-context(:root[data-theme='light']) .intro, :host-context(:root[data-theme='light']) .legal { color:rgba(43,36,27,.72); } :host-context(:root[data-theme='light']) label, :host-context(:root[data-theme='light']) .form-meta, :host-context(:root[data-theme='light']) .switch { color:#2b241b; } :host-context(:root[data-theme='light']) .eyebrow, :host-context(:root[data-theme='light']) .password button, :host-context(:root[data-theme='light']) .form-meta a, :host-context(:root[data-theme='light']) .switch a { color:#80591f; } :host-context(:root[data-theme='light']) input { border-color:rgba(43,36,27,.24); background:rgba(255,255,255,.72); color:#241c13; } :host-context(:root[data-theme='light']) input::placeholder { color:rgba(43,36,27,.55); } :host-context(:root[data-theme='light']) .social { border-color:rgba(43,36,27,.18); background:rgba(255,255,255,.68); color:#2b241b; } :host-context(:root[data-theme='light']) .divider { color:rgba(43,36,27,.6); } :host-context(:root[data-theme='light']) .divider:before, :host-context(:root[data-theme='light']) .divider:after { background:rgba(43,36,27,.18); } :host-context(:root[data-theme='light']) .auth-art { color:#f3ecdd; } @media (max-width:800px) { :host,.auth-shell { min-height:100dvh; height:auto; overflow:visible; } .auth-shell { grid-template-columns:1fr; } .auth-art { display:none; } .auth-panel { height:auto; display:block; padding:20px 16px; transform:none; } .auth-mobile-nav { display:flex; flex-direction:column; gap:8px; margin-bottom:20px; } .auth-mobile-nav .back-home,.auth-mobile-nav .brand { margin:0; } .social__label { display:none; } } @media (prefers-reduced-motion:reduce) { .spinner { animation:none; } }
   `],
 })
@@ -65,15 +62,86 @@ export class AuthPageComponent {
   protected readonly intro = computed(() => ({ login:'Your beautiful moments are waiting.', signup:'Create memorable invitation experiences in minutes.', otp:'Enter the six-digit code we sent you.', forgot:'We’ll send a secure reset link to your email.', reset:'Make it strong, memorable, and yours.', 'check-email':'We sent a verification link to your inbox.', verified:'Your account is ready.', callback:'Taking you back to Evoke.' } as Record<AuthMode, string>)[this.mode()] ?? '');
   protected readonly artTitle = computed(() => this.mode() === 'signup' ? 'Your story starts here' : 'The moment is yours');
   protected fieldError(name: keyof FormModel): string { const control = this.form.controls[name]; return control.invalid && control.touched ? 'Please enter a valid value.' : ''; }
-  protected async submit(): Promise<void> { this.error.set(''); this.form.markAllAsTouched(); if (this.form.invalid || (this.mode() === 'signup' && !this.form.controls.terms.value)) { this.error.set('Please check the highlighted fields and accept the terms.'); return; } const v=this.form.value; const result=this.mode()==='login' ? await this.auth.login(v.email!,v.password!,v.remember) : await this.auth.signup(v.firstName!,v.lastName!,v.email!,v.password!); if(result.ok) void this.router.navigateByUrl(this.destination()); else this.error.set(result.error === 'invalid_credentials' ? 'That email and password combination is not recognised.' : 'We could not complete that request. Please try again.'); }
+
+  constructor() {
+    // OAuth/email-link callbacks land here after a full-page redirect; by this point
+    // the app initializer has already awaited Supabase's session restore, so success or
+    // failure is already known — no polling/timeout needed.
+    if (this.mode() === 'callback') {
+      if (this.auth.isAuthenticated()) {
+        void this.router.navigateByUrl(this.destination());
+      } else {
+        this.error.set('We could not complete sign-in. Please try again.');
+      }
+    }
+  }
+
+  protected async submit(): Promise<void> {
+    this.error.set('');
+    this.form.markAllAsTouched();
+    if (this.form.invalid || (this.mode() === 'signup' && !this.form.controls.terms.value)) {
+      this.error.set('Please check the highlighted fields and accept the terms.');
+      return;
+    }
+    const v = this.form.value;
+    const result = this.mode() === 'login'
+      ? await this.auth.login(v.email!, v.password!, v.remember)
+      : await this.auth.signup(v.firstName!, v.lastName!, v.email!, v.password!);
+    if (!result.ok) {
+      this.error.set(this.errorMessage(result.error));
+      return;
+    }
+    if (this.mode() === 'signup' && !result.session) {
+      // Email confirmation required — no session was issued yet.
+      void this.router.navigateByUrl('/check-email');
+      return;
+    }
+    void this.router.navigateByUrl(this.destination());
+  }
+
   /** Honour ?returnUrl= when the guard bounced us here; admins land on /admin. */
   private destination(): string { const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl'); if (returnUrl) return returnUrl; return this.auth.isAdmin() ? '/admin' : '/dashboard'; }
-  protected async submitOtp(): Promise<void> { this.form.controls.otp.markAsTouched(); if(this.form.controls.otp.invalid){this.error.set('Enter the six-digit code.');return;} const result=await this.auth.verifyOtp(this.form.controls.otp.value); if(result.ok) void this.router.navigateByUrl('/email-verified'); else this.error.set('That code is invalid or expired.'); }
-  protected async sendReset(): Promise<void> { if(this.form.controls.email.invalid){this.form.controls.email.markAsTouched();return;} await this.auth.sendOtp(this.form.controls.email.value); void this.router.navigateByUrl('/check-email'); }
-  protected async reset(): Promise<void> { if(this.form.controls.password.value!==this.form.controls.confirmPassword.value){this.error.set('Passwords must match.');return;} await this.auth.resetPassword(this.form.controls.password.value); void this.router.navigateByUrl('/email-verified'); }
-  /** One-click fill for the seeded demo accounts (frontend-only auth). */
-  protected readonly demoCredentials = DEMO_CREDENTIALS;
-  protected useDemo(email: string, password: string): void { this.form.patchValue({ email, password }); this.error.set(''); }
-  protected async social(provider: SocialProvider): Promise<void> { await this.auth.loginWithProvider(provider); }
-  protected async resend(): Promise<void> { await this.auth.sendOtp(this.form.controls.email.value); }
+
+  protected async submitOtp(): Promise<void> {
+    this.form.controls.otp.markAsTouched();
+    if (this.form.controls.otp.invalid) { this.error.set('Enter the six-digit code.'); return; }
+    const result = await this.auth.verifyOtp(this.form.controls.otp.value);
+    if (result.ok) void this.router.navigateByUrl(this.destination());
+    else this.error.set(this.errorMessage(result.error));
+  }
+
+  protected async sendReset(): Promise<void> {
+    if (this.form.controls.email.invalid) { this.form.controls.email.markAsTouched(); return; }
+    const result = await this.auth.sendPasswordResetEmail(this.form.controls.email.value);
+    if (result.ok) void this.router.navigateByUrl('/check-email');
+    else this.error.set(this.errorMessage(result.error));
+  }
+
+  protected async reset(): Promise<void> {
+    if (this.form.controls.password.value !== this.form.controls.confirmPassword.value) { this.error.set('Passwords must match.'); return; }
+    const result = await this.auth.resetPassword(this.form.controls.password.value);
+    if (result.ok) void this.router.navigateByUrl('/email-verified');
+    else this.error.set(this.errorMessage(result.error));
+  }
+
+  protected async social(provider: SocialProvider): Promise<void> {
+    const result = await this.auth.loginWithProvider(provider);
+    if (!result.ok) this.error.set(this.errorMessage(result.error));
+  }
+
+  protected async resend(): Promise<void> {
+    await this.auth.resendPending();
+  }
+
+  private errorMessage(code?: AuthErrorCode): string {
+    switch (code) {
+      case 'invalid_credentials': return 'That email and password combination is not recognised.';
+      case 'user_exists': return 'An account with that email already exists — try signing in instead.';
+      case 'weak_password': return 'Please choose a stronger password (at least 8 characters).';
+      case 'invalid_otp': return 'That code is invalid. Please check it and try again.';
+      case 'expired_otp': return 'That code has expired. Request a new one and try again.';
+      case 'network_error': return 'We could not reach the server. Check your connection and try again.';
+      default: return 'We could not complete that request. Please try again.';
+    }
+  }
 }

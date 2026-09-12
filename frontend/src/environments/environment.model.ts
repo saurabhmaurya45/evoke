@@ -7,6 +7,9 @@ export interface AppEnvironment {
   readonly name: 'development' | 'staging' | 'production';
   readonly apiBaseUrl: string;
   readonly appUrl: string;
+  /** Supabase project URL and publishable (anon) key — safe to expose client-side. */
+  readonly supabaseUrl: string;
+  readonly supabasePublishableKey: string;
   readonly features: {
     readonly analytics: boolean;
     readonly themeToggle: boolean;
