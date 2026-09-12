@@ -10,9 +10,12 @@ from app.shared.pagination import Page, PageParams, page_params
 from app.templates.schemas import (
     TemplateCreate,
     TemplateOut,
+    TemplateGalleryOut,
     TemplateUpdate,
     TemplateVersionCreate,
     TemplateVersionOut,
+    CategoryOut,
+    CurrencyOut,
 )
 from app.templates.service import (
     create_template,
@@ -22,28 +25,46 @@ from app.templates.service import (
     list_templates,
     publish_template_version,
     update_template,
+    list_categories,
+    list_currencies,
 )
 from app.users.models import User, UserRole
 
 router = APIRouter(prefix="/v1/templates", tags=["templates"])
 
 
-@router.get("", response_model=Page[TemplateOut])
+@router.get("/categories", response_model=Envelope[list[CategoryOut]])
+async def list_categories_route(db: AsyncSession = Depends(get_db)) -> Envelope[list[CategoryOut]]:
+    """List all active categories."""
+    categories = await list_categories(db)
+    return Envelope(data=[CategoryOut.model_validate(cat) for cat in categories])
+
+
+@router.get("/currencies", response_model=Envelope[list[CurrencyOut]])
+async def list_currencies_route(db: AsyncSession = Depends(get_db)) -> Envelope[list[CurrencyOut]]:
+    """List all active currencies."""
+    currencies = await list_currencies(db)
+    return Envelope(data=[CurrencyOut.model_validate(curr) for curr in currencies])
+
+
+@router.get("", response_model=Page[TemplateGalleryOut])
 async def list_templates_route(
     params: PageParams = Depends(page_params),
-    category: str | None = Query(None),
+    category_id: uuid.UUID | None = Query(None),
     search: str | None = Query(None),
-    include_all: bool = Query(False, description="Admin only: return all statuses, not just ACTIVE."),
+    include_draft: bool = Query(False, description="Admin only: include draft templates."),
     current_user: User | None = Depends(get_current_user_optional),
     db: AsyncSession = Depends(get_db),
-) -> Page[TemplateOut]:
+) -> Page[TemplateGalleryOut]:
     is_admin = current_user is not None and current_user.role == UserRole.ADMIN
     page = await list_templates(
-        db, params, category=category, search=search,
-        include_all=include_all and is_admin,
+        db, params,
+        category_id=category_id,
+        search=search,
+        include_draft=include_draft and is_admin,
     )
-    return Page[TemplateOut](
-        data=[TemplateOut.model_validate(template) for template in page.data],
+    return Page[TemplateGalleryOut](
+        data=[TemplateGalleryOut.model_validate(template) for template in page.data],
         pagination=page.pagination,
     )
 

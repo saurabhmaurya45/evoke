@@ -9,34 +9,38 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.shared.audit import log_action
 from app.shared.errors import ConflictError, NotFoundError
 from app.shared.pagination import Page, PageParams, make_page
-from app.templates.models import Template, TemplateStatus, TemplateVersion, TemplateVersionStatus
+from app.templates.models import (
+    Template,
+    TemplateStatus,
+    TemplateVersion,
+    TemplateVersionStatus,
+    Category,
+    Currency,
+    StorefrontStatus,
+    PricingModel,
+)
 from app.templates.schemas import TemplateCreate, TemplateUpdate, TemplateVersionCreate
 from app.users.models import User
 
-# Canonical template definitions — kept in sync with the frontend HomeContentService.
-_SEED_TEMPLATES: list[dict] = [
-    {"slug": "tpl-samarpan-royal",  "name": "Samarpan — Royal Union",          "category": "Wedding"},
-    {"slug": "tpl-eternal-bond",    "name": "Eternal Bond — Royal Wedding",     "category": "Wedding"},
-    {"slug": "tpl-beloved-nikkah",  "name": "Beloved — Nikkah Invitation",      "category": "Wedding"},
-    {"slug": "tpl-harpreet-ritika", "name": "Rosewood — Punjabi Wedding",       "category": "Wedding"},
-    {"slug": "tpl-karan-nisha",     "name": "Maroon & Gold — Royal Hindu Wedding", "category": "Wedding"},
-    {"slug": "tpl-joe-serin",       "name": "Doorway — Modern Wedding",         "category": "Wedding"},
-    {"slug": "tpl-golden-promise",  "name": "Golden Promise",                   "category": "Engagement"},
-]
 
-
-async def seed_catalog(db: AsyncSession) -> None:
-    """Upsert the canonical template catalog. Safe to call on every startup —
-    existing rows are left unchanged (slug is the conflict key)."""
-    for tpl in _SEED_TEMPLATES:
+async def seed_categories(db: AsyncSession) -> None:
+    """Seed initial categories. Safe to call on every startup."""
+    categories = [
+        {"slug": "wedding", "name": "Wedding", "display_order": 1},
+        {"slug": "engagement", "name": "Engagement", "display_order": 2},
+        {"slug": "birthday", "name": "Birthday", "display_order": 3},
+        {"slug": "anniversary", "name": "Anniversary", "display_order": 4},
+        {"slug": "corporate", "name": "Corporate Event", "display_order": 5},
+    ]
+    for cat in categories:
         stmt = (
-            pg_insert(Template)
+            pg_insert(Category)
             .values(
                 id=uuid.uuid4(),
-                slug=tpl["slug"],
-                name=tpl["name"],
-                category=tpl["category"],
-                status=TemplateStatus.ACTIVE,
+                slug=cat["slug"],
+                name=cat["name"],
+                display_order=cat["display_order"],
+                is_active=True,
             )
             .on_conflict_do_nothing(index_elements=["slug"])
         )
@@ -44,18 +48,67 @@ async def seed_catalog(db: AsyncSession) -> None:
     await db.commit()
 
 
+async def seed_currencies(db: AsyncSession) -> None:
+    """Seed initial currencies. Safe to call on every startup."""
+    currencies = [
+        {"code": "INR", "name": "Indian Rupee", "symbol": "₹", "minor_unit": 100},
+        {"code": "USD", "name": "US Dollar", "symbol": "$", "minor_unit": 1},
+        {"code": "EUR", "name": "Euro", "symbol": "€", "minor_unit": 1},
+        {"code": "GBP", "name": "British Pound", "symbol": "£", "minor_unit": 1},
+    ]
+    for curr in currencies:
+        stmt = (
+            pg_insert(Currency)
+            .values(
+                id=uuid.uuid4(),
+                code=curr["code"],
+                name=curr["name"],
+                symbol=curr["symbol"],
+                minor_unit=curr["minor_unit"],
+                is_active=True,
+            )
+            .on_conflict_do_nothing(index_elements=["code"])
+        )
+        await db.execute(stmt)
+    await db.commit()
+
+
+async def list_categories(db: AsyncSession) -> list[Category]:
+    """List all active categories."""
+    result = await db.execute(
+        select(Category)
+        .where(Category.is_active == True)
+        .order_by(Category.display_order)
+    )
+    return list(result.scalars().all())
+
+
+async def list_currencies(db: AsyncSession) -> list[Currency]:
+    """List all active currencies."""
+    result = await db.execute(
+        select(Currency).where(Currency.is_active == True).order_by(Currency.code)
+    )
+    return list(result.scalars().all())
+
+
 async def list_templates(
     db: AsyncSession,
     params: PageParams,
     *,
-    category: str | None = None,
+    category_id: uuid.UUID | None = None,
     search: str | None = None,
-    include_all: bool = False,
+    include_draft: bool = False,
 ) -> Page[Template]:
-    """Public listing — only ACTIVE templates unless include_all is True (admin only)."""
-    filters = [] if include_all else [Template.status == TemplateStatus.ACTIVE]
-    if category:
-        filters.append(Template.category == category)
+    """Public listing — only ACTIVE templates with LISTED storefront status unless
+    include_draft is True (admin only)."""
+    filters = []
+    if not include_draft:
+        filters.extend([
+            Template.status == TemplateStatus.ACTIVE,
+            Template.storefront_status == StorefrontStatus.LISTED,
+        ])
+    if category_id:
+        filters.append(Template.category_id == category_id)
     if search:
         filters.append(Template.name.ilike(f"%{search}%"))
 
@@ -73,8 +126,7 @@ async def list_templates(
 
 
 async def get_template(db: AsyncSession, template_id: uuid.UUID) -> Template:
-    """Public direct fetch — unlike the list, this is not filtered by status. Matches
-    the docs' "list vs get" pattern: only the catalog listing hides non-ACTIVE items."""
+    """Public direct fetch — unlike the list, this is not filtered by status."""
     template = await db.get(Template, template_id)
     if template is None:
         raise NotFoundError("TEMPLATE_NOT_FOUND", "Template not found.")
@@ -82,7 +134,19 @@ async def get_template(db: AsyncSession, template_id: uuid.UUID) -> Template:
 
 
 async def create_template(db: AsyncSession, admin_user: User, data: TemplateCreate) -> Template:
-    template = Template(slug=data.slug, name=data.name, category=data.category)
+    template = Template(
+        slug=data.slug,
+        name=data.name,
+        description=data.description,
+        category_id=data.category_id,
+        pricing_model=data.pricing_model,
+        price_amount_minor=data.price_amount_minor,
+        currency_id=data.currency_id,
+        thumbnail_url=data.thumbnail_url,
+        preview_url=data.preview_url,
+        status=TemplateStatus.DRAFT,
+        storefront_status=StorefrontStatus.UNLISTED,
+    )
     db.add(template)
     await db.flush()
     await log_action(
@@ -135,7 +199,8 @@ async def create_template_version(
         schema_version=data.schema_version,
         protocol_version=data.protocol_version,
         schema=data.template_schema,
-        default_config=data.default_config,
+        defaults=data.defaults,
+        capabilities=data.capabilities,
         status=TemplateVersionStatus.DRAFT,
     )
     db.add(version)
