@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime
 
+from app.events.models import EventStatus, EventType
 from app.shared.schema import CamelModel
 from app.users.models import UserRole
 
@@ -32,3 +33,24 @@ class UserProfileUpdate(CamelModel):
     first_name: str | None = None
     last_name: str | None = None
     display_name: str | None = None
+
+
+class UserSiteOut(CamelModel):
+    """One event belonging to the current user, projected as a dashboard site card.
+
+    `views` and `rsvps` are not yet tracked by the backend — they are returned as 0
+    until the analytics/publishing module is added. The shape matches the frontend's
+    `InvitationSite` model so the component can swap from the seeded service with no
+    further changes.
+    """
+
+    id: uuid.UUID
+    type: EventType
+    title: str
+    slug: str
+    status: EventStatus
+    template_id: uuid.UUID | None
+    created_at: datetime
+    updated_at: datetime
+    views: int = 0
+    rsvps: int = 0

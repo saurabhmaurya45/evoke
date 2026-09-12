@@ -18,6 +18,8 @@ import { apiBaseUrlInterceptor } from './core/interceptors/api-base-url.intercep
 import { authTokenInterceptor } from './core/interceptors/auth-token.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { AuthService } from './core/services/auth.service';
+import { HttpTemplateRepository } from './features/editor/data/http-template-repository';
+import { TEMPLATE_REPOSITORY } from './features/editor/data/template-repository';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,5 +41,7 @@ export const appConfig: ApplicationConfig = {
     // the URL) before the router activates the first route, so auth guards never see a
     // stale "logged out" state on a hard refresh.
     provideAppInitializer(() => inject(AuthService).init()),
+    // Swap the editor's draft persistence from localStorage to the backend API.
+    { provide: TEMPLATE_REPOSITORY, useClass: HttpTemplateRepository },
   ],
 };

@@ -46,9 +46,8 @@ interface TemplateDraft {
 })
 export class AdminDashboardComponent implements OnInit {
   private readonly seo = inject(SeoService);
-  private readonly content = inject(DashboardContentService);
+  protected readonly content = inject(DashboardContentService);
   protected readonly auth = inject(AuthService);
-
   private readonly catalog = inject(TemplateCatalogService);
 
   protected readonly tabs: readonly AdminTab[] = ['templates', 'customers', 'sites', 'payments'];
@@ -66,16 +65,17 @@ export class AdminDashboardComponent implements OnInit {
     return id ? (this.templates().find((template) => template.slotId === id) ?? null) : null;
   });
 
-  protected readonly metrics = this.content.adminMetrics();
-  protected readonly customers = this.content.adminCustomers();
-  protected readonly sites = this.content.adminSites();
-  protected readonly payments = this.content.adminPayments();
+  // Computed signals — re-evaluate reactively after loadAdminData() resolves.
+  protected readonly metrics = computed(() => this.content.adminMetrics());
+  protected readonly customers = computed(() => this.content.adminCustomers());
+  protected readonly sites = computed(() => this.content.adminSites());
+  protected readonly payments = computed(() => this.content.adminPayments());
 
   protected readonly tabCount = computed(() => ({
     templates: this.templates().length,
-    customers: this.customers.length,
-    sites: this.sites.length,
-    payments: this.payments.length,
+    customers: this.customers().length,
+    sites: this.sites().length,
+    payments: this.payments().length,
   }));
 
   ngOnInit(): void {
@@ -84,6 +84,7 @@ export class AdminDashboardComponent implements OnInit {
       description: 'Platform overview — customers, invitation sites, and payments.',
       robots: 'noindex, nofollow',
     });
+    this.content.loadAdminData();
   }
 
   protected revenue(customer: AdminCustomer): string {

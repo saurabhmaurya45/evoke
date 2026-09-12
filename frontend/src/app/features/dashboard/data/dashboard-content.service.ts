@@ -1,169 +1,261 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject, signal } from '@angular/core';
+import { Observable, forkJoin, tap } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import type {
   AdminCustomer,
   AdminMetric,
   CustomerAccount,
   InvitationSite,
   PaymentRecord,
+  SiteStatus,
 } from '../models/dashboard.model';
 
+// ---------- API response shapes (camelCase from backend) ----------
+
+interface ApiPage<T> {
+  data: T[];
+  pagination: { page: number; pageSize: number; total: number };
+}
+
+interface ApiEnvelope<T> {
+  data: T;
+}
+
+interface UserSiteApiOut {
+  id: string;
+  type: string;
+  title: string;
+  slug: string;
+  status: string;
+  templateId: string | null;
+  createdAt: string;
+  views: number;
+  rsvps: number;
+}
+
+interface UserProfileApiOut {
+  id: string;
+  email: string;
+  firstName: string | null;
+  lastName: string | null;
+  createdAt: string;
+}
+
+interface AdminMetricsApiOut {
+  customerCount: number;
+  siteCount: number;
+  draftCount: number;
+  archivedCount: number;
+}
+
+interface AdminCustomerApiOut {
+  id: string;
+  email: string;
+  firstName: string | null;
+  lastName: string | null;
+  displayName: string | null;
+  joinedAt: string;
+  eventCount: number;
+}
+
+interface AdminSiteApiOut {
+  id: string;
+  ownerId: string;
+  ownerEmail: string;
+  type: string;
+  title: string;
+  slug: string;
+  status: string;
+  templateId: string | null;
+  createdAt: string;
+}
+
+interface AdminPaymentApiOut {
+  id: string;
+}
+
+// ------------------------------------------------------------------
+
 /**
- * Seeded dashboard data — the stand-in until the orders/billing API exists.
- * Mirrors HomeContentService: a single source of truth held away from the
- * presentation layer, so swapping these getters for HTTP calls later touches
- * no component. In-memory on purpose; nothing persists across a reload.
+ * Dashboard data service backed by the real API.
+ * Exposes signals populated lazily via `loadUserData()` / `loadAdminData()`,
+ * called from the respective dashboard components in `ngOnInit`. The public
+ * surface (`accountFor`, `adminMetrics`, …) mirrors the old seeded service
+ * so components stay unchanged.
  */
 @Injectable({ providedIn: 'root' })
 export class DashboardContentService {
-  private readonly accounts: readonly CustomerAccount[] = [
-    {
-      userId: 'usr-ananya',
-      plan: 'Premium',
-      memberSince: '2026-02-11',
-      sites: [
-        {
-          id: 'site-ananya-1',
-          templateId: 'tpl-golden-promise',
-          templateName: 'Golden Promise',
-          occasion: 'Wedding',
-          status: 'published',
-          url: 'https://evoke.page/ananya-and-rohan',
-          createdAt: '2026-05-02',
-          expiresAt: '2027-05-02',
-          views: 1284,
-          rsvps: 96,
-        },
-        {
-          id: 'site-ananya-2',
-          templateId: 'tpl-samarpan-royal',
-          templateName: 'Samarpan — Royal Wedding',
-          occasion: 'Engagement',
-          status: 'draft',
-          url: 'https://evoke.page/ananya-roka-preview',
-          createdAt: '2026-07-19',
-          views: 0,
-          rsvps: 0,
-        },
-      ],
-      payments: [
-        {
-          id: 'pay-1',
-          invoiceNo: 'EVK-2026-0417',
-          plan: 'Premium — 12 months',
-          amount: 499900,
-          currency: 'INR',
-          status: 'paid',
-          method: 'UPI · HDFC ····4821',
-          paidAt: '2026-05-02',
-          siteId: 'site-ananya-1',
-        },
-        {
-          id: 'pay-2',
-          invoiceNo: 'EVK-2026-0688',
-          plan: 'Extra guest capacity',
-          amount: 99900,
-          currency: 'INR',
-          status: 'paid',
-          method: 'Visa ····1109',
-          paidAt: '2026-06-14',
-          siteId: 'site-ananya-1',
-        },
-        {
-          id: 'pay-3',
-          invoiceNo: 'EVK-2026-0912',
-          plan: 'Engagement add-on',
-          amount: 149900,
-          currency: 'INR',
-          status: 'pending',
-          method: 'Netbanking · ICICI',
-          paidAt: '2026-07-19',
-          siteId: 'site-ananya-2',
-        },
-      ],
-    },
-  ];
+  private readonly http = inject(HttpClient);
 
-  private readonly customers: readonly AdminCustomer[] = [
-    { userId: 'usr-ananya', name: 'Ananya Sharma', email: 'user@evoke.test', plan: 'Premium', joinedAt: '2026-02-11', sites: 2, revenue: 749700 },
-    { userId: 'usr-karan', name: 'Karan Mehta', email: 'karan@example.com', plan: 'Premium', joinedAt: '2026-03-04', sites: 1, revenue: 499900 },
-    { userId: 'usr-nisha', name: 'Nisha Rao', email: 'nisha@example.com', plan: 'Starter', joinedAt: '2026-04-22', sites: 1, revenue: 199900 },
-    { userId: 'usr-joe', name: 'Joe Thomas', email: 'joe@example.com', plan: 'Premium', joinedAt: '2026-05-30', sites: 3, revenue: 1149700 },
-    { userId: 'usr-serin', name: 'Serin Kurian', email: 'serin@example.com', plan: 'Starter', joinedAt: '2026-06-18', sites: 1, revenue: 199900 },
-    { userId: 'usr-harpreet', name: 'Harpreet Kaur', email: 'harpreet@example.com', plan: 'Premium', joinedAt: '2026-07-09', sites: 2, revenue: 599800 },
-  ];
+  private readonly _account = signal<CustomerAccount | null>(null);
+  private readonly _adminMetrics = signal<readonly AdminMetric[]>([]);
+  private readonly _adminCustomers = signal<readonly AdminCustomer[]>([]);
+  private readonly _adminSites = signal<readonly InvitationSite[]>([]);
+  private readonly _adminPayments = signal<readonly PaymentRecord[]>([]);
 
-  /** Every site on the platform, for the admin table. */
-  private readonly allSites: readonly InvitationSite[] = [
-    ...this.accounts.flatMap((account) => account.sites),
-    {
-      id: 'site-karan-1',
-      templateId: 'tpl-karan-nisha',
-      templateName: 'Maroon & Gold — Royal Hindu Wedding',
-      occasion: 'Wedding',
-      status: 'published',
-      url: 'https://evoke.page/karan-weds-nisha',
-      createdAt: '2026-03-06',
-      expiresAt: '2027-03-06',
-      views: 3140,
-      rsvps: 212,
-    },
-    {
-      id: 'site-joe-1',
-      templateId: 'tpl-joe-serin',
-      templateName: 'Doorway — Modern Wedding',
-      occasion: 'Wedding',
-      status: 'published',
-      url: 'https://evoke.page/joe-and-serin',
-      createdAt: '2026-06-01',
-      expiresAt: '2027-06-01',
-      views: 2077,
-      rsvps: 148,
-    },
-    {
-      id: 'site-harpreet-1',
-      templateId: 'tpl-harpreet-ritika',
-      templateName: 'Rosewood — Sikh Wedding',
-      occasion: 'Wedding',
-      status: 'expired',
-      url: 'https://evoke.page/harpreet-ritika',
-      createdAt: '2025-07-11',
-      expiresAt: '2026-07-11',
-      views: 4310,
-      rsvps: 301,
-    },
-  ];
+  readonly loading = signal(false);
+  readonly loadError = signal<string | null>(null);
 
-  /** The signed-in customer's account, or `null` when they have no orders. */
-  accountFor(userId: string): CustomerAccount | null {
-    return this.accounts.find((account) => account.userId === userId) ?? null;
+  // ---------- public API (same shape the components already use) ----------
+
+  accountFor(_userId: string): CustomerAccount | null {
+    return this._account();
   }
 
   adminMetrics(): readonly AdminMetric[] {
-    const revenue = this.customers.reduce((sum, customer) => sum + customer.revenue, 0);
-    const published = this.allSites.filter((site) => site.status === 'published').length;
-    const rsvps = this.allSites.reduce((sum, site) => sum + site.rsvps, 0);
-    return [
-      { label: 'Total revenue', value: formatCurrency(revenue), delta: '+18.2%', hint: 'vs. previous 30 days' },
-      { label: 'Customers', value: String(this.customers.length), delta: '+3', hint: 'new this month' },
-      { label: 'Published sites', value: String(published), hint: `${this.allSites.length} created in total` },
-      { label: 'RSVPs collected', value: rsvps.toLocaleString('en-IN'), hint: 'across all live invitations' },
-    ];
+    return this._adminMetrics();
   }
 
   adminCustomers(): readonly AdminCustomer[] {
-    return this.customers;
+    return this._adminCustomers();
   }
 
   adminSites(): readonly InvitationSite[] {
-    return this.allSites;
+    return this._adminSites();
   }
 
-  /** Latest payments across every customer, newest first. */
   adminPayments(): readonly PaymentRecord[] {
-    return this.accounts
-      .flatMap((account) => account.payments)
-      .slice()
-      .sort((a, b) => b.paidAt.localeCompare(a.paidAt));
+    return this._adminPayments();
+  }
+
+  /**
+   * Archive (soft-delete) an event. On success the site's status is updated to
+   * 'expired' in local state so the UI reflects the change immediately without a
+   * full reload.
+   */
+  archiveEvent(eventId: string): Observable<void> {
+    return this.http.delete<void>(`v1/events/${eventId}`).pipe(
+      tap(() => {
+        const account = this._account();
+        if (account) {
+          this._account.set({
+            ...account,
+            sites: account.sites.map((s) =>
+              s.id === eventId ? { ...s, status: 'expired' as SiteStatus } : s,
+            ),
+          });
+        }
+      }),
+    );
+  }
+
+  // ---------- loaders ----------
+
+  loadUserData(): void {
+    this.loading.set(true);
+    this.loadError.set(null);
+
+    forkJoin({
+      sites: this.http.get<ApiPage<UserSiteApiOut>>('v1/users/me/sites?page_size=100'),
+      profile: this.http.get<ApiEnvelope<UserProfileApiOut>>('v1/users/me'),
+    }).subscribe({
+      next: ({ sites, profile }) => {
+        this._account.set({
+          userId: profile.data.id,
+          plan: 'Free',
+          memberSince: profile.data.createdAt,
+          sites: sites.data.map((s) => this.mapUserSite(s)),
+          payments: [],
+        });
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loadError.set('Failed to load your data. Please try again.');
+        this.loading.set(false);
+      },
+    });
+  }
+
+  loadAdminData(): void {
+    console.log('[DashboardContent] loadAdminData() called');
+    this.loading.set(true);
+    this.loadError.set(null);
+
+    forkJoin({
+      metrics: this.http.get<ApiEnvelope<AdminMetricsApiOut>>('v1/admin/metrics'),
+      customers: this.http.get<ApiPage<AdminCustomerApiOut>>('v1/admin/customers?page_size=100'),
+      sites: this.http.get<ApiPage<AdminSiteApiOut>>('v1/admin/sites?page_size=100'),
+      payments: this.http.get<ApiPage<AdminPaymentApiOut>>('v1/admin/payments?page_size=100'),
+    }).subscribe({
+      next: ({ metrics, customers, sites }) => {
+        this._adminMetrics.set(this.mapMetrics(metrics.data));
+        this._adminCustomers.set(customers.data.map((c) => this.mapCustomer(c)));
+        this._adminSites.set(sites.data.map((s) => this.mapAdminSite(s)));
+        // Payments: backend returns empty list until billing is implemented.
+        this._adminPayments.set([]);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error('[DashboardContent] loadAdminData error:', err.status, err.message);
+        this.loadError.set('Failed to load admin data. Please try again.');
+        this.loading.set(false);
+      },
+    });
+  }
+
+  // ---------- mappers ----------
+
+  private mapUserSite(s: UserSiteApiOut): InvitationSite {
+    return {
+      id: s.id,
+      templateId: s.templateId ?? '',
+      templateName: s.title,
+      occasion: this.formatType(s.type),
+      status: this.mapStatus(s.status),
+      url: `${environment.appUrl}/i/${s.slug}`,
+      createdAt: s.createdAt,
+      views: s.views,
+      rsvps: s.rsvps,
+    };
+  }
+
+  private mapAdminSite(s: AdminSiteApiOut): InvitationSite {
+    return {
+      id: s.id,
+      templateId: s.templateId ?? '',
+      templateName: s.title,
+      occasion: this.formatType(s.type),
+      status: this.mapStatus(s.status),
+      url: `${environment.appUrl}/i/${s.slug}`,
+      createdAt: s.createdAt,
+      views: 0,
+      rsvps: 0,
+    };
+  }
+
+  private mapCustomer(c: AdminCustomerApiOut): AdminCustomer {
+    const name =
+      c.displayName ||
+      [c.firstName, c.lastName].filter(Boolean).join(' ') ||
+      c.email;
+    return {
+      userId: c.id,
+      name,
+      email: c.email,
+      plan: 'Free',
+      joinedAt: c.joinedAt,
+      sites: c.eventCount,
+      revenue: 0,
+    };
+  }
+
+  private mapMetrics(m: AdminMetricsApiOut): AdminMetric[] {
+    return [
+      { label: 'Customers', value: m.customerCount.toLocaleString('en-IN') },
+      { label: 'Total sites', value: m.siteCount.toLocaleString('en-IN') },
+      { label: 'Active drafts', value: m.draftCount.toLocaleString('en-IN') },
+      { label: 'Archived', value: m.archivedCount.toLocaleString('en-IN') },
+    ];
+  }
+
+  private formatType(type: string): string {
+    return type.charAt(0).toUpperCase() + type.slice(1).toLowerCase().replace(/_/g, ' ');
+  }
+
+  private mapStatus(status: string): SiteStatus {
+    if (status === 'ARCHIVED') return 'expired';
+    return 'draft';
   }
 }
 

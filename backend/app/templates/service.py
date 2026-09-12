@@ -3,14 +3,45 @@ from __future__ import annotations
 import uuid
 
 from sqlalchemy import func, select
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.shared.audit import log_action
 from app.shared.errors import ConflictError, NotFoundError
 from app.shared.pagination import Page, PageParams, make_page
 from app.templates.models import Template, TemplateStatus, TemplateVersion, TemplateVersionStatus
-from app.templates.schemas import TemplateCreate, TemplateVersionCreate
+from app.templates.schemas import TemplateCreate, TemplateUpdate, TemplateVersionCreate
 from app.users.models import User
+
+# Canonical template definitions — kept in sync with the frontend HomeContentService.
+_SEED_TEMPLATES: list[dict] = [
+    {"slug": "tpl-samarpan-royal",  "name": "Samarpan — Royal Union",          "category": "Wedding"},
+    {"slug": "tpl-eternal-bond",    "name": "Eternal Bond — Royal Wedding",     "category": "Wedding"},
+    {"slug": "tpl-beloved-nikkah",  "name": "Beloved — Nikkah Invitation",      "category": "Wedding"},
+    {"slug": "tpl-harpreet-ritika", "name": "Rosewood — Punjabi Wedding",       "category": "Wedding"},
+    {"slug": "tpl-karan-nisha",     "name": "Maroon & Gold — Royal Hindu Wedding", "category": "Wedding"},
+    {"slug": "tpl-joe-serin",       "name": "Doorway — Modern Wedding",         "category": "Wedding"},
+    {"slug": "tpl-golden-promise",  "name": "Golden Promise",                   "category": "Engagement"},
+]
+
+
+async def seed_catalog(db: AsyncSession) -> None:
+    """Upsert the canonical template catalog. Safe to call on every startup —
+    existing rows are left unchanged (slug is the conflict key)."""
+    for tpl in _SEED_TEMPLATES:
+        stmt = (
+            pg_insert(Template)
+            .values(
+                id=uuid.uuid4(),
+                slug=tpl["slug"],
+                name=tpl["name"],
+                category=tpl["category"],
+                status=TemplateStatus.ACTIVE,
+            )
+            .on_conflict_do_nothing(index_elements=["slug"])
+        )
+        await db.execute(stmt)
+    await db.commit()
 
 
 async def list_templates(
@@ -19,9 +50,10 @@ async def list_templates(
     *,
     category: str | None = None,
     search: str | None = None,
+    include_all: bool = False,
 ) -> Page[Template]:
-    """Public listing — only ever returns ACTIVE templates."""
-    filters = [Template.status == TemplateStatus.ACTIVE]
+    """Public listing — only ACTIVE templates unless include_all is True (admin only)."""
+    filters = [] if include_all else [Template.status == TemplateStatus.ACTIVE]
     if category:
         filters.append(Template.category == category)
     if search:
@@ -60,6 +92,26 @@ async def create_template(db: AsyncSession, admin_user: User, data: TemplateCrea
         resource_id=template.id,
         actor_user_id=admin_user.id,
     )
+    await db.commit()
+    await db.refresh(template)
+    return template
+
+
+async def update_template(
+    db: AsyncSession, admin_user: User, template_id: uuid.UUID, data: TemplateUpdate
+) -> Template:
+    template = await get_template(db, template_id)
+    changes = data.model_dump(exclude_unset=True)
+    for field, value in changes.items():
+        setattr(template, field, value)
+    if changes:
+        await log_action(
+            db,
+            action="TEMPLATE_UPDATED",
+            resource_type="template",
+            resource_id=template.id,
+            actor_user_id=admin_user.id,
+        )
     await db.commit()
     await db.refresh(template)
     return template
