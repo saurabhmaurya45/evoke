@@ -1,6 +1,4 @@
 import logging
-from contextlib import asynccontextmanager
-from typing import AsyncIterator
 
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,31 +10,33 @@ from app.auth.router import router as auth_router
 from app.config import get_settings
 from app.drafts.router import router as drafts_router
 from app.events.router import router as events_router
-from app.shared.database import _session_factory, get_db
+from app.shared.database import get_db
 from app.shared.errors import RequestIdMiddleware, register_error_handlers
 from app.templates.router import router as templates_router
-from app.templates.service import seed_catalog
 from app.users.router import router as users_router
 
 settings = get_settings()
 
 logging.basicConfig(level=settings.log_level)
 
-logger = logging.getLogger(__name__)
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    async with _session_factory() as db:
-        try:
-            await seed_catalog(db)
-            logger.info("Template catalog seeded.")
-        except Exception:
-            logger.exception("Template catalog seed failed — continuing startup.")
-    yield
-
-
-app = FastAPI(title="Evoke API", version="v1", lifespan=lifespan)
+app = FastAPI(
+    title="Evoke API",
+    version="v1",
+    openapi_tags=[
+        {
+            "name": "templates",
+            "description": "Browse and manage invitation templates and their immutable versions.",
+        },
+        {
+            "name": "template-categories",
+            "description": "Categories used to group templates by event type (e.g. Wedding, Birthday).",
+        },
+        {
+            "name": "template-currencies",
+            "description": "Currencies usable for pricing PAID templates.",
+        },
+    ],
+)
 
 app.add_middleware(RequestIdMiddleware)
 app.add_middleware(
