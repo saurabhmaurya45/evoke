@@ -163,6 +163,9 @@ class TemplateGalleryOut(CamelModel):
     pricing_model: PricingModel
     price_amount_minor: int | None = None
     currency_id: uuid.UUID | None = None
+    storefront_status: StorefrontStatus = Field(
+        description="Commercial visibility: LISTED (public) or UNLISTED."
+    )
     thumbnail_url: str | None = None
     preview_url: str | None = None
     created_at: datetime

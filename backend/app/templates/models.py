@@ -76,7 +76,7 @@ class Template(Base):
     currency_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), ForeignKey("currencies.id"), nullable=True
     )
-    storefront_status: Mapped[str] = mapped_column(String(20), nullable=False, default="LISTED")
+    storefront_status: Mapped[str] = mapped_column(String(20), nullable=False, default="UNLISTED")
     thumbnail_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
     preview_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
     # Content/catalog readiness only (is this template visible in the public catalog?),

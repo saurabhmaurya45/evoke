@@ -80,6 +80,19 @@ export class HttpTemplateRepository implements TemplateRepository {
     return { id: this.readEventId(document.templateId) ?? document.templateId };
   }
 
+  /**
+   * Pre-populate the localStorage event-id cache for this template. Called by
+   * the editor page when it receives an `?eventId=` query param from the
+   * dashboard "Edit" link, so the user's draft is always resolved even when the
+   * cache was cleared or the user is on a different device.
+   */
+  primeEventId(templateId: string, eventId: string): void {
+    const cached = this.readEventId(templateId);
+    if (!cached) {
+      this.storeEventId(templateId, eventId);
+    }
+  }
+
   private async getOrCreateEvent(templateId: string): Promise<string> {
     const cached = this.readEventId(templateId);
     if (cached) return cached;

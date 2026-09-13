@@ -20,6 +20,12 @@ export const routes: Routes = [
     loadChildren: () => import('./features/editor/editor.routes').then((m) => m.EDITOR_ROUTES),
   },
   {
+    // Public/owner-only invitation viewer — full-screen, no marketing shell.
+    path: 'i',
+    loadChildren: () =>
+      import('./features/invitation/invitation.routes').then((m) => m.INVITATION_ROUTES),
+  },
+  {
     path: '',
     component: MainLayoutComponent,
     children: [

@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.events.models import EventStatus, EventType
 from app.events.schemas import EventCreate, EventOut, EventUpdate
-from app.events.service import archive_event, create_event, get_event, list_events, update_event
+from app.events.service import archive_event, create_event, get_event, list_events, publish_event, update_event
 from app.shared.auth.dependencies import get_current_user
 from app.shared.database import get_db
 from app.shared.envelope import Envelope
@@ -58,6 +58,16 @@ async def update_event_route(
     db: AsyncSession = Depends(get_db),
 ) -> Envelope[EventOut]:
     event = await update_event(db, event_id, current_user, data)
+    return Envelope(data=EventOut.model_validate(event))
+
+
+@router.post("/{event_id}/publish", response_model=Envelope[EventOut])
+async def publish_event_route(
+    event_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> Envelope[EventOut]:
+    event = await publish_event(db, event_id, current_user)
     return Envelope(data=EventOut.model_validate(event))
 
 

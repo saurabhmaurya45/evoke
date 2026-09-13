@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
-import { Observable, forkJoin, tap } from 'rxjs';
+import { Observable, forkJoin, tap, catchError, of, map } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import type {
   AdminCustomer,
@@ -29,6 +29,7 @@ interface UserSiteApiOut {
   slug: string;
   status: string;
   templateId: string | null;
+  templateSlotId: string | null;
   createdAt: string;
   views: number;
   rsvps: number;
@@ -199,7 +200,7 @@ export class DashboardContentService {
   private mapUserSite(s: UserSiteApiOut): InvitationSite {
     return {
       id: s.id,
-      templateId: s.templateId ?? '',
+      templateId: s.templateSlotId ?? s.title,
       templateName: s.title,
       occasion: this.formatType(s.type),
       status: this.mapStatus(s.status),
@@ -254,8 +255,29 @@ export class DashboardContentService {
   }
 
   private mapStatus(status: string): SiteStatus {
+    if (status === 'PUBLISHED') return 'published';
     if (status === 'ARCHIVED') return 'expired';
     return 'draft';
+  }
+
+  publishEvent(eventId: string): Observable<void> {
+    // Backend returns Envelope[EventOut] but we only need the side-effect.
+    // Do NOT catchError here — let the caller handle errors so the user
+    // can be notified of failures (403, network error, etc.).
+    return this.http.post<unknown>(`v1/events/${eventId}/publish`, {}).pipe(
+      tap(() => {
+        const account = this._account();
+        if (account) {
+          this._account.set({
+            ...account,
+            sites: account.sites.map((s) =>
+              s.id === eventId ? { ...s, status: 'published' as SiteStatus } : s,
+            ),
+          });
+        }
+      }),
+      map(() => void 0),
+    );
   }
 }
 

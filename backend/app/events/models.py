@@ -22,10 +22,8 @@ class EventType(str, enum.Enum):
 
 class EventStatus(str, enum.Enum):
     DRAFT = "DRAFT"
+    PUBLISHED = "PUBLISHED"
     ARCHIVED = "ARCHIVED"
-    # PUBLISHED is intentionally not modeled yet: that state only becomes reachable
-    # once a future Publishing module exists, and adding it now with no way to reach
-    # it would be a half-finished state machine.
 
 
 class Event(Base):

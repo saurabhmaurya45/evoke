@@ -8,7 +8,7 @@ import {
   signal,
   untracked,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormEngineComponent } from '../../components/form-engine/form-engine.component';
 import { TemplateRendererComponent } from '../../components/template-renderer/template-renderer.component';
 import { TemplateEditorStore } from '../../data/template-editor.store';
@@ -18,6 +18,7 @@ import { TEMPLATE_REPOSITORY } from '../../data/template-repository';
 import { SeoService } from '../../../../core/services/seo.service';
 import { WINDOW } from '../../../../core/tokens/window.token';
 import { TemplateMigrationService } from '../../data/template-migration.service';
+import { HttpTemplateRepository } from '../../data/http-template-repository';
 
 type EditorPane = 'edit' | 'preview';
 type SaveState = 'idle' | 'saving' | 'saved';
@@ -46,6 +47,7 @@ export class EditorPageComponent {
   private readonly content = inject(TemplateContentService);
   private readonly repository = inject(TEMPLATE_REPOSITORY);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly seo = inject(SeoService);
   private readonly window = inject(WINDOW);
   private readonly migrations = inject(TemplateMigrationService);
@@ -87,6 +89,13 @@ export class EditorPageComponent {
           description: `Personalise the ${schema.name} invitation and publish your wedding website.`,
           robots: 'noindex, nofollow',
         });
+        // When arriving from the dashboard "Edit" link, the event UUID is passed
+        // as ?eventId= so the draft can be loaded even if the localStorage cache
+        // was cleared (different device, fresh browser, etc.).
+        const eventId = this.route.snapshot.queryParamMap.get('eventId');
+        if (eventId && this.repository instanceof HttpTemplateRepository) {
+          this.repository.primeEventId(schema.id, eventId);
+        }
         // Seed from a saved draft when present, otherwise the template's default
         // sample content (JSON) — never values baked into the markup/schema.
         void Promise.all([

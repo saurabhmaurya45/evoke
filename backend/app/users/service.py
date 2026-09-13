@@ -4,10 +4,12 @@ from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.drafts.models import Draft
 from app.events.models import Event
 from app.shared.audit import log_action
 from app.shared.auth.identity_provider import TokenIdentity
 from app.shared.pagination import Page, PageParams, make_page
+from app.templates.models import Template
 from app.users.models import User
 from app.users.schemas import UserProfileUpdate, UserSiteOut
 
@@ -60,19 +62,39 @@ async def list_my_sites(db: AsyncSession, user: User, params: PageParams) -> Pag
     )
     events = list((await db.execute(stmt)).scalars().all())
 
-    items = [
-        UserSiteOut(
+    # Resolve template_slot_id for each event: prefer the draft's linked template
+    # slug (authoritative), fall back to event.title when it looks like a slot id.
+    event_ids = [e.id for e in events]
+    drafts_by_event: dict[uuid.UUID, Draft] = {}
+    if event_ids:
+        draft_rows = (await db.execute(select(Draft).where(Draft.event_id.in_(event_ids)))).scalars().all()
+        drafts_by_event = {d.event_id: d for d in draft_rows}
+
+    template_slugs: dict[uuid.UUID, str] = {}
+    template_ids = {d.template_id for d in drafts_by_event.values() if d.template_id}
+    if template_ids:
+        tpl_rows = (await db.execute(select(Template).where(Template.id.in_(template_ids)))).scalars().all()
+        template_slugs = {t.id: t.slug for t in tpl_rows}
+
+    items = []
+    for event in events:
+        draft = drafts_by_event.get(event.id)
+        slot_id: str | None = None
+        if draft and draft.template_id and draft.template_id in template_slugs:
+            slot_id = template_slugs[draft.template_id]
+        elif event.title and event.title.startswith("tpl-"):
+            slot_id = event.title
+        items.append(UserSiteOut(
             id=event.id,
             type=event.type,
             title=event.title,
             slug=event.slug,
             status=event.status,
             template_id=event.template_id,
+            template_slot_id=slot_id,
             created_at=event.created_at,
             updated_at=event.updated_at,
-        )
-        for event in events
-    ]
+        ))
     return make_page(items, total, params)
 
 

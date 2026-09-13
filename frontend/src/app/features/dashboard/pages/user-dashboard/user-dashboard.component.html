@@ -45,8 +45,18 @@
           </div>
 
           <div class="site__actions">
-            <a class="btn btn--ghost" [routerLink]="['/editor', site.templateId]">Edit</a>
+            <a class="btn btn--ghost" [routerLink]="['/editor', site.templateId]" [queryParams]="{eventId: site.id}">Edit</a>
             <a class="btn btn--ghost" [href]="site.url" target="_blank" rel="noopener noreferrer">Open page</a>
+            @if (site.status === 'draft') {
+              <button
+                type="button"
+                class="btn btn--ghost btn--primary"
+                [disabled]="publishingSiteId() === site.id"
+                (click)="publishSite(site.id)"
+              >
+                {{ publishingSiteId() === site.id ? 'Publishing…' : 'Publish' }}
+              </button>
+            }
             @if (site.status !== 'expired') {
               <button
                 type="button"

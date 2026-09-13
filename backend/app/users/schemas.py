@@ -42,6 +42,11 @@ class UserSiteOut(CamelModel):
     until the analytics/publishing module is added. The shape matches the frontend's
     `InvitationSite` model so the component can swap from the seeded service with no
     further changes.
+
+    `template_slot_id` is the frontend template identifier (e.g. 'tpl-samarpan-royal')
+    used to route to /editor/:id and resolve the template's previewUrl. It is derived
+    from the draft's linked template slug when available, otherwise from the event
+    title (HttpTemplateRepository stores the slot id there by convention).
     """
 
     id: uuid.UUID
@@ -50,6 +55,7 @@ class UserSiteOut(CamelModel):
     slug: str
     status: EventStatus
     template_id: uuid.UUID | None
+    template_slot_id: str | None = None
     created_at: datetime
     updated_at: datetime
     views: int = 0

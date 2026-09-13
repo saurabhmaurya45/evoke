@@ -9,11 +9,11 @@ import type { TemplateCard } from '../../home/models/home-content.model';
 interface BackendTemplateApiOut {
   id: string;
   slug: string;
-  status: string;
+  storefrontStatus: string;
 }
 interface ApiPage<T> { data: T[]; }
 /** Minimal backend record cached in memory for UUID lookups. */
-interface BackendEntry { id: string; status: string; }
+interface BackendEntry { id: string; storefrontStatus: string; }
 
 /** A catalogue entry: the card plus the commercial state admins control. */
 export interface CatalogTemplate extends TemplateCard {
@@ -96,11 +96,11 @@ export class TemplateCatalogService {
     const newPublished = !current.published;
     this.setPublished(slotId, newPublished);
     const backendId = this._backendMap()[slotId]?.id;
-    console.log('[TemplateCatalog] togglePublished', slotId, '→', newPublished ? 'ACTIVE' : 'ARCHIVED', '| backendId =', backendId ?? 'NOT FOUND (backendMap empty)');
+    console.log('[TemplateCatalog] togglePublished', slotId, '→', newPublished ? 'LISTED' : 'UNLISTED', '| backendId =', backendId ?? 'NOT FOUND (backendMap empty)');
     console.log('[TemplateCatalog] full backendMap =', JSON.stringify(this._backendMap()));
     if (backendId) {
       this.http
-        .patch(`v1/templates/${backendId}`, { status: newPublished ? 'ACTIVE' : 'ARCHIVED' })
+        .patch(`v1/templates/${backendId}`, { storefrontStatus: newPublished ? 'LISTED' : 'UNLISTED' })
         .pipe(catchError((err) => { console.error('[TemplateCatalog] PATCH failed:', err.status, err.message); return of(null); }))
         .subscribe((res) => console.log('[TemplateCatalog] PATCH response:', res));
     }
@@ -134,16 +134,20 @@ export class TemplateCatalogService {
   }
 
   private syncFromBackend(): void {
-    console.log('[TemplateCatalog] syncFromBackend() called — fetching v1/templates?include_all=true');
+    console.log('[TemplateCatalog] syncFromBackend() called — fetching v1/templates?include_draft=true');
     this.http
-      .get<ApiPage<BackendTemplateApiOut>>('v1/templates?page_size=100&include_all=true')
+      .get<ApiPage<BackendTemplateApiOut>>('v1/templates?page_size=100&include_draft=true')
       .pipe(catchError((err) => { console.error('[TemplateCatalog] GET templates failed:', err.status, err.message); return of({ data: [] }); }))
       .subscribe((page) => {
         console.log('[TemplateCatalog] GET templates returned', page.data.length, 'items:', page.data.map(t => t.slug));
         if (!page.data.length) { console.warn('[TemplateCatalog] backendMap NOT populated — empty response'); return; }
+        // Key the map by slug (what the backend returns). The FE templates use
+        // slotId — these must be the same string (e.g. 'tpl-samarpan-royal').
+        // A mismatch means the template was seeded with a different slug on the
+        // backend than the id declared in templates.index.json.
         const map: Record<string, BackendEntry> = {};
         for (const t of page.data) {
-          map[t.slug] = { id: t.id, status: t.status };
+          map[t.slug] = { id: t.id, storefrontStatus: t.storefrontStatus };
         }
         this._backendMap.set(map);
         console.log('[TemplateCatalog] backendMap set:', Object.keys(map));
@@ -151,7 +155,10 @@ export class TemplateCatalogService {
         this._templates.update((templates) =>
           templates.map((t) => {
             const backend = map[t.slotId];
-            return backend ? { ...t, published: backend.status === 'ACTIVE' } : t;
+            if (!backend) {
+              console.warn(`[TemplateCatalog] no backend entry for slotId "${t.slotId}" — slug/slotId mismatch? backend slugs:`, Object.keys(map));
+            }
+            return backend ? { ...t, published: backend.storefrontStatus === 'LISTED' } : t;
           }),
         );
         this.persist();

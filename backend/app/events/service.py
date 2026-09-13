@@ -124,6 +124,31 @@ async def update_event(
     return event
 
 
+async def get_event_by_slug(db: AsyncSession, slug: str) -> Event | None:
+    """Fetch an event by its public slug — no auth check, caller decides access."""
+    result = await db.execute(select(Event).where(Event.slug == slug))
+    return result.scalar_one_or_none()
+
+
+async def publish_event(db: AsyncSession, event_id: uuid.UUID, current_user: User) -> Event:
+    """Transition a DRAFT event to PUBLISHED — makes it publicly visible."""
+    event = await get_event(db, event_id, current_user)
+    if event.status == EventStatus.ARCHIVED:
+        from app.shared.errors import ValidationFailedError
+        raise ValidationFailedError("An archived event cannot be published.")
+    event.status = EventStatus.PUBLISHED
+    await log_action(
+        db,
+        action="EVENT_PUBLISHED",
+        resource_type="event",
+        resource_id=event.id,
+        actor_user_id=current_user.id,
+    )
+    await db.commit()
+    await db.refresh(event)
+    return event
+
+
 async def archive_event(db: AsyncSession, event_id: uuid.UUID, current_user: User) -> Event:
     """Soft delete: sets status=ARCHIVED. There is no hard row delete for events."""
     event = await get_event(db, event_id, current_user)
