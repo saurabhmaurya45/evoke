@@ -27,8 +27,12 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'dashboard', renderMode: RenderMode.Client },
   { path: 'admin', renderMode: RenderMode.Client },
   { path: 'payment', renderMode: RenderMode.Client },
+  { path: 'payment/**', renderMode: RenderMode.Client },
   { path: 'preview/**', renderMode: RenderMode.Client },
   { path: 'editor/**', renderMode: RenderMode.Client },
+  // Invitation viewer is iframe + postMessage and resolves templates by relative URL —
+  // it can't render on the server (SSR produced the error state, flashed before hydration).
+  { path: 'i/**', renderMode: RenderMode.Client },
   { path: 'verify-otp', renderMode: RenderMode.Client },
   { path: 'forgot-password', renderMode: RenderMode.Client },
   { path: 'reset-password', renderMode: RenderMode.Client },

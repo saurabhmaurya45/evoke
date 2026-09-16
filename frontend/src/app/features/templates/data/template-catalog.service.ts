@@ -10,10 +10,18 @@ interface BackendTemplateApiOut {
   id: string;
   slug: string;
   storefrontStatus: string;
+  pricingModel: 'FREE' | 'PAID';
+  priceAmountMinor: number | null;
 }
 interface ApiPage<T> { data: T[]; }
 /** Minimal backend record cached in memory for UUID lookups. */
 interface BackendEntry { id: string; storefrontStatus: string; }
+
+/** The backend is the source of truth for pricing — checkout charges what it says. */
+function backendPricing(t: BackendTemplateApiOut): Pick<CatalogTemplate, 'pricing' | 'price'> {
+  const paid = t.pricingModel === 'PAID' && (t.priceAmountMinor ?? 0) > 0;
+  return { pricing: paid ? 'paid' : 'free', price: paid ? t.priceAmountMinor! : 0 };
+}
 
 /** A catalogue entry: the card plus the commercial state admins control. */
 export interface CatalogTemplate extends TemplateCard {
@@ -67,13 +75,13 @@ export class TemplateCatalogService {
       }
     });
 
-    // When the current user is confirmed as admin, pull the authoritative
-    // publish status from the backend and merge it over the local overrides.
+    // Pull authoritative pricing for everyone; admins additionally get draft/unlisted
+    // templates (for UUID lookups) and publish status. Browser-only: no API calls
+    // while prerendering.
     effect(() => {
       const admin = this.auth.isAdmin();
-      console.log('[TemplateCatalog] isAdmin =', admin);
-      if (admin) {
-        this.syncFromBackend();
+      if (this.window) {
+        this.syncFromBackend(admin);
       }
     });
   }
@@ -115,9 +123,16 @@ export class TemplateCatalogService {
     });
     const backendId = this._backendMap()[slotId]?.id;
     if (backendId) {
-      const payload: Record<string, string> = {};
+      const payload: Record<string, string | number | null> = {};
       if (changes.name !== undefined) payload['name'] = changes.name;
       if (changes.category !== undefined) payload['category'] = changes.category;
+      if (changes.pricing !== undefined || changes.price !== undefined) {
+        const updated = this._templates().find((template) => template.slotId === slotId);
+        if (updated) {
+          payload['pricingModel'] = updated.pricing === 'paid' ? 'PAID' : 'FREE';
+          payload['priceAmountMinor'] = updated.pricing === 'paid' ? updated.price : null;
+        }
+      }
       if (Object.keys(payload).length) {
         this.http
           .patch(`v1/templates/${backendId}`, payload)
@@ -133,32 +148,33 @@ export class TemplateCatalogService {
     this.persist();
   }
 
-  private syncFromBackend(): void {
-    console.log('[TemplateCatalog] syncFromBackend() called — fetching v1/templates?include_draft=true');
+  private syncFromBackend(admin: boolean): void {
+    const url = `v1/templates?page_size=100${admin ? '&include_draft=true' : ''}`;
     this.http
-      .get<ApiPage<BackendTemplateApiOut>>('v1/templates?page_size=100&include_draft=true')
+      .get<ApiPage<BackendTemplateApiOut>>(url)
       .pipe(catchError((err) => { console.error('[TemplateCatalog] GET templates failed:', err.status, err.message); return of({ data: [] }); }))
       .subscribe((page) => {
-        console.log('[TemplateCatalog] GET templates returned', page.data.length, 'items:', page.data.map(t => t.slug));
-        if (!page.data.length) { console.warn('[TemplateCatalog] backendMap NOT populated — empty response'); return; }
-        // Key the map by slug (what the backend returns). The FE templates use
-        // slotId — these must be the same string (e.g. 'tpl-samarpan-royal').
-        // A mismatch means the template was seeded with a different slug on the
-        // backend than the id declared in templates.index.json.
-        const map: Record<string, BackendEntry> = {};
-        for (const t of page.data) {
-          map[t.slug] = { id: t.id, storefrontStatus: t.storefrontStatus };
+        if (!page.data.length) return;
+        // Keyed by slug, which must equal the FE slotId (e.g. 'tpl-samarpan-royal').
+        const bySlug = new Map(page.data.map((t) => [t.slug, t]));
+        if (admin) {
+          const map: Record<string, BackendEntry> = {};
+          for (const t of page.data) {
+            map[t.slug] = { id: t.id, storefrontStatus: t.storefrontStatus };
+          }
+          this._backendMap.set(map);
         }
-        this._backendMap.set(map);
-        console.log('[TemplateCatalog] backendMap set:', Object.keys(map));
-        // Merge authoritative publish status; local overrides for other fields are kept.
         this._templates.update((templates) =>
           templates.map((t) => {
-            const backend = map[t.slotId];
-            if (!backend) {
-              console.warn(`[TemplateCatalog] no backend entry for slotId "${t.slotId}" — slug/slotId mismatch? backend slugs:`, Object.keys(map));
-            }
-            return backend ? { ...t, published: backend.storefrontStatus === 'LISTED' } : t;
+            const backend = bySlug.get(t.slotId);
+            if (!backend) return t;
+            return {
+              ...t,
+              ...backendPricing(backend),
+              // The public list only contains LISTED templates, so publish status is
+              // authoritative only in the admin (include_draft) response.
+              ...(admin ? { published: backend.storefrontStatus === 'LISTED' } : {}),
+            };
           }),
         );
         this.persist();
@@ -190,8 +206,8 @@ export class TemplateCatalogService {
         ...template,
         ...override,
         published: override?.published ?? true,
-        pricing: override?.pricing ?? 'paid',
-        price: override?.price ?? 149900,
+        pricing: override?.pricing ?? 'free',
+        price: override?.price ?? 0,
       };
     });
   }

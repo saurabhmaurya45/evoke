@@ -3,10 +3,38 @@ from __future__ import annotations
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.admin.schemas import AdminCustomerOut, AdminMetricsOut, AdminSiteOut
+from app.admin.schemas import AdminCustomerOut, AdminMetricsOut, AdminPaymentOut, AdminSiteOut
 from app.events.models import Event, EventStatus
+from app.payments.models import Payment, PaymentStatus
+from app.payments.schemas import PaymentOut
 from app.shared.pagination import Page, PageParams, make_page
+from app.templates.models import Template
 from app.users.models import User
+
+
+async def list_all_payments(db: AsyncSession, params: PageParams) -> Page[AdminPaymentOut]:
+    total = (await db.execute(select(func.count()).select_from(Payment))).scalar_one()
+    rows = (
+        await db.execute(
+            select(Payment, Template.name, User.email, Event.slug)
+            .join(Template, Template.id == Payment.template_id)
+            .join(User, User.id == Payment.user_id)
+            .join(Event, Event.id == Payment.event_id)
+            .order_by(Payment.created_at.desc())
+            .offset((params.page - 1) * params.page_size)
+            .limit(params.page_size)
+        )
+    ).all()
+    items = [
+        AdminPaymentOut(
+            **PaymentOut.model_validate(payment).model_dump(exclude={"template_name"}),
+            template_name=template_name,
+            customer_email=email,
+            event_slug=slug,
+        )
+        for payment, template_name, email, slug in rows
+    ]
+    return make_page(items, total, params)
 
 
 async def list_customers(db: AsyncSession, params: PageParams) -> Page[AdminCustomerOut]:
@@ -16,11 +44,23 @@ async def list_customers(db: AsyncSession, params: PageParams) -> Page[AdminCust
         .subquery()
     )
 
+    revenue_sub = (
+        select(Payment.user_id, func.sum(Payment.amount_minor).label("revenue_minor"))
+        .where(Payment.status == PaymentStatus.PAID)
+        .group_by(Payment.user_id)
+        .subquery()
+    )
+
     total = (await db.execute(select(func.count()).select_from(User))).scalar_one()
 
     stmt = (
-        select(User, func.coalesce(event_count_sub.c.event_count, 0).label("event_count"))
+        select(
+            User,
+            func.coalesce(event_count_sub.c.event_count, 0).label("event_count"),
+            func.coalesce(revenue_sub.c.revenue_minor, 0).label("revenue_minor"),
+        )
         .outerjoin(event_count_sub, User.id == event_count_sub.c.owner_id)
+        .outerjoin(revenue_sub, User.id == revenue_sub.c.user_id)
         .order_by(User.created_at.desc())
         .offset((params.page - 1) * params.page_size)
         .limit(params.page_size)
@@ -37,8 +77,9 @@ async def list_customers(db: AsyncSession, params: PageParams) -> Page[AdminCust
             role=user.role,
             joined_at=user.created_at,
             event_count=count,
+            revenue_minor=revenue,
         )
-        for user, count in rows
+        for user, count, revenue in rows
     ]
     return make_page(items, total, params)
 

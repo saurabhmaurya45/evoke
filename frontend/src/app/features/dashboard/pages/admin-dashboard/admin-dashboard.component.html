@@ -136,17 +136,18 @@
       @default {
         <table class="table">
           <thead>
-            <tr><th>Invoice</th><th>Plan</th><th>Method</th><th>Date</th><th>Status</th><th class="num">Amount</th></tr>
+            <tr><th>Invoice</th><th>Customer</th><th>Plan</th><th>Method</th><th>Date</th><th>Status</th><th class="num">Amount</th></tr>
           </thead>
           <tbody>
             @if (content.loading()) {
-              <tr><td colspan="6" class="table__loading">Loading…</td></tr>
+              <tr><td colspan="7" class="table__loading">Loading…</td></tr>
             } @else if (!payments().length) {
-              <tr><td colspan="6" class="table__loading">No payments recorded yet.</td></tr>
+              <tr><td colspan="7" class="table__loading">No payments recorded yet.</td></tr>
             }
             @for (payment of payments(); track payment.id) {
               <tr>
                 <td class="mono">{{ payment.invoiceNo }}</td>
+                <td>{{ payment.customer }}</td>
                 <td>{{ payment.plan }}</td>
                 <td>{{ payment.method }}</td>
                 <td>{{ date(payment.paidAt) }}</td>

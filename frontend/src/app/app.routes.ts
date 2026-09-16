@@ -81,13 +81,7 @@ export const routes: Routes = [
       },
       {
         path: 'payment',
-        component: ComingSoonComponent,
-        title: 'Checkout • Evoke',
-        data: {
-          eyebrow: 'Checkout',
-          heading: 'Secure Checkout',
-          description: 'One-time secure checkout is coming soon.',
-        },
+        loadChildren: () => import('./features/payment/payment.routes').then((m) => m.PAYMENT_ROUTES),
       },
       {
         path: 'dashboard',

@@ -5,11 +5,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.drafts.models import Draft
 from app.events.models import EventStatus
 from app.events.schemas import InvitationOut
-from app.events.service import get_event_by_slug
+from app.events.service import get_event_by_slug, resolve_event_template
 from app.shared.auth.dependencies import get_current_user_optional
 from app.shared.database import get_db
 from app.shared.errors import AuthForbiddenError, AuthRequiredError, NotFoundError
-from app.templates.models import Template
 from app.users.models import User
 
 router = APIRouter(prefix="/v1/i", tags=["invitation"])
@@ -44,22 +43,10 @@ async def get_invitation_route(
     draft_result = await db.execute(select(Draft).where(Draft.event_id == event.id))
     draft = draft_result.scalar_one_or_none()
 
-    # Resolve the template slot id the Angular frontend uses to look up the
-    # template's previewUrl in templates.index.json.
-    #
-    # Priority:
-    #   1. draft.template_id FK → look up the template slug from the DB (reliable,
-    #      works for any event regardless of how it was created).
-    #   2. event.title fallback — HttpTemplateRepository stores the slot id as the
-    #      event title when it creates the event, so this works for all FE-created
-    #      events. Any event whose title is NOT a slot id (admin-created events with
-    #      real titles) will fall through to None and the viewer will show an error.
-    template_slot_id: str | None = None
-    if draft and draft.template_id:
-        template = await db.get(Template, draft.template_id)
-        if template:
-            template_slot_id = template.slug
-
+    # Slot id the Angular app uses to find the template's previewUrl in templates.index.json.
+    # Templates not seeded in the DB still resolve via the slot-id-as-title convention.
+    template = await resolve_event_template(db, event)
+    template_slot_id = template.slug if template else None
     if template_slot_id is None and event.title and event.title.startswith("tpl-"):
         template_slot_id = event.title
 

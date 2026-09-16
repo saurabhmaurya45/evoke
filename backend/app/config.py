@@ -25,6 +25,16 @@ class Settings(BaseSettings):
 
     log_level: str = "INFO"
 
+    razorpay_key_id: str | None = None
+    razorpay_key_secret: str | None = None
+    razorpay_webhook_secret: str | None = None
+    razorpay_api_url: str = "https://api.razorpay.com/v1"
+    # Public URL of this API — Razorpay redirects the browser back to it after payment.
+    api_base_url: str = "http://localhost:8000"
+    frontend_base_url: str = "http://localhost:4200"
+    # Razorpay rejects payment links that expire in under 15 minutes.
+    payment_link_expiry_minutes: int = 30
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]

@@ -1,0 +1,70 @@
+<section class="pay">
+  @switch (state()) {
+    @case ('checking') {
+      <div class="pay__icon pay__icon--pending" aria-hidden="true">…</div>
+      <h1 class="pay__title">Confirming your payment</h1>
+      <p class="pay__sub">Hang tight — this only takes a moment.</p>
+    }
+
+    @case ('success') {
+      <div class="pay__icon pay__icon--success" aria-hidden="true">✓</div>
+      <p class="pay__eyebrow">{{ payment() ? 'Payment successful' : 'Published' }}</p>
+      <h1 class="pay__title">Your invitation is live</h1>
+      <p class="pay__sub">
+        @if (payment(); as p) {
+          We received {{ amount() }}{{ p.templateName ? ' for ' + p.templateName : '' }}.
+        }
+        Share the link below with your guests.
+      </p>
+
+      @if (inviteUrl()) {
+        <div class="pay__link">
+          <span class="pay__link-text">{{ inviteUrl() }}</span>
+          <button type="button" class="pay__copy" (click)="copyLink()">
+            {{ copied() ? 'Copied' : 'Copy' }}
+          </button>
+        </div>
+      }
+
+      <div class="pay__actions">
+        <a class="pay__btn pay__btn--ghost" routerLink="/dashboard">Go to dashboard</a>
+        @if (quote(); as q) {
+          <a class="pay__btn" [routerLink]="['/i', q.eventSlug]">View invitation</a>
+        }
+      </div>
+
+      @if (payment()?.providerPaymentId; as ref) {
+        <p class="pay__note">Payment reference: {{ ref }}</p>
+      }
+    }
+
+    @case ('pending') {
+      <div class="pay__icon pay__icon--pending" aria-hidden="true">!</div>
+      <p class="pay__eyebrow">Processing</p>
+      <h1 class="pay__title">We're still confirming your payment</h1>
+      <p class="pay__sub">
+        Razorpay hasn't confirmed it with us yet. If money was deducted, your invitation will be
+        published automatically within a few minutes — check your dashboard shortly.
+      </p>
+      <div class="pay__actions">
+        <a class="pay__btn" routerLink="/dashboard">Go to dashboard</a>
+      </div>
+    }
+
+    @case ('failed') {
+      <div class="pay__icon pay__icon--failed" aria-hidden="true">✕</div>
+      <p class="pay__eyebrow">Payment not completed</p>
+      <h1 class="pay__title">Your invitation isn't published yet</h1>
+      <p class="pay__sub">
+        The payment was cancelled or didn't go through. You haven't been charged for a failed
+        payment — you can try again whenever you're ready.
+      </p>
+      <div class="pay__actions">
+        <a class="pay__btn pay__btn--ghost" routerLink="/dashboard">Go to dashboard</a>
+        @if (eventId()) {
+          <a class="pay__btn" routerLink="/payment" [queryParams]="{ site: eventId() }">Try again</a>
+        }
+      </div>
+    }
+  }
+</section>

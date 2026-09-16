@@ -3,6 +3,7 @@ import uuid
 from typing import Any
 
 from fastapi import FastAPI, Request, status
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
@@ -54,6 +55,16 @@ class ConflictError(AppError):
 class ValidationFailedError(AppError):
     def __init__(self, message: str, details: dict[str, Any] | None = None) -> None:
         super().__init__("VALIDATION_FAILED", message, status.HTTP_422_UNPROCESSABLE_ENTITY, details)
+
+
+class PaymentRequiredError(AppError):
+    def __init__(self, amount_minor: int, currency: str) -> None:
+        super().__init__(
+            "PAYMENT_REQUIRED",
+            "This template is paid. Complete payment to publish the invitation.",
+            status.HTTP_402_PAYMENT_REQUIRED,
+            {"amountMinor": amount_minor, "currency": currency},
+        )
 
 
 class RequestIdMiddleware:
@@ -116,7 +127,11 @@ def register_error_handlers(app: FastAPI) -> None:
                 "VALIDATION_FAILED",
                 "The request payload failed validation.",
                 request_id,
-                {"errors": exc.errors()},
+                # A non-JSON body leaves raw bytes in `input`; encode so the handler can't 500.
+                {"errors": jsonable_encoder(
+                    exc.errors(),
+                    custom_encoder={bytes: lambda b: b.decode("utf-8", "replace")},
+                )},
             ),
         )
 

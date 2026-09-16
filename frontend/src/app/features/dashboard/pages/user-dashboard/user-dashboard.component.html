@@ -48,14 +48,13 @@
             <a class="btn btn--ghost" [routerLink]="['/editor', site.templateId]" [queryParams]="{eventId: site.id}">Edit</a>
             <a class="btn btn--ghost" [href]="site.url" target="_blank" rel="noopener noreferrer">Open page</a>
             @if (site.status === 'draft') {
-              <button
-                type="button"
+              <a
                 class="btn btn--ghost btn--primary"
-                [disabled]="publishingSiteId() === site.id"
-                (click)="publishSite(site.id)"
+                routerLink="/payment"
+                [queryParams]="{ site: site.id, template: site.templateId }"
               >
-                {{ publishingSiteId() === site.id ? 'Publishing…' : 'Publish' }}
-              </button>
+                Publish
+              </a>
             }
             @if (site.status !== 'expired') {
               <button

@@ -53,6 +53,11 @@ src/
         data/        # HomeContentService (single source of truth for content)
         models/ pages/ home.routes.ts
       auth/ dashboard/   # scaffolded, lazy, dashboard is authGuard-protected
+      editor/ preview/ invitation/ templates/
+      payment/       # checkout + post-Razorpay result pages (authGuard)
+        data/        # PaymentApiService (/v1/payments client)
+        pages/       # checkout-page, payment-result-page
+        payment.routes.ts
   styles/            # global SCSS layers
     abstracts/       # tokens, breakpoints, mixins (design tokens live here)
     base/            # reset, fonts, typography, animations
@@ -418,8 +423,8 @@ configured trusted origin once templates are served from a known origin.
 - required-field checks;
 - document serialization.
 
-`TemplateRepository` is an injection-token boundary. The current implementation is
-`LocalStorageTemplateRepository`, but the editor depends only on the interface:
+`TemplateRepository` is an injection-token boundary. `app.config.ts` binds it to
+`HttpTemplateRepository`; the editor depends only on the interface:
 
 ```text
 EditorPageComponent
@@ -427,12 +432,60 @@ EditorPageComponent
         v
 TEMPLATE_REPOSITORY
         |
-        +-- LocalStorageTemplateRepository (current)
-        +-- ApiTemplateRepository (future)
+        +-- HttpTemplateRepository (current) — signed in: event + draft via the API
+        |                                      signed out: localStorage fallback
+        +-- LocalStorageTemplateRepository   — offline / demo implementation
 ```
+
+When signed in, the first save creates a backend event titled with the template slot
+id (e.g. `tpl-samarpan-royal`) and caches `slotId → eventId` in localStorage
+(`evoke:event-ids`); the dashboard's Edit link passes `?eventId=` so the draft
+resolves on any device.
 
 Draft autosave is debounced by 800 ms and deduplicated against the last persisted
 document. A persisted document contains `templateId`, `schemaVersion`, and `data`.
+
+## Publishing and payments
+
+Publishing goes through a checkout step so paid templates are charged via Razorpay.
+The feature lives in [`src/app/features/payment/`](src/app/features/payment/); both
+routes are `authGuard`-protected and client-rendered.
+
+```text
+Editor "Publish" / Dashboard "Publish"
+        |  (signed out → /login?returnUrl=…)
+        v
+/payment?site=<eventId>&template=<slotId>      CheckoutPageComponent
+        |  GET  v1/payments/quote     → template name, price, already live?
+        |  POST v1/payments/checkout
+        |     ├─ free / already paid → published → /payment/result?status=success
+        |     └─ paid → window.location = checkoutUrl (Razorpay hosted page)
+        v
+Razorpay → backend callback (verifies signature, publishes)
+        v
+/payment/result?status=…&paymentId=…&eventId=…  PaymentResultPageComponent
+        |  polls GET v1/payments/{id} (2 s × 10) — the redirect status is only a hint
+        ├─ PAID    → "Your invitation is live" + share link (/i/<slug>)
+        ├─ pending → "Still confirming" (webhook will publish shortly)
+        └─ failed  → "Try again" → back to checkout
+```
+
+- [`PaymentApiService`](src/app/features/payment/data/payment-api.service.ts) wraps
+  `/v1/payments` (quote, checkout, get, listMine) plus `formatMoney` / `apiErrorCode`.
+- The frontend never sends an amount — prices come from the backend.
+  `TemplateCatalogService` syncs `pricingModel` / `priceAmountMinor` from
+  `GET v1/templates` for every visitor, and the admin editor PATCHes pricing changes
+  back, so the gallery, admin table, and checkout always agree. Templates show as
+  Free until the backend says otherwise.
+- The user dashboard lists payment history from `GET v1/payments`; the admin
+  dashboard's Payments tab uses `GET v1/admin/payments` and the Customers tab shows
+  revenue from `revenueMinor`.
+- Checkout error codes surfaced to users: `PAYMENTS_NOT_CONFIGURED` (503),
+  `PAYMENT_PROVIDER_ERROR` (502); calling `v1/events/{id}/publish` directly on an
+  unpaid paid template returns `PAYMENT_REQUIRED` (402).
+
+See [`backend/README.md`](../backend/README.md#payments-razorpay) for the server-side
+flow, environment variables, webhook setup, and Razorpay test-mode payment details.
 
 ## Draft migration
 
@@ -526,8 +579,10 @@ runtime and must clean up its listeners, timers, and media resources.
 - Do not use arbitrary user data as a selector or executable JavaScript.
 - Replace wildcard message origins with a trusted configured origin before serving
   templates across origins.
-- Move publishing and media upload to a backend before treating localStorage as a
-  production data store.
+- Publishing, drafts, and payments are server-side; media upload still needs a
+  backend before localStorage-held images are production-ready.
+- Payment amounts and "paid" status are never trusted from the client: prices are
+  read from the backend and publish is gated server-side.
 
 ## Testing checklist
 

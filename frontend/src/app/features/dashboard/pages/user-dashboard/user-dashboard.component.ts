@@ -52,7 +52,6 @@ export class UserDashboardComponent implements OnInit {
 
   /** Id of the site currently being archived (disables the button during the request). */
   protected readonly archivingSiteId = signal<string | null>(null);
-  protected readonly publishingSiteId = signal<string | null>(null);
 
   ngOnInit(): void {
     this.seo.apply({
@@ -69,22 +68,6 @@ export class UserDashboardComponent implements OnInit {
 
   protected date(iso: string): string {
     return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-  }
-
-  protected publishSite(siteId: string): void {
-    this.publishingSiteId.set(siteId);
-    this.content
-      .publishEvent(siteId)
-      .pipe(
-        catchError((err: { status?: number }) => {
-          const msg = err.status === 403
-            ? 'You do not have permission to publish this invitation.'
-            : 'Failed to publish. Please try again.';
-          alert(msg);
-          return of(null);
-        }),
-      )
-      .subscribe(() => this.publishingSiteId.set(null));
   }
 
   protected archiveSite(siteId: string): void {

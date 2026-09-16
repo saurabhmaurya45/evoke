@@ -19,6 +19,7 @@ import { SeoService } from '../../../../core/services/seo.service';
 import { WINDOW } from '../../../../core/tokens/window.token';
 import { TemplateMigrationService } from '../../data/template-migration.service';
 import { HttpTemplateRepository } from '../../data/http-template-repository';
+import { AuthService } from '../../../../core/services/auth.service';
 
 type EditorPane = 'edit' | 'preview';
 type SaveState = 'idle' | 'saving' | 'saved';
@@ -52,6 +53,7 @@ export class EditorPageComponent {
   private readonly window = inject(WINDOW);
   private readonly migrations = inject(TemplateMigrationService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly auth = inject(AuthService);
   protected readonly store = inject(TemplateEditorStore);
 
   /** Route param `:templateId`. */
@@ -135,6 +137,11 @@ export class EditorPageComponent {
   protected async publish(): Promise<void> {
     const doc = this.store.toDocument();
     if (!doc || !this.store.canPublish()) {
+      return;
+    }
+    // Checkout needs a backend event owned by the user, which only exists once signed in.
+    if (!this.auth.isAuthenticated()) {
+      await this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
       return;
     }
     const { id } = await this.repository.publish(doc);

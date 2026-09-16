@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { Observable, forkJoin, tap, catchError, of, map } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { PaymentApiService, type Payment } from '../../payment/data/payment-api.service';
 import type {
   AdminCustomer,
   AdminMetric,
@@ -58,6 +59,7 @@ interface AdminCustomerApiOut {
   displayName: string | null;
   joinedAt: string;
   eventCount: number;
+  revenueMinor: number;
 }
 
 interface AdminSiteApiOut {
@@ -72,8 +74,9 @@ interface AdminSiteApiOut {
   createdAt: string;
 }
 
-interface AdminPaymentApiOut {
-  id: string;
+interface AdminPaymentApiOut extends Payment {
+  customerEmail: string;
+  eventSlug: string;
 }
 
 // ------------------------------------------------------------------
@@ -88,6 +91,7 @@ interface AdminPaymentApiOut {
 @Injectable({ providedIn: 'root' })
 export class DashboardContentService {
   private readonly http = inject(HttpClient);
+  private readonly payments = inject(PaymentApiService);
 
   private readonly _account = signal<CustomerAccount | null>(null);
   private readonly _adminMetrics = signal<readonly AdminMetric[]>([]);
@@ -150,14 +154,16 @@ export class DashboardContentService {
     forkJoin({
       sites: this.http.get<ApiPage<UserSiteApiOut>>('v1/users/me/sites?page_size=100'),
       profile: this.http.get<ApiEnvelope<UserProfileApiOut>>('v1/users/me'),
+      // Payment history is secondary — never let it block the sites list.
+      payments: this.payments.listMine().pipe(catchError(() => of([] as Payment[]))),
     }).subscribe({
-      next: ({ sites, profile }) => {
+      next: ({ sites, profile, payments }) => {
         this._account.set({
           userId: profile.data.id,
           plan: 'Free',
           memberSince: profile.data.createdAt,
           sites: sites.data.map((s) => this.mapUserSite(s)),
-          payments: [],
+          payments: payments.map((p) => this.mapPayment(p)),
         });
         this.loading.set(false);
       },
@@ -179,12 +185,13 @@ export class DashboardContentService {
       sites: this.http.get<ApiPage<AdminSiteApiOut>>('v1/admin/sites?page_size=100'),
       payments: this.http.get<ApiPage<AdminPaymentApiOut>>('v1/admin/payments?page_size=100'),
     }).subscribe({
-      next: ({ metrics, customers, sites }) => {
+      next: ({ metrics, customers, sites, payments }) => {
         this._adminMetrics.set(this.mapMetrics(metrics.data));
         this._adminCustomers.set(customers.data.map((c) => this.mapCustomer(c)));
         this._adminSites.set(sites.data.map((s) => this.mapAdminSite(s)));
-        // Payments: backend returns empty list until billing is implemented.
-        this._adminPayments.set([]);
+        this._adminPayments.set(
+          payments.data.map((p) => ({ ...this.mapPayment(p), customer: p.customerEmail })),
+        );
         this.loading.set(false);
       },
       error: (err) => {
@@ -237,7 +244,7 @@ export class DashboardContentService {
       plan: 'Free',
       joinedAt: c.joinedAt,
       sites: c.eventCount,
-      revenue: 0,
+      revenue: c.revenueMinor ?? 0,
     };
   }
 
@@ -260,24 +267,18 @@ export class DashboardContentService {
     return 'draft';
   }
 
-  publishEvent(eventId: string): Observable<void> {
-    // Backend returns Envelope[EventOut] but we only need the side-effect.
-    // Do NOT catchError here — let the caller handle errors so the user
-    // can be notified of failures (403, network error, etc.).
-    return this.http.post<unknown>(`v1/events/${eventId}/publish`, {}).pipe(
-      tap(() => {
-        const account = this._account();
-        if (account) {
-          this._account.set({
-            ...account,
-            sites: account.sites.map((s) =>
-              s.id === eventId ? { ...s, status: 'published' as SiteStatus } : s,
-            ),
-          });
-        }
-      }),
-      map(() => void 0),
-    );
+  private mapPayment(p: Payment): PaymentRecord {
+    return {
+      id: p.id,
+      invoiceNo: `EVK-${p.id.slice(0, 8).toUpperCase()}`,
+      plan: p.templateName ?? 'Invitation',
+      amount: p.amountMinor,
+      currency: p.currency,
+      status: p.status === 'PAID' ? 'paid' : p.status === 'CREATED' ? 'pending' : 'failed',
+      method: 'Razorpay',
+      paidAt: p.paidAt ?? p.createdAt,
+      siteId: p.eventId,
+    };
   }
 }
 

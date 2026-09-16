@@ -30,13 +30,15 @@ export interface PaymentRecord {
   readonly plan: string;
   /** Minor units (paise), so no floating-point money. */
   readonly amount: number;
-  readonly currency: 'INR';
+  readonly currency: string;
   readonly status: PaymentStatus;
   readonly method: string;
   /** ISO date of the transaction. */
   readonly paidAt: string;
   /** Site this payment unlocked, when tied to one. */
   readonly siteId?: string;
+  /** Payer's email — admin view only. */
+  readonly customer?: string;
 }
 
 /** Everything one customer sees on their dashboard. */

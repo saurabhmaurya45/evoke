@@ -1,0 +1,98 @@
+<section class="pay">
+  <p class="pay__eyebrow">Checkout</p>
+
+  @switch (state()) {
+    @case ('loading') {
+      <h1 class="pay__title">Preparing checkout…</h1>
+      <p class="pay__sub">Fetching your invitation details.</p>
+    }
+
+    @case ('error') {
+      <h1 class="pay__title">We hit a snag</h1>
+      <p class="pay__sub">{{ error() }}</p>
+      <div class="pay__actions">
+        @if (site()) {
+          <button type="button" class="pay__btn pay__btn--ghost" (click)="retry()">Try again</button>
+        }
+        <a class="pay__btn" routerLink="/dashboard">Go to dashboard</a>
+      </div>
+    }
+
+    @default {
+      @if (quote(); as q) {
+        <h1 class="pay__title">{{ isLive() ? 'Already live' : 'Publish your invitation' }}</h1>
+        <p class="pay__sub">
+          @if (isLive()) {
+            This invitation is already published and visible to your guests.
+          } @else if (q.paymentRequired && !q.alreadyPaid) {
+            You'll be taken to Razorpay's secure page to complete a one-time payment.
+            Your invitation goes live as soon as the payment succeeds.
+          } @else {
+            No payment needed — your invitation will go live right away.
+          }
+        </p>
+
+        <div class="pay__card">
+          <div class="pay__row">
+            <span class="pay__label">Template</span>
+            <span class="pay__value">{{ q.templateName }}</span>
+          </div>
+          <div class="pay__row">
+            <span class="pay__label">Plan</span>
+            <span class="pay__value">One-time · lifetime access</span>
+          </div>
+          <div class="pay__row pay__row--total">
+            <span class="pay__label">Total</span>
+            <span class="pay__value">
+              @if (!q.paymentRequired) {
+                Free
+              } @else if (q.alreadyPaid) {
+                Paid
+              } @else {
+                {{ price() }}
+              }
+            </span>
+          </div>
+        </div>
+
+        @if (error()) {
+          <p class="pay__error" role="alert">{{ error() }}</p>
+        }
+
+        <div class="pay__actions">
+          @if (editorSlotId()) {
+            <a
+              class="pay__btn pay__btn--ghost"
+              [routerLink]="['/editor', editorSlotId()]"
+              [queryParams]="{ eventId: q.eventId }"
+            >
+              Back to editor
+            </a>
+          }
+          @if (isLive()) {
+            <a class="pay__btn" [routerLink]="['/i', q.eventSlug]">View invitation</a>
+          } @else {
+            <button
+              type="button"
+              class="pay__btn"
+              [disabled]="state() !== 'ready'"
+              (click)="submit()"
+            >
+              @switch (state()) {
+                @case ('processing') { Please wait… }
+                @case ('redirecting') { Redirecting to Razorpay… }
+                @default {
+                  {{ q.paymentRequired && !q.alreadyPaid ? 'Pay ' + price() + ' & publish' : 'Publish now' }}
+                }
+              }
+            </button>
+          }
+        </div>
+
+        @if (q.paymentRequired && !q.alreadyPaid && !isLive()) {
+          <p class="pay__note">Payments are processed securely by Razorpay. We never see your card details.</p>
+        }
+      }
+    }
+  }
+</section>

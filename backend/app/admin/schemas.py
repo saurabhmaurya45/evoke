@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime
 
 from app.events.models import EventStatus, EventType
+from app.payments.schemas import PaymentOut
 from app.shared.schema import CamelModel
 from app.users.models import UserRole
 
@@ -15,6 +16,7 @@ class AdminCustomerOut(CamelModel):
     role: UserRole
     joined_at: datetime
     event_count: int
+    revenue_minor: int = 0
 
 
 class AdminSiteOut(CamelModel):
@@ -37,7 +39,6 @@ class AdminMetricsOut(CamelModel):
     archived_count: int
 
 
-class AdminPaymentOut(CamelModel):
-    """Placeholder — no Payment model yet. Reserved for when billing is added."""
-
-    id: uuid.UUID
+class AdminPaymentOut(PaymentOut):
+    customer_email: str
+    event_slug: str

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.admin.schemas import AdminCustomerOut, AdminMetricsOut, AdminPaymentOut, AdminSiteOut
-from app.admin.service import get_metrics, list_all_sites, list_customers
+from app.admin.service import get_metrics, list_all_payments, list_all_sites, list_customers
 from app.shared.auth.dependencies import require_role
 from app.shared.database import get_db
 from app.shared.envelope import Envelope
@@ -45,11 +45,5 @@ async def list_payments_route(
     admin_user: User = Depends(require_role(UserRole.ADMIN)),
     db: AsyncSession = Depends(get_db),
 ) -> Page[AdminPaymentOut]:
-    """Payments are not modelled yet. Returns an empty page so the frontend
-    contract is stable and the admin tab renders without crashing."""
-    from app.shared.pagination import Pagination
-
-    return Page[AdminPaymentOut](
-        data=[],
-        pagination=Pagination(page=params.page, page_size=params.page_size, total=0),
-    )
+    """Every payment across the platform, newest first (all statuses)."""
+    return await list_all_payments(db, params)

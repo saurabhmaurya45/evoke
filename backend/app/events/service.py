@@ -12,11 +12,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.drafts.models import Draft
 from app.events.models import Event, EventStatus, EventType
 from app.events.schemas import EventCreate, EventUpdate
+from app.payments.pricing import get_template_price, has_paid_payment
 from app.shared.audit import log_action
 from app.shared.authorization import ensure_owner_or_admin
-from app.shared.errors import NotFoundError
+from app.shared.errors import NotFoundError, PaymentRequiredError, ValidationFailedError
 from app.shared.pagination import Page, PageParams, make_page
-from app.users.models import User
+from app.templates.models import Template
+from app.users.models import User, UserRole
 
 _SLUG_SUFFIX_ALPHABET = string.ascii_lowercase + string.digits
 _SLUG_CREATE_ATTEMPTS = 5
@@ -130,12 +132,50 @@ async def get_event_by_slug(db: AsyncSession, slug: str) -> Event | None:
     return result.scalar_one_or_none()
 
 
+async def resolve_event_template(db: AsyncSession, event: Event) -> Template | None:
+    """Find the template an event is built on.
+
+    Falls back to the event title because HttpTemplateRepository creates events with the
+    template slot id (== template slug, e.g. 'tpl-samarpan-royal') as the title.
+    """
+    if event.template_id:
+        template = await db.get(Template, event.template_id)
+        if template:
+            return template
+
+    draft = (
+        await db.execute(select(Draft).where(Draft.event_id == event.id))
+    ).scalar_one_or_none()
+    if draft and draft.template_id:
+        template = await db.get(Template, draft.template_id)
+        if template:
+            return template
+
+    if event.title and event.title.startswith("tpl-"):
+        return (
+            await db.execute(select(Template).where(Template.slug == event.title))
+        ).scalar_one_or_none()
+    return None
+
+
 async def publish_event(db: AsyncSession, event_id: uuid.UUID, current_user: User) -> Event:
-    """Transition a DRAFT event to PUBLISHED — makes it publicly visible."""
+    """Transition a DRAFT event to PUBLISHED — makes it publicly visible.
+
+    Events on a PAID template need a PAID payment first (admins are exempt).
+    """
     event = await get_event(db, event_id, current_user)
     if event.status == EventStatus.ARCHIVED:
-        from app.shared.errors import ValidationFailedError
         raise ValidationFailedError("An archived event cannot be published.")
+    if event.status == EventStatus.PUBLISHED:
+        return event
+
+    if current_user.role != UserRole.ADMIN:
+        template = await resolve_event_template(db, event)
+        if template is not None:
+            price = await get_template_price(db, template)
+            if not price.is_free and not await has_paid_payment(db, event.id):
+                raise PaymentRequiredError(price.amount_minor, price.currency)
+
     event.status = EventStatus.PUBLISHED
     await log_action(
         db,

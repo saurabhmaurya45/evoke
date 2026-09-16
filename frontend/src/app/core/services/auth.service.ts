@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import type { AuthChangeEvent, AuthError, Provider, Session } from '@supabase/supabase-js';
-import { catchError, firstValueFrom, of } from 'rxjs';
+import { catchError, firstValueFrom, of, timeout } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { SupabaseClientService } from './supabase-client.service';
 
@@ -27,6 +27,8 @@ export interface AuthSession { readonly user: AuthUser; readonly token: string; 
 export interface AuthResult { readonly ok: boolean; readonly error?: AuthErrorCode; readonly session?: AuthSession; }
 
 type PendingAction = 'confirm-signup' | 'password-reset' | 'otp';
+
+const PROFILE_TIMEOUT_MS = 8000;
 
 /** Supabase's OAuth provider id for each button — Microsoft/Entra ID is "azure" in Supabase. */
 const SUPABASE_PROVIDER: Record<SocialProvider, Provider> = {
@@ -257,9 +259,12 @@ export class AuthService {
   private async fetchProfile(session: Session): Promise<AuthUser | null> {
     try {
       const response = await firstValueFrom(
-        this.http.get<CurrentUserResponse>(`${environment.apiBaseUrl}/v1/auth/me`, {
-          headers: { Authorization: `Bearer ${session.access_token}` },
-        }),
+        this.http
+          .get<CurrentUserResponse>(`${environment.apiBaseUrl}/v1/auth/me`, {
+            headers: { Authorization: `Bearer ${session.access_token}` },
+          })
+          // App bootstrap awaits this — a hung backend must not block every page (incl. public ones).
+          .pipe(timeout(PROFILE_TIMEOUT_MS)),
       );
       const metadata = session.user.user_metadata ?? {};
       return {
