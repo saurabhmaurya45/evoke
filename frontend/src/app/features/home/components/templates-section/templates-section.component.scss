@@ -125,6 +125,16 @@
   height: 100%;
 }
 
+.templates__media {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: rgba(0, 0, 0, 0.15);
+}
+
 .templates__badge {
   position: absolute;
   top: 14px;
@@ -214,6 +224,68 @@
   &:hover {
     border-color: $color-gold;
     background: rgba(201, 162, 39, 0.12);
+  }
+}
+
+// The dark panel above is hard-coded, but headings/card text use var(--text), which
+// turns dark in light theme — give the whole section a light surface instead.
+:host-context(:root[data-theme='light']) {
+  .templates::before {
+    background:
+      radial-gradient(circle at 18% 8%, rgba(139, 100, 29, 0.22) 0 1px, transparent 1.5px),
+      radial-gradient(circle at 80% 26%, rgba(139, 100, 29, 0.18) 0 1px, transparent 1.5px),
+      radial-gradient(circle at 58% 74%, rgba(139, 100, 29, 0.14) 0 1px, transparent 1.5px),
+      linear-gradient(180deg, #f1e8d6, #eadfc8);
+    background-size: 170px 150px, 220px 190px, 260px 220px, auto;
+    box-shadow: inset 0 0 0 1px rgba(75, 57, 31, 0.08);
+  }
+
+  .templates__card {
+    background: linear-gradient(160deg, rgba(255, 253, 247, 0.96), rgba(250, 244, 232, 0.92));
+    border-color: rgba(75, 57, 31, 0.14);
+    box-shadow: 0 14px 30px rgba(75, 57, 31, 0.1);
+  }
+
+  .templates__name {
+    color: #241c13;
+  }
+
+  .templates__badge {
+    background: rgba(255, 252, 244, 0.82);
+    border-color: rgba(75, 57, 31, 0.14);
+    color: #2b241b;
+  }
+
+  .templates__btn--ghost {
+    background: rgba(75, 57, 31, 0.05);
+    border-color: rgba(75, 57, 31, 0.2);
+    color: #2b241b;
+
+    &:hover {
+      background: rgba(75, 57, 31, 0.1);
+    }
+  }
+
+  .carousel__nav {
+    background: rgba(255, 252, 244, 0.92);
+    border-color: rgba(75, 57, 31, 0.2);
+    color: #2b241b;
+    box-shadow: 0 6px 16px rgba(75, 57, 31, 0.12);
+
+    &:hover:not(:disabled) {
+      border-color: #b78120;
+      background: #fff8e6;
+    }
+  }
+
+  .templates__more-link {
+    border-color: rgba(75, 57, 31, 0.24);
+    color: #2b241b;
+
+    &:hover {
+      border-color: #b78120;
+      background: rgba(201, 162, 39, 0.12);
+    }
   }
 }
 

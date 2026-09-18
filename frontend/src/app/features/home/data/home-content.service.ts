@@ -45,6 +45,37 @@ const MAROON_GOLD_TEMPLATE = '/invitation-templates/template%205/index.html';
 const DOORWAY_TEMPLATE = '/invitation-templates/template%206/index.html';
 const GOLDEN_PROMISE_TEMPLATE = '/invitation-templates/template%207/index.html';
 
+export interface HeroCard {
+  readonly slotId: string;
+  /** Poster shown before the clip has data, and if it fails to load. */
+  readonly img: string;
+  /** Muted, looping, full-page-scroll capture of the live template — same asset
+   * used by the templates carousel below (see `cardPreview()`). */
+  readonly video: string;
+  readonly title: string;
+  readonly subtitle: string;
+}
+
+const HERO_TEMPLATE_SHOTS = [
+  { slotId: 'tpl-samarpan-royal', templateNo: 1 },
+  { slotId: 'tpl-golden-promise', templateNo: 7 },
+  { slotId: 'tpl-harpreet-ritika', templateNo: 4 },
+  { slotId: 'tpl-karan-nisha', templateNo: 5 },
+] as const;
+
+/**
+ * Card preview media: a muted clip scrolled through the live template end to end
+ * (poster shown until it has data — see `templates-section.component.ts` and
+ * `hero.component.ts`, which both autoplay it). `n` is the
+ * `public/invitation-templates/template N` folder holding `card.mp4` / `card-poster.jpg`.
+ */
+function cardPreview(n: number): { previewVideo: string; previewPoster: string } {
+  return {
+    previewVideo: `/invitation-templates/template%20${n}/card.mp4`,
+    previewPoster: `/invitation-templates/template%20${n}/card-poster.jpg`,
+  };
+}
+
 /**
  * Single source of truth for the marketing homepage content. Isolated from
  * the presentation layer so copy/data can later come from a CMS or API
@@ -112,6 +143,7 @@ export class HomeContentService {
       monogram: 'S',
       photo: COUPLE_PHOTO,
       previewUrl: SAMARPAN_TEMPLATE,
+      ...cardPreview(1),
       ...COUPLE_CREDIT,
     },
     {
@@ -123,6 +155,7 @@ export class HomeContentService {
       monogram: 'E',
       photo: FLOWER_PHOTO,
       previewUrl: ETERNAL_BOND_TEMPLATE,
+      ...cardPreview(2),
       ...FLOWER_CREDIT,
     },
     {
@@ -134,6 +167,7 @@ export class HomeContentService {
       monogram: 'B',
       photo: COUPLE_PHOTO,
       previewUrl: BELOVED_NIKKAH_TEMPLATE,
+      ...cardPreview(3),
       ...COUPLE_CREDIT,
     },
     {
@@ -145,6 +179,7 @@ export class HomeContentService {
       monogram: 'R',
       photo: FLOWER_PHOTO,
       previewUrl: ROSEWOOD_TEMPLATE,
+      ...cardPreview(4),
       ...FLOWER_CREDIT,
     },
     {
@@ -156,6 +191,7 @@ export class HomeContentService {
       monogram: 'K',
       photo: COUPLE_PHOTO,
       previewUrl: MAROON_GOLD_TEMPLATE,
+      ...cardPreview(5),
       ...COUPLE_CREDIT,
     },
     {
@@ -167,6 +203,7 @@ export class HomeContentService {
       monogram: 'D',
       photo: COUPLE_PHOTO,
       previewUrl: DOORWAY_TEMPLATE,
+      ...cardPreview(6),
       ...COUPLE_CREDIT,
     },
     {
@@ -178,6 +215,7 @@ export class HomeContentService {
       monogram: 'G',
       photo: RING_PHOTO,
       previewUrl: GOLDEN_PROMISE_TEMPLATE,
+      ...cardPreview(7),
       ...RING_CREDIT,
     },
   ];
@@ -357,34 +395,19 @@ export class HomeContentService {
     },
   ];
 
-  readonly heroCards = [
-    {
-      id: 'hero-wedding',
-      img: 'assets/images/image-1.jpg',
-      title: 'Elena & James',
-      subtitle: 'Wedding Invitation',
-      credit: COUPLE_CREDIT,
-    },
-    {
-      id: 'hero-engagement',
-      img: 'assets/images/image-2.jpg',
-      title: 'Priya & Rohan',
-      subtitle: 'Engagement Invitation',
-      credit: RING_CREDIT,
-    },
-    {
-      id: 'hero-phone',
-      img: 'assets/images/image-3.jpg',
-      title: 'Save the Date',
-      subtitle: 'Invitation Suite',
-      credit: FLOWER_CREDIT,
-    },
-    {
-      id: 'hero-laptop',
-      img: 'assets/images/image-4.jpg',
-      title: '',
-      subtitle: '',
-      credit: FLOWER_CREDIT,
-    },
-  ] as const;
+  /**
+   * Hero floating cards show real templates, using screenshots of their rendered
+   * pages. Order maps to the card slots: large, right, phone (portrait), laptop.
+   */
+  readonly heroCards: readonly HeroCard[] = HERO_TEMPLATE_SHOTS.map(({ slotId, templateNo }) => {
+    const template = this.templateBySlotId(slotId);
+    const { previewVideo, previewPoster } = cardPreview(templateNo);
+    return {
+      slotId,
+      img: previewPoster,
+      video: previewVideo,
+      title: template?.name ?? '',
+      subtitle: template ? `${template.category} Invitation` : '',
+    };
+  });
 }

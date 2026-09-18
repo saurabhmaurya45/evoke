@@ -1,11 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  type AfterViewInit,
+  type AfterViewChecked,
   type ElementRef,
   inject,
   signal,
   viewChild,
+  viewChildren,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SectionHeadingComponent } from '../../../../shared/components/section-heading/section-heading.component';
@@ -34,19 +35,37 @@ import { TemplateCatalogService } from '../../../templates/data/template-catalog
   templateUrl: './templates-section.component.html',
   styleUrl: './templates-section.component.scss',
 })
-export class TemplatesSectionComponent implements AfterViewInit {
+export class TemplatesSectionComponent implements AfterViewChecked {
   private readonly catalog = inject(TemplateCatalogService);
 
   /** Only published templates reach the public carousel. */
   protected readonly templates = this.catalog.published;
 
   private readonly track = viewChild.required<ElementRef<HTMLElement>>('track');
+  private readonly cardVideos = viewChildren<ElementRef<HTMLVideoElement>>('vid');
+  private readonly startedVideos = new WeakSet<HTMLVideoElement>();
+  private onScrollRun = false;
 
   protected readonly atStart = signal(true);
   protected readonly atEnd = signal(false);
 
-  ngAfterViewInit(): void {
-    this.onScroll();
+  ngAfterViewChecked(): void {
+    if (!this.onScrollRun) {
+      this.onScrollRun = true;
+      this.onScroll();
+    }
+    // The WeakSet only records a *successful* play() (see HeroComponent for why a
+    // rejected attempt needs to stay retryable rather than being marked done).
+    for (const { nativeElement } of this.cardVideos()) {
+      if (this.startedVideos.has(nativeElement) || typeof nativeElement.play !== 'function') {
+        continue;
+      }
+      nativeElement.muted = true;
+      void nativeElement
+        .play()
+        .then(() => this.startedVideos.add(nativeElement))
+        .catch(() => {});
+    }
   }
 
   /** Page the track by one viewport width. `direction` is -1 (back) or 1 (forward). */

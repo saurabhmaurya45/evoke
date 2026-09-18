@@ -1,4 +1,16 @@
-import { ChangeDetectionStrategy, Component, type OnInit, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  type AfterViewChecked,
+  type AfterViewInit,
+  type ElementRef,
+  type OnInit,
+  computed,
+  inject,
+  signal,
+  viewChildren,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TemplateCatalogService, formatPrice } from '../../data/template-catalog.service';
 import type { CatalogTemplate } from '../../data/template-catalog.service';
@@ -23,9 +35,12 @@ type Filter = string;
   templateUrl: './template-gallery.component.html',
   styleUrl: './template-gallery.component.scss',
 })
-export class TemplateGalleryComponent implements OnInit {
+export class TemplateGalleryComponent implements OnInit, AfterViewInit, AfterViewChecked {
   private readonly seo = inject(SeoService);
   private readonly catalog = inject(TemplateCatalogService);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly cardVideos = viewChildren<ElementRef<HTMLVideoElement>>('vid');
+  private startedVideos = new WeakSet<HTMLVideoElement>();
 
   /** Only published templates are public. */
   protected readonly all = this.catalog.published;
@@ -80,6 +95,44 @@ export class TemplateGalleryComponent implements OnInit {
         genre: template.category,
       })),
     });
+  }
+
+  /** Gates play attempts until the post-hydration nudge burst (below) has finished. */
+  private settled = false;
+
+  ngAfterViewInit(): void {
+    // This page is prerendered, so Angular hydrates onto server-rendered <video>
+    // nodes. Hydration re-applies bound attributes (incl. the <source src>) once on
+    // the client even when the value is unchanged, which the browser treats as a new
+    // media resource and aborts any play() already in flight for it ("AbortError:
+    // the media was removed from the document") — and every markForCheck below is
+    // itself another re-application, so attempting play() *during* this burst would
+    // just keep re-triggering the same abort. Let the burst run undisturbed first
+    // (forcing whatever re-applications are coming to happen now), then make one
+    // clean attempt per video afterward, once nothing is left to interrupt it.
+    let ticks = 0;
+    const id = setInterval(() => {
+      this.cdr.markForCheck();
+      if (++ticks < 10) return;
+      clearInterval(id);
+      this.settled = true;
+      this.cdr.markForCheck();
+    }, 100);
+  }
+
+  ngAfterViewChecked(): void {
+    if (!this.settled) return;
+    // Filtering/search adds cards well after the initial render too — this also
+    // covers those, now that the startup race above has settled. The WeakSet keeps
+    // already-playing clips from having play() called again on every CD pass.
+    for (const { nativeElement } of this.cardVideos()) {
+      if (this.startedVideos.has(nativeElement) || typeof nativeElement.play !== 'function') {
+        continue;
+      }
+      this.startedVideos.add(nativeElement);
+      nativeElement.muted = true;
+      void nativeElement.play().catch(() => {});
+    }
   }
 
   protected onSearch(event: Event): void {

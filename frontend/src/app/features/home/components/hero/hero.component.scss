@@ -210,6 +210,10 @@
 }
 
 .hero__card-inner {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
   background: linear-gradient(135deg, rgba(var(--glass-rgb), 0.1), rgba(var(--glass-rgb), 0.03));
   border: 1px solid rgba(var(--glass-rgb), 0.14);
   backdrop-filter: blur(20px);
@@ -217,23 +221,28 @@
   box-shadow: $shadow-card;
 }
 
-.hero__card--1 app-image-slot,
-.hero__card--2 app-image-slot {
+.hero__card-media {
   display: block;
+  width: 100%;
+  object-fit: cover;
+  border-radius: var(--radius, 14px);
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.hero__card--1 .hero__card-media,
+.hero__card--2 .hero__card-media {
   height: 130px;
 }
 
-.hero__card--2 app-image-slot {
+.hero__card--2 .hero__card-media {
   height: 110px;
 }
 
-.hero__card--3 app-image-slot {
-  display: block;
+.hero__card--3 .hero__card-media {
   height: 180px;
 }
 
-.hero__card--4 app-image-slot {
-  display: block;
+.hero__card--4 .hero__card-media {
   height: 110px;
 }
 

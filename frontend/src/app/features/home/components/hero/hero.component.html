@@ -47,60 +47,37 @@
 
   <!-- Floating preview cards -->
   <div class="hero__stage">
-    <div class="hero__card hero__card--1" #floatCard>
-      <div class="hero__card-inner">
-        <app-image-slot
-          [src]="content.heroCards[0].img"
-          alt="Wedding invitation preview"
-          [radius]="14"
-          [credit]="content.heroCards[0].credit.credit"
-          [creditHref]="content.heroCards[0].credit.creditHref"
-          priority
-        />
-        <div class="hero__card-title">{{ content.heroCards[0].title }}</div>
-        <div class="hero__card-sub">{{ content.heroCards[0].subtitle }}</div>
+    @for (card of content.heroCards; track card.slotId; let i = $index) {
+      <div class="hero__card" [class]="'hero__card--' + (i + 1)" #floatCard>
+        <a
+          class="hero__card-inner"
+          [routerLink]="['/preview', card.slotId]"
+          [attr.aria-label]="'Preview the ' + card.title + ' template'"
+        >
+          <!-- Live capture of the real template, scrolled end-to-end — same clip the
+               templates carousel uses. Hero cards are above the fold, so all four
+               autoplay immediately rather than waiting on hover/viewport. -->
+          <video
+            #vid
+            class="hero__card-media"
+            [style.--radius.px]="cardRadii[i]"
+            [poster]="card.img"
+            [attr.aria-label]="card.title + ' template preview'"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+          >
+            <source [src]="card.video" type="video/mp4" />
+          </video>
+          <!-- The laptop-style card (4th) is media-only by design. -->
+          @if (i < 3) {
+            <div class="hero__card-title">{{ card.title }}</div>
+            <div class="hero__card-sub">{{ card.subtitle }}</div>
+          }
+        </a>
       </div>
-    </div>
-
-    <div class="hero__card hero__card--2" #floatCard>
-      <div class="hero__card-inner">
-        <app-image-slot
-          [src]="content.heroCards[1].img"
-          alt="Engagement invitation preview"
-          [radius]="14"
-          [credit]="content.heroCards[1].credit.credit"
-          [creditHref]="content.heroCards[1].credit.creditHref"
-          priority
-        />
-        <div class="hero__card-title">{{ content.heroCards[1].title }}</div>
-        <div class="hero__card-sub">{{ content.heroCards[1].subtitle }}</div>
-      </div>
-    </div>
-
-    <div class="hero__card hero__card--3" #floatCard>
-      <div class="hero__card-inner">
-        <app-image-slot
-          [src]="content.heroCards[2].img"
-          alt="Save the date phone mockup"
-          [radius]="20"
-          [credit]="content.heroCards[2].credit.credit"
-          [creditHref]="content.heroCards[2].credit.creditHref"
-        />
-        <div class="hero__card-title">{{ content.heroCards[2].title }}</div>
-        <div class="hero__card-sub">{{ content.heroCards[2].subtitle }}</div>
-      </div>
-    </div>
-
-    <div class="hero__card hero__card--4" #floatCard>
-      <div class="hero__card-inner">
-        <app-image-slot
-          [src]="content.heroCards[3].img"
-          alt="Invitation website laptop mockup"
-          [radius]="10"
-          [credit]="content.heroCards[3].credit.credit"
-          [creditHref]="content.heroCards[3].credit.creditHref"
-        />
-      </div>
-    </div>
+    }
   </div>
 </section>

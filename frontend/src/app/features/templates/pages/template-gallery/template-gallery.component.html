@@ -40,13 +40,30 @@
         <article class="card" appTilt [style.--accent]="tpl.accent">
           <div class="card__preview" [style.background]="tpl.wash">
             <span class="card__monogram" aria-hidden="true">{{ tpl.monogram }}</span>
-            <app-image-slot
-              [src]="tpl.photo"
-              [alt]="tpl.name + ' template preview'"
-              [radius]="20"
-              [credit]="tpl.credit"
-              [creditHref]="tpl.creditHref"
-            />
+            @if (tpl.previewVideo) {
+              <!-- Live capture of the real template, scrolled end-to-end. Autoplays muted. -->
+              <video
+                #vid
+                class="card__media"
+                [poster]="tpl.previewPoster ?? tpl.photo"
+                [attr.aria-label]="tpl.name + ' template preview'"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="auto"
+              >
+                <source [src]="tpl.previewVideo" type="video/mp4" />
+              </video>
+            } @else {
+              <app-image-slot
+                [src]="tpl.photo"
+                [alt]="tpl.name + ' template preview'"
+                [radius]="20"
+                [credit]="tpl.credit"
+                [creditHref]="tpl.creditHref"
+              />
+            }
             <span class="card__badge">
               <span class="card__badge-dot" [style.background]="tpl.accent"></span>
               {{ tpl.category }}

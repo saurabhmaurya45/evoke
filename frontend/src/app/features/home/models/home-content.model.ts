@@ -33,6 +33,10 @@ export interface TemplateCard extends ImageCredit {
   readonly photo: string;
   /** URL of the full, rendered invitation template shown in the preview. */
   readonly previewUrl: string;
+  /** Muted looping clip of the live template, played on hover/focus. Falls back to `photo` when absent. */
+  readonly previewVideo?: string;
+  /** Poster frame for `previewVideo` — shown at rest and while the clip loads. */
+  readonly previewPoster?: string;
 }
 
 export interface FeatureItem {
