@@ -1,0 +1,71 @@
+name: Deploy backend to Vercel
+
+# Production-only: every push to main that touches the backend lints, tests,
+# then deploys to Vercel as a Python serverless function. Independent of the
+# frontend workflow — each deploys only when its own path changes.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - ".github/workflows/deploy-backend.yml"
+  workflow_dispatch: {}
+
+defaults:
+  run:
+    working-directory: backend
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  # Separate Vercel project from the frontend's — each app gets its own
+  # PROJECT_ID secret so they deploy independently.
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_BACKEND_PROJECT_ID }}
+
+jobs:
+  deploy:
+    name: Lint, test, and deploy
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: deploy-backend-production
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Lint
+        run: ruff check .
+
+      # GitHub-hosted runners ship Docker, so the testcontainers-backed
+      # Postgres suite runs for real here (unlike a sandbox with no Docker).
+      - name: Test
+        run: pytest
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      # `vercel build` + `deploy --prebuilt` (rather than `vercel deploy`) so
+      # Vercel's own Python build produces the Build Output API artifact.
+      - name: Pull Vercel project settings
+        run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build on Vercel
+        run: vercel build --prod --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel
+        run: vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}

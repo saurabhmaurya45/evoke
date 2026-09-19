@@ -28,4 +28,4 @@ async def logout(current_user: User = Depends(get_current_user)) -> None:
     application-facing auth contract stable and as a hook for future server-side
     revocation (e.g. admin-forced logout) without requiring a frontend contract change.
     """
-    return None
+    return

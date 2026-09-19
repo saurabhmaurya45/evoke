@@ -95,8 +95,18 @@ WEDDING_SCHEMA = {
     "couple": {
         "type": "object",
         "properties": {
-            "name_1": {"type": "string", "minLength": 1, "maxLength": 100, "title": "Partner 1 Name"},
-            "name_2": {"type": "string", "minLength": 1, "maxLength": 100, "title": "Partner 2 Name"},
+            "name_1": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100,
+                "title": "Partner 1 Name",
+            },
+            "name_2": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100,
+                "title": "Partner 2 Name",
+            },
             "nickname": {"type": "string", "maxLength": 100, "title": "Couple Nickname (optional)"},
         },
         "required": ["name_1", "name_2"],

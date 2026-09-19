@@ -13,7 +13,9 @@ router = APIRouter(prefix="/v1/users", tags=["users"])
 
 
 @router.get("/me", response_model=Envelope[UserProfileOut])
-async def get_my_profile(current_user: User = Depends(get_current_user)) -> Envelope[UserProfileOut]:
+async def get_my_profile(
+    current_user: User = Depends(get_current_user),
+) -> Envelope[UserProfileOut]:
     return Envelope(data=UserProfileOut.model_validate(current_user))
 
 

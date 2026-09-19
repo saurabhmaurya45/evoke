@@ -9,14 +9,14 @@ from app.shared.audit import log_action
 from app.shared.errors import ConflictError, NotFoundError, ValidationFailedError
 from app.shared.pagination import Page, PageParams, make_page
 from app.templates.models import (
+    Category,
+    Currency,
+    PricingModel,
+    StorefrontStatus,
     Template,
     TemplateStatus,
     TemplateVersion,
     TemplateVersionStatus,
-    Category,
-    Currency,
-    StorefrontStatus,
-    PricingModel,
 )
 from app.templates.schemas import (
     CategoryCreate,
@@ -35,7 +35,7 @@ async def list_categories(db: AsyncSession) -> list[Category]:
     """List all active categories."""
     result = await db.execute(
         select(Category)
-        .where(Category.is_active == True)
+        .where(Category.is_active)
         .order_by(Category.display_order)
     )
     return list(result.scalars().all())
@@ -114,7 +114,7 @@ async def delete_category(db: AsyncSession, admin_user: User, category_id: uuid.
 async def list_currencies(db: AsyncSession) -> list[Currency]:
     """List all active currencies."""
     result = await db.execute(
-        select(Currency).where(Currency.is_active == True).order_by(Currency.code)
+        select(Currency).where(Currency.is_active).order_by(Currency.code)
     )
     return list(result.scalars().all())
 
@@ -207,7 +207,9 @@ async def list_templates(
     if search:
         filters.append(Template.name.ilike(f"%{search}%"))
 
-    total = (await db.execute(select(func.count()).select_from(Template).where(*filters))).scalar_one()
+    total = (
+        await db.execute(select(func.count()).select_from(Template).where(*filters))
+    ).scalar_one()
 
     stmt = (
         select(Template)
@@ -343,7 +345,9 @@ async def create_template_version(
 
     max_version = (
         await db.execute(
-            select(func.max(TemplateVersion.version)).where(TemplateVersion.template_id == template_id)
+            select(func.max(TemplateVersion.version)).where(
+                TemplateVersion.template_id == template_id
+            )
         )
     ).scalar_one()
     next_version = (max_version or 0) + 1
@@ -389,7 +393,9 @@ async def list_template_versions(
     return list(result.scalars().all())
 
 
-async def _get_version(db: AsyncSession, template_id: uuid.UUID, version: int) -> TemplateVersion | None:
+async def _get_version(
+    db: AsyncSession, template_id: uuid.UUID, version: int
+) -> TemplateVersion | None:
     result = await db.execute(
         select(TemplateVersion).where(
             TemplateVersion.template_id == template_id, TemplateVersion.version == version

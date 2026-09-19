@@ -67,14 +67,14 @@ async def list_my_sites(db: AsyncSession, user: User, params: PageParams) -> Pag
     event_ids = [e.id for e in events]
     drafts_by_event: dict[uuid.UUID, Draft] = {}
     if event_ids:
-        draft_rows = (await db.execute(select(Draft).where(Draft.event_id.in_(event_ids)))).scalars().all()
-        drafts_by_event = {d.event_id: d for d in draft_rows}
+        draft_result = await db.execute(select(Draft).where(Draft.event_id.in_(event_ids)))
+        drafts_by_event = {d.event_id: d for d in draft_result.scalars().all()}
 
     template_slugs: dict[uuid.UUID, str] = {}
     template_ids = {d.template_id for d in drafts_by_event.values() if d.template_id}
     if template_ids:
-        tpl_rows = (await db.execute(select(Template).where(Template.id.in_(template_ids)))).scalars().all()
-        template_slugs = {t.id: t.slug for t in tpl_rows}
+        tpl_result = await db.execute(select(Template).where(Template.id.in_(template_ids)))
+        template_slugs = {t.id: t.slug for t in tpl_result.scalars().all()}
 
     items = []
     for event in events:

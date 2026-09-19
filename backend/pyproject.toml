@@ -40,6 +40,21 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+# Generated, frozen historical artifacts — not hand-maintained, so not linted.
+extend-exclude = ["alembic/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RET", "BLE", "RUF"]
+ignore = [
+    # FastAPI's own dependency injection idiom (`= Depends(...)` in a
+    # parameter default) — that's the framework's intended pattern, not a bug.
+    "B008",
+    # `class X(str, enum.Enum)` -> `enum.StrEnum` is a style preference, not a
+    # bug; every enum model uses the str+Enum form deliberately (SQLAlchemy
+    # `Enum(...)` columns and Pydantic both key off it), so a repo-wide base-
+    # class rewrite isn't worth the churn/risk for this alone.
+    "UP042",
+]
 
 [tool.mypy]
 python_version = "3.11"

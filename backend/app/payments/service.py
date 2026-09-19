@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 from urllib.parse import urlencode
 
@@ -84,7 +84,7 @@ async def start_checkout(
         event = await publish_event(db, event.id, user)
         return CheckoutOut(payment_required=False, event=EventOut.model_validate(event))
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     reusable = (
         await db.execute(
             select(Payment)
@@ -208,7 +208,7 @@ async def mark_paid(db: AsyncSession, payment: Payment, provider_payment_id: str
         return event
 
     payment.status = PaymentStatus.PAID
-    payment.paid_at = datetime.now(timezone.utc)
+    payment.paid_at = datetime.now(UTC)
     if provider_payment_id:
         payment.provider_payment_id = provider_payment_id
     await log_action(
@@ -333,7 +333,9 @@ async def handle_webhook(
 
     if payment.status == PaymentStatus.CREATED:
         payment.status = (
-            PaymentStatus.EXPIRED if event_name == "payment_link.expired" else PaymentStatus.CANCELLED
+            PaymentStatus.EXPIRED
+            if event_name == "payment_link.expired"
+            else PaymentStatus.CANCELLED
         )
         await db.commit()
     else:

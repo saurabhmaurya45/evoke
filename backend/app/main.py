@@ -31,7 +31,9 @@ app = FastAPI(
         },
         {
             "name": "template-categories",
-            "description": "Categories used to group templates by event type (e.g. Wedding, Birthday).",
+            "description": (
+                "Categories used to group templates by event type (e.g. Wedding, Birthday)."
+            ),
         },
         {
             "name": "template-currencies",
@@ -79,6 +81,6 @@ async def ready(db: AsyncSession = Depends(get_db)) -> dict:
     try:
         await db.execute(text("SELECT 1"))
         db_ok = True
-    except Exception:
+    except Exception:  # noqa: BLE001 — any DB failure means "degraded", not a crash
         db_ok = False
     return {"status": "ok" if db_ok else "degraded", "database": db_ok}

@@ -12,6 +12,8 @@ itself is defined once here and reused everywhere. Compose with `merge(...)`:
 
 from typing import Any
 
+from pydantic import Field
+
 from app.shared.schema import CamelModel
 
 
@@ -19,7 +21,7 @@ class ErrorDetail(CamelModel):
     code: str
     message: str
     request_id: str
-    details: dict[str, Any] = {}
+    details: dict[str, Any] = Field(default_factory=dict)
 
 
 class ErrorEnvelope(CamelModel):

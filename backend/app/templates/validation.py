@@ -112,7 +112,10 @@ def _check_security(value: Any, *, path: str) -> list[dict[str, str]]:
     if isinstance(value, str):
         if len(value) > _MAX_STRING_LENGTH:
             violations.append(
-                {"path": path, "message": f"exceeds maximum length of {_MAX_STRING_LENGTH} characters."}
+                {
+                    "path": path,
+                    "message": f"exceeds maximum length of {_MAX_STRING_LENGTH} characters.",
+                }
             )
             return violations
         if "\x00" in value:

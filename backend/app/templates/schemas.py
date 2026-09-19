@@ -6,10 +6,10 @@ from pydantic import Field, model_validator
 
 from app.shared.schema import CamelModel
 from app.templates.models import (
+    PricingModel,
+    StorefrontStatus,
     TemplateStatus,
     TemplateVersionStatus,
-    StorefrontStatus,
-    PricingModel,
 )
 
 
@@ -20,20 +20,30 @@ class CategoryOut(CamelModel):
     slug: str = Field(description="Unique, URL-safe identifier, e.g. 'wedding'.")
     name: str = Field(description="Display name, e.g. 'Wedding'.")
     description: str | None = Field(default=None, description="Optional longer description.")
-    icon_url: str | None = Field(default=None, description="URL of an icon representing the category.")
+    icon_url: str | None = Field(
+        default=None, description="URL of an icon representing the category."
+    )
     display_order: int = Field(description="Sort order for gallery filters — ascending.")
-    is_active: bool = Field(description="False if the category has been deactivated (soft-deleted).")
+    is_active: bool = Field(
+        description="False if the category has been deactivated (soft-deleted)."
+    )
     created_at: datetime
 
 
 class CategoryCreate(CamelModel):
     """ADMIN-only body — enforced by the router dependency, not here."""
 
-    slug: str = Field(description="Unique, URL-safe identifier, e.g. 'wedding'. Must not already exist.")
+    slug: str = Field(
+        description="Unique, URL-safe identifier, e.g. 'wedding'. Must not already exist."
+    )
     name: str = Field(description="Display name, e.g. 'Wedding'.")
     description: str | None = Field(default=None, description="Optional longer description.")
-    icon_url: str | None = Field(default=None, description="URL of an icon representing the category.")
-    display_order: int = Field(default=0, description="Sort order for gallery filters — ascending.")
+    icon_url: str | None = Field(
+        default=None, description="URL of an icon representing the category."
+    )
+    display_order: int = Field(
+        default=0, description="Sort order for gallery filters — ascending."
+    )
 
 
 class CategoryUpdate(CamelModel):
@@ -41,8 +51,12 @@ class CategoryUpdate(CamelModel):
 
     name: str | None = Field(default=None, description="Display name, e.g. 'Wedding'.")
     description: str | None = Field(default=None, description="Optional longer description.")
-    icon_url: str | None = Field(default=None, description="URL of an icon representing the category.")
-    display_order: int | None = Field(default=None, description="Sort order for gallery filters — ascending.")
+    icon_url: str | None = Field(
+        default=None, description="URL of an icon representing the category."
+    )
+    display_order: int | None = Field(
+        default=None, description="Sort order for gallery filters — ascending."
+    )
     is_active: bool | None = Field(
         default=None, description="Set to false to deactivate without deleting."
     )
@@ -56,7 +70,9 @@ class CurrencyOut(CamelModel):
     name: str = Field(description="Display name, e.g. 'US Dollar'.")
     symbol: str = Field(description="Display symbol, e.g. '$'.")
     minor_unit: int = Field(description="Decimal places in minor-unit amounts, e.g. 2 for cents.")
-    is_active: bool = Field(description="False if the currency has been deactivated (soft-deleted).")
+    is_active: bool = Field(
+        description="False if the currency has been deactivated (soft-deleted)."
+    )
     created_at: datetime
 
 
@@ -93,15 +109,19 @@ class TemplateCreate(CamelModel):
     slug: str = Field(description="Unique, URL-safe identifier. Must not already exist.")
     name: str = Field(description="Display name shown in the gallery.")
     description: str | None = Field(default=None, description="Optional marketing description.")
-    category_id: uuid.UUID | None = Field(default=None, description="Category to file this template under.")
+    category_id: uuid.UUID | None = Field(
+        default=None, description="Category to file this template under."
+    )
     pricing_model: PricingModel = Field(
         default=PricingModel.FREE, description="FREE or PAID."
     )
     price_amount_minor: int | None = Field(
-        default=None, description="Price in minor units (e.g. cents). Required only when pricingModel=PAID."
+        default=None,
+        description="Price in minor units (e.g. cents). Required only when pricingModel=PAID.",
     )
     currency_id: uuid.UUID | None = Field(
-        default=None, description="Currency for price_amount_minor. Required only when pricingModel=PAID."
+        default=None,
+        description="Currency for price_amount_minor. Required only when pricingModel=PAID.",
     )
     thumbnail_url: str | None = Field(default=None, description="Gallery thumbnail image URL.")
     preview_url: str | None = Field(default=None, description="Full-size preview image/link URL.")
@@ -116,7 +136,9 @@ class TemplateCreate(CamelModel):
             if self.currency_id is None:
                 raise ValueError("currencyId is required when pricingModel is PAID.")
         elif self.price_amount_minor is not None or self.currency_id is not None:
-            raise ValueError("priceAmountMinor and currencyId must not be set when pricingModel is FREE.")
+            raise ValueError(
+                "priceAmountMinor and currencyId must not be set when pricingModel is FREE."
+            )
         return self
 
 
@@ -129,7 +151,9 @@ class TemplateUpdate(CamelModel):
 
     name: str | None = Field(default=None, description="Display name shown in the gallery.")
     description: str | None = Field(default=None, description="Optional marketing description.")
-    category_id: uuid.UUID | None = Field(default=None, description="Category to file this template under.")
+    category_id: uuid.UUID | None = Field(
+        default=None, description="Category to file this template under."
+    )
     storefront_status: StorefrontStatus | None = Field(
         default=None,
         description="LISTED (visible in public gallery) or UNLISTED. Use this to unpublish "
@@ -150,13 +174,13 @@ class TemplateUpdate(CamelModel):
         if self.price_amount_minor is not None and self.price_amount_minor <= 0:
             raise ValueError("priceAmountMinor must be positive.")
         fields_set = self.model_fields_set
-        if self.pricing_model == PricingModel.FREE:
-            if ("price_amount_minor" in fields_set and self.price_amount_minor is not None) or (
-                "currency_id" in fields_set and self.currency_id is not None
-            ):
-                raise ValueError(
-                    "priceAmountMinor and currencyId must not be set when pricingModel is FREE."
-                )
+        if self.pricing_model == PricingModel.FREE and (
+            ("price_amount_minor" in fields_set and self.price_amount_minor is not None)
+            or ("currency_id" in fields_set and self.currency_id is not None)
+        ):
+            raise ValueError(
+                "priceAmountMinor and currencyId must not be set when pricingModel is FREE."
+            )
         return self
 
 
@@ -217,7 +241,9 @@ class TemplateVersionCreate(CamelModel):
     structures) applied to end-user submissions — see `app.templates.validation`.
     """
 
-    schema_version: int = Field(description="Version of the schema format this version's `schema` conforms to.")
+    schema_version: int = Field(
+        description="Version of the schema format this version's `schema` conforms to."
+    )
     protocol_version: int = Field(
         default=1, description="Version of the rendering protocol the frontend editor should use."
     )
@@ -243,7 +269,9 @@ class TemplateVersionOut(CamelModel):
 
     id: uuid.UUID
     template_id: uuid.UUID
-    version: int = Field(description="Sequential version number, starting at 1, unique per template.")
+    version: int = Field(
+        description="Sequential version number, starting at 1, unique per template."
+    )
     schema_version: int
     protocol_version: int
     template_schema: dict[str, Any] = Field(alias="schema")

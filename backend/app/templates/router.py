@@ -6,21 +6,28 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.shared.auth.dependencies import get_current_user_optional, require_role
 from app.shared.database import get_db
 from app.shared.envelope import Envelope
-from app.shared.openapi_responses import FORBIDDEN, UNAUTHORIZED, conflict, merge, not_found, validation_failed
+from app.shared.openapi_responses import (
+    FORBIDDEN,
+    UNAUTHORIZED,
+    conflict,
+    merge,
+    not_found,
+    validation_failed,
+)
 from app.shared.pagination import Page, PageParams, page_params
 from app.templates.schemas import (
-    TemplateCreate,
-    TemplateOut,
-    TemplateGalleryOut,
-    TemplateUpdate,
-    TemplateVersionCreate,
-    TemplateVersionOut,
     CategoryCreate,
     CategoryOut,
     CategoryUpdate,
     CurrencyCreate,
     CurrencyOut,
     CurrencyUpdate,
+    TemplateCreate,
+    TemplateGalleryOut,
+    TemplateOut,
+    TemplateUpdate,
+    TemplateVersionCreate,
+    TemplateVersionOut,
 )
 from app.templates.service import (
     create_category,

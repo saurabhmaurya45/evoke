@@ -23,7 +23,11 @@ class FakeRazorpayClient(RazorpayClient):
     async def create_payment_link(self, **kwargs):
         self.created.append(kwargs)
         n = len(self.created)
-        return {"id": f"plink_test{n}", "short_url": f"https://rzp.io/i/test{n}", "status": "created"}
+        return {
+            "id": f"plink_test{n}",
+            "short_url": f"https://rzp.io/i/test{n}",
+            "status": "created",
+        }
 
 
 @pytest.fixture

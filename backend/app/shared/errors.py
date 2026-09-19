@@ -54,7 +54,9 @@ class ConflictError(AppError):
 
 class ValidationFailedError(AppError):
     def __init__(self, message: str, details: dict[str, Any] | None = None) -> None:
-        super().__init__("VALIDATION_FAILED", message, status.HTTP_422_UNPROCESSABLE_ENTITY, details)
+        super().__init__(
+            "VALIDATION_FAILED", message, status.HTTP_422_UNPROCESSABLE_ENTITY, details
+        )
 
 
 class PaymentRequiredError(AppError):
@@ -119,7 +121,9 @@ def register_error_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(RequestValidationError)
-    async def handle_validation_error(request: Request, exc: RequestValidationError) -> JSONResponse:
+    async def handle_validation_error(
+        request: Request, exc: RequestValidationError
+    ) -> JSONResponse:
         request_id = getattr(request.state, "request_id", "unknown")
         return JSONResponse(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
