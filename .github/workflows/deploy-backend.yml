@@ -36,7 +36,10 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          # Latest stable. pyproject.toml's requires-python stays >=3.11 (the
+          # actual compatibility floor) — this just runs CI on the newest
+          # version so a forward-compat break surfaces here first.
+          python-version: "3.14"
           cache: "pip"
 
       - name: Install dependencies
