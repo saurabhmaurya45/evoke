@@ -441,7 +441,13 @@ async def get_template_version_route(
     tags=["templates"],
     summary="Create a new template version",
     responses=merge(
-        UNAUTHORIZED, FORBIDDEN, not_found("TEMPLATE_NOT_FOUND", "Template not found.")
+        UNAUTHORIZED,
+        FORBIDDEN,
+        not_found("TEMPLATE_NOT_FOUND", "Template not found."),
+        validation_failed(
+            "schema is not a valid JSON Schema, or defaults does not conform to schema, or "
+            "either contains disallowed markup/script content or an oversized/too-deep structure."
+        ),
     ),
 )
 async def create_template_version_route(
@@ -456,6 +462,13 @@ async def create_template_version_route(
     (max existing version + 1, starting at 1) — it is not caller-supplied.
     The new version starts as `status=DRAFT` and is invisible to non-admins
     until published. Returns `404` if the template doesn't exist.
+
+    `schema` is validated as a syntactically valid JSON Schema, and if
+    `defaults` is provided it is validated against `schema` and scanned for
+    disallowed content (HTML/script markup, dangerous URI schemes, oversized
+    or too-deeply-nested structures) — the same engine end-user submissions
+    will be checked against. A `422` here means the template itself was
+    authored incorrectly, before any user ever sees it.
     """
     version = await create_template_version(db, admin_user, template_id, data)
     return Envelope(data=TemplateVersionOut.model_validate(version))

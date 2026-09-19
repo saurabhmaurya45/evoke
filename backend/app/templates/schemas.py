@@ -207,7 +207,12 @@ class TemplateVersionCreate(CamelModel):
     """ADMIN-only body. The caller supplies these explicitly — the backend does not
     guess schema/protocol versions or the defaults.
 
-    The version number itself is assigned automatically by the server."""
+    The version number itself is assigned automatically by the server. `schema`
+    must itself be a valid JSON Schema (Draft 2020-12), and if `defaults` is
+    provided it must validate against `schema` and pass the same security checks
+    (no markup/script content, no dangerous URI schemes, no oversized/too-deep
+    structures) applied to end-user submissions — see `app.templates.validation`.
+    """
 
     schema_version: int = Field(description="Version of the schema format this version's `schema` conforms to.")
     protocol_version: int = Field(
@@ -216,10 +221,14 @@ class TemplateVersionCreate(CamelModel):
     # Renamed from `schema` on the Python side only — that name shadows a deprecated
     # BaseModel.schema() classmethod. The JSON field stays "schema" via the alias.
     template_schema: dict[str, Any] = Field(
-        alias="schema", description="JSON Schema describing the editable fields for this template."
+        alias="schema",
+        description="JSON Schema (Draft 2020-12) describing the editable fields for this template. "
+        "Must itself be a syntactically valid JSON Schema.",
     )
     defaults: dict[str, Any] | None = Field(
-        default=None, description="Default field values pre-filled when a user starts from this template."
+        default=None,
+        description="Default field values pre-filled when a user starts from this template. "
+        "Must validate against `schema` if provided.",
     )
     capabilities: dict[str, Any] = Field(
         default_factory=dict, description="Feature flags describing what this version supports."

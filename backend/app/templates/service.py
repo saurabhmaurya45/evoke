@@ -27,6 +27,7 @@ from app.templates.schemas import (
     TemplateUpdate,
     TemplateVersionCreate,
 )
+from app.templates.validation import validate_instance, validate_schema_definition
 from app.users.models import User
 
 
@@ -335,6 +336,10 @@ async def create_template_version(
     db: AsyncSession, admin_user: User, template_id: uuid.UUID, data: TemplateVersionCreate
 ) -> TemplateVersion:
     await get_template(db, template_id)  # 404s if the template doesn't exist
+
+    validate_schema_definition(data.template_schema)
+    if data.defaults is not None:
+        validate_instance(data.template_schema, data.defaults, field_label="defaults", partial=True)
 
     max_version = (
         await db.execute(
