@@ -55,6 +55,15 @@ async def test_public_list_only_shows_active_templates(client, db_session, auth_
     assert republish_resp.status_code == 200
     assert republish_resp.json()["data"]["status"] == "PUBLISHED"
 
+    # A template starts UNLISTED (storefront visibility is commercial, not
+    # catalog readiness) — publishing a version alone doesn't list it, the
+    # admin still has to opt it into the public gallery explicitly.
+    list_resp = await client.patch(
+        f"/v1/templates/{template_id}", headers=admin_headers, json={"storefrontStatus": "LISTED"}
+    )
+    assert list_resp.status_code == 200
+    assert list_resp.json()["data"]["storefrontStatus"] == "LISTED"
+
     after_resp = await client.get("/v1/templates")
     ids = [t["id"] for t in after_resp.json()["data"]]
     assert template_id in ids
