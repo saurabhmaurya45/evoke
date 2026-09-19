@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from app.shared.schema import CamelModel
 from app.templates.models import (
@@ -106,12 +106,30 @@ class TemplateCreate(CamelModel):
     thumbnail_url: str | None = Field(default=None, description="Gallery thumbnail image URL.")
     preview_url: str | None = Field(default=None, description="Full-size preview image/link URL.")
 
+    @model_validator(mode="after")
+    def _validate_pricing(self) -> "TemplateCreate":
+        if self.pricing_model == PricingModel.PAID:
+            if self.price_amount_minor is None or self.price_amount_minor <= 0:
+                raise ValueError(
+                    "priceAmountMinor is required and must be positive when pricingModel is PAID."
+                )
+            if self.currency_id is None:
+                raise ValueError("currencyId is required when pricingModel is PAID.")
+        elif self.price_amount_minor is not None or self.currency_id is not None:
+            raise ValueError("priceAmountMinor and currencyId must not be set when pricingModel is FREE.")
+        return self
+
 
 class TemplateUpdate(CamelModel):
-    """ADMIN-only partial update. Only provided fields are applied."""
+    """ADMIN-only partial update. Only provided fields are applied.
+
+    Cross-field pricing invariants (PAID requires priceAmountMinor + currencyId)
+    are enforced against the template's final merged state in the service layer,
+    since a partial payload alone doesn't know the template's current values."""
 
     name: str | None = Field(default=None, description="Display name shown in the gallery.")
     description: str | None = Field(default=None, description="Optional marketing description.")
+    category_id: uuid.UUID | None = Field(default=None, description="Category to file this template under.")
     storefront_status: StorefrontStatus | None = Field(
         default=None,
         description="LISTED (visible in public gallery) or UNLISTED. Use this to unpublish "
@@ -121,8 +139,25 @@ class TemplateUpdate(CamelModel):
     price_amount_minor: int | None = Field(
         default=None, description="Price in minor units (e.g. cents)."
     )
+    currency_id: uuid.UUID | None = Field(
+        default=None, description="Currency for price_amount_minor."
+    )
     thumbnail_url: str | None = Field(default=None, description="Gallery thumbnail image URL.")
     preview_url: str | None = Field(default=None, description="Full-size preview image/link URL.")
+
+    @model_validator(mode="after")
+    def _validate_pricing(self) -> "TemplateUpdate":
+        if self.price_amount_minor is not None and self.price_amount_minor <= 0:
+            raise ValueError("priceAmountMinor must be positive.")
+        fields_set = self.model_fields_set
+        if self.pricing_model == PricingModel.FREE:
+            if ("price_amount_minor" in fields_set and self.price_amount_minor is not None) or (
+                "currency_id" in fields_set and self.currency_id is not None
+            ):
+                raise ValueError(
+                    "priceAmountMinor and currencyId must not be set when pricingModel is FREE."
+                )
+        return self
 
 
 class TemplateOut(CamelModel):
@@ -175,7 +210,12 @@ class TemplateVersionCreate(CamelModel):
     """ADMIN-only body. The caller supplies these explicitly — the backend does not
     guess schema/protocol versions or the defaults.
 
-    The version number itself is assigned automatically by the server."""
+    The version number itself is assigned automatically by the server. `schema`
+    must itself be a valid JSON Schema (Draft 2020-12), and if `defaults` is
+    provided it must validate against `schema` and pass the same security checks
+    (no markup/script content, no dangerous URI schemes, no oversized/too-deep
+    structures) applied to end-user submissions — see `app.templates.validation`.
+    """
 
     schema_version: int = Field(description="Version of the schema format this version's `schema` conforms to.")
     protocol_version: int = Field(
@@ -184,10 +224,14 @@ class TemplateVersionCreate(CamelModel):
     # Renamed from `schema` on the Python side only — that name shadows a deprecated
     # BaseModel.schema() classmethod. The JSON field stays "schema" via the alias.
     template_schema: dict[str, Any] = Field(
-        alias="schema", description="JSON Schema describing the editable fields for this template."
+        alias="schema",
+        description="JSON Schema (Draft 2020-12) describing the editable fields for this template. "
+        "Must itself be a syntactically valid JSON Schema.",
     )
     defaults: dict[str, Any] | None = Field(
-        default=None, description="Default field values pre-filled when a user starts from this template."
+        default=None,
+        description="Default field values pre-filled when a user starts from this template. "
+        "Must validate against `schema` if provided.",
     )
     capabilities: dict[str, Any] = Field(
         default_factory=dict, description="Feature flags describing what this version supports."
