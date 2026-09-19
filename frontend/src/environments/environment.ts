@@ -5,7 +5,7 @@ import type { AppEnvironment } from './environment.model';
 export const environment: AppEnvironment = {
   production: false,
   name: 'development',
-  apiBaseUrl: 'http://localhost:8000',
+  apiBaseUrl: 'https://evokebackend.vercel.app',
   appUrl: 'http://localhost:4200',
   supabaseUrl: 'https://jcyogzcqifqukleqtbtw.supabase.co',
   supabasePublishableKey: 'sb_publishable_XBcDrgEjVQfygZ4bnUOoxQ_YoFX7wlp',
