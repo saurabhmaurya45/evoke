@@ -46,9 +46,19 @@ jobs:
         run: ruff check .
 
       # GitHub-hosted runners ship Docker, so the testcontainers-backed
-      # Postgres suite runs for real here (unlike a sandbox with no Docker).
+      # Postgres suite runs for real here (unlike a sandbox with no Docker) —
+      # TEST_DATABASE_URL is deliberately left unset so conftest.py's fallback
+      # spins one up. The DATABASE_URL/SUPABASE_* values below are never
+      # actually connected to: tests override get_db and the identity
+      # provider, but app.config.Settings() still runs at import time
+      # (app.db_models -> ...  -> app.shared.database) and its fields have no
+      # defaults, so it needs *some* well-formed value for each.
       - name: Test
         run: pytest
+        env:
+          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/ci_placeholder
+          SUPABASE_URL: https://ci-placeholder.supabase.co
+          SUPABASE_PUBLISHABLE_KEY: ci-placeholder-key
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
