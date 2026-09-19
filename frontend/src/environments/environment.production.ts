@@ -5,10 +5,11 @@ export const environment: AppEnvironment = {
   name: 'production',
   apiBaseUrl: 'https://evokebackend.vercel.app',
   appUrl: 'https://evokefrontend.vercel.app',
-  // Same Supabase project as environment.ts for now — there is no separate
-  // production project yet. Publishable key is safe to ship in the client bundle.
-  supabaseUrl: 'https://jcyogzcqifqukleqtbtw.supabase.co',
-  supabasePublishableKey: 'sb_publishable_XBcDrgEjVQfygZ4bnUOoxQ_YoFX7wlp',
+  // Separate Supabase project from environment.ts (dev), co-located in us-east-1 with
+  // the backend's Vercel function region to avoid cross-region latency. Publishable
+  // key is safe to ship in the client bundle.
+  supabaseUrl: 'https://kivrvvtlwvmtogpkrvoh.supabase.co',
+  supabasePublishableKey: 'sb_publishable_bCKt-maGBHftHoI_3vbjmw_G2LfbeUz',
   features: {
     analytics: true,
     themeToggle: true,
