@@ -35,7 +35,7 @@ async def test_public_list_only_shows_active_templates(client, db_session, auth_
     version_resp = await client.post(
         f"/v1/templates/{template_id}/versions",
         headers=admin_headers,
-        json={"schemaVersion": 1, "protocolVersion": 1, "schema": {"fields": []}},
+        json={"schemaVersion": 1, "protocolVersion": 1, "schema": {}},
     )
     assert version_resp.status_code == 201
     version_number = version_resp.json()["data"]["version"]
