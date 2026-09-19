@@ -1,0 +1,83 @@
+name: Deploy frontend to Vercel
+
+# Production-only: every push to main that touches the frontend builds, then
+# deploys to Vercel. Netlify (frontend/netlify.toml) is untouched and keeps
+# deploying independently — this is a second, parallel deploy target.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/deploy-frontend.yml"
+  workflow_dispatch: {}
+
+defaults:
+  run:
+    working-directory: frontend
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  # Separate Vercel project from the backend's — each app gets its own
+  # PROJECT_ID secret so they deploy independently.
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_FRONTEND_PROJECT_ID }}
+
+jobs:
+  deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: deploy-frontend-production
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Served as a static asset (public/** is copied into every Angular
+      # build output) at /version.json — so "what's live" is answerable by
+      # fetching the deployed site, not by cross-referencing CI runs. Written
+      # before both builds below so each one picks it up.
+      - name: Resolve app version
+        run: |
+          echo "{\"version\": \"${GITHUB_SHA::7}\", \"builtAt\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" \
+            > public/version.json
+
+      # No lint gate here: eslint currently flags ~39 pre-existing findings
+      # unrelated to this pipeline — fixing those is a separate task, not
+      # something a CI setup should silently gate on.
+      - name: Build (gate — fails fast before any Vercel call)
+        run: npm run build:prod
+
+      # Pinned, not @latest — an unannounced CLI upgrade shouldn't be able to
+      # break a deploy silently. Bump deliberately when there's a reason to.
+      - name: Install Vercel CLI
+        run: npm install --global vercel@59.23.2
+
+      # `vercel build` + `deploy --prebuilt` (rather than `vercel deploy`) so
+      # Vercel's own Angular-aware build produces the Build Output API
+      # artifact — the plain `ng build` above is only a fail-fast gate, its
+      # output is not what gets deployed.
+      - name: Pull Vercel project settings
+        run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build on Vercel
+        run: vercel build --prod --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel
+        run: vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}

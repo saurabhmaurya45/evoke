@@ -69,8 +69,12 @@ app.include_router(payments_router)
 
 @app.get("/health")
 async def health() -> dict:
-    """Process health — does not check dependencies. Used for liveness."""
-    return {"status": "ok"}
+    """Process health — does not check dependencies. Used for liveness.
+
+    Includes the deployed commit SHA (`version`) so it's possible to confirm
+    exactly what's live without needing CI/dashboard access.
+    """
+    return {"status": "ok", "version": settings.app_version}
 
 
 @app.get("/ready")

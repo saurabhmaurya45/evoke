@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     environment: str = "development"
+    # Short git SHA of the deployed commit, set by CI (see deploy-backend.yml)
+    # so /health reports exactly what's live — "dev" when run locally.
+    app_version: str = "dev"
 
     database_url: str
 
