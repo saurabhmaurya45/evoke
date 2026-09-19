@@ -49,8 +49,11 @@ def postgres_url() -> str:
 
     from testcontainers.postgres import PostgresContainer
 
-    with PostgresContainer("postgres:16-alpine") as container:
-        yield _to_async_url(container.get_connection_url())
+    # PostgresContainer defaults to a psycopg2 URL (sync driver, and not even
+    # an installed dependency here) — request asyncpg explicitly so
+    # create_async_engine gets a driver it can actually load.
+    with PostgresContainer("postgres:16-alpine", driver="asyncpg") as container:
+        yield container.get_connection_url()
 
 
 @pytest_asyncio.fixture
