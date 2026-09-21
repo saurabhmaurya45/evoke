@@ -8,6 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { AuthService } from '../../../../core/services/auth.service';
 import { SeoService } from '../../../../core/services/seo.service';
 import { DashboardContentService, formatCurrency } from '../../data/dashboard-content.service';
@@ -40,7 +41,7 @@ interface TemplateDraft {
 @Component({
   selector: 'app-admin-dashboard',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule],
+  imports: [FormsModule, LoaderComponent],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss',
 })

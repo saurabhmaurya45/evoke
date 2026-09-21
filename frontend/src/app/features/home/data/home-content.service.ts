@@ -3,7 +3,6 @@ import type {
   FaqItem,
   FeatureItem,
   HowItWorksStep,
-  PricingTier,
   ServiceCard,
   StatItem,
   TemplateCard,
@@ -59,8 +58,8 @@ export interface HeroCard {
 const HERO_TEMPLATE_SHOTS = [
   { slotId: 'tpl-samarpan-royal', templateNo: 1 },
   { slotId: 'tpl-golden-promise', templateNo: 7 },
-  { slotId: 'tpl-harpreet-ritika', templateNo: 4 },
-  { slotId: 'tpl-karan-nisha', templateNo: 5 },
+  { slotId: 'tpl-rosewood-punjabi', templateNo: 4 },
+  { slotId: 'tpl-maroon-gold-royal', templateNo: 5 },
 ] as const;
 
 /**
@@ -173,7 +172,7 @@ export class HomeContentService {
     {
       name: 'Rosewood — Punjabi Wedding',
       category: 'Wedding',
-      slotId: 'tpl-harpreet-ritika',
+      slotId: 'tpl-rosewood-punjabi',
       wash: WASH_ROSE,
       accent: '#C97B63',
       monogram: 'R',
@@ -185,7 +184,7 @@ export class HomeContentService {
     {
       name: 'Maroon & Gold — Royal Hindu Wedding',
       category: 'Wedding',
-      slotId: 'tpl-karan-nisha',
+      slotId: 'tpl-maroon-gold-royal',
       wash: WASH_ROSE,
       accent: '#6e1423',
       monogram: 'K',
@@ -197,7 +196,7 @@ export class HomeContentService {
     {
       name: 'Doorway — Modern Wedding',
       category: 'Wedding',
-      slotId: 'tpl-joe-serin',
+      slotId: 'tpl-doorway-modern',
       wash: WASH_ROSE,
       accent: '#8a6d1f',
       monogram: 'D',
@@ -333,35 +332,6 @@ export class HomeContentService {
       role: 'Event Planner',
       quote: 'I now recommend Evoke to every couple I work with. The quality speaks for itself.',
       initials: 'PN',
-    },
-  ];
-
-  readonly pricing: readonly PricingTier[] = [
-    {
-      name: 'Starter',
-      price: '$49',
-      featured: false,
-      surface: 'glass',
-      perks: ['1 premium template', 'Custom domain link', 'Photo gallery', 'Basic support'],
-    },
-    {
-      name: 'Premium',
-      price: '$99',
-      featured: true,
-      surface: 'featured',
-      perks: ['All templates', 'RSVP & guest list', 'Countdown & music', 'Priority support'],
-    },
-    {
-      name: 'Luxury',
-      price: '$199',
-      featured: false,
-      surface: 'luxury',
-      perks: [
-        'Everything in Premium',
-        'Custom animations',
-        'Dedicated designer',
-        'White-glove setup',
-      ],
     },
   ];
 

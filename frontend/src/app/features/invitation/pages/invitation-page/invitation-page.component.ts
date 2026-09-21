@@ -13,6 +13,7 @@ import { TimeoutError, catchError, firstValueFrom, of, retry, throwError, timeou
 import { TemplateSchemaLoader } from '../../../editor/data/template-schema.loader';
 import { WINDOW } from '../../../../core/tokens/window.token';
 import { PREVIEW_PROTOCOL_VERSION, PREVIEW_READY, PREVIEW_UPDATE } from '../../../editor/data/preview-protocol';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 interface InvitationApiOut {
   eventId: string;
@@ -49,6 +50,7 @@ function isTransient(err: unknown): boolean {
 @Component({
   selector: 'app-invitation-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [LoaderComponent],
   template: `
     @switch (state()) {
       @case ('not-found') {
@@ -91,24 +93,7 @@ function isTransient(err: unknown): boolean {
         aria-live="polite"
         [attr.aria-hidden]="state() === 'ready' && frameReady() ? 'true' : null"
       >
-        <div class="inv-loader__inner">
-          <svg class="inv-loader__art" viewBox="0 0 120 84" aria-hidden="true">
-            <defs>
-              <linearGradient id="inv-gold" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#f8e7b0" />
-                <stop offset="50%" stop-color="#d4af37" />
-                <stop offset="100%" stop-color="#9a7514" />
-              </linearGradient>
-            </defs>
-            <circle class="inv-loader__track" cx="46" cy="50" r="24" />
-            <circle class="inv-loader__track" cx="74" cy="50" r="24" />
-            <circle class="inv-loader__ring inv-loader__ring--left" cx="46" cy="50" r="24" />
-            <circle class="inv-loader__ring inv-loader__ring--right" cx="74" cy="50" r="24" />
-            <path class="inv-loader__gem" d="M60 4 62.4 10.6 69 13 62.4 15.4 60 22 57.6 15.4 51 13 57.6 10.6Z" />
-          </svg>
-          <span class="inv-loader__line" aria-hidden="true"></span>
-          <span class="inv-sr-only">Loading invitation</span>
-        </div>
+        <app-loader class="inv-loader__inner" label="Loading invitation" />
       </div>
     }
   `,
@@ -120,7 +105,7 @@ function isTransient(err: unknown): boolean {
       height: 100vh;
       background: #0e0102;
     }
-    /* ---------- loader: two interlocking gold rings ---------- */
+    /* ---------- loader backdrop; the animated mark itself is <app-loader> ---------- */
     .inv-loader {
       position: absolute;
       inset: 0;
@@ -135,12 +120,9 @@ function isTransient(err: unknown): boolean {
       visibility: hidden;
       pointer-events: none;
     }
+    /* :host(app-loader) is display:contents, so this still targets the mark directly. */
     .inv-loader__inner {
       position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
       /* Delay so fast loads never flash the loader. */
       opacity: 0;
       animation: inv-fade-in 0.6s ease 0.15s forwards;
@@ -158,76 +140,15 @@ function isTransient(err: unknown): boolean {
       animation: inv-glow 2.8s ease-in-out infinite;
       pointer-events: none;
     }
-    .inv-loader__art {
-      position: relative;
-      width: clamp(132px, 16vw, 176px);
-      height: auto;
-      overflow: visible;
-    }
-    .inv-loader__track {
-      fill: none;
-      stroke: rgba(212, 175, 55, 0.22);
-      stroke-width: 1.6;
-    }
-    .inv-loader__ring {
-      fill: none;
-      stroke: url(#inv-gold);
-      stroke-width: 2.4;
-      stroke-linecap: round;
-      stroke-dasharray: 151;
-      stroke-dashoffset: 151;
-      transform-box: fill-box;
-      transform-origin: center;
-      filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.45));
-      animation: inv-draw 2.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-    }
-    .inv-loader__ring--left { transform: rotate(-90deg); }
-    .inv-loader__ring--right { transform: rotate(90deg) scaleX(-1); animation-delay: 0.35s; }
-    .inv-loader__gem {
-      fill: #f8e7b0;
-      transform-box: fill-box;
-      transform-origin: center;
-      filter: drop-shadow(0 0 4px rgba(248, 231, 176, 0.8));
-      animation: inv-twinkle 2.8s ease-in-out infinite;
-    }
-    .inv-loader__line {
-      width: clamp(110px, 13vw, 150px);
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4) 20%, #fff3cf 50%, rgba(212, 175, 55, 0.4) 80%, transparent);
-      background-size: 200% 100%;
-      animation: inv-shimmer 2.8s ease-in-out infinite;
-    }
-    .inv-sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip: rect(0 0 0 0);
-      white-space: nowrap;
-    }
-    @keyframes inv-draw {
-      0% { stroke-dashoffset: 151; opacity: 0.35; }
-      45%, 60% { stroke-dashoffset: 0; opacity: 1; }
-      100% { stroke-dashoffset: -151; opacity: 0.35; }
-    }
-    @keyframes inv-twinkle {
-      0%, 100% { transform: scale(0.55) rotate(0deg); opacity: 0.35; }
-      50% { transform: scale(1) rotate(45deg); opacity: 1; }
-    }
     @keyframes inv-glow {
       0%, 100% { transform: scale(0.9); opacity: 0.6; }
       50% { transform: scale(1.08); opacity: 1; }
-    }
-    @keyframes inv-shimmer {
-      0% { background-position: 150% 0; }
-      100% { background-position: -50% 0; }
     }
     @keyframes inv-fade-in {
       to { opacity: 1; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .inv-loader__ring { animation: none; stroke-dashoffset: 0; }
-      .inv-loader__gem, .inv-loader__line, .inv-loader__inner::before { animation-duration: 6s; }
+      .inv-loader__inner::before { animation-duration: 6s; }
     }
     button.inv-state__link {
       background: transparent;

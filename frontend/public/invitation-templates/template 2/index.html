@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="/invitation-templates/evoke-fit.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Eternal Bond | Wedding Invitation</title>
@@ -321,12 +322,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     window.addEventListener('message', function (e) {
       if (e && e.source === window.parent && e.origin === parentOrigin && e.data && e.data.channel === 'evoke:preview-update' && e.data.version === 1) apply(e.data.data);
     });
-    // Poll until the bundle has rendered the couple's names, then signal ready
-    // so the editor pushes current data. Timers survive the DOM replace.
+    // Poll until the bundle has rendered the couple's names, then signal ready.
+    // innerText, not textContent: textContent also matches the names inside the
+    // still-unrendered bundle payload <script> and would signal ready too early.
+    // The editor then pushes current data. Timers survive the DOM replace.
     var tries = 0;
     var poll = setInterval(function () {
       tries++;
-      var text = document.body && document.body.textContent;
+      var text = document.body && document.body.innerText;
       if (text && text.indexOf(state.groomName) !== -1) {
         clearInterval(poll);
         try {

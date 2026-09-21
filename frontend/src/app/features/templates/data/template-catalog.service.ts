@@ -66,6 +66,14 @@ export class TemplateCatalogService {
 
   private readonly _templates = signal<readonly CatalogTemplate[]>(this.seed());
 
+  /**
+   * Admin changes made before the slug → backend id map has loaded. They are
+   * merged per slot and sent as soon as the map arrives, so an early click is
+   * saved rather than silently staying local (and then being overwritten by the
+   * backend state).
+   */
+  private readonly pendingPatches = new Map<string, Record<string, string | number | null>>();
+
   constructor() {
     // Another tab wrote the catalogue — adopt it so every open view stays in
     // sync. `storage` only fires in tabs other than the one that wrote.
@@ -103,15 +111,7 @@ export class TemplateCatalogService {
     if (!current) return;
     const newPublished = !current.published;
     this.setPublished(slotId, newPublished);
-    const backendId = this._backendMap()[slotId]?.id;
-    console.log('[TemplateCatalog] togglePublished', slotId, '→', newPublished ? 'LISTED' : 'UNLISTED', '| backendId =', backendId ?? 'NOT FOUND (backendMap empty)');
-    console.log('[TemplateCatalog] full backendMap =', JSON.stringify(this._backendMap()));
-    if (backendId) {
-      this.http
-        .patch(`v1/templates/${backendId}`, { storefrontStatus: newPublished ? 'LISTED' : 'UNLISTED' })
-        .pipe(catchError((err) => { console.error('[TemplateCatalog] PATCH failed:', err.status, err.message); return of(null); }))
-        .subscribe((res) => console.log('[TemplateCatalog] PATCH response:', res));
-    }
+    this.sendPatch(slotId, { storefrontStatus: newPublished ? 'LISTED' : 'UNLISTED' });
   }
 
   /** Apply an admin edit. Paid templates keep their price; free ones reset to 0. */
@@ -121,25 +121,17 @@ export class TemplateCatalogService {
       const price = pricing === 'free' ? 0 : (changes.price ?? template.price);
       return { ...changes, pricing, price };
     });
-    const backendId = this._backendMap()[slotId]?.id;
-    if (backendId) {
-      const payload: Record<string, string | number | null> = {};
-      if (changes.name !== undefined) payload['name'] = changes.name;
-      if (changes.category !== undefined) payload['category'] = changes.category;
-      if (changes.pricing !== undefined || changes.price !== undefined) {
-        const updated = this._templates().find((template) => template.slotId === slotId);
-        if (updated) {
-          payload['pricingModel'] = updated.pricing === 'paid' ? 'PAID' : 'FREE';
-          payload['priceAmountMinor'] = updated.pricing === 'paid' ? updated.price : null;
-        }
-      }
-      if (Object.keys(payload).length) {
-        this.http
-          .patch(`v1/templates/${backendId}`, payload)
-          .pipe(catchError(() => of(null)))
-          .subscribe();
+    const payload: Record<string, string | number | null> = {};
+    if (changes.name !== undefined) payload['name'] = changes.name;
+    if (changes.category !== undefined) payload['category'] = changes.category;
+    if (changes.pricing !== undefined || changes.price !== undefined) {
+      const updated = this._templates().find((template) => template.slotId === slotId);
+      if (updated) {
+        payload['pricingModel'] = updated.pricing === 'paid' ? 'PAID' : 'FREE';
+        payload['priceAmountMinor'] = updated.pricing === 'paid' ? updated.price : null;
       }
     }
+    if (Object.keys(payload).length) this.sendPatch(slotId, payload);
   }
 
   /** Discard every admin change and return to the seeded catalogue. */
@@ -148,32 +140,64 @@ export class TemplateCatalogService {
     this.persist();
   }
 
+  /** PATCH the backend now if the template's id is known, otherwise queue it. */
+  private sendPatch(slotId: string, payload: Record<string, string | number | null>): void {
+    const backendId = this._backendMap()[slotId]?.id;
+    if (!backendId) {
+      this.pendingPatches.set(slotId, { ...this.pendingPatches.get(slotId), ...payload });
+      return;
+    }
+    this.http
+      .patch(`v1/templates/${backendId}`, payload)
+      .pipe(
+        catchError((err) => {
+          console.error('[TemplateCatalog] PATCH failed:', err.status, err.message);
+          return of(null);
+        }),
+      )
+      .subscribe();
+  }
+
   private syncFromBackend(admin: boolean): void {
     const url = `v1/templates?page_size=100${admin ? '&include_draft=true' : ''}`;
     this.http
       .get<ApiPage<BackendTemplateApiOut>>(url)
       .pipe(catchError((err) => { console.error('[TemplateCatalog] GET templates failed:', err.status, err.message); return of({ data: [] }); }))
       .subscribe((page) => {
+        // A failed or empty response says nothing — keep what we have rather than hide everything.
         if (!page.data.length) return;
         // Keyed by slug, which must equal the FE slotId (e.g. 'tpl-samarpan-royal').
         const bySlug = new Map(page.data.map((t) => [t.slug, t]));
+        // Slots with an admin change still waiting to reach the backend: their local
+        // state is newer than this response, so it must not overwrite them.
+        const pending = new Map(this.pendingPatches);
         if (admin) {
           const map: Record<string, BackendEntry> = {};
           for (const t of page.data) {
             map[t.slug] = { id: t.id, storefrontStatus: t.storefrontStatus };
           }
           this._backendMap.set(map);
+          this.pendingPatches.clear();
+          for (const [slotId, payload] of pending) this.sendPatch(slotId, payload);
         }
         this._templates.update((templates) =>
           templates.map((t) => {
             const backend = bySlug.get(t.slotId);
-            if (!backend) return t;
+            const patch = pending.get(t.slotId);
+            if (!backend) {
+              // The public list only contains LISTED templates, so a template absent
+              // from it is hidden (unlisted, or not in the backend at all). An admin
+              // response includes drafts, so absence there means nothing.
+              return admin ? t : { ...t, published: false };
+            }
             return {
               ...t,
-              ...backendPricing(backend),
-              // The public list only contains LISTED templates, so publish status is
-              // authoritative only in the admin (include_draft) response.
-              ...(admin ? { published: backend.storefrontStatus === 'LISTED' } : {}),
+              ...(patch?.['pricingModel'] === undefined ? backendPricing(backend) : {}),
+              // Public response: present means LISTED. Admin (include_draft) response:
+              // the status field is authoritative.
+              ...(patch?.['storefrontStatus'] === undefined
+                ? { published: admin ? backend.storefrontStatus === 'LISTED' : true }
+                : {}),
             };
           }),
         );

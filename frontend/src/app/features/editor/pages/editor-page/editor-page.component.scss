@@ -3,6 +3,8 @@
   inset: 0;
   display: block;
   overflow: hidden;
+  // `hidden` can still be scrolled programmatically (focus, scrollIntoView); `clip` cannot.
+  overflow: clip;
   background: var(--bg);
   color: var(--text);
 }
@@ -190,4 +192,19 @@
       display: none;
     }
   }
+}
+
+.editor__missing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 1rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.editor__missing--loading {
+  --ld-size: clamp(96px, 14vw, 140px);
 }

@@ -53,14 +53,6 @@ export interface Testimonial {
   readonly initials: string;
 }
 
-export interface PricingTier {
-  readonly name: string;
-  readonly price: string;
-  readonly featured: boolean;
-  readonly perks: readonly string[];
-  readonly surface: 'glass' | 'featured' | 'luxury';
-}
-
 export interface FaqItem {
   readonly question: string;
   readonly answer: string;

@@ -25,21 +25,23 @@ import type { FieldSchema, FieldValue } from '../../models/template-schema.model
               @if (field.type === 'list') {
                 <div class="list">
                   <span class="list__title">{{ field.label }}</span>
-                  @for (item of store.listItems(section.key, field.key); track $index) {
+                  @for (item of store.listItems(section.key, field.key); track $index; let itemIndex = $index) {
                     <div class="list__item">
+                      <!-- itemIndex, not $index: inside this nested loop $index is the
+                           field's position within the item, which wrote edits to the wrong item. -->
                       @for (child of field.itemSchema ?? []; track child.key) {
                         <app-field-control
                           [field]="child"
                           [value]="itemValue(item, child.key)"
                           (valueChange)="
-                            store.setListItemField(section.key, field.key, $index, child.key, $event)
+                            store.setListItemField(section.key, field.key, itemIndex, child.key, $event)
                           "
                         />
                       }
                       <button
                         type="button"
                         class="list__remove"
-                        (click)="store.removeListItem(section.key, field.key, $index)"
+                        (click)="store.removeListItem(section.key, field.key, itemIndex)"
                       >
                         Remove
                       </button>

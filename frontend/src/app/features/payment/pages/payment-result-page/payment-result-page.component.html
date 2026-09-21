@@ -1,7 +1,7 @@
 <section class="pay">
   @switch (state()) {
     @case ('checking') {
-      <div class="pay__icon pay__icon--pending" aria-hidden="true">…</div>
+      <app-loader label="Confirming your payment" />
       <h1 class="pay__title">Confirming your payment</h1>
       <p class="pay__sub">Hang tight — this only takes a moment.</p>
     }

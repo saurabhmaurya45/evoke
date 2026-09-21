@@ -14,7 +14,7 @@ import { SectionAuraComponent } from '../../../../shared/components/section-aura
 import { ImageSlotComponent } from '../../../../shared/components/image-slot/image-slot.component';
 import { TiltDirective } from '../../../../shared/directives/tilt.directive';
 import { RevealDirective } from '../../../../shared/directives/reveal.directive';
-import { TemplateCatalogService } from '../../../templates/data/template-catalog.service';
+import { TemplateCatalogService, formatPrice } from '../../../templates/data/template-catalog.service';
 
 /**
  * Templates carousel. A native scroll-snap track (so touch/trackpad swiping
@@ -40,6 +40,7 @@ export class TemplatesSectionComponent implements AfterViewChecked {
 
   /** Only published templates reach the public carousel. */
   protected readonly templates = this.catalog.published;
+  protected readonly price = formatPrice;
 
   private readonly track = viewChild.required<ElementRef<HTMLElement>>('track');
   private readonly cardVideos = viewChildren<ElementRef<HTMLVideoElement>>('vid');

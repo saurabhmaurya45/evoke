@@ -56,7 +56,12 @@
             </span>
           </div>
           <div class="templates__body">
-            <h3 class="templates__name">{{ tpl.name }}</h3>
+            <div class="templates__head">
+              <h3 class="templates__name">{{ tpl.name }}</h3>
+              <span class="templates__price" [class.templates__price--free]="tpl.pricing === 'free'">{{
+                price(tpl)
+              }}</span>
+            </div>
             <div class="templates__actions">
               <a
                 class="templates__btn templates__btn--ghost"

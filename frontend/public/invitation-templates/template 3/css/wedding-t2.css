@@ -1153,6 +1153,7 @@ body:not(.wed2-has-hero-verse) .wed2-hero-verse {
   color: var(--wed2-red);
   line-height: 1.05;
   max-width: 44%;
+  overflow-wrap: anywhere;
   opacity: 0;
 }
 
@@ -2132,6 +2133,7 @@ body.wed2-general .wed2-details-greeting {
 }
 
 .wed2-details-name {
+  overflow-wrap: anywhere; /* long single words wrap instead of widening the section */
   margin: 0 0 0.5rem;
   font-family: 'Great Vibes', cursive;
   font-size: clamp(2.1rem, 7vw, 3.2rem);

@@ -1,3 +1,4 @@
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -31,7 +32,7 @@ type CheckoutState = 'loading' | 'ready' | 'processing' | 'redirecting' | 'error
 @Component({
   selector: 'app-checkout-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
+  imports: [RouterLink, LoaderComponent],
   templateUrl: './checkout-page.component.html',
   styleUrl: '../payment-page.scss',
 })

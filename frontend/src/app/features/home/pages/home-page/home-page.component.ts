@@ -7,7 +7,6 @@ import { TemplatesSectionComponent } from '../../components/templates-section/te
 import { FeaturesSectionComponent } from '../../components/features-section/features-section.component';
 import { ComparisonComponent } from '../../components/comparison/comparison.component';
 import { TestimonialsComponent } from '../../components/testimonials/testimonials.component';
-import { PricingComponent } from '../../components/pricing/pricing.component';
 import { FaqComponent } from '../../components/faq/faq.component';
 import { CtaComponent } from '../../components/cta/cta.component';
 import { SeoService } from '../../../../core/services/seo.service';
@@ -15,6 +14,7 @@ import { APP_DESCRIPTION, APP_NAME } from '../../../../core/constants/app.consta
 import { HOME_KEYWORDS, ORGANISATION } from '../../../../core/constants/seo.constants';
 import { environment } from '../../../../../environments/environment';
 import { HomeContentService } from '../../data/home-content.service';
+import { TemplateCatalogService } from '../../../templates/data/template-catalog.service';
 
 /**
  * Home page — composition only. Each section is an isolated, single-purpose
@@ -33,7 +33,6 @@ import { HomeContentService } from '../../data/home-content.service';
     FeaturesSectionComponent,
     ComparisonComponent,
     TestimonialsComponent,
-    PricingComponent,
     FaqComponent,
     CtaComponent,
   ],
@@ -42,6 +41,7 @@ import { HomeContentService } from '../../data/home-content.service';
 export class HomePageComponent implements OnInit {
   private readonly seo = inject(SeoService);
   private readonly content = inject(HomeContentService);
+  private readonly catalog = inject(TemplateCatalogService);
 
   ngOnInit(): void {
     const url = environment.appUrl;
@@ -86,13 +86,12 @@ export class HomePageComponent implements OnInit {
         operatingSystem: 'Web',
         description: APP_DESCRIPTION,
         publisher: { '@id': `${url}/#organization` },
-        offers: this.content.pricing.map((tier) => ({
+        // One Offer per published template, at the price the catalog actually charges.
+        offers: this.catalog.published().map((tpl) => ({
           '@type': 'Offer',
-          name: tier.name,
-          price: tier.price.replace(/[^\d.]/g, ''),
-          // Follows the price actually shown on the page — mismatched currency
-          // in structured data is a rich-result violation, not a detail.
-          priceCurrency: tier.price.includes('₹') ? 'INR' : 'USD',
+          name: tpl.name,
+          price: tpl.pricing === 'paid' ? (tpl.price / 100).toFixed(2) : '0',
+          priceCurrency: 'INR',
           availability: 'https://schema.org/InStock',
         })),
       },

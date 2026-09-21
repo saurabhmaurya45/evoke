@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
+  <script src="/invitation-templates/evoke-fit.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SAMARPAN — A Royal Union | Samarth &amp; Arpan</title>
@@ -332,6 +333,7 @@
       }
       #hero .names {
         font-size: clamp(3rem, 10vw, 6.6rem);
+        overflow-wrap: anywhere; /* a very long single word must wrap, not widen the hero */
         line-height: 1.1;
         margin: 22px 0 10px;
       }
@@ -2362,6 +2364,11 @@
             grid.innerHTML = events
               .map(function (ev) {
                 var meta = [fmtDate(ev.date), ev.venue].filter(Boolean).join(' · ');
+                // Optional map link: only http(s) URLs become a link on the arrow.
+                var mapHref = /^https?:\/\//i.test(ev.mapUrl || '') ? esc(ev.mapUrl) : '';
+                var arrow = mapHref
+                  ? '<a class="arrow" href="' + mapHref + '" target="_blank" rel="noopener noreferrer" aria-label="Open map" style="color:inherit;text-decoration:none">→</a>'
+                  : '<span class="arrow">→</span>';
                 var photo = ev.image
                   ? '<div class="photo"><img src="' + esc(ev.image) + '" alt="" loading="lazy" /></div>'
                   : '<div class="photo" style="background:linear-gradient(150deg,#7c5f0e,#3d2e05)"></div>';
@@ -2369,7 +2376,7 @@
                   '<div class="event-card reveal">' +
                   '<h3>' + esc(ev.name || 'Celebration') + '</h3>' +
                   photo +
-                  '<div class="meta"><span>' + esc(meta) + '</span><span class="arrow">→</span></div>' +
+                  '<div class="meta"><span>' + esc(meta) + '</span>' + arrow + '</div>' +
                   '</div>'
                 );
               })

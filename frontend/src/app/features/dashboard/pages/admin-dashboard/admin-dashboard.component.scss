@@ -369,3 +369,13 @@ $nav-height: 76px;
   .admin { padding: 120px 18px 90px; }
   .drawer { width: 100vw; }
 }
+
+.table__loading {
+  text-align: center;
+  padding: 20px 0;
+
+  app-loader {
+    --ld-size: 28px;
+    display: inline-block;
+  }
+}

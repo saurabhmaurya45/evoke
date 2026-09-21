@@ -96,7 +96,7 @@
           </thead>
           <tbody>
             @if (content.loading() && !customers().length) {
-              <tr><td colspan="6" class="table__loading">Loading…</td></tr>
+              <tr><td colspan="6" class="table__loading"><app-loader [compact]="true" label="Loading customers" /></td></tr>
             }
             @for (customer of customers(); track customer.userId) {
               <tr>
@@ -118,7 +118,7 @@
           </thead>
           <tbody>
             @if (content.loading() && !sites().length) {
-              <tr><td colspan="6" class="table__loading">Loading…</td></tr>
+              <tr><td colspan="6" class="table__loading"><app-loader [compact]="true" label="Loading sites" /></td></tr>
             }
             @for (site of sites(); track site.id) {
               <tr>
@@ -140,7 +140,7 @@
           </thead>
           <tbody>
             @if (content.loading()) {
-              <tr><td colspan="7" class="table__loading">Loading…</td></tr>
+              <tr><td colspan="7" class="table__loading"><app-loader [compact]="true" label="Loading payments" /></td></tr>
             } @else if (!payments().length) {
               <tr><td colspan="7" class="table__loading">No payments recorded yet.</td></tr>
             }

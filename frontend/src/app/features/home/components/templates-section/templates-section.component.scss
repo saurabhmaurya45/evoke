@@ -164,13 +164,39 @@
   padding: 16px 8px 6px;
 }
 
+.templates__head {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 41px;
+  margin-bottom: 14px;
+}
+
 .templates__name {
   font-family: $font-serif;
-  min-height: 41px;
   font-size: 17px;
   line-height: 1.2;
   font-weight: $fw-semibold;
-  margin: 0 0 14px;
+  margin: 0;
+}
+
+.templates__price {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: $radius-pill;
+  font-size: 11px;
+  font-weight: $fw-semibold;
+  white-space: nowrap;
+  color: $color-gold;
+  background: rgba(201, 162, 39, 0.14);
+  border: 1px solid rgba(201, 162, 39, 0.3);
+}
+
+.templates__price--free {
+  color: #6ec177;
+  background: rgba(76, 175, 80, 0.14);
+  border-color: rgba(76, 175, 80, 0.3);
 }
 
 .templates__actions {
@@ -248,6 +274,18 @@
 
   .templates__name {
     color: #241c13;
+  }
+
+  .templates__price {
+    color: #8a6410;
+    background: rgba(201, 162, 39, 0.16);
+    border-color: rgba(139, 100, 29, 0.35);
+  }
+
+  .templates__price--free {
+    color: #2e7d32;
+    background: rgba(76, 175, 80, 0.14);
+    border-color: rgba(46, 125, 50, 0.35);
   }
 
   .templates__badge {

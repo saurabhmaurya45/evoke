@@ -6,7 +6,6 @@ export const PRIMARY_NAV: readonly NavLink[] = [
   { label: 'Services', fragment: 'services' },
   { label: 'Templates', path: '/templates' },
   { label: 'How It Works', fragment: 'how-it-works' },
-  { label: 'Pricing', fragment: 'pricing' },
   { label: 'FAQ', fragment: 'faq' },
   { label: 'Contact', fragment: 'footer-contact' },
 ];
@@ -17,7 +16,6 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
     links: [
       { label: 'Services', fragment: 'services' },
       { label: 'Templates', path: '/templates' },
-      { label: 'Pricing', fragment: 'pricing' },
       { label: 'How It Works', fragment: 'how-it-works' },
     ],
   },

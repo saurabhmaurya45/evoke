@@ -20,9 +20,10 @@ import { WINDOW } from '../../../../core/tokens/window.token';
 import { TemplateMigrationService } from '../../data/template-migration.service';
 import { HttpTemplateRepository } from '../../data/http-template-repository';
 import { AuthService } from '../../../../core/services/auth.service';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 type EditorPane = 'edit' | 'preview';
-type SaveState = 'idle' | 'saving' | 'saved';
+type SaveState = 'idle' | 'saving' | 'saved' | 'error';
 
 const AUTOSAVE_DELAY = 800;
 
@@ -39,7 +40,7 @@ const AUTOSAVE_DELAY = 800;
   selector: 'app-editor-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [TemplateEditorStore],
-  imports: [FormEngineComponent, TemplateRendererComponent],
+  imports: [FormEngineComponent, TemplateRendererComponent, LoaderComponent],
   templateUrl: './editor-page.component.html',
   styleUrl: './editor-page.component.scss',
 })
@@ -144,7 +145,14 @@ export class EditorPageComponent {
       await this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
       return;
     }
-    const { id } = await this.repository.publish(doc);
+    let id: string;
+    try {
+      ({ id } = await this.repository.publish(doc));
+    } catch {
+      // Don't advance to payment with a draft that never reached the server.
+      this.saveState.set('error');
+      return;
+    }
     this.lastSaved = JSON.stringify(doc);
     await this.router.navigate(['/payment'], {
       queryParams: { template: doc.templateId, site: id },
@@ -165,10 +173,14 @@ export class EditorPageComponent {
     this.window?.clearTimeout(this.saveTimer);
     this.saveTimer =
       this.window?.setTimeout(() => {
-        void this.repository.saveDraft(doc).then(() => {
-          this.lastSaved = snapshot;
-          this.saveState.set('saved');
-        });
+        this.repository.saveDraft(doc).then(
+          () => {
+            this.lastSaved = snapshot;
+            this.saveState.set('saved');
+          },
+          // lastSaved is left stale on purpose, so the next edit retries the save.
+          () => this.saveState.set('error'),
+        );
       }, AUTOSAVE_DELAY) ?? 0;
   }
 }

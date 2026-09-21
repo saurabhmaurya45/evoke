@@ -61,7 +61,16 @@ export class AuthService {
   private readonly supabase = inject(SupabaseClientService).client;
   private readonly http = inject(HttpClient);
 
-  private readonly _session = signal<AuthSession | null>(null);
+  private readonly _session = signal<AuthSession | null>(null, {
+    // Structural equality: a session rebuilt from the same token/user is not a change —
+    // without this every .set() (even a same-value one) is a new object reference and
+    // re-runs every effect reading the signal, e.g. TemplateCatalogService's admin sync.
+    equal: (a, b) =>
+      a?.token === b?.token &&
+      a?.user.id === b?.user.id &&
+      a?.user.role === b?.user.role &&
+      a?.user.emailVerified === b?.user.emailVerified,
+  });
   private readonly _ready = signal(false);
   private readonly _pendingEmail = signal<string | null>(null);
   private _pendingAction: PendingAction | null = null;
@@ -87,6 +96,15 @@ export class AuthService {
     const fromName = `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.trim();
     return (fromName || user.email[0] || '?').toUpperCase();
   });
+
+  /**
+   * In-flight (or last-settled) `/v1/auth/me` fetch, keyed by access token. Supabase's
+   * `onAuthStateChange` listener fires its own `INITIAL_SESSION` the moment it's
+   * subscribed, and `init()` below independently calls `getSession()` and does the same
+   * — both for the identical restored session/token. Keying on the token collapses that
+   * duplicate into one request regardless of which one runs first.
+   */
+  private profileFetch: { token: string; promise: Promise<AuthUser | null> } | null = null;
 
   constructor() {
     this.supabase.auth.onAuthStateChange((event, session) => {
@@ -238,19 +256,39 @@ export class AuthService {
   }
 
   private async handleAuthChange(
-    _event: AuthChangeEvent | 'INITIAL_SESSION',
+    event: AuthChangeEvent | 'INITIAL_SESSION',
     session: Session | null,
   ): Promise<void> {
     if (!session) {
       this._session.set(null);
+      this.profileFetch = null;
       return;
     }
-    const profile = await this.fetchProfile(session);
+    // A refreshed access token doesn't change who the user is or their role — Supabase
+    // fires this on its own timer (autoRefreshToken) throughout the session, so re-hitting
+    // the backend here would mean an unprompted /v1/auth/me every time it rotates.
+    const current = this._session();
+    if (event === 'TOKEN_REFRESHED' && current) {
+      this._session.set({ token: session.access_token, expiresAt: session.expires_at, user: current.user });
+      return;
+    }
+    const profile = await this.getOrFetchProfile(session);
     this._session.set({
       token: session.access_token,
       expiresAt: session.expires_at,
       user: profile ?? this.fallbackUser(session),
     });
+  }
+
+  /** `fetchProfile`, deduped by access token so concurrent/duplicate auth events for the
+   * same session share one `/v1/auth/me` request instead of firing one each. */
+  private getOrFetchProfile(session: Session): Promise<AuthUser | null> {
+    if (this.profileFetch?.token === session.access_token) {
+      return this.profileFetch.promise;
+    }
+    const promise = this.fetchProfile(session);
+    this.profileFetch = { token: session.access_token, promise };
+    return promise;
   }
 
   /** The backend lazily provisions the app-side user row and returns the canonical

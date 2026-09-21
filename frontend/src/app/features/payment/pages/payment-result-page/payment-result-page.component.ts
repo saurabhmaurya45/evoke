@@ -1,3 +1,4 @@
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -35,7 +36,7 @@ const POLL_ATTEMPTS = 10;
 @Component({
   selector: 'app-payment-result-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
+  imports: [RouterLink, LoaderComponent],
   templateUrl: './payment-result-page.component.html',
   styleUrl: '../payment-page.scss',
 })

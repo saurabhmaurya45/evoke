@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import random
 import re
 import string
@@ -10,12 +11,13 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.drafts.models import Draft
+from app.shared.database import _session_factory
 from app.events.models import Event, EventStatus, EventType
 from app.events.schemas import EventCreate, EventUpdate
 from app.payments.pricing import get_template_price, has_paid_payment
 from app.shared.audit import log_action
 from app.shared.authorization import ensure_owner_or_admin
-from app.shared.errors import NotFoundError, PaymentRequiredError, ValidationFailedError
+from app.shared.errors import ConflictError, NotFoundError, PaymentRequiredError, ValidationFailedError
 from app.shared.pagination import Page, PageParams, make_page
 from app.templates.models import Template
 from app.users.models import User, UserRole
@@ -34,24 +36,51 @@ def _random_suffix(length: int = 6) -> str:
 
 
 async def create_event(db: AsyncSession, owner: User, data: EventCreate) -> Event:
-    """Create an event and its 1:1 draft in a single transaction.
+    """Create an event and its 1:1 draft in a single transaction — or, for a
+    template-backed event, return the existing one.
 
-    Slugs are generated from the title plus a short random suffix; on the rare
-    collision (another event already took that exact slug) we retry with a fresh
-    suffix a few times before giving up.
+    `title` doubles as the template slot id for events created from the editor
+    (e.g. 'tpl-samarpan-royal' — see `resolve_event_template`), and a user editing
+    the same template should only ever have one active (non-archived) draft for
+    it: reopening the editor, a second tab, or a cleared localStorage cache must
+    resume that draft, not fork a new one. Checked up front so the common case
+    (no duplicate) never pays for a wasted slug/draft insert; `ix_events_owner_title_active`
+    is the last-resort guard if two requests for the same new template race each other —
+    caught below and resolved the same way, by adopting the winner instead of erroring.
+
+    Slugs are generated from the title plus a short random suffix; on a slug collision
+    (another event already took that exact slug) we retry with a fresh suffix a few
+    times before giving up.
     """
+    # Captured once: `db.rollback()` below expires every attribute on every ORM object
+    # attached to this session, `owner` included, regardless of `expire_on_commit`. Reading
+    # `owner.id` again after that triggers SQLAlchemy to lazily re-fetch it — a sync-style
+    # load attempted outside an awaited query, which raised MissingGreenlet under
+    # concurrent load. `owner_id` is a plain value; it can't expire.
+    owner_id = owner.id
+
+    existing = await _find_active_event(db, owner_id, data.title)
+    if existing is not None:
+        return existing
+
     base_slug = _slugify(data.title)[:140]
 
     last_error: IntegrityError | None = None
     for _ in range(_SLUG_CREATE_ATTEMPTS):
         slug = f"{base_slug}-{_random_suffix()}"[:160]
-        event = Event(owner_id=owner.id, type=data.type, title=data.title, slug=slug)
+        event = Event(owner_id=owner_id, type=data.type, title=data.title, slug=slug)
         db.add(event)
         try:
             await db.flush()
         except IntegrityError as exc:
             last_error = exc
             await db.rollback()
+            # Either the random slug collided (retry below) or a concurrent request for
+            # this same (owner, title) won the race — tell them apart directly rather
+            # than guessing from the error.
+            winner = await _await_active_event(owner_id, data.title)
+            if winner is not None:
+                return winner
             continue
 
         db.add(Draft(event_id=event.id, data={}, revision=0))
@@ -60,14 +89,63 @@ async def create_event(db: AsyncSession, owner: User, data: EventCreate) -> Even
             action="EVENT_CREATED",
             resource_type="event",
             resource_id=event.id,
-            actor_user_id=owner.id,
+            actor_user_id=owner_id,
         )
         await db.commit()
         await db.refresh(event)
         return event
 
     assert last_error is not None
+    if data.title.startswith("tpl-"):
+        # Every attempt hit the (owner, title) conflict and never found the winner row —
+        # pathological (contended enough that its commit never became visible within our
+        # poll budget), but a clean 409 beats a raw IntegrityError reaching the client.
+        raise ConflictError(
+            "EVENT_ALREADY_EXISTS",
+            "You already have an active draft for this template.",
+            details={"title": data.title},
+        )
     raise last_error
+
+
+async def _find_active_event(db: AsyncSession, owner_id: uuid.UUID, title: str) -> Event | None:
+    """The owner's non-archived event for this template slot id, if any — see
+    `ix_events_owner_title_active`. Only template-backed titles ('tpl-*') are deduped;
+    this app has no other event-creation path today, but scoping it keeps a future
+    freeform-titled event (e.g. two same-named birthday parties) from colliding here.
+    """
+    if not title.startswith("tpl-"):
+        return None
+    result = await db.execute(
+        select(Event).where(
+            Event.owner_id == owner_id,
+            Event.title == title,
+            Event.status != EventStatus.ARCHIVED,
+        )
+    )
+    return result.scalar_one_or_none()
+
+
+_WINNER_POLL_ATTEMPTS = 5
+_WINNER_POLL_DELAY_S = 0.05
+
+
+async def _await_active_event(owner_id: uuid.UUID, title: str) -> Event | None:
+    """After our own insert lost a race on `ix_events_owner_title_active`, the winning
+    request's row exists but may not be visible yet — under READ COMMITTED it only
+    becomes visible once that request's transaction *commits*, which happens a few
+    statements (and an audit-log insert) after the point our insert collided with it.
+    Polls briefly rather than looking once. A fresh session per attempt, since the
+    caller's `db` just rolled back and is mid-retry — no need to hold its connection
+    idle across a wait it doesn't otherwise need."""
+    for attempt in range(_WINNER_POLL_ATTEMPTS):
+        async with _session_factory() as lookup_db:
+            winner = await _find_active_event(lookup_db, owner_id, title)
+        if winner is not None:
+            return winner
+        if attempt < _WINNER_POLL_ATTEMPTS - 1:
+            await asyncio.sleep(_WINNER_POLL_DELAY_S)
+    return None
 
 
 async def list_events(

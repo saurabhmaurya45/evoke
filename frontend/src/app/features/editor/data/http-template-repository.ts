@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, firstValueFrom, of, tap } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { WINDOW } from '../../../core/tokens/window.token';
 import type { TemplateData, TemplateDocument } from '../models/template-schema.model';
@@ -14,6 +14,13 @@ interface DraftApiOut {
   schemaVersion: number | null;
 }
 interface EventApiOut { id: string; slug: string; }
+
+/** `currentRevision` from a DRAFT_CONFLICT (409) error envelope, else null. */
+function conflictRevision(err: unknown): number | null {
+  const e = err as { status?: number; error?: { error?: { details?: { currentRevision?: unknown } } } };
+  const rev = e?.status === 409 ? e.error?.error?.details?.currentRevision : null;
+  return typeof rev === 'number' ? rev : null;
+}
 
 const EVENT_CACHE_KEY = 'evoke:event-ids';
 const REVISION_CACHE_KEY = 'evoke:draft-revisions';
@@ -31,25 +38,49 @@ export class HttpTemplateRepository implements TemplateRepository {
   private readonly auth = inject(AuthService);
   private readonly window = inject(WINDOW);
 
-  async saveDraft(document: TemplateDocument): Promise<void> {
+  /**
+   * Saves run one at a time. Autosave can fire again while the previous PUT is still
+   * in flight; both would carry the same `revision`, so the second would be rejected
+   * as a conflict (and, before this queue, silently dropped).
+   */
+  private saveQueue: Promise<unknown> = Promise.resolve();
+
+  saveDraft(document: TemplateDocument): Promise<void> {
     if (!this.auth.isAuthenticated()) {
       this.localWrite(LOCAL_DRAFT_PREFIX + document.templateId, document);
-      return;
+      return Promise.resolve();
     }
+    const run = (): Promise<void> => this.persistDraft(document);
+    const result = this.saveQueue.then(run, run);
+    this.saveQueue = result.catch(() => undefined);
+    return result;
+  }
+
+  private async persistDraft(document: TemplateDocument): Promise<void> {
     const eventId = await this.getOrCreateEvent(document.templateId);
-    const revision = this.readRevision(document.templateId);
-    await firstValueFrom(
-      this.http
-        .put<ApiEnvelope<DraftApiOut>>(`v1/events/${eventId}/draft`, {
-          data: document.data,
-          revision,
-          schemaVersion: document.schemaVersion,
-        })
-        .pipe(
-          tap((res) => this.storeRevision(document.templateId, res.data.revision)),
-          catchError(() => of(null)),
-        ),
-    );
+    for (let attempt = 0; ; attempt++) {
+      try {
+        const res = await firstValueFrom(
+          this.http.put<ApiEnvelope<DraftApiOut>>(`v1/events/${eventId}/draft`, {
+            data: document.data,
+            revision: this.readRevision(document.templateId),
+            schemaVersion: document.schemaVersion,
+          }),
+        );
+        this.storeRevision(document.templateId, res.data.revision);
+        return;
+      } catch (err) {
+        // The cached revision was stale (another tab/device saved, or the cache was
+        // cleared). The editor always holds the user's newest full document, so adopt
+        // the server's revision and write again once; anything else is a real failure.
+        const current = conflictRevision(err);
+        if (attempt === 0 && current !== null) {
+          this.storeRevision(document.templateId, current);
+          continue;
+        }
+        throw err;
+      }
+    }
   }
 
   async loadDraft(templateId: string): Promise<TemplateDocument | null> {
