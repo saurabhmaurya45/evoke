@@ -20,6 +20,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from sqlalchemy import select, update
+from sqlalchemy.ext.asyncio import AsyncSession
 
 import app.db_models  # noqa: F401  (registers every model on Base.metadata)
 from app.events.models import Event
@@ -99,67 +100,78 @@ TEMPLATES = [
 PAID_CURRENCY = "INR"
 
 
-async def main(apply: bool) -> None:
+async def seed(db: AsyncSession, *, apply: bool) -> tuple[list[str], list[str]]:
+    """The actual seeding logic, taking `db` explicitly — like every other service in
+    this app — instead of opening its own connection, so it can run against a test's
+    isolated session too. Returns `(created, kept)` description lines; `main()` below
+    is the only thing that prints them or owns the real engine/session lifecycle.
+    """
     created: list[str] = []
     kept: list[str] = []
 
-    async with _session_factory() as db:
-        currencies = {c.code: c for c in (await db.execute(select(Currency))).scalars()}
-        for spec in CURRENCIES:
-            if spec["code"] in currencies:
-                kept.append(f"currency {spec['code']}")
-                continue
-            row = Currency(**spec)
-            db.add(row)
-            currencies[spec["code"]] = row
-            created.append(f"currency {spec['code']}")
+    currencies = {c.code: c for c in (await db.execute(select(Currency))).scalars()}
+    for spec in CURRENCIES:
+        if spec["code"] in currencies:
+            kept.append(f"currency {spec['code']}")
+            continue
+        row = Currency(**spec)
+        db.add(row)
+        currencies[spec["code"]] = row
+        created.append(f"currency {spec['code']}")
 
-        categories = {c.slug: c for c in (await db.execute(select(Category))).scalars()}
-        for spec in CATEGORIES:
-            if spec["slug"] in categories:
-                kept.append(f"category {spec['slug']}")
-                continue
-            row = Category(**spec)
-            db.add(row)
-            categories[spec["slug"]] = row
-            created.append(f"category {spec['slug']}")
+    categories = {c.slug: c for c in (await db.execute(select(Category))).scalars()}
+    for spec in CATEGORIES:
+        if spec["slug"] in categories:
+            kept.append(f"category {spec['slug']}")
+            continue
+        row = Category(**spec)
+        db.add(row)
+        categories[spec["slug"]] = row
+        created.append(f"category {spec['slug']}")
 
-        await db.flush()  # assigns ids so templates can reference them
+    await db.flush()  # assigns ids so templates can reference them
 
-        templates = {t.slug: t for t in (await db.execute(select(Template))).scalars()}
-        for old, new in LEGACY_SLUGS.items():
-            if old in templates and new not in templates:
-                templates[old].slug = new
-                templates[new] = templates.pop(old)
-                moved = (
-                    await db.execute(update(Event).where(Event.title == old).values(title=new))
-                ).rowcount
-                created.append(f"rename template {old} -> {new} ({moved} event(s) re-pointed)")
-        existing = set(templates)
-        for spec in TEMPLATES:
-            if spec["slug"] in existing:
-                kept.append(f"template {spec['slug']}")
-                continue
-            paid = spec["price_minor"] is not None
-            db.add(
-                Template(
-                    slug=spec["slug"],
-                    name=spec["name"],
-                    category_id=categories[spec["category"]].id,
-                    pricing_model=(PricingModel.PAID if paid else PricingModel.FREE).value,
-                    price_amount_minor=spec["price_minor"],
-                    currency_id=currencies[PAID_CURRENCY].id if paid else None,
-                    storefront_status=StorefrontStatus.LISTED.value,
-                    status=TemplateStatus.ACTIVE,
-                )
+    templates = {t.slug: t for t in (await db.execute(select(Template))).scalars()}
+    for old, new in LEGACY_SLUGS.items():
+        if old in templates and new not in templates:
+            templates[old].slug = new
+            templates[new] = templates.pop(old)
+            moved = (
+                await db.execute(update(Event).where(Event.title == old).values(title=new))
+            ).rowcount
+            created.append(f"rename template {old} -> {new} ({moved} event(s) re-pointed)")
+    existing = set(templates)
+    for spec in TEMPLATES:
+        if spec["slug"] in existing:
+            kept.append(f"template {spec['slug']}")
+            continue
+        paid = spec["price_minor"] is not None
+        db.add(
+            Template(
+                slug=spec["slug"],
+                name=spec["name"],
+                category_id=categories[spec["category"]].id,
+                pricing_model=(PricingModel.PAID if paid else PricingModel.FREE).value,
+                price_amount_minor=spec["price_minor"],
+                currency_id=currencies[PAID_CURRENCY].id if paid else None,
+                storefront_status=StorefrontStatus.LISTED.value,
+                status=TemplateStatus.ACTIVE,
             )
-            price_label = f"PAID INR {spec['price_minor'] / 100}" if paid else "FREE"
-            created.append(f"template {spec['slug']} ({price_label})")
+        )
+        price_label = f"PAID INR {spec['price_minor'] / 100}" if paid else "FREE"
+        created.append(f"template {spec['slug']} ({price_label})")
 
-        if apply:
-            await db.commit()
-        else:
-            await db.rollback()
+    if apply:
+        await db.commit()
+    else:
+        await db.rollback()
+
+    return created, kept
+
+
+async def main(apply: bool) -> None:
+    async with _session_factory() as db:
+        created, kept = await seed(db, apply=apply)
 
     verb = "APPLIED" if apply else "DRY RUN (nothing written)"
     print(f"{verb}: {len(created)} to create, {len(kept)} already present")
