@@ -19,12 +19,12 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from sqlalchemy import select, update  # noqa: E402
+from sqlalchemy import select, update
 
-import app.db_models  # noqa: E402,F401  (registers every model on Base.metadata)
-from app.events.models import Event  # noqa: E402
-from app.shared.database import _engine, _session_factory  # noqa: E402
-from app.templates.models import (  # noqa: E402
+import app.db_models  # noqa: F401  (registers every model on Base.metadata)
+from app.events.models import Event
+from app.shared.database import _engine, _session_factory
+from app.templates.models import (
     Category,
     Currency,
     PricingModel,
@@ -53,13 +53,48 @@ LEGACY_SLUGS = {
 
 # price_minor is in paise; None means FREE.
 TEMPLATES = [
-    {"slug": "tpl-samarpan-royal", "name": "Samarpan — Royal Union", "category": "wedding", "price_minor": 149900},
-    {"slug": "tpl-eternal-bond", "name": "Eternal Bond — Royal Wedding", "category": "wedding", "price_minor": None},
-    {"slug": "tpl-beloved-nikkah", "name": "Beloved — Nikkah Invitation", "category": "wedding", "price_minor": None},
-    {"slug": "tpl-rosewood-punjabi", "name": "Rosewood — Punjabi Wedding", "category": "wedding", "price_minor": None},
-    {"slug": "tpl-maroon-gold-royal", "name": "Maroon & Gold — Royal Hindu Wedding", "category": "wedding", "price_minor": None},
-    {"slug": "tpl-doorway-modern", "name": "Doorway — Modern Wedding", "category": "wedding", "price_minor": None},
-    {"slug": "tpl-golden-promise", "name": "Golden Promise", "category": "engagement", "price_minor": None},
+    {
+        "slug": "tpl-samarpan-royal",
+        "name": "Samarpan — Royal Union",
+        "category": "wedding",
+        "price_minor": 149900,
+    },
+    {
+        "slug": "tpl-eternal-bond",
+        "name": "Eternal Bond — Royal Wedding",
+        "category": "wedding",
+        "price_minor": None,
+    },
+    {
+        "slug": "tpl-beloved-nikkah",
+        "name": "Beloved — Nikkah Invitation",
+        "category": "wedding",
+        "price_minor": None,
+    },
+    {
+        "slug": "tpl-rosewood-punjabi",
+        "name": "Rosewood — Punjabi Wedding",
+        "category": "wedding",
+        "price_minor": None,
+    },
+    {
+        "slug": "tpl-maroon-gold-royal",
+        "name": "Maroon & Gold — Royal Hindu Wedding",
+        "category": "wedding",
+        "price_minor": None,
+    },
+    {
+        "slug": "tpl-doorway-modern",
+        "name": "Doorway — Modern Wedding",
+        "category": "wedding",
+        "price_minor": None,
+    },
+    {
+        "slug": "tpl-golden-promise",
+        "name": "Golden Promise",
+        "category": "engagement",
+        "price_minor": None,
+    },
 ]
 PAID_CURRENCY = "INR"
 
@@ -118,16 +153,16 @@ async def main(apply: bool) -> None:
                     status=TemplateStatus.ACTIVE,
                 )
             )
-            created.append(
-                f"template {spec['slug']} ({'PAID INR %s' % (spec['price_minor'] / 100) if paid else 'FREE'})"
-            )
+            price_label = f"PAID INR {spec['price_minor'] / 100}" if paid else "FREE"
+            created.append(f"template {spec['slug']} ({price_label})")
 
         if apply:
             await db.commit()
         else:
             await db.rollback()
 
-    print(("APPLIED" if apply else "DRY RUN (nothing written)") + f": {len(created)} to create, {len(kept)} already present")
+    verb = "APPLIED" if apply else "DRY RUN (nothing written)"
+    print(f"{verb}: {len(created)} to create, {len(kept)} already present")
     for line in created:
         print("  + " + line)
     for line in kept:
@@ -136,6 +171,10 @@ async def main(apply: bool) -> None:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--apply", action="store_true", help="write the changes (default is a dry run)")
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--apply", action="store_true", help="write the changes (default is a dry run)"
+    )
     asyncio.run(main(parser.parse_args().apply))

@@ -11,13 +11,18 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.drafts.models import Draft
-from app.shared.database import _session_factory
 from app.events.models import Event, EventStatus, EventType
 from app.events.schemas import EventCreate, EventUpdate
 from app.payments.pricing import get_template_price, has_paid_payment
 from app.shared.audit import log_action
 from app.shared.authorization import ensure_owner_or_admin
-from app.shared.errors import ConflictError, NotFoundError, PaymentRequiredError, ValidationFailedError
+from app.shared.database import _session_factory
+from app.shared.errors import (
+    ConflictError,
+    NotFoundError,
+    PaymentRequiredError,
+    ValidationFailedError,
+)
 from app.shared.pagination import Page, PageParams, make_page
 from app.templates.models import Template
 from app.users.models import User, UserRole
