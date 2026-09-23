@@ -10,7 +10,7 @@ export const EDITOR_ROUTES: Routes = [
     path: ':templateId',
     loadComponent: () =>
       import('./pages/editor-page/editor-page.component').then((m) => m.EditorPageComponent),
-    title: 'Edit Template • Evoke',
+    title: 'Edit Template • theinvitely.in',
   },
   { path: '', pathMatch: 'full', redirectTo: 'tpl-samarpan-royal' },
 ];

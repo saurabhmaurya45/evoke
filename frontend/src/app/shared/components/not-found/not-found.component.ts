@@ -58,7 +58,7 @@ export class NotFoundComponent implements OnInit {
 
   ngOnInit(): void {
     this.seo.apply({
-      title: 'Page not found • Evoke',
+      title: 'Page not found • theinvitely.in',
       description: 'The page you are looking for does not exist.',
       robots: 'noindex, nofollow',
     });

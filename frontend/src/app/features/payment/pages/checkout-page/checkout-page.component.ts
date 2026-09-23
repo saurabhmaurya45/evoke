@@ -60,7 +60,7 @@ export class CheckoutPageComponent {
 
   constructor() {
     inject(SeoService).apply({
-      title: 'Checkout • Evoke',
+      title: 'Checkout • theinvitely.in',
       description: 'Publish your invitation website.',
       robots: 'noindex, nofollow',
     });

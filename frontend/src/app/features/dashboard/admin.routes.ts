@@ -8,6 +8,6 @@ export const ADMIN_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/admin-dashboard/admin-dashboard.component').then((m) => m.AdminDashboardComponent),
     canActivate: [adminGuard],
-    title: 'Admin • Evoke',
+    title: 'Admin • theinvitely.in',
   },
 ];

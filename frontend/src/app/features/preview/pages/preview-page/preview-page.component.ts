@@ -44,8 +44,8 @@ export class PreviewPageComponent {
     effect(() => {
       const tpl = this.template();
       this.seo.apply({
-        title: `${tpl.name} — Template Preview • Evoke`,
-        description: `Preview the ${tpl.name} ${tpl.category.toLowerCase()} invitation template on Evoke.`,
+        title: `${tpl.name} — Template Preview • theinvitely.in`,
+        description: `Preview the ${tpl.name} ${tpl.category.toLowerCase()} invitation template on theinvitely.in.`,
         robots: 'noindex, follow',
       });
     });

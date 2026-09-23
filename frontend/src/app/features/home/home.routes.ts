@@ -6,6 +6,6 @@ export const HOME_ROUTES: Routes = [
     path: '',
     loadComponent: () =>
       import('./pages/home-page/home-page.component').then((m) => m.HomePageComponent),
-    title: 'Evoke — Create Beautiful Invitation Websites in Minutes',
+    title: 'theinvitely.in — Create Beautiful Invitation Websites in Minutes',
   },
 ];

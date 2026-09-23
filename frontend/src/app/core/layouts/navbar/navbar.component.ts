@@ -7,6 +7,7 @@ import { ViewportService } from '../../services/viewport.service';
 import { PRIMARY_NAV } from '../../constants/navigation.constants';
 import { AuthService } from '../../services/auth.service';
 import { ProfileMenuComponent } from '../../../shared/components/profile-menu/profile-menu.component';
+import { APP_NAME } from '../../constants/app.constants';
 
 /**
  * Fixed top navigation. Reacts to scroll (glass background) and viewport
@@ -25,6 +26,7 @@ export class NavbarComponent {
   protected readonly viewport = inject(ViewportService);
   protected readonly auth = inject(AuthService);
   protected readonly navLinks = PRIMARY_NAV;
+  protected readonly appName = APP_NAME;
   protected readonly mobileMenuOpen = signal(false);
 
   protected signOut(): void {

@@ -36,12 +36,12 @@ export const routes: Routes = [
       {
         path: 'services',
         component: ComingSoonComponent,
-        title: 'Services • Evoke',
+        title: 'Services • theinvitely.in',
         data: {
           eyebrow: 'Services',
           heading: 'Services',
           description:
-            'Explore every occasion Evoke supports — a dedicated services hub is on the way.',
+            'Explore every occasion theinvitely.in supports — a dedicated services hub is on the way.',
         },
       },
       {
@@ -52,7 +52,7 @@ export const routes: Routes = [
       {
         path: 'pricing',
         component: ComingSoonComponent,
-        title: 'Pricing • Evoke',
+        title: 'Pricing • theinvitely.in',
         data: {
           eyebrow: 'Pricing',
           heading: 'Pricing',
@@ -62,17 +62,17 @@ export const routes: Routes = [
       {
         path: 'about',
         component: ComingSoonComponent,
-        title: 'About • Evoke',
+        title: 'About • theinvitely.in',
         data: {
           eyebrow: 'Company',
-          heading: 'About Evoke',
+          heading: 'About theinvitely.in',
           description: 'Our story is coming soon.',
         },
       },
       {
         path: 'contact',
         component: ComingSoonComponent,
-        title: 'Contact • Evoke',
+        title: 'Contact • theinvitely.in',
         data: {
           eyebrow: 'Company',
           heading: 'Contact us',

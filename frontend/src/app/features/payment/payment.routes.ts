@@ -9,7 +9,7 @@ export const PAYMENT_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/checkout-page/checkout-page.component').then((m) => m.CheckoutPageComponent),
     canActivate: [authGuard],
-    title: 'Checkout • Evoke',
+    title: 'Checkout • theinvitely.in',
   },
   {
     path: 'result',
@@ -18,6 +18,6 @@ export const PAYMENT_ROUTES: Routes = [
         (m) => m.PaymentResultPageComponent,
       ),
     canActivate: [authGuard],
-    title: 'Payment status • Evoke',
+    title: 'Payment status • theinvitely.in',
   },
 ];

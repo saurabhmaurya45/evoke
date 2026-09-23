@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LogoComponent } from '../../../../shared/components/logo/logo.component';
 import { AuthService, type AuthErrorCode, type SocialProvider } from '../../../../core/services/auth.service';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { APP_NAME } from '../../../../core/constants/app.constants';
 
 type AuthMode = 'login' | 'signup' | 'otp' | 'forgot' | 'reset' | 'check-email' | 'verified' | 'callback';
 type FormModel = { firstName: FormControl<string>; lastName: FormControl<string>; email: FormControl<string>; password: FormControl<string>; confirmPassword: FormControl<string>; remember: FormControl<boolean>; terms: FormControl<boolean>; otp: FormControl<string> };
@@ -14,15 +15,15 @@ type FormModel = { firstName: FormControl<string>; lastName: FormControl<string>
   imports: [ReactiveFormsModule, RouterLink, LogoComponent, LoaderComponent],
   template: `
     <main class="auth-shell">
-      <section class="auth-art"><div class="auth-art__nav"><a class="back-home" routerLink="/">← Back to homepage</a><a class="brand" routerLink="/"><app-logo [markSize]="28" [wordSize]="22" /></a></div><div class="orb orb--one" aria-hidden="true"></div><div class="orb orb--two" aria-hidden="true"></div><div class="sparkle sparkle--one" aria-hidden="true">✦</div><div class="sparkle sparkle--two" aria-hidden="true">✧</div><div class="invite-card" aria-hidden="true"><div class="invite-card__top"><span>EVOKE</span><b>EST. 2026</b></div><div class="invite-card__monogram">E</div><div class="invite-card__rule"><i></i><span>✦</span><i></i></div><strong>{{ artTitle() }}</strong><small>Beautiful beginnings, thoughtfully made</small><div class="invite-card__footer">CREATE · CELEBRATE · REMEMBER</div><i class="invite-card__frame"></i></div></section>
+      <section class="auth-art"><div class="auth-art__nav"><a class="back-home" routerLink="/">← Back to homepage</a><a class="brand" routerLink="/"><app-logo [height]="38" /></a></div><div class="orb orb--one" aria-hidden="true"></div><div class="orb orb--two" aria-hidden="true"></div><div class="sparkle sparkle--one" aria-hidden="true">✦</div><div class="sparkle sparkle--two" aria-hidden="true">✧</div><div class="invite-card" aria-hidden="true"><div class="invite-card__top"><span>{{ appName }}</span><b>EST. 2026</b></div><div class="invite-card__monogram">t</div><div class="invite-card__rule"><i></i><span>✦</span><i></i></div><strong>{{ artTitle() }}</strong><small>Beautiful beginnings, thoughtfully made</small><div class="invite-card__footer">CREATE · CELEBRATE · REMEMBER</div><i class="invite-card__frame"></i></div></section>
       <section class="auth-panel" [class.auth-panel--signup]="mode() === 'signup'" aria-labelledby="auth-title">
-        <div class="auth-mobile-nav"><a class="back-home" routerLink="/">← Back to homepage</a><a class="brand" routerLink="/"><app-logo [markSize]="28" [wordSize]="22" /></a></div>
+        <div class="auth-mobile-nav"><a class="back-home" routerLink="/">← Back to homepage</a><a class="brand" routerLink="/"><app-logo [height]="38" /></a></div>
         <div class="auth-card">
-          @if (mode() === 'callback') { <div class="status"><app-loader label="Completing sign in" /><h1 id="auth-title">Completing sign in</h1><p>Taking you back to Evoke…</p></div> }
-          @else if (mode() === 'verified') { <div class="status"><div class="success">✓</div><h1 id="auth-title">Email verified</h1><p>Your account is ready. Continue to your Evoke dashboard.</p><a class="primary" routerLink="/dashboard">Continue to dashboard</a></div> }
+          @if (mode() === 'callback') { <div class="status"><app-loader label="Completing sign in" /><h1 id="auth-title">Completing sign in</h1><p>Taking you back to {{ appName }}…</p></div> }
+          @else if (mode() === 'verified') { <div class="status"><div class="success">✓</div><h1 id="auth-title">Email verified</h1><p>Your account is ready. Continue to your {{ appName }} dashboard.</p><a class="primary" routerLink="/dashboard">Continue to dashboard</a></div> }
           @else if (mode() === 'check-email') { <div class="status"><div class="mail">✦</div><h1 id="auth-title">Check your email</h1><p>We sent a verification link. It may take a moment to arrive.</p><button class="secondary" type="button" (click)="resend()">Resend email</button><a routerLink="/login">Back to sign in</a></div> }
           @else {
-            <p class="eyebrow">{{ mode() === 'login' ? 'Welcome back' : mode() === 'signup' ? 'Begin your story' : 'Evoke account' }}</p>
+            <p class="eyebrow">{{ mode() === 'login' ? 'Welcome back' : mode() === 'signup' ? 'Begin your story' : appName + ' account' }}</p>
             <h1 id="auth-title">{{ heading() }}</h1><p class="intro">{{ intro() }}</p>
             @if (error()) { <div class="error" role="alert">{{ error() }}</div> }
             @if (mode() === 'login' || mode() === 'signup') {
@@ -35,12 +36,12 @@ type FormModel = { firstName: FormControl<string>; lastName: FormControl<string>
                 <button class="primary" type="submit" [disabled]="auth.loading()">{{ auth.loading() ? 'Please wait…' : mode() === 'login' ? 'Sign in' : 'Create account' }}</button>
               </form>
               <div class="divider"><span>or continue with</span></div><div class="socials">@for (provider of providers; track provider) { <button class="social" type="button" (click)="social(provider)" [attr.aria-label]="'Continue with ' + provider"><span class="social__icon" [class]="'social__icon--' + provider" aria-hidden="true">{{ provider === 'google' ? 'G' : provider === 'apple' ? '●' : provider === 'facebook' ? 'f' : provider === 'github' ? '◆' : 'M' }}</span><span class="social__label">{{ provider }}</span></button> }</div>
-              <p class="switch">{{ mode() === 'login' ? 'New to Evoke?' : 'Already have an account?' }} <a [routerLink]="mode() === 'login' ? '/signup' : '/login'">{{ mode() === 'login' ? 'Create account' : 'Sign in' }}</a></p>
+              <p class="switch">{{ mode() === 'login' ? 'New to ' + appName + '?' : 'Already have an account?' }} <a [routerLink]="mode() === 'login' ? '/signup' : '/login'">{{ mode() === 'login' ? 'Create account' : 'Sign in' }}</a></p>
             } @else if (mode() === 'otp') { <form [formGroup]="form" (ngSubmit)="submitOtp()"><label>6-digit verification code<input class="otp" inputmode="numeric" maxlength="6" formControlName="otp" autocomplete="one-time-code" placeholder="000000" /></label><button class="primary" type="submit">Verify code</button></form><p class="switch"><a routerLink="/login">Change email</a></p> }
             @else if (mode() === 'forgot') { <form [formGroup]="form" (ngSubmit)="sendReset()"><label>Email address<input type="email" formControlName="email" autocomplete="email" /></label><button class="primary" type="submit">Send reset link</button></form><p class="switch"><a routerLink="/login">Back to sign in</a></p> }
             @else { <form [formGroup]="form" (ngSubmit)="reset()"><label>New password<input type="password" formControlName="password" autocomplete="new-password" /></label><label>Confirm password<input type="password" formControlName="confirmPassword" autocomplete="new-password" /></label><button class="primary" type="submit">Reset password</button></form> }
           }
-        </div><p class="legal">By continuing, you agree to Evoke's Terms and Privacy Policy.</p>
+        </div><p class="legal">By continuing, you agree to {{ appName }}'s Terms and Privacy Policy.</p>
       </section>
     </main>
   `,
@@ -59,8 +60,9 @@ export class AuthPageComponent {
   protected readonly mode = signal<AuthMode>((this.route.snapshot.data['mode'] as AuthMode) ?? 'login'); protected readonly showPassword = signal(false); protected readonly error = signal('');
   protected readonly providers: readonly SocialProvider[] = ['google', 'apple', 'facebook', 'github', 'microsoft'];
   protected readonly form = new FormGroup<FormModel>({ firstName: new FormControl('', { nonNullable:true, validators:[Validators.minLength(2)] }), lastName: new FormControl('', { nonNullable:true, validators:[Validators.minLength(2)] }), email: new FormControl('', { nonNullable:true, validators:[Validators.required,Validators.email] }), password: new FormControl('', { nonNullable:true, validators:[Validators.required,Validators.minLength(8)] }), confirmPassword: new FormControl('', { nonNullable:true }), remember: new FormControl(false, { nonNullable:true }), terms: new FormControl(false, { nonNullable:true }), otp: new FormControl('', { nonNullable:true, validators:[Validators.pattern(/^\d{6}$/)] }) });
-  protected readonly heading = computed(() => ({ login:'Sign in to Evoke', signup:'Create your account', otp:'Verify your email', forgot:'Reset your password', reset:'Choose a new password', 'check-email':'Check your email', verified:'Email verified', callback:'Completing sign in' } as Record<AuthMode, string>)[this.mode()] ?? 'Welcome to Evoke');
-  protected readonly intro = computed(() => ({ login:'Your beautiful moments are waiting.', signup:'Create memorable invitation experiences in minutes.', otp:'Enter the six-digit code we sent you.', forgot:'We’ll send a secure reset link to your email.', reset:'Make it strong, memorable, and yours.', 'check-email':'We sent a verification link to your inbox.', verified:'Your account is ready.', callback:'Taking you back to Evoke.' } as Record<AuthMode, string>)[this.mode()] ?? '');
+  protected readonly appName = APP_NAME;
+  protected readonly heading = computed(() => ({ login:`Sign in to ${APP_NAME}`, signup:'Create your account', otp:'Verify your email', forgot:'Reset your password', reset:'Choose a new password', 'check-email':'Check your email', verified:'Email verified', callback:'Completing sign in' } as Record<AuthMode, string>)[this.mode()] ?? `Welcome to ${APP_NAME}`);
+  protected readonly intro = computed(() => ({ login:'Your beautiful moments are waiting.', signup:'Create memorable invitation experiences in minutes.', otp:'Enter the six-digit code we sent you.', forgot:'We’ll send a secure reset link to your email.', reset:'Make it strong, memorable, and yours.', 'check-email':'We sent a verification link to your inbox.', verified:'Your account is ready.', callback:`Taking you back to ${APP_NAME}.` } as Record<AuthMode, string>)[this.mode()] ?? '');
   protected readonly artTitle = computed(() => this.mode() === 'signup' ? 'Your story starts here' : 'The moment is yours');
   protected fieldError(name: keyof FormModel): string { const control = this.form.controls[name]; return control.invalid && control.touched ? 'Please enter a valid value.' : ''; }
 

@@ -8,6 +8,6 @@ export const TEMPLATES_ROUTES: Routes = [
       import('./pages/template-gallery/template-gallery.component').then(
         (m) => m.TemplateGalleryComponent,
       ),
-    title: 'Templates • Evoke',
+    title: 'Templates • theinvitely.in',
   },
 ];

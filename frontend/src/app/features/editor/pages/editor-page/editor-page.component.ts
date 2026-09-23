@@ -88,7 +88,7 @@ export class EditorPageComponent {
           return;
         }
         this.seo.apply({
-          title: `Edit ${schema.name} • Evoke`,
+          title: `Edit ${schema.name} • theinvitely.in`,
           description: `Personalise the ${schema.name} invitation and publish your wedding website.`,
           robots: 'noindex, nofollow',
         });

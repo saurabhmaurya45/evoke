@@ -131,7 +131,7 @@ export const HOME_KEYWORDS: readonly string[] = [
 
 /** Company details used in structured data. Update alongside a rebrand. */
 export const ORGANISATION = {
-  legalName: 'Evoke',
+  legalName: 'theinvitely.in',
   areaServed: 'IN',
   currency: 'INR',
   language: 'en-IN',

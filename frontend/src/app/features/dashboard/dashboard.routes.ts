@@ -8,6 +8,6 @@ export const DASHBOARD_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/user-dashboard/user-dashboard.component').then((m) => m.UserDashboardComponent),
     canActivate: [authGuard],
-    title: 'Dashboard • Evoke',
+    title: 'Dashboard • theinvitely.in',
   },
 ];

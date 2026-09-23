@@ -64,7 +64,7 @@ export class PaymentResultPageComponent {
 
   constructor() {
     inject(SeoService).apply({
-      title: 'Payment status • Evoke',
+      title: 'Payment status • theinvitely.in',
       description: 'Your invitation payment status.',
       robots: 'noindex, nofollow',
     });

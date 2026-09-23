@@ -1,5 +1,5 @@
 /** Immutable brand + product constants. */
-export const APP_NAME = 'Evoke';
+export const APP_NAME = 'theinvitely.in';
 
 export const APP_TAGLINE = 'Create Beautiful Invitation Websites in Minutes';
 

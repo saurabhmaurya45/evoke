@@ -25,7 +25,7 @@ export class ComingSoonComponent implements OnInit {
   private readonly seo = inject(SeoService);
 
   readonly heading = input('Coming Soon');
-  readonly eyebrow = input('Evoke');
+  readonly eyebrow = input('theinvitely.in');
   readonly description = input('This experience is on its way. Check back soon.');
 
   ngOnInit(): void {

@@ -9,7 +9,7 @@ export const PREVIEW_ROUTES: Routes = [
     path: ':templateId',
     loadComponent: () =>
       import('./pages/preview-page/preview-page.component').then((m) => m.PreviewPageComponent),
-    title: 'Template Preview • Evoke',
+    title: 'Template Preview • theinvitely.in',
   },
   { path: '', pathMatch: 'full', redirectTo: 'tpl-samarpan-royal' },
 ];

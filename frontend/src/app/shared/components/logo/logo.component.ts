@@ -1,46 +1,30 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { APP_NAME } from '../../../core/constants/app.constants';
+import { ThemeService } from '../../../core/services/theme.service';
 
-/** Brand lockup: gradient diamond + serif wordmark. */
+/**
+ * Brand lockup: the theinvitely.in wordmark image. Two colour treatments
+ * exist — a cream/gold version for the dark theme and a bronze/gold version
+ * for the light theme, since the cream "the" is unreadable on a light bg.
+ */
 @Component({
   selector: 'app-logo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <span class="logo" [style.--mark-size.px]="markSize()" [style.--word-size.px]="wordSize()">
-      <span class="logo__mark" aria-hidden="true"></span>
-      <span class="logo__word">{{ name }}</span>
-    </span>
-  `,
+  template: `<img class="logo" [style.height.px]="height()" [src]="src()" [alt]="name" />`,
   styles: [
     `
-      @use 'abstracts' as *;
-
       .logo {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .logo__mark {
-        width: var(--mark-size, 30px);
-        height: var(--mark-size, 30px);
-        border-radius: 9px;
-        background: $gradient-logo;
-        transform: rotate(45deg);
-        flex-shrink: 0;
-      }
-
-      .logo__word {
-        font-family: $font-serif;
-        font-size: var(--word-size, 20px);
-        font-weight: $fw-bold;
-        letter-spacing: -0.02em;
+        display: block;
+        width: auto;
       }
     `,
   ],
 })
 export class LogoComponent {
-  readonly markSize = input(30);
-  readonly wordSize = input(20);
+  private readonly theme = inject(ThemeService);
+  readonly height = input(46);
   protected readonly name = APP_NAME;
+  protected readonly src = computed(() =>
+    this.theme.isDark() ? 'assets/brand/logo.png' : 'assets/brand/logo-light.png',
+  );
 }

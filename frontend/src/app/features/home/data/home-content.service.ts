@@ -330,7 +330,7 @@ export class HomeContentService {
     {
       name: 'Priya Nair',
       role: 'Event Planner',
-      quote: 'I now recommend Evoke to every couple I work with. The quality speaks for itself.',
+      quote: 'I now recommend theinvitely.in to every couple I work with. The quality speaks for itself.',
       initials: 'PN',
     },
   ];

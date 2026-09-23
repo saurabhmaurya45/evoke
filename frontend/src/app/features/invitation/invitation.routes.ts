@@ -7,6 +7,6 @@ export const INVITATION_ROUTES: Routes = [
       import('./pages/invitation-page/invitation-page.component').then(
         (m) => m.InvitationPageComponent,
       ),
-    title: 'Your Invitation • Evoke',
+    title: 'Your Invitation • theinvitely.in',
   },
 ];

@@ -1,6 +1,6 @@
 <nav class="nav" [class.nav--scrolled]="viewport.scrolled()" aria-label="Primary">
   <div class="nav__bar">
-    <a class="nav__brand" routerLink="/" fragment="hero" aria-label="Evoke home">
+    <a class="nav__brand" routerLink="/" fragment="hero" [attr.aria-label]="appName + ' home'">
       <app-logo />
     </a>
 

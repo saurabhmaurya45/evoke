@@ -2,8 +2,8 @@
   <div class="footer__inner">
     <div class="footer__grid">
       <div class="footer__brand">
-        <a class="footer__logo" routerLink="/" fragment="hero" aria-label="Evoke home">
-          <app-logo [markSize]="26" [wordSize]="18" />
+        <a class="footer__logo" routerLink="/" fragment="hero" [attr.aria-label]="appName + ' home'">
+          <app-logo [height]="38" />
         </a>
         <p class="footer__desc">{{ description }}</p>
         <ul class="footer__social">
