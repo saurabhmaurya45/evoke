@@ -21,7 +21,7 @@
 }
 
 .compare__col {
-  border-radius: 22px;
+  border-radius: $radius-lg;
   padding: 32px;
 
   &--old {
@@ -38,7 +38,7 @@
 
 .compare__title {
   font-family: $font-serif;
-  font-size: 17px;
+  font-size: font-size('2xl');
   font-weight: $fw-semibold;
   margin: 0 0 24px;
 
@@ -52,7 +52,7 @@
   gap: 12px;
   padding: 12px 0;
   border-top: 1px solid rgba(var(--glass-rgb), 0.06);
-  font-size: 14.5px;
+  font-size: font-size('md');
 
   .compare__col--old & {
     color: rgba(var(--text-rgb), 0.5);

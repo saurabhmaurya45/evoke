@@ -66,6 +66,25 @@ $space: (
   @return map.get($space, $key);
 }
 
+// Font sizes — covers body/UI copy; purely decorative glyph sizes (a giant
+// monogram letter, an icon-style arrow glyph) are intentionally out of scope,
+// the same way icon pixel sizes aren't part of a type scale either.
+$font-size: (
+  'xs': 11px,
+  'sm': 12px,
+  'base': 13px,
+  'md': 14px,
+  'lg': 15px,
+  'xl': 16px,
+  '2xl': 17px,
+  '3xl': 19px,
+  '4xl': 22px,
+);
+
+@function font-size($key) {
+  @return map.get($font-size, $key);
+}
+
 // Radii
 $radius-sm: 8px;
 $radius-md: 14px;

@@ -81,7 +81,7 @@
   border-radius: $radius-pill;
   background: rgba(var(--glass-rgb), 0.06);
   border: 1px solid rgba(var(--glass-rgb), 0.12);
-  font-size: 13px;
+  font-size: font-size('base');
   color: rgba(var(--text-rgb), 0.75);
   margin-bottom: 28px;
   animation: fadeInUp 0.8s ease both;
@@ -110,7 +110,7 @@
 }
 
 .hero__lede {
-  font-size: 19px;
+  font-size: font-size('3xl');
   line-height: 1.6;
   color: rgba(var(--text-rgb), 0.65);
   max-width: 520px;
@@ -126,7 +126,7 @@
 }
 
 .hero__cta {
-  font-size: 16px;
+  font-size: font-size('xl');
   font-weight: $fw-semibold;
   padding: 16px 30px;
   border-radius: $radius-pill;
@@ -155,56 +155,58 @@
   z-index: $z-content;
 }
 
+// Two lanes (left: 1 over 3, right: 2 over 4), each card's vertical slot
+// sized with a real measured margin against its neighbours — not just eyeballed.
+// A prior pass ("loose overlapping cascade") looked fine in isolated
+// screenshots but put card 1 and card 3 on a genuine collision course at
+// every desktop width actually measured, hiding card 1's title under card 3.
 .hero__card {
   position: absolute;
   transition: transform 0.15s ease-out;
   will-change: transform;
 
+  .hero__card-inner {
+    border-radius: $radius-lg;
+    padding: 14px;
+  }
+
   &--1 {
     top: 0;
-    left: 10%;
-    width: 230px;
+    left: 4%;
+    width: 200px;
 
     .hero__card-inner {
       animation: floatY 7s ease-in-out infinite;
-      border-radius: 22px;
-      padding: 16px;
     }
   }
 
   &--2 {
-    top: 120px;
-    right: 0;
-    width: 210px;
+    top: 40px;
+    right: 2%;
+    width: 190px;
 
     .hero__card-inner {
       animation: floatY2 8s ease-in-out infinite;
-      border-radius: 22px;
-      padding: 16px;
     }
   }
 
   &--3 {
-    bottom: 10px;
-    left: 22%;
-    width: 150px;
+    top: 226px;
+    left: 4%;
+    width: 170px;
 
     .hero__card-inner {
       animation: floatY3 9s ease-in-out infinite;
-      border-radius: 28px;
-      padding: 10px;
     }
   }
 
   &--4 {
-    bottom: -30px;
-    right: 8%;
-    width: 190px;
+    top: 266px;
+    right: 2%;
+    width: 180px;
 
     .hero__card-inner {
       animation: floatY 10s ease-in-out infinite;
-      border-radius: 16px;
-      padding: 10px;
     }
   }
 }
@@ -239,7 +241,11 @@
 }
 
 .hero__card--3 .hero__card-media {
-  height: 180px;
+  // Was 180px — card 3's slot starts at top:226px in a 460px-tall stage, and
+  // this card has three collage photos stacked in its content, making it the
+  // tallest of the four; the full 180px media pushed its total height past
+  // the stage's bottom edge.
+  height: 130px;
 }
 
 .hero__card--4 .hero__card-media {
@@ -249,12 +255,12 @@
 .hero__card-title {
   margin-top: 12px;
   font-family: $font-serif;
-  font-size: 14px;
+  font-size: font-size('md');
   font-weight: $fw-semibold;
 }
 
 .hero__card-sub {
-  font-size: 12px;
+  font-size: font-size('sm');
   color: rgba(var(--text-rgb), 0.5);
 }
 

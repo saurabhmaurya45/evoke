@@ -21,7 +21,7 @@
     radial-gradient(circle at 58% 74%, rgba(214, 167, 54, 0.16) 0 1px, transparent 1.5px),
     #12110f;
   background-size: 170px 150px, 220px 190px, 260px 220px, auto;
-  border-radius: 32px;
+  border-radius: $radius-2xl;
 }
 
 .carousel {
@@ -54,15 +54,22 @@
 
 .carousel__nav {
   flex-shrink: 0;
-  width: 44px;
-  height: 44px;
+  // Was 44px at rgba(var(--nav-rgb), 0.6) — in dark mode --nav-rgb is almost
+  // the same colour as this section's own background, so at rest the button
+  // nearly disappeared into it. Bigger and more opaque so it reads without
+  // needing hover.
+  width: 52px;
+  height: 52px;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  border: 1px solid rgba(210, 190, 153, 0.28);
-  background: rgba(var(--nav-rgb), 0.6);
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  background: rgba(var(--nav-rgb), 0.85);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   color: #f3ecdd;
-  font-size: 26px;
+  // The ‹/› glyph itself, not body copy — scaled with the button, not the
+  // type scale (same reasoning as the monogram/icon sizes below).
+  font-size: 30px;
   line-height: 1;
   cursor: pointer;
   transition: all $transition-base;
@@ -87,7 +94,7 @@
 .templates__card {
   background: linear-gradient(160deg, rgba(48, 46, 42, 0.55), rgba(27, 26, 23, 0.88));
   border: 1px solid rgba(210, 190, 153, 0.2);
-  border-radius: 22px;
+  border-radius: $radius-lg;
   padding: 12px;
   min-width: 0;
   will-change: transform;
@@ -101,7 +108,8 @@
 .templates__preview {
   position: relative;
   height: 190px;
-  border-radius: 18px;
+  // Concentric with the card's own $radius-lg (20px) minus its 12px padding.
+  border-radius: $radius-sm;
   overflow: hidden;
 }
 
@@ -142,7 +150,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
+  font-size: font-size('xs');
   font-weight: $fw-semibold;
   letter-spacing: 0.02em;
   padding: 6px 14px;
@@ -175,7 +183,7 @@
 
 .templates__name {
   font-family: $font-serif;
-  font-size: 17px;
+  font-size: font-size('2xl');
   line-height: 1.2;
   font-weight: $fw-semibold;
   margin: 0;
@@ -185,7 +193,7 @@
   flex-shrink: 0;
   padding: 4px 10px;
   border-radius: $radius-pill;
-  font-size: 11px;
+  font-size: font-size('xs');
   font-weight: $fw-semibold;
   white-space: nowrap;
   color: $color-gold;
@@ -207,7 +215,7 @@
 .templates__btn {
   flex: 1;
   text-align: center;
-  font-size: 11px;
+  font-size: font-size('xs');
   font-weight: $fw-semibold;
   padding: 10px 8px;
   border-radius: $radius-pill;
@@ -243,7 +251,7 @@
   border-radius: $radius-pill;
   border: 1px solid rgba(210, 190, 153, 0.28);
   color: #f3ecdd;
-  font-size: 13px;
+  font-size: font-size('base');
   font-weight: $fw-semibold;
   transition: border-color $transition-base, background $transition-base;
 

@@ -318,6 +318,11 @@
         position: absolute;
         inset: 0;
         z-index: 1;
+        /* The rings sit at the same vertical position as the names/tagline
+           text, and at full brightness a solid metallic object crossing
+           letters reads as an error, not a decoration. Softer + smaller
+           keeps it as atmosphere behind the copy instead of on top of it. */
+        opacity: 0.55;
       }
       #hero .vignette {
         position: absolute;
@@ -352,13 +357,20 @@
       }
       #hero .date-line {
         margin-top: 26px;
+        /* Explicit, not left to the <p>'s browser-default bottom margin — that
+           default (~1em, smaller than .hero-btns' own top margin) was getting
+           discarded by margin collapsing anyway, so it wasn't doing anything. */
+        margin-bottom: 14px;
         font-family: 'Cormorant Garamond', serif;
         font-size: 1.35rem;
         color: var(--ivory);
         font-style: italic;
       }
       .hero-btns {
-        margin-top: 44px;
+        /* Was 44px. Adjoining margins collapse to the larger of the two, so
+           raising .date-line's alone wouldn't have widened the visible gap —
+           this is the value that actually governs it. */
+        margin-top: 56px;
         display: flex;
         gap: 20px;
         justify-content: center;
@@ -367,6 +379,11 @@
       .btn {
         display: inline-block;
         padding: 16px 42px;
+        /* All-caps text sits visually high in a font's default line box (the
+           box still reserves descender space uppercase glyphs never use) —
+           tightening the line-height to the glyph size re-centers it inside
+           the (already symmetric) 16px/16px padding. */
+        line-height: 1;
         text-decoration: none;
         cursor: pointer;
         font-family: 'Jost', sans-serif;
@@ -386,10 +403,12 @@
         background: linear-gradient(135deg, #b5902a, var(--gold), #b5902a);
         color: var(--night);
         font-weight: 500;
-        box-shadow: 0 8px 28px rgba(212, 175, 55, 0.35);
+        /* Was 0 8px 28px / 0.35 — the large blur plus downward offset read as
+           a smeared glow rather than a shadow, worst along the bottom edge. */
+        box-shadow: 0 4px 14px rgba(212, 175, 55, 0.28);
       }
       .btn-solid:hover {
-        box-shadow: 0 14px 36px rgba(212, 175, 55, 0.55);
+        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
       }
       .btn-ghost {
         background: rgba(26, 4, 5, 0.35);
@@ -553,6 +572,12 @@
         z-index: 2;
         pointer-events: none;
         padding: 0 20px;
+        /* The camera pushes in close for the final "hug" pose (deliberately —
+           that's the emotional payoff of the scene), which can bring the
+           figures up under this caption. A scrim keeps the text legible
+           against whatever's behind it at that moment, without touching the
+           camera choreography itself. */
+        background: radial-gradient(ellipse 65% 100% at 50% 50%, rgba(15, 2, 3, 0.6), transparent 80%);
       }
       .embrace-cap p {
         font-family: 'Cormorant Garamond', serif;
@@ -564,7 +589,9 @@
         position: absolute;
         left: 0;
         right: 0;
-        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+        text-shadow:
+          0 1px 3px rgba(0, 0, 0, 0.9),
+          0 2px 14px rgba(0, 0, 0, 0.7);
       }
       .embrace-cap p.on {
         opacity: 1;
@@ -1550,8 +1577,11 @@
         ringA.add(gem);
 
         ringGroup.add(ringA, ringB);
-        ringGroup.position.y = 0.6;
-        ringGroup.scale.setScalar(isMobile ? 0.72 : 1);
+        // Was y: 0.6, scale: 1 on desktop — that put the rings right across
+        // the names text. Lower and smaller tucks them into the gap between
+        // the names and the tagline line instead of crossing either.
+        ringGroup.position.y = 0.05;
+        ringGroup.scale.setScalar(isMobile ? 0.72 : 0.62);
         scene.add(ringGroup);
 
         /* ---------- floating golden sparks (particles) ---------- */

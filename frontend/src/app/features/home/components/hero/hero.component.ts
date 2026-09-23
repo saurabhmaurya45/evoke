@@ -33,8 +33,9 @@ export class HeroComponent implements AfterViewInit, AfterViewChecked {
   private readonly cdr = inject(ChangeDetectorRef);
   protected readonly content = inject(HomeContentService);
 
-  /** Media corner radius per card slot (large, right, phone, laptop). */
-  protected readonly cardRadii = [14, 14, 20, 10];
+  /** Media corner radius, one shared value now that all four card shells
+   * share the same outer radius ($radius-lg, see hero.component.scss). */
+  protected readonly cardRadii = [12, 12, 12, 12];
 
   private readonly floatCards = viewChildren<ElementRef<HTMLElement>>('floatCard');
   private readonly cardVideos = viewChildren<ElementRef<HTMLVideoElement>>('vid');

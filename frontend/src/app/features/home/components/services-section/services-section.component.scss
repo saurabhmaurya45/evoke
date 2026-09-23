@@ -10,7 +10,11 @@
 
 .services__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  // Capped, not 1fr: with only a few cards, auto-fit collapses the empty
+  // tracks and stretches the real ones to fill the row — this keeps them at
+  // a sane width instead.
+  grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
+  justify-content: center;
   gap: 24px;
 }
 
@@ -46,13 +50,13 @@
 
 .services__card-title {
   font-family: $font-serif;
-  font-size: 22px;
+  font-size: font-size('4xl');
   font-weight: $fw-semibold;
   margin: 0 0 10px;
 }
 
 .services__card-desc {
-  font-size: 15px;
+  font-size: font-size('lg');
   line-height: 1.6;
   color: rgba(var(--text-rgb), 0.6);
   margin: 0;
@@ -66,7 +70,7 @@
 }
 
 .services__tag {
-  font-size: 12px;
+  font-size: font-size('sm');
   padding: 5px 12px;
   border-radius: $radius-pill;
   background: rgba(var(--glass-rgb), 0.06);

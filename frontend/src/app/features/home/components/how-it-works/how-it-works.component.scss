@@ -9,14 +9,24 @@
 }
 
 .how__grid {
-  display: flex;
-  flex-wrap: wrap;
+  // Grid, not flex-wrap: with 6 items, flex-wrap's own line-fill behaviour
+  // wrapped them 4-then-2 and let flex-grow stretch the trailing two to fill
+  // their short row — reading as "the last two steps are bigger/different",
+  // not just a wrap. An explicit column count keeps every row even.
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+
+  @include respond-below('lg') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-below('sm') {
+    grid-template-columns: 1fr;
+  }
 }
 
 .how__card {
-  flex: 1 1 260px;
-  min-width: 200px;
   background: rgba(var(--glass-rgb), 0.04);
   border: 1px solid rgba(var(--glass-rgb), 0.1);
   border-radius: $radius-lg;
@@ -33,7 +43,7 @@
 
 .how__step {
   font-family: $font-serif;
-  font-size: 14px;
+  font-size: font-size('md');
   font-weight: $fw-bold;
 
   @include gradient-text($gradient-gold);
@@ -42,13 +52,15 @@
 
 .how__title {
   font-family: $font-serif;
-  font-size: 18px;
+  // Was 18px — merged onto the same "card title within a grid" size the
+  // comparison and templates cards use, rather than its own one-off step.
+  font-size: font-size('2xl');
   font-weight: $fw-semibold;
   margin: 0 0 8px;
 }
 
 .how__desc {
-  font-size: 14px;
+  font-size: font-size('md');
   line-height: 1.5;
   color: rgba(var(--text-rgb), 0.55);
   margin: 0;

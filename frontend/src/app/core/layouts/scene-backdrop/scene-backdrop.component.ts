@@ -38,10 +38,14 @@ import { ThemeService } from '../../services/theme.service';
         z-index: 0;
         display: block;
         pointer-events: none;
-        // Keep the composition readable behind text: fade the edges.
-        mask-image: radial-gradient(ellipse 90% 85% at 50% 40%, black 60%, transparent);
-        -webkit-mask-image: radial-gradient(ellipse 90% 85% at 50% 40%, black 60%, transparent);
-        opacity: 0.85;
+        // Keep the composition readable behind text: fade the edges (tighter
+        // than before — sections with a near-transparent card background,
+        // e.g. the comparison table, were letting the rings show through
+        // strongly enough to compete with the copy) and lower the base
+        // opacity so it reads as ambient, not foreground.
+        mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, black 35%, transparent 75%);
+        -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, black 35%, transparent 75%);
+        opacity: 0.4;
       }
       .backdrop {
         width: 100%;
