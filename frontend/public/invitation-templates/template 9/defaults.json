@@ -1,0 +1,51 @@
+{
+  "couple": {
+    "groomName": "Kabir",
+    "groomFullName": "Kabir Malhotra",
+    "brideName": "Anaya",
+    "brideFullName": "Anaya Kapoor",
+    "image": "/invitation-templates/template%209/static/images/couple-watercolor.png"
+  },
+  "wedding": {
+    "date": "2027-07-03",
+    "time": "16:00",
+    "dateLabel": "July 3rd, 2027",
+    "place": "Loire Valley, France",
+    "introText": "Two families, one celebration. With full hearts we invite you to share the day we promise each other forever — your laughter, blessings and company would make it complete."
+  },
+  "events": {
+    "items": [
+      { "time": "16:00", "title": "Wedding Ceremony", "description": "We say our vows in the rose garden, surrounded by the people we love.", "date": "July 3rd, 2027", "location": "Rose Garden", "mapUrl": "", "emoji": "💍", "accent": "#c9953a" },
+      { "time": "17:30", "title": "Garden Cocktails", "description": "Sparkling drinks and small bites on the terrace by the fountain.", "date": "July 3rd, 2027", "location": "Fountain Terrace", "mapUrl": "", "emoji": "🥂", "accent": "#6a9e6f" },
+      { "time": "19:30", "title": "Candlelight Dinner", "description": "A long-table dinner under chandeliers in the château hall.", "date": "July 3rd, 2027", "location": "Château Hall", "mapUrl": "", "emoji": "🕯️", "accent": "#8e6fb5" },
+      { "time": "21:30", "title": "Dance Under the Stars", "description": "Cake, a live band and dancing in the courtyard until late.", "date": "July 3rd, 2027", "location": "Courtyard", "mapUrl": "", "emoji": "🎶", "accent": "#b56f7a" }
+    ]
+  },
+  "venue": {
+    "name": "Château de Lumière",
+    "address": "Route des Vignes, Loire Valley, France",
+    "mapUrl": "",
+    "image": "/invitation-templates/template%209/static/images/chateau.png"
+  },
+  "dressCode": {
+    "text": "Dress to celebrate — formal evening wear in soft, romantic tones that suit a summer garden wedding.",
+    "colors": [
+      { "name": "Sage", "hex": "#4f5d3d" },
+      { "name": "Wine", "hex": "#600014" },
+      { "name": "Gold", "hex": "#c9953a" },
+      { "name": "Rose", "hex": "#e0b0b8" },
+      { "name": "Ivory", "hex": "#ecd8bf" }
+    ]
+  },
+  "registry": {
+    "title": "Gifts",
+    "description": "Your presence is the only gift we ask for. If you would still like to give something, a contribution towards our first home together would mean a great deal to us."
+  },
+  "contact": {
+    "title": "Need Assistance?",
+    "phone": "Riya: +91 90000 00000"
+  },
+  "music": {
+    "track": "/invitation-templates/template%209/static/media/background-music.mp3"
+  }
+}

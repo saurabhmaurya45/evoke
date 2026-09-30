@@ -5,5 +5,7 @@
   { "id": "tpl-rosewood-punjabi", "previewUrl": "/invitation-templates/template%204/index.html", "schemaUrl": "/invitation-templates/template%204/schema.json", "bindingMode": "legacy" },
   { "id": "tpl-maroon-gold-royal", "previewUrl": "/invitation-templates/template%205/index.html", "schemaUrl": "/invitation-templates/template%205/schema.json", "bindingMode": "legacy" },
   { "id": "tpl-doorway-modern", "previewUrl": "/invitation-templates/template%206/index.html", "schemaUrl": "/invitation-templates/template%206/schema.json", "bindingMode": "legacy" },
-  { "id": "tpl-golden-promise", "previewUrl": "/invitation-templates/template%207/index.html", "schemaUrl": "/invitation-templates/template%207/schema.json", "bindingMode": "legacy" }
+  { "id": "tpl-golden-promise", "previewUrl": "/invitation-templates/template%207/index.html", "schemaUrl": "/invitation-templates/template%207/schema.json", "bindingMode": "legacy" },
+  { "id": "tpl-royal-gate", "previewUrl": "/invitation-templates/template%208/index.html", "schemaUrl": "/invitation-templates/template%208/schema.json", "bindingMode": "legacy" },
+  { "id": "tpl-chateau-classic", "previewUrl": "/invitation-templates/template%209/index.html", "schemaUrl": "/invitation-templates/template%209/schema.json", "bindingMode": "legacy" }
 ]

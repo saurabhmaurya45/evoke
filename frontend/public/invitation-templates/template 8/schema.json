@@ -1,0 +1,155 @@
+{
+  "id": "tpl-royal-gate",
+  "name": "Royal Gate — Sikh Wedding",
+  "category": "Wedding",
+  "version": 1,
+  "defaultsUrl": "/invitation-templates/template%208/defaults.json",
+  "sections": [
+    {
+      "key": "couple",
+      "label": "Couple & Invitation",
+      "fields": [
+        { "key": "groomName", "label": "Groom’s name", "type": "text", "required": true, "placeholder": "Arjan Singh" },
+        { "key": "groomRelation", "label": "Groom relation", "type": "text", "placeholder": "Son of" },
+        { "key": "groomParents", "label": "Groom’s parents", "type": "text" },
+        { "key": "joiner", "label": "Joining word", "type": "text", "placeholder": "With" },
+        { "key": "brideName", "label": "Bride’s name", "type": "text", "required": true, "placeholder": "Simran Kaur" },
+        { "key": "brideRelation", "label": "Bride relation", "type": "text", "placeholder": "Daughter of" },
+        { "key": "brideParents", "label": "Bride’s parents", "type": "text" },
+        { "key": "symbol", "label": "Sacred symbol", "type": "text", "placeholder": "ੴ" },
+        { "key": "shabad", "label": "Shabad / blessing (one line per row)", "type": "textarea" },
+        { "key": "heading", "label": "Invitation heading", "type": "text", "placeholder": "We Cordially Invite You" },
+        { "key": "message", "label": "Invitation message", "type": "textarea" }
+      ]
+    },
+    {
+      "key": "hero",
+      "label": "Opening Gate",
+      "fields": [
+        { "key": "monogram", "label": "Monogram seal", "type": "image" },
+        { "key": "tapText", "label": "Tap prompt", "type": "text", "placeholder": "Tap to Begin" },
+        { "key": "joiner", "label": "Word between names", "type": "text", "placeholder": "Weds" },
+        { "key": "loadingText", "label": "Loading message", "type": "text" },
+        { "key": "scrollText", "label": "Scroll hint", "type": "text", "placeholder": "Scroll Down" },
+        { "key": "poster", "label": "Gate image (before opening)", "type": "image" },
+        { "key": "entryVideo", "label": "Gate opening video URL", "type": "text" },
+        { "key": "music", "label": "Background music", "type": "audio" }
+      ]
+    },
+    {
+      "key": "saveTheDate",
+      "label": "Save The Date",
+      "fields": [
+        { "key": "label", "label": "Small heading", "type": "text", "placeholder": "A Special Surprise" },
+        { "key": "heading", "label": "Heading", "type": "text" },
+        { "key": "day", "label": "Scratch card — day", "type": "text", "placeholder": "12" },
+        { "key": "month", "label": "Scratch card — month", "type": "text", "placeholder": "February" },
+        { "key": "year", "label": "Scratch card — year", "type": "text", "placeholder": "2027" },
+        { "key": "instruction", "label": "Scratch instruction", "type": "text" }
+      ]
+    },
+    {
+      "key": "countdown",
+      "label": "Countdown",
+      "fields": [
+        { "key": "title", "label": "Heading", "type": "text", "placeholder": "The Big Day Approaches" },
+        { "key": "date", "label": "Wedding date", "type": "date", "required": true },
+        { "key": "time", "label": "Time (HH:MM, 24h)", "type": "text", "placeholder": "09:00" }
+      ]
+    },
+    {
+      "key": "story",
+      "label": "Our Story",
+      "fields": [
+        { "key": "title", "label": "Heading", "type": "text", "placeholder": "Our Story" },
+        {
+          "key": "paragraphs",
+          "label": "Paragraphs",
+          "type": "list",
+          "itemSchema": [{ "key": "text", "label": "Paragraph", "type": "textarea", "required": true }]
+        },
+        {
+          "key": "photos",
+          "label": "Photos (carousel)",
+          "type": "list",
+          "itemSchema": [{ "key": "image", "label": "Photo", "type": "image" }]
+        }
+      ]
+    },
+    {
+      "key": "events",
+      "label": "Wedding Events",
+      "fields": [
+        { "key": "title", "label": "Heading", "type": "text", "placeholder": "Wedding Events" },
+        {
+          "key": "items",
+          "label": "Events",
+          "type": "list",
+          "itemSchema": [
+            { "key": "title", "label": "Event", "type": "text", "required": true },
+            { "key": "date", "label": "Date", "type": "text", "placeholder": "12 FEBRUARY 2027" },
+            { "key": "time", "label": "Day & time", "type": "text", "placeholder": "FRIDAY • 9 AM ONWARDS" },
+            { "key": "venue", "label": "Venue", "type": "text" },
+            { "key": "address", "label": "City / address", "type": "text" },
+            { "key": "country", "label": "Country", "type": "text" },
+            { "key": "mapUrl", "label": "Google Maps link", "type": "text" },
+            { "key": "image", "label": "Image", "type": "image" }
+          ]
+        },
+        { "key": "mapLabel", "label": "Map button label", "type": "text", "placeholder": "VIEW ON MAPS" },
+        { "key": "showJourney", "label": "Show travel journey (two countries)", "type": "toggle" },
+        { "key": "journeyAfter", "label": "Show journey after event number", "type": "text", "placeholder": "3" },
+        { "key": "fromLabel", "label": "Journey — from", "type": "text", "placeholder": "CANADA" },
+        { "key": "fromImage", "label": "Journey — from landmark", "type": "image" },
+        { "key": "toLabel", "label": "Journey — to", "type": "text", "placeholder": "INDIA" },
+        { "key": "toImage", "label": "Journey — to landmark", "type": "image" }
+      ]
+    },
+    {
+      "key": "family",
+      "label": "Family",
+      "fields": [
+        { "key": "title", "label": "Heading", "type": "text", "placeholder": "With Blessings From" },
+        {
+          "key": "groups",
+          "label": "Family members",
+          "type": "list",
+          "itemSchema": [
+            { "key": "relation", "label": "Relation", "type": "text", "required": true },
+            { "key": "names", "label": "Names", "type": "text" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "rsvp",
+      "label": "RSVP",
+      "fields": [
+        { "key": "title", "label": "Heading", "type": "text", "placeholder": "RSVP" },
+        { "key": "subtitle", "label": "Subtitle", "type": "text" },
+        { "key": "whatsapp", "label": "WhatsApp number for RSVPs (with country code)", "type": "text", "placeholder": "+91 90000 00000" },
+        { "key": "messageLabel", "label": "Message field label", "type": "text" },
+        { "key": "buttonText", "label": "Button label", "type": "text", "placeholder": "Send RSVP" },
+        { "key": "thankYouTitle", "label": "Thank-you title", "type": "text" },
+        { "key": "thankYou", "label": "Thank-you message", "type": "textarea" },
+        { "key": "whatsappThanks", "label": "Thank-you message (WhatsApp RSVP)", "type": "textarea" }
+      ]
+    },
+    {
+      "key": "footer",
+      "label": "Footer & Contacts",
+      "fields": [
+        { "key": "thankYou", "label": "Closing heading", "type": "text", "placeholder": "Thank You" },
+        {
+          "key": "contacts",
+          "label": "Contacts",
+          "type": "list",
+          "itemSchema": [
+            { "key": "name", "label": "Name", "type": "text", "required": true },
+            { "key": "phone", "label": "Phone", "type": "text" }
+          ]
+        }
+      ]
+    }
+  ]
+}

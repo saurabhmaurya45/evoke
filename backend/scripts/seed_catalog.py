@@ -1,6 +1,6 @@
 """Seed the template catalog (categories, currencies, templates) into an empty database.
 
-An external, idempotent script — never run by the app itself. It mirrors the seven
+An external, idempotent script — never run by the app itself. It mirrors the nine
 templates the frontend ships (`frontend/public/invitation-templates/`, names/categories
 from `home-content.service.ts`); each template's `slug` is the frontend slot id.
 
@@ -94,6 +94,18 @@ TEMPLATES = [
         "slug": "tpl-golden-promise",
         "name": "Golden Promise",
         "category": "engagement",
+        "price_minor": None,
+    },
+    {
+        "slug": "tpl-royal-gate",
+        "name": "Royal Gate — Sikh Wedding",
+        "category": "wedding",
+        "price_minor": None,
+    },
+    {
+        "slug": "tpl-chateau-classic",
+        "name": "Château — Classic Wedding",
+        "category": "wedding",
         "price_minor": None,
     },
 ]

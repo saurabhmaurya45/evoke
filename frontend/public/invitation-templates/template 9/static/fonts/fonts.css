@@ -1,0 +1,36 @@
+/* Google Fonts (OFL), self-hosted: one latin file per family/weight */
+@font-face {
+  font-family: 'Alex Brush';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(alex-brush-400.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url(cormorant-garamond-variable.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Imperial Script';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(imperial-script-400.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url(inter-variable.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Italiana';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(italiana-400.woff2) format('woff2');
+}

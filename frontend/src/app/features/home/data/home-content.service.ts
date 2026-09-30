@@ -43,6 +43,8 @@ const ROSEWOOD_TEMPLATE = '/invitation-templates/template%204/index.html';
 const MAROON_GOLD_TEMPLATE = '/invitation-templates/template%205/index.html';
 const DOORWAY_TEMPLATE = '/invitation-templates/template%206/index.html';
 const GOLDEN_PROMISE_TEMPLATE = '/invitation-templates/template%207/index.html';
+const ROYAL_GATE_TEMPLATE = '/invitation-templates/template%208/index.html';
+const CHATEAU_TEMPLATE = '/invitation-templates/template%209/index.html';
 
 export interface HeroCard {
   readonly slotId: string;
@@ -216,6 +218,30 @@ export class HomeContentService {
       previewUrl: GOLDEN_PROMISE_TEMPLATE,
       ...cardPreview(7),
       ...RING_CREDIT,
+    },
+    {
+      name: 'Royal Gate — Sikh Wedding',
+      category: 'Wedding',
+      slotId: 'tpl-royal-gate',
+      wash: WASH_ROSE,
+      accent: '#7a1f1f',
+      monogram: 'R',
+      photo: COUPLE_PHOTO,
+      previewUrl: ROYAL_GATE_TEMPLATE,
+      ...cardPreview(8),
+      ...COUPLE_CREDIT,
+    },
+    {
+      name: 'Château — Classic Wedding',
+      category: 'Wedding',
+      slotId: 'tpl-chateau-classic',
+      wash: WASH_ROSE,
+      accent: '#600014',
+      monogram: 'C',
+      photo: COUPLE_PHOTO,
+      previewUrl: CHATEAU_TEMPLATE,
+      ...cardPreview(9),
+      ...COUPLE_CREDIT,
     },
   ];
 

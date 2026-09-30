@@ -1,0 +1,99 @@
+{
+  "id": "tpl-chateau-classic",
+  "name": "Château — Classic Wedding",
+  "category": "Wedding",
+  "version": 1,
+  "defaultsUrl": "/invitation-templates/template%209/defaults.json",
+  "sections": [
+    {
+      "key": "couple",
+      "label": "Couple",
+      "fields": [
+        { "key": "groomName", "label": "Groom’s name", "type": "text", "required": true, "placeholder": "Kabir" },
+        { "key": "groomFullName", "label": "Groom’s full name", "type": "text", "placeholder": "Kabir Malhotra" },
+        { "key": "brideName", "label": "Bride’s name", "type": "text", "required": true, "placeholder": "Anaya" },
+        { "key": "brideFullName", "label": "Bride’s full name", "type": "text", "placeholder": "Anaya Kapoor" },
+        { "key": "image", "label": "Couple illustration", "type": "image" }
+      ]
+    },
+    {
+      "key": "wedding",
+      "label": "Wedding Day",
+      "fields": [
+        { "key": "date", "label": "Wedding date (countdown)", "type": "date", "required": true },
+        { "key": "time", "label": "Time (HH:MM, 24h)", "type": "text", "placeholder": "16:00" },
+        { "key": "dateLabel", "label": "Date as shown", "type": "text", "placeholder": "July 3rd, 2027" },
+        { "key": "place", "label": "City / place", "type": "text", "placeholder": "Loire Valley, France" },
+        { "key": "introText", "label": "Welcome message", "type": "textarea" }
+      ]
+    },
+    {
+      "key": "events",
+      "label": "Schedule",
+      "fields": [
+        {
+          "key": "items",
+          "label": "Events",
+          "type": "list",
+          "itemSchema": [
+            { "key": "title", "label": "Event", "type": "text", "required": true },
+            { "key": "time", "label": "Time", "type": "text", "placeholder": "16:00" },
+            { "key": "date", "label": "Date", "type": "text" },
+            { "key": "description", "label": "Description", "type": "textarea" },
+            { "key": "location", "label": "Location", "type": "text" },
+            { "key": "mapUrl", "label": "Google Maps link", "type": "text" },
+            { "key": "emoji", "label": "Emoji", "type": "text", "placeholder": "💍" },
+            { "key": "accent", "label": "Accent colour", "type": "color" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "venue",
+      "label": "Venue",
+      "fields": [
+        { "key": "name", "label": "Venue name", "type": "text", "required": true },
+        { "key": "address", "label": "Address", "type": "textarea" },
+        { "key": "mapUrl", "label": "Google Maps link", "type": "text" },
+        { "key": "image", "label": "Venue sketch", "type": "image" }
+      ]
+    },
+    {
+      "key": "dressCode",
+      "label": "Dress Code",
+      "fields": [
+        { "key": "text", "label": "Dress code note", "type": "textarea" },
+        {
+          "key": "colors",
+          "label": "Colour palette",
+          "type": "list",
+          "itemSchema": [
+            { "key": "name", "label": "Colour name", "type": "text", "required": true },
+            { "key": "hex", "label": "Colour", "type": "color" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "registry",
+      "label": "Gift Registry",
+      "fields": [
+        { "key": "title", "label": "Heading", "type": "text" },
+        { "key": "description", "label": "Message", "type": "textarea" }
+      ]
+    },
+    {
+      "key": "contact",
+      "label": "Contact",
+      "fields": [
+        { "key": "title", "label": "Heading", "type": "text", "placeholder": "Need Assistance?" },
+        { "key": "phone", "label": "Contact (name & phone)", "type": "text" }
+      ]
+    },
+    {
+      "key": "music",
+      "label": "Music",
+      "fields": [{ "key": "track", "label": "Background music", "type": "audio" }]
+    }
+  ]
+}

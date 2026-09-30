@@ -1,0 +1,130 @@
+{
+  "hero": {
+    "entryVideo": "/invitation-templates/template%208/static/media/gate-entry.mp4",
+    "poster": "/invitation-templates/template%208/static/images/gate-poster.webp",
+    "monogram": "/invitation-templates/template%208/static/images/seal-monogram.png",
+    "music": "/invitation-templates/template%208/static/media/background-music.mp3",
+    "tapText": "Tap to Begin",
+    "loadingText": "✨ A Beautiful Love Story Awaits... ✨",
+    "joiner": "Weds",
+    "scrollText": "Scroll Down"
+  },
+  "couple": {
+    "symbol": "ੴ",
+    "shabad": "ਸਤਿਗੁਰੂ ਦਾਤੇ ਕਾਜਿ ਰਚਾਇਆ ਆਪਣੀ ਮੇਹਰ ਕਰਾਈ।\nਦਾਸਾਂ ਕਾਰਜ ਆਪ ਸਵਾਰੇ ਇਹ ਉਸ ਦੀ ਵਡਿਆਈ॥",
+    "heading": "We Cordially Invite You",
+    "message": "Together with our beloved families,\nwe request the honour of your gracious\npresence to celebrate the wedding of",
+    "groomName": "Arjan Singh",
+    "groomRelation": "Son of",
+    "groomParents": "Sdn. Gurpreet Kaur & S. Harjit Singh",
+    "joiner": "With",
+    "brideName": "Simran Kaur",
+    "brideRelation": "Daughter of",
+    "brideParents": "Sdn. Manpreet Kaur & S. Balwinder Singh"
+  },
+  "saveTheDate": {
+    "label": "A Special Surprise",
+    "heading": "Scratch the heart to reveal our wedding date",
+    "day": "12",
+    "month": "February",
+    "year": "2027",
+    "instruction": "Scratch to reveal! ✨"
+  },
+  "countdown": {
+    "title": "The Big Day Approaches",
+    "date": "2027-02-12",
+    "time": "09:00"
+  },
+  "story": {
+    "title": "Our Story",
+    "paragraphs": [
+      { "text": "Our story did not begin with years of knowing each other. It began with two hearts finding each other at exactly the right time." },
+      { "text": "From the very beginning, we found comfort in the quiet moments, joy in the unexpected ones, and a shared love for mountains and beaches alike." },
+      { "text": "As we begin this new chapter, we feel incredibly grateful to have found in each other a partner, a best friend and an adventure companion." },
+      { "text": "We cannot wait to celebrate the beginning of our forever with the people who mean the most to us!" }
+    ],
+    "photos": [
+      { "image": "/invitation-templates/template%208/static/images/story-1.webp" },
+      { "image": "/invitation-templates/template%208/static/images/story-2.webp" },
+      { "image": "/invitation-templates/template%208/static/images/story-3.webp" }
+    ]
+  },
+  "events": {
+    "title": "Wedding Events",
+    "mapLabel": "VIEW ON MAPS",
+    "items": [
+      {
+        "title": "Sangeet & Cocktail Party",
+        "date": "10 FEBRUARY 2027",
+        "time": "WEDNESDAY • 7 PM ONWARDS",
+        "venue": "The Royal Banquet Hall",
+        "address": "Surrey, BC",
+        "country": "Canada",
+        "mapUrl": "",
+        "image": "/invitation-templates/template%208/static/images/event-sangeet.webp"
+      },
+      {
+        "title": "Mehndi & Maiyan",
+        "date": "11 FEBRUARY 2027",
+        "time": "THURSDAY • 12 PM ONWARDS",
+        "venue": "Our Residence",
+        "address": "White Rock, BC",
+        "country": "Canada",
+        "mapUrl": "",
+        "image": "/invitation-templates/template%208/static/images/event-mehndi.webp"
+      },
+      {
+        "title": "Anand Karaj",
+        "date": "12 FEBRUARY 2027",
+        "time": "FRIDAY • 9 AM ONWARDS",
+        "venue": "Gurdwara Sahib",
+        "address": "Surrey, BC",
+        "country": "Canada",
+        "mapUrl": "",
+        "image": "/invitation-templates/template%208/static/images/event-anand-karaj.webp"
+      },
+      {
+        "title": "Reception",
+        "date": "20 FEBRUARY 2027",
+        "time": "SATURDAY • 7 PM ONWARDS",
+        "venue": "Heritage Palace Resort",
+        "address": "Ludhiana, Punjab",
+        "country": "India",
+        "mapUrl": "",
+        "image": "/invitation-templates/template%208/static/images/event-reception.webp"
+      }
+    ],
+    "showJourney": true,
+    "journeyAfter": "3",
+    "fromLabel": "CANADA",
+    "fromImage": "/invitation-templates/template%208/static/images/landmark-canada.webp",
+    "toLabel": "INDIA",
+    "toImage": "/invitation-templates/template%208/static/images/landmark-india.webp"
+  },
+  "family": {
+    "title": "With Blessings From",
+    "groups": [
+      { "relation": "Grand Parents", "names": "Sdn. Jaswant Kaur & S. Kartar Singh" },
+      { "relation": "Bhabhi & Brother", "names": "Navneet Kaur & Gurdeep Singh" },
+      { "relation": "Sister & Jiju", "names": "Harleen Kaur & Manjot Singh" },
+      { "relation": "Nieces & Nephews", "names": "Jasleen, Rehmat & Fateh" }
+    ]
+  },
+  "rsvp": {
+    "title": "RSVP",
+    "subtitle": "Kindly let us know which celebrations you will join.",
+    "whatsapp": "",
+    "messageLabel": "Leave a personal message for the couple",
+    "buttonText": "Send RSVP",
+    "thankYouTitle": "Thank You!",
+    "thankYou": "We have noted your response.\nWe can't wait to celebrate with you!",
+    "whatsappThanks": "Your RSVP is ready in WhatsApp.\nJust tap Send to confirm."
+  },
+  "footer": {
+    "thankYou": "Thank You",
+    "contacts": [
+      { "name": "S. Harjit Singh", "phone": "+91 90000 00000" },
+      { "name": "Gurdeep Singh", "phone": "+1 555 010 0000" }
+    ]
+  }
+}
