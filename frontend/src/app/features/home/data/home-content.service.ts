@@ -45,6 +45,7 @@ const DOORWAY_TEMPLATE = '/invitation-templates/template%206/index.html';
 const GOLDEN_PROMISE_TEMPLATE = '/invitation-templates/template%207/index.html';
 const ROYAL_GATE_TEMPLATE = '/invitation-templates/template%208/index.html';
 const CHATEAU_TEMPLATE = '/invitation-templates/template%209/index.html';
+const TEMPLE_BELLS_TEMPLATE = '/invitation-templates/template%2010/index.html';
 
 export interface HeroCard {
   readonly slotId: string;
@@ -241,6 +242,18 @@ export class HomeContentService {
       photo: COUPLE_PHOTO,
       previewUrl: CHATEAU_TEMPLATE,
       ...cardPreview(9),
+      ...COUPLE_CREDIT,
+    },
+    {
+      name: 'Temple Bells — Traditional Wedding',
+      category: 'Wedding',
+      slotId: 'tpl-temple-bells',
+      wash: WASH_GOLD,
+      accent: '#6b4f2c',
+      monogram: 'T',
+      photo: COUPLE_PHOTO,
+      previewUrl: TEMPLE_BELLS_TEMPLATE,
+      ...cardPreview(10),
       ...COUPLE_CREDIT,
     },
   ];

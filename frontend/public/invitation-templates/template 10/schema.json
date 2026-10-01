@@ -1,0 +1,105 @@
+{
+  "id": "tpl-temple-bells",
+  "name": "Temple Bells — Traditional Wedding",
+  "category": "Wedding",
+  "version": 1,
+  "defaultsUrl": "/invitation-templates/template%2010/defaults.json",
+  "sections": [
+    {
+      "key": "couple",
+      "label": "Couple",
+      "fields": [
+        { "key": "groomName", "label": "Groom’s full name", "type": "text", "required": true, "placeholder": "Vihaan Kapoor" },
+        { "key": "groomShort", "label": "Groom’s first name", "type": "text", "placeholder": "Vihaan" },
+        { "key": "groomParents", "label": "Groom’s parents", "type": "text" },
+        { "key": "groomPhoto", "label": "Groom portrait", "type": "image" },
+        { "key": "brideName", "label": "Bride’s full name", "type": "text", "required": true, "placeholder": "Meera Joshi" },
+        { "key": "brideShort", "label": "Bride’s first name", "type": "text", "placeholder": "Meera" },
+        { "key": "brideParents", "label": "Bride’s parents", "type": "text" },
+        { "key": "bridePhoto", "label": "Bride portrait", "type": "image" }
+      ]
+    },
+    {
+      "key": "wedding",
+      "label": "Wedding Day",
+      "fields": [
+        { "key": "date", "label": "Wedding date (countdown)", "type": "date", "required": true },
+        { "key": "time", "label": "Time (HH:MM, 24h)", "type": "text", "placeholder": "16:00" },
+        { "key": "dateLabel", "label": "Date as shown", "type": "text", "placeholder": "Sunday, 14 February 2027" },
+        { "key": "dateLine", "label": "Date & city line", "type": "text", "placeholder": "February 14th, 2027 • Jaipur" },
+        { "key": "venue", "label": "Venue", "type": "text", "placeholder": "The Royal Courtyard" },
+        { "key": "city", "label": "City", "type": "text", "placeholder": "Jaipur" }
+      ]
+    },
+    {
+      "key": "verse",
+      "label": "Blessing Verse",
+      "fields": [
+        { "key": "text", "label": "Verse", "type": "textarea" },
+        { "key": "source", "label": "Source / signature", "type": "text" }
+      ]
+    },
+    {
+      "key": "story",
+      "label": "Our Story",
+      "fields": [
+        {
+          "key": "items",
+          "label": "Milestones",
+          "type": "list",
+          "itemSchema": [
+            { "key": "year", "label": "Year", "type": "text", "placeholder": "2025" },
+            { "key": "title", "label": "Title", "type": "text", "required": true },
+            { "key": "text", "label": "Text", "type": "textarea" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "events",
+      "label": "Events",
+      "fields": [
+        {
+          "key": "items",
+          "label": "Events",
+          "type": "list",
+          "itemSchema": [
+            { "key": "title", "label": "Event", "type": "text", "required": true },
+            { "key": "time", "label": "Time", "type": "text", "placeholder": "16.00 Onwards" },
+            { "key": "venue", "label": "Venue", "type": "text" },
+            { "key": "address", "label": "Address", "type": "text" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gift",
+      "label": "Gifts",
+      "fields": [
+        { "key": "heading", "label": "Heading", "type": "text", "placeholder": "Blessings & Gifts" },
+        { "key": "message", "label": "Message", "type": "textarea" },
+        { "key": "title", "label": "Gift box title", "type": "text", "placeholder": "Gift Details" },
+        { "key": "name", "label": "Account holder", "type": "text" },
+        { "key": "details", "label": "Payment details (UPI / bank)", "type": "text" },
+        { "key": "note", "label": "Note", "type": "text" }
+      ]
+    },
+    {
+      "key": "gallery",
+      "label": "Gallery",
+      "fields": [
+        {
+          "key": "photos",
+          "label": "Photos (slideshow)",
+          "type": "list",
+          "itemSchema": [{ "key": "image", "label": "Photo", "type": "image" }]
+        }
+      ]
+    },
+    {
+      "key": "music",
+      "label": "Music",
+      "fields": [{ "key": "track", "label": "Background music", "type": "audio" }]
+    }
+  ]
+}

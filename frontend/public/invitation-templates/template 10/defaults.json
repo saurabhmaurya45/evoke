@@ -1,0 +1,59 @@
+{
+  "couple": {
+    "groomName": "Vihaan Kapoor",
+    "groomShort": "Vihaan",
+    "groomParents": "Son of Mr. Rajeev Kapoor & Mrs. Anjali Kapoor",
+    "groomPhoto": "/invitation-templates/template%2010/static/images/groom.jpg",
+    "brideName": "Meera Joshi",
+    "brideShort": "Meera",
+    "brideParents": "Daughter of Mr. Sanjay Joshi & Mrs. Kavita Joshi",
+    "bridePhoto": "/invitation-templates/template%2010/static/images/bride.jpg"
+  },
+  "wedding": {
+    "date": "2027-02-14",
+    "time": "16:00",
+    "dateLabel": "Sunday, 14 February 2027",
+    "dateLine": "February 14th, 2027 • Jaipur",
+    "venue": "The Royal Courtyard",
+    "city": "Jaipur"
+  },
+  "verse": {
+    "text": "With the blessings of our elders and the grace of the divine, two families come together and two hearts become one — for this life and every life after.",
+    "source": "— Saat Phere, Saat Vachan"
+  },
+  "story": {
+    "items": [
+      { "year": "2020", "title": "First Hello", "text": "A shared umbrella on a rainy evening in Pune turned into a conversation neither of us wanted to end." },
+      { "year": "2022", "title": "Growing Together", "text": "Road trips, late-night chai and two families slowly becoming one big, noisy circle." },
+      { "year": "2025", "title": "The Question", "text": "On a quiet morning at the lakeside in Udaipur, Vihaan asked — and Meera said yes." },
+      { "year": "2027", "title": "Our Forever", "text": "Now we invite you to bless us as we take our seven steps together." }
+    ]
+  },
+  "events": {
+    "items": [
+      { "title": "Haldi & Mehendi", "time": "11.00 Onwards", "venue": "Palace Lawns", "address": "Amer Road, Jaipur, Rajasthan" },
+      { "title": "Wedding Ceremony", "time": "16.00 Onwards", "venue": "The Royal Courtyard", "address": "Amer Road, Jaipur, Rajasthan" },
+      { "title": "Grand Reception", "time": "20.00 Onwards", "venue": "Durbar Hall", "address": "Amer Road, Jaipur, Rajasthan" }
+    ]
+  },
+  "gift": {
+    "heading": "Blessings & Gifts",
+    "message": "Your presence and blessings are the most precious gift. If you would still like to give something, a contribution towards our new home would mean a lot to us.",
+    "title": "Gift Details",
+    "name": "Vihaan Kapoor & Meera Joshi",
+    "details": "UPI: vihaanmeera@upi",
+    "note": "Thank you for your love"
+  },
+  "gallery": {
+    "photos": [
+      { "image": "/invitation-templates/template%2010/static/images/gallery-1.png" },
+      { "image": "/invitation-templates/template%2010/static/images/gallery-2.png" },
+      { "image": "/invitation-templates/template%2010/static/images/gallery-3.png" },
+      { "image": "/invitation-templates/template%2010/static/images/gallery-4.png" },
+      { "image": "/invitation-templates/template%2010/static/images/gallery-5.png" }
+    ]
+  },
+  "music": {
+    "track": "/invitation-templates/template%2010/static/media/background-music.mp3"
+  }
+}
