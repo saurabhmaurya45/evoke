@@ -194,112 +194,15 @@
     return 'tel:' + String(phone || '').replace(/\s/g, '');
   }
 
-  function encodedStoragePath(attr) {
-    return attr ? attr.replace(/^\//, '') : '';
-  }
-
-  function decodedStoragePath(attr) {
-    if (!attr) return '';
-    var raw = attr.replace(/^\//, '');
-    try {
-      return decodeURIComponent(raw);
-    } catch (err) {
-      return raw.replace(/%2F/g, '/');
-    }
-  }
-
-  function resolvePathOnlyImageUrl(storagePath, baseUrl, cb) {
-    var path = decodedStoragePath(storagePath);
-    var encoded = encodedStoragePath(storagePath);
-    var bucket = 'my-bel0ved.firebasestorage.app';
-
-    function setUrl(url) {
-      if (url && typeof cb === 'function') cb(url);
-    }
-
-    function trySdk() {
-      try {
-        if (window.firebase && firebase.storage) {
-          firebase.storage().ref(path).getDownloadURL().then(setUrl).catch(tryRest);
-          return;
-        }
-      } catch (e) { /* fall through */ }
-      tryRest();
-    }
-
-    function tryRest() {
-      var metaUrl = 'https://firebasestorage.googleapis.com/v0/b/' + bucket + '/o/' + encoded;
-      fetch(metaUrl)
-        .then(function (res) { return res.ok ? res.json() : null; })
-        .then(function (meta) {
-          if (meta && meta.downloadTokens) {
-            setUrl(baseUrl + encoded + '?alt=media&token=' + meta.downloadTokens.split(',')[0]);
-          } else if (baseUrl) {
-            setUrl(baseUrl + encoded + '?alt=media');
-          }
-        })
-        .catch(function () {
-          if (baseUrl) setUrl(baseUrl + encoded + '?alt=media');
-        });
-    }
-
-    trySdk();
-  }
-
-  function applyFirebaseAsset(el) {
-    var baseUrl = window.FirebaseConfig && window.FirebaseConfig.storageBaseUrl;
-    if (!el) return;
-
-    var storagePath = el.getAttribute('data-storage-path');
-    if (!storagePath) return;
-
-    var existingSrc = el.getAttribute('src');
-    var token = el.getAttribute('data-token');
-    var encoded = encodedStoragePath(storagePath);
-
-    // Template media is bundled locally. Keep the storage metadata attributes
-    // for editor compatibility, but never require Firebase for shipped assets.
-    var localName = decodedStoragePath(storagePath).split('/').pop();
-    var localUrl = 'static/assets/' + encodeURIComponent(localName).replace(/%2F/g, '/');
-    if (localName && /\.(mp3|mp4|png|jpe?g|webp|gif)$/i.test(localName)) {
-      el.setAttribute('src', localUrl);
-      if (el.tagName === 'SOURCE' && el.parentElement) el.parentElement.load();
-      return;
-    }
-
-    function setSrc(url) {
-      if (!url) {
-        if (existingSrc && !el.getAttribute('src')) el.setAttribute('src', existingSrc);
-        return;
-      }
-      var current = el.currentSrc || el.getAttribute('src') || el.src || '';
-      /* Intro already has an inline Firebase src — don't restart buffering. */
-      if (el.id === 'wed6-intro-video' && current.indexOf(encoded) !== -1) {
-        return;
-      }
-      if (current === url || (el.tagName === 'VIDEO' && current.indexOf(encoded) !== -1)) {
-        return;
-      }
-      if (el.tagName === 'SOURCE') {
-        el.src = url;
-        var audioEl = el.closest('audio');
-        if (audioEl) audioEl.load();
-      } else {
-        el.src = url;
-        if (el.tagName === 'VIDEO') el.load();
-      }
-    }
-
-    if (baseUrl && token) {
-      setSrc(baseUrl + encoded + '?alt=media&token=' + token);
-      return;
-    }
-
-    if (baseUrl) {
-      resolvePathOnlyImageUrl(storagePath, baseUrl, setSrc);
-    } else if (existingSrc) {
-      el.setAttribute('src', existingSrc);
-    }
+  /** Point an image/video at a gallery entry: an absolute/data URL or a file under static/assets. */
+  function applyMediaSrc(el, path) {
+    if (!el || !path) return;
+    var url = /^(https?:|data:|blob:|\/)/i.test(path)
+      ? path
+      : 'static/assets/' + encodeURIComponent(path.split('/').pop());
+    if (el.getAttribute('src') === url) return;
+    el.setAttribute('src', url);
+    if (el.tagName === 'VIDEO') el.load();
   }
 
   function applyMusicVolume() {
@@ -312,12 +215,6 @@
     audio.volume = Math.min(1, Math.max(0, vol));
   }
 
-  function initializeFirebaseAudio() {
-    if (!audio) return;
-    applyMusicVolume();
-    var source = audio.querySelector('source[data-storage-path]');
-    if (source) applyFirebaseAsset(source);
-  }
 
   function playSfx(el) {
     if (!el) return;
@@ -815,7 +712,7 @@
         markDoorVideoReady();
       } else {
         startOpeningLoader();
-        /* Fallback if Firebase/video stalls. */
+        /* Fallback if the video stalls. */
         window.setTimeout(function () {
           if (!doorVideoReady) markDoorVideoReady();
         }, 16000);
@@ -1332,13 +1229,10 @@
 
       if (path) {
         if (item) item.classList.remove('is-empty');
-        photo.setAttribute('data-storage-path', path);
-        photo.removeAttribute('data-token');
-        applyFirebaseAsset(photo);
+        applyMediaSrc(photo, path);
         continue;
       }
 
-      photo.removeAttribute('data-storage-path');
       if (localSrc) {
         if (item) item.classList.remove('is-empty');
         continue;
@@ -1848,35 +1742,6 @@
     }
   }
 
-  function initializeFirebaseImages() {
-    /* Intro video first — often already started via inline src / preload. */
-    if (introVideo && introVideo.getAttribute('data-storage-path')) {
-      applyFirebaseAsset(introVideo);
-    }
-
-    document.querySelectorAll(
-      'img[data-storage-path], video[data-storage-path], audio source[data-storage-path]'
-    ).forEach(function (el) {
-      if (el === introVideo) return;
-      var path = el.getAttribute('data-storage-path');
-      if (path) applyFirebaseAsset(el);
-    });
-  }
-
-  function runFirebaseInit() {
-    initializeFirebaseAudio();
-    initializeFirebaseImages();
-    if (window.FirebaseConfig && window.FirebaseConfig.storageBaseUrl) return;
-    var check = setInterval(function () {
-      if (window.FirebaseConfig && window.FirebaseConfig.storageBaseUrl) {
-        clearInterval(check);
-        initializeFirebaseAudio();
-        initializeFirebaseImages();
-      }
-    }, 100);
-    setTimeout(function () { clearInterval(check); }, 12000);
-  }
-
   /* ---- Evoke editor live-preview bridge -----------------------------------
    * The editor embeds this template and streams the user's form data in via
    * postMessage. We map the section-keyed data onto the body's data-* attributes
@@ -1970,7 +1835,7 @@
       setText('wed6-hero-bride', getAttr('data-bride-name', ''));
       setText('wed6-quote-text', getAttr('data-quote', ''));
 
-      // Gallery: set uploaded/URL images directly (bypass the Firebase resolver).
+      // Gallery: set uploaded/URL images directly.
       var gl = (data.gallery && data.gallery.items) || null;
       if (Array.isArray(gl)) {
         for (var k = 0; k < 5; k++) {
@@ -1979,8 +1844,6 @@
           var src = gl[k] && gl[k].image ? String(gl[k].image) : '';
           var item = ph.closest ? ph.closest('.wed6-gallery-item') : null;
           if (src) {
-            ph.removeAttribute('data-storage-path');
-            ph.removeAttribute('data-token');
             ph.src = src;
             if (item) item.classList.remove('is-empty');
           }
@@ -2007,8 +1870,7 @@
 
   /* Boot */
   hydrate();
-  // Resolve the bundled media paths locally; no remote storage is required.
-  initializeFirebaseImages();
+  applyMusicVolume();
   initMute();
   initOpening();
   warmIntroVideoBuffer();

@@ -23,10 +23,10 @@
         { "key": "blessingsLabel", "label": "Blessings label", "type": "text", "placeholder": "With Divine Blessings Of" },
         { "key": "blessingsNames", "label": "Blessings names", "type": "textarea" },
         { "key": "inviteLine", "label": "Invitation line", "type": "textarea" },
-        { "key": "brideName", "label": "Bride’s name", "type": "text", "required": true, "placeholder": "Khushboo" },
+        { "key": "brideName", "label": "Bride’s name", "type": "text", "required": true, "placeholder": "Ishita" },
         { "key": "brideFamily", "label": "Bride’s family line", "type": "textarea" },
         { "key": "joiner", "label": "Joining word", "type": "text", "placeholder": "With" },
-        { "key": "groomName", "label": "Groom’s name", "type": "text", "required": true, "placeholder": "Pranshul" },
+        { "key": "groomName", "label": "Groom’s name", "type": "text", "required": true, "placeholder": "Aryan" },
         { "key": "groomFamily", "label": "Groom’s family line", "type": "textarea" }
       ]
     },
