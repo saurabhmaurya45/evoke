@@ -4,7 +4,7 @@ export const environment: AppEnvironment = {
   production: true,
   name: 'production',
   apiBaseUrl: 'https://evokebackend.vercel.app',
-  appUrl: 'https://evokefrontend.vercel.app',
+  appUrl: 'https://theinvitely.in',
   // Separate Supabase project from environment.ts (dev), co-located in us-east-1 with
   // the backend's Vercel function region to avoid cross-region latency. Publishable
   // key is safe to ship in the client bundle.
