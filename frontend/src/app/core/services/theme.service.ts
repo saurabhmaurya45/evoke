@@ -42,13 +42,9 @@ export class ThemeService {
   }
 
   private resolveInitialTheme(): Theme {
-    const stored = this.safeRead();
-    if (stored === 'dark' || stored === 'light') {
-      return stored;
-    }
-    // Fall back to the OS preference, defaulting to the brand's dark theme.
-    const prefersLight = this.window?.matchMedia?.('(prefers-color-scheme: light)').matches;
-    return prefersLight ? 'light' : 'dark';
+    // Dark is the default on every page. Light is used only after the visitor
+    // chooses it with the theme toggle.
+    return this.safeRead() === 'light' ? 'light' : 'dark';
   }
 
   private safeRead(): string | null {

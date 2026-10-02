@@ -1,0 +1,28 @@
+<article class="legal">
+  <header class="legal__head">
+    <p class="legal__eyebrow">{{ page().eyebrow }}</p>
+    <h1 class="legal__title">{{ page().title }}</h1>
+    <p class="legal__updated">Last updated {{ page().updated }}</p>
+    <p class="legal__intro">{{ page().intro }}</p>
+  </header>
+
+  @for (section of page().sections; track section.heading) {
+    <section class="legal__section">
+      <h2>{{ section.heading }}</h2>
+      @for (paragraph of section.paragraphs; track paragraph) {
+        <p>{{ paragraph }}</p>
+      }
+      @if (section.bullets) {
+        <ul>
+          @for (item of section.bullets; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      }
+    </section>
+  }
+
+  <p class="legal__related">
+    <a [routerLink]="page().relatedPath">{{ page().relatedLabel }}</a>
+  </p>
+</article>

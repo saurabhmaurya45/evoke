@@ -15,5 +15,7 @@ export interface SocialLink {
   readonly label: string;
   readonly href: string;
   /** Named icon key resolved by the icon component. */
-  readonly icon: 'instagram' | 'facebook' | 'x';
+  readonly icon: 'gmail' | 'whatsapp' | 'instagram';
+  /** Opens in a new tab. Used for off-site profiles such as WhatsApp. */
+  readonly external?: boolean;
 }

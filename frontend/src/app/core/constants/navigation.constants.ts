@@ -1,3 +1,4 @@
+import { CONTACT_EMAIL, CONTACT_INSTAGRAM, CONTACT_WHATSAPP } from './app.constants';
 import type { FooterColumn, NavLink, SocialLink } from '../models';
 
 /** Primary in-page navigation (home sections). */
@@ -27,10 +28,17 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
       { label: 'Contact', fragment: 'footer-contact' },
     ],
   },
+  {
+    title: 'Legal',
+    links: [
+      { label: 'Privacy Policy', path: '/privacy' },
+      { label: 'Terms & Conditions', path: '/terms' },
+    ],
+  },
 ];
 
 export const SOCIAL_LINKS: readonly SocialLink[] = [
-  { label: 'Instagram', href: '#footer-contact', icon: 'instagram' },
-  { label: 'Facebook', href: '#footer-contact', icon: 'facebook' },
-  { label: 'X', href: '#footer-contact', icon: 'x' },
+  { label: 'Gmail', href: `mailto:${CONTACT_EMAIL}`, icon: 'gmail' },
+  { label: 'WhatsApp', href: CONTACT_WHATSAPP, icon: 'whatsapp', external: true },
+  { label: 'Instagram', href: CONTACT_INSTAGRAM, icon: 'instagram', external: true },
 ];

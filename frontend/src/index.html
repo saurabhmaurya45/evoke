@@ -18,18 +18,12 @@
     <!-- Preload the hero art so the LCP image starts fetching immediately. -->
     <link rel="preload" as="image" href="/invitation-templates/template%201/preview-desktop.jpg" fetchpriority="high" />
 
-    <!-- Apply the persisted theme before first paint to avoid a flash. -->
+    <!-- Dark by default. Light only if the visitor has chosen it. -->
     <script>
       (function () {
         try {
-          var stored = localStorage.getItem('evoke.theme');
-          var theme =
-            stored === 'dark' || stored === 'light'
-              ? stored
-              : window.matchMedia('(prefers-color-scheme: light)').matches
-                ? 'light'
-                : 'dark';
-          document.documentElement.setAttribute('data-theme', theme);
+          var stored = localStorage.getItem('theinvitely.theme');
+          document.documentElement.setAttribute('data-theme', stored === 'light' ? 'light' : 'dark');
         } catch (e) {}
       })();
     </script>

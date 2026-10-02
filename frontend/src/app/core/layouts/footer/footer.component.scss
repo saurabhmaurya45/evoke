@@ -32,7 +32,23 @@
   font-size: 14px;
   line-height: 1.6;
   color: rgba(var(--text-rgb), 0.5);
+  margin: 0 0 16px;
+}
+
+.footer__contact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   margin: 0 0 20px;
+  font-size: 14px;
+
+  a {
+    color: rgba(var(--text-rgb), 0.72);
+
+    &:hover {
+      color: var(--text);
+    }
+  }
 }
 
 .footer__social {
@@ -135,7 +151,18 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 12px;
+  align-items: center;
+  gap: 12px 24px;
   font-size: 13px;
   color: rgba(var(--text-rgb), 0.4);
+}
+
+.footer__legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+
+  a:hover {
+    color: var(--text);
+  }
 }

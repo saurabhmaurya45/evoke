@@ -18,6 +18,8 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'pricing', renderMode: RenderMode.Prerender },
   { path: 'about', renderMode: RenderMode.Prerender },
   { path: 'contact', renderMode: RenderMode.Prerender },
+  { path: 'privacy', renderMode: RenderMode.Prerender },
+  { path: 'terms', renderMode: RenderMode.Prerender },
 
   // Auth screens: real pages, but nothing to index.
   { path: 'login', renderMode: RenderMode.Prerender },

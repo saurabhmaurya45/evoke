@@ -80,6 +80,24 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'privacy',
+        loadComponent: () =>
+          import('./features/legal/pages/legal-page/legal-page.component').then(
+            (m) => m.LegalPageComponent,
+          ),
+        title: 'Privacy Policy • theinvitely.in',
+        data: { document: 'privacy' },
+      },
+      {
+        path: 'terms',
+        loadComponent: () =>
+          import('./features/legal/pages/legal-page/legal-page.component').then(
+            (m) => m.LegalPageComponent,
+          ),
+        title: 'Terms and Conditions • theinvitely.in',
+        data: { document: 'terms' },
+      },
+      {
         path: 'payment',
         loadChildren: () => import('./features/payment/payment.routes').then((m) => m.PAYMENT_ROUTES),
       },

@@ -1,7 +1,7 @@
 <nav class="nav" [class.nav--scrolled]="viewport.scrolled()" aria-label="Primary">
   <div class="nav__bar">
     <a class="nav__brand" routerLink="/" fragment="hero" [attr.aria-label]="appName + ' home'">
-      <app-logo />
+      <app-logo [height]="viewport.isMobile() ? 34 : 42" />
     </a>
 
     @if (!viewport.isMobile()) {
