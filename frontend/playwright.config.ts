@@ -2,8 +2,8 @@ import { defineConfig, devices } from '@playwright/test';
 
 /**
  * End-to-end checks against the production build (`npm run build` first).
- * Production is Netlify serving the prerendered files, so the tests run
- * against a static server that applies netlify.toml's rules — not the Node
+ * Production is Vercel serving the prerendered files, so the tests run
+ * against a static server that applies vercel.json's rules — not the Node
  * SSR server. Playwright starts it for the run and stops it afterwards.
  */
 const PORT = 4321;
@@ -18,7 +18,7 @@ export default defineConfig({
   },
   projects: [{ name: 'mobile', use: { ...devices['Pixel 7'] } }],
   webServer: {
-    command: 'node e2e/netlify-static-server.mjs',
+    command: 'node e2e/vercel-static-server.mjs',
     url: `http://localhost:${PORT}`,
     env: { PORT: String(PORT) },
     reuseExistingServer: false,

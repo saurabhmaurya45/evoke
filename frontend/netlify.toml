@@ -1,3 +1,6 @@
+# NOTE: production is hosted on Vercel and uses vercel.json, not this file.
+# Keep the two in step if this config is ever used again.
+
 [build]
   publish = "dist/wedding-website/browser"
   command = "npm run build"
