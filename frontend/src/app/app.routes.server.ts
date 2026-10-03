@@ -1,4 +1,7 @@
 import { RenderMode, type ServerRoute } from '@angular/ssr';
+import { TEMPLATE_SEO } from './features/templates/data/template-seo.data';
+import { LANDING_PAGES } from './features/landing/data/landing-pages.data';
+import { BLOG_POSTS } from './features/blog/data/blog-posts.data';
 
 /**
  * Per-route render strategy.
@@ -14,7 +17,29 @@ export const serverRoutes: ServerRoute[] = [
   // Marketing pages — crawled, so prerender to static HTML.
   { path: '', renderMode: RenderMode.Prerender },
   { path: 'templates', renderMode: RenderMode.Prerender },
-  { path: 'services', renderMode: RenderMode.Prerender },
+  {
+    path: 'templates/:slug',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: () => Promise.resolve(TEMPLATE_SEO.map(({ slug }) => ({ slug }))),
+  },
+  { path: 'wedding-invitations', renderMode: RenderMode.Prerender },
+  {
+    path: 'wedding-invitations/:community',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: () =>
+      Promise.resolve(
+        LANDING_PAGES.filter((page) => page.parent === 'wedding-invitations').map((page) => ({
+          community: page.path.split('/')[1],
+        })),
+      ),
+  },
+  { path: 'engagement-invitations', renderMode: RenderMode.Prerender },
+  { path: 'blog', renderMode: RenderMode.Prerender },
+  {
+    path: 'blog/:slug',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: () => Promise.resolve(BLOG_POSTS.map(({ slug }) => ({ slug }))),
+  },
   { path: 'pricing', renderMode: RenderMode.Prerender },
   { path: 'about', renderMode: RenderMode.Prerender },
   { path: 'contact', renderMode: RenderMode.Prerender },

@@ -1,0 +1,92 @@
+@if (data(); as page) {
+  <article class="page">
+    <nav aria-label="Breadcrumb">
+      <ol class="crumbs">
+        <li><a routerLink="/">Home</a></li>
+        @if (parent(); as p) {
+          <li>
+            <a [routerLink]="'/' + p.path">{{ p.breadcrumb }}</a>
+          </li>
+        }
+        <li aria-current="page">{{ page.breadcrumb }}</li>
+      </ol>
+    </nav>
+
+    <header>
+      <p class="eyebrow">{{ page.eyebrow }}</p>
+      <h1 class="title">{{ page.h1 }}</h1>
+      <p class="intro">{{ page.intro }}</p>
+      <div class="actions">
+        <a class="cta cta--solid" routerLink="/templates">Create your invitation</a>
+        <a class="cta cta--ghost" routerLink="/" fragment="how-it-works">How it works</a>
+      </div>
+    </header>
+
+    <section class="block">
+      <h2>{{ page.parent ? 'Recommended designs' : 'Invitation templates' }}</h2>
+      <app-template-strip [first]="page.featured" [only]="!!page.parent" />
+      @if (page.parent) {
+        <p class="prose">
+          <a routerLink="/templates">See all {{ templateCount() }} invitation templates</a>
+        </p>
+      }
+    </section>
+
+    <div class="prose">
+      @for (section of page.sections; track section.heading) {
+        <section>
+          <h2>{{ section.heading }}</h2>
+          @for (paragraph of section.paragraphs; track paragraph) {
+            <p>{{ paragraph }}</p>
+          }
+          @if (section.bullets) {
+            <ul>
+              @for (item of section.bullets; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          }
+        </section>
+      }
+    </div>
+
+    <section class="block">
+      <h2>Frequently asked questions</h2>
+      <div class="faq">
+        @for (faq of page.faqs; track faq.question) {
+          <details>
+            <summary>{{ faq.question }}</summary>
+            <p>{{ faq.answer }}</p>
+          </details>
+        }
+      </div>
+    </section>
+
+    <section class="block prose">
+      <h2>Invitations for every tradition</h2>
+      <ul>
+        @for (c of communities; track c.path) {
+          @if (c.path !== page.path) {
+            <li>
+              <a [routerLink]="'/' + c.path">{{ c.breadcrumb }}</a>
+            </li>
+          }
+        }
+        @if (page.path !== 'engagement-invitations') {
+          <li><a routerLink="/engagement-invitations">Engagement Invitations</a></li>
+        }
+        <li><a routerLink="/blog">Invitation wording &amp; ideas</a></li>
+      </ul>
+    </section>
+
+    <aside class="band">
+      <h2>Ready to send your invitation?</h2>
+      <p>Pick a design, add your details and share one link on WhatsApp — in minutes.</p>
+      <div class="actions">
+        <a class="cta cta--solid" routerLink="/templates">Browse templates</a>
+      </div>
+    </aside>
+  </article>
+} @else {
+  <app-not-found />
+}

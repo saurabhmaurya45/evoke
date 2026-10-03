@@ -2,21 +2,43 @@
 <!-- en-IN: the customer base is India, so regional English is the honest signal. --><html lang="en-IN" data-theme="dark">
   <head>
     <meta charset="utf-8" />
-    <title>theinvitely.in — Create Beautiful Invitation Websites in Minutes</title>
+    <title>Wedding Invitation Website &amp; E-Invites | theinvitely.in</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="theinvitely.in is the premium platform for creating personalized invitation websites — weddings, engagements, and every occasion in life."
+      content="Create a beautiful wedding invitation website with photos, music, venue map &amp; RSVP. Share one link on WhatsApp. Ready in minutes."
     />
+    <!--
+      Static share-card fallback. Link previews (WhatsApp, Instagram, Facebook)
+      never run JavaScript, so client-rendered routes — including couples' /i/
+      invitation links — only ever show these. Prerendered pages replace them
+      with page-specific values via SeoService.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="theinvitely.in" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:title" content="Wedding Invitation Website &amp; E-Invites | theinvitely.in" />
+    <meta property="og:description" content="Create a beautiful wedding invitation website with photos, music, venue map &amp; RSVP. Share one link on WhatsApp." />
+    <meta property="og:url" content="https://theinvitely.in" />
+    <meta property="og:image" content="https://theinvitely.in/og/og-default.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Wedding invitation website on a phone — create yours at theinvitely.in" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://theinvitely.in/og/og-default.jpg" />
     <meta name="theme-color" content="#15120e" />
     <meta name="color-scheme" content="dark light" />
 
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="icon" href="favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
 
-    <!-- Preload the hero art so the LCP image starts fetching immediately. -->
-    <link rel="preload" as="image" href="/invitation-templates/template%201/preview-desktop.jpg" fetchpriority="high" />
+    <!-- Preload the first hero card's poster (the LCP image) so it starts fetching immediately. -->
+    <link rel="preload" as="image" href="/invitation-templates/template%201/card-poster.jpg" fetchpriority="high" />
 
     <!-- Dark by default. Light only if the visitor has chosen it. -->
     <script>

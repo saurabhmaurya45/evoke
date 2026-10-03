@@ -41,6 +41,8 @@ export class TemplatesSectionComponent implements AfterViewChecked {
   /** Only published templates reach the public carousel. */
   protected readonly templates = this.catalog.published;
   protected readonly price = formatPrice;
+  /** Prices render only once they come from the backend — never the ₹0 seed. */
+  protected readonly pricesKnown = this.catalog.pricesKnown;
 
   private readonly track = viewChild.required<ElementRef<HTMLElement>>('track');
   private readonly cardVideos = viewChildren<ElementRef<HTMLVideoElement>>('vid');

@@ -1,10 +1,10 @@
 <section class="gallery">
   <header class="gallery__head">
     <p class="gallery__eyebrow">Templates</p>
-    <h1 class="gallery__title">Invitation Card Templates</h1>
+    <h1 class="gallery__title">Wedding &amp; Engagement Invitation Templates</h1>
     <p class="gallery__sub">
-      Ready-to-use digital invitation designs for weddings, engagements and every celebration.
-      Preview any template live, personalise it, and share the link on WhatsApp.
+      Ready-to-use wedding invitation website templates — royal, Punjabi, Sikh, Nikah, South Indian and
+      classic designs. Preview any template live, personalise it, and share the link on WhatsApp.
     </p>
   </header>
 
@@ -46,7 +46,7 @@
                 #vid
                 class="card__media"
                 [poster]="tpl.previewPoster ?? tpl.photo"
-                [attr.aria-label]="tpl.name + ' template preview'"
+                [attr.aria-label]="tpl.name + ' ' + label(tpl) + ' invitation website template preview'"
                 autoplay
                 muted
                 loop
@@ -66,15 +66,19 @@
             }
             <span class="card__badge">
               <span class="card__badge-dot" [style.background]="tpl.accent"></span>
-              {{ tpl.category }}
+              {{ label(tpl) }}
             </span>
           </div>
           <div class="card__body">
             <div class="card__head">
-              <h2 class="card__name">{{ tpl.name }}</h2>
-              <span class="card__price" [class.card__price--free]="tpl.pricing === 'free'">
-                {{ price(tpl) }}
-              </span>
+              <h2 class="card__name">
+                <a [routerLink]="['/templates', slug(tpl)]">{{ tpl.name }}</a>
+              </h2>
+              @if (pricesKnown()) {
+                <span class="card__price" [class.card__price--free]="tpl.pricing === 'free'">
+                  {{ price(tpl) }}
+                </span>
+              }
             </div>
             <div class="card__actions">
               <a

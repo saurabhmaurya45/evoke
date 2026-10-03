@@ -10,4 +10,12 @@ export const TEMPLATES_ROUTES: Routes = [
       ),
     title: 'Templates • theinvitely.in',
   },
+  {
+    // One indexable page per template; title/meta are set by the component.
+    path: ':slug',
+    loadComponent: () =>
+      import('./pages/template-detail/template-detail.component').then(
+        (m) => m.TemplateDetailComponent,
+      ),
+  },
 ];

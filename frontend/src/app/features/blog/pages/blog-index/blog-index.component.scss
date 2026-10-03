@@ -1,0 +1,42 @@
+@use 'abstracts' as *;
+
+.posts {
+  list-style: none;
+  margin: 40px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.posts__card {
+  display: block;
+  padding: 22px 24px;
+  border-radius: 18px;
+  @include glass(0.05, 0.12, 0px);
+  transition: border-color 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: rgba(201, 162, 39, 0.5);
+  }
+
+  .meta {
+    display: block;
+    margin: 0 0 6px;
+  }
+
+  h2 {
+    font-family: $font-serif;
+    font-size: 24px;
+    font-weight: $fw-semibold;
+    margin: 0 0 6px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(var(--text-rgb), 0.7);
+  }
+}

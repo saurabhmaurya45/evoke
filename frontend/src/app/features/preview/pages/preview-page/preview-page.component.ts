@@ -3,6 +3,8 @@ import { RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeResourceUrl } from '@angular/platform-browser';
 import { HomeContentService } from '../../../home/data/home-content.service';
 import { SeoService } from '../../../../core/services/seo.service';
+import { environment } from '../../../../../environments/environment';
+import { templateSeoBySlotId } from '../../../templates/data/template-seo.data';
 
 type PreviewMode = 'preview' | 'use';
 
@@ -43,10 +45,13 @@ export class PreviewPageComponent {
   constructor() {
     effect(() => {
       const tpl = this.template();
+      const seo = templateSeoBySlotId(tpl.slotId);
       this.seo.apply({
         title: `${tpl.name} — Template Preview • theinvitely.in`,
         description: `Preview the ${tpl.name} ${tpl.category.toLowerCase()} invitation template on theinvitely.in.`,
         robots: 'noindex, follow',
+        // The indexable version of this template lives at /templates/:slug.
+        ...(seo && { canonical: `${environment.appUrl}/templates/${seo.slug}` }),
       });
     });
   }

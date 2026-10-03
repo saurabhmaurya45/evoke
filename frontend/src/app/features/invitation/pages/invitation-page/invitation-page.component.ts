@@ -14,6 +14,7 @@ import { TemplateSchemaLoader } from '../../../editor/data/template-schema.loade
 import { WINDOW } from '../../../../core/tokens/window.token';
 import { PREVIEW_PROTOCOL_VERSION, PREVIEW_READY, PREVIEW_UPDATE } from '../../../editor/data/preview-protocol';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { SeoService } from '../../../../core/services/seo.service';
 
 interface InvitationApiOut {
   eventId: string;
@@ -202,6 +203,7 @@ export class InvitationPageComponent implements OnInit {
   private readonly loader = inject(TemplateSchemaLoader);
   private readonly window = inject(WINDOW);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly seo = inject(SeoService);
 
   readonly slug = input('');
 
@@ -219,6 +221,14 @@ export class InvitationPageComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    // Couples' pages hold names, dates and addresses — never index them. Also
+    // sent as an X-Robots-Tag header (netlify.toml) for crawlers that skip JS.
+    this.seo.apply({
+      title: 'Wedding Invitation',
+      description: 'You are invited! Open the invitation for event details, venue and RSVP.',
+      robots: 'noindex, nofollow',
+    });
+
     const slug = this.slug();
     if (!slug) {
       this.state.set('not-found');

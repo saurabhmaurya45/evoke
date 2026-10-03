@@ -11,11 +11,9 @@
   <div class="section-skeleton" aria-hidden="true"></div>
 }
 
-@defer (on viewport) {
-  <app-features-section />
-} @placeholder {
-  <div class="section-skeleton" aria-hidden="true"></div>
-}
+<!-- Rendered eagerly so its text is in the prerendered HTML: feature keywords are
+     what this page ranks for. -->
+<app-features-section />
 
 @defer (on viewport) {
   <app-comparison />
@@ -29,11 +27,9 @@
   <div class="section-skeleton" aria-hidden="true"></div>
 }
 
-@defer (on viewport) {
-  <app-faq />
-} @placeholder {
-  <div class="section-skeleton" aria-hidden="true"></div>
-}
+<!-- Rendered eagerly: FAQPage structured data must match answers visible in the
+     static HTML, and a @defer placeholder would leave them out. -->
+<app-faq />
 
 @defer (on viewport) {
   <app-cta />

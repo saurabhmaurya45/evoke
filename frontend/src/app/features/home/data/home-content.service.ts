@@ -85,13 +85,6 @@ function cardPreview(n: number): { previewVideo: string; previewPoster: string }
  */
 @Injectable({ providedIn: 'root' })
 export class HomeContentService {
-  readonly stats: readonly StatItem[] = [
-    { label: 'Invitations Created', target: 1000, suffix: '+' },
-    { label: 'Templates', target: 200, suffix: '+' },
-    { label: 'Customer Satisfaction', target: 99, suffix: '%' },
-    { label: 'Website Generation', target: null, staticValue: 'Instant' },
-  ];
-
   readonly services: readonly ServiceCard[] = [
     {
       title: 'Wedding Invitations',
@@ -258,6 +251,18 @@ export class HomeContentService {
     },
   ];
 
+  /**
+   * Statistics band. Only claims we can stand behind: these values are
+   * prerendered into the homepage that search engines index. The template
+   * count is derived from the catalogue so it can never drift from it.
+   */
+  readonly stats: readonly StatItem[] = [
+    { label: 'Wedding & Engagement Designs', target: this.templates.length },
+    { label: 'To Create Your Invitation', target: null, staticValue: 'Minutes' },
+    { label: 'For Every Guest', target: null, staticValue: 'One Link' },
+    { label: 'Website Generation', target: null, staticValue: 'Instant' },
+  ];
+
   /** Resolves a template card by its slot id (used by the preview route). */
   templateBySlotId(slotId: string): TemplateCard | undefined {
     return this.templates.find((tpl) => tpl.slotId === slotId);
@@ -401,6 +406,26 @@ export class HomeContentService {
       question: 'What happens after I pay?',
       answer:
         'You receive a shareable link to your live invitation website immediately, ready to send to guests.',
+    },
+    {
+      question: 'Can I send my wedding invitation on WhatsApp?',
+      answer:
+        'Yes. Your invitation is a single link, so you can send it on WhatsApp, Instagram, SMS or email. Guests open it in their phone browser — no app or download needed.',
+    },
+    {
+      question: 'Is an invitation website better than a PDF wedding card?',
+      answer:
+        'A PDF is a heavy file guests have to download and zoom into. An invitation website opens instantly, plays your music, shows your photos, gives one-tap directions to every venue and collects RSVPs — and you can update it any time.',
+    },
+    {
+      question: 'Can guests see the venue on Google Maps?',
+      answer:
+        'Yes. Each event can include its venue address with a Google Maps link, so guests get directions to the haldi, sangeet, wedding and reception in one tap.',
+    },
+    {
+      question: 'Do you have Punjabi, Sikh, Nikah and South Indian designs?',
+      answer:
+        'Yes. Our templates include Rosewood (Punjabi), Royal Gate (Sikh Anand Karaj), Beloved (Nikah), Temple Bells (South Indian temple wedding) and royal Hindu designs, alongside modern and classic styles.',
     },
   ];
 
