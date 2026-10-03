@@ -166,11 +166,31 @@ test('template preview is noindex and canonicalises to the template page', async
   );
 });
 
-test('/services redirects to the wedding invitations hub', async ({ page, request }) => {
+test('/services permanently redirects to the wedding invitations hub', async ({
+  page,
+  request,
+}) => {
+  // Vercel answers `permanent: true` with 308, which Google treats like a 301.
   const res = await request.get('/services', { maxRedirects: 0 });
-  expect(res.status()).toBe(301);
+  expect(res.status()).toBe(308);
+  expect(res.headers()['location']).toBe('/wedding-invitations');
   await page.goto('/services');
   await expect(page).toHaveURL(/\/wedding-invitations$/);
+});
+
+test('non-prerendered routes get the empty app shell, not the homepage', async ({ request }) => {
+  // Without the vercel.json rewrite, Vercel served the prerendered homepage
+  // here: a couple's link loaded the marketing page first and crawlers saw
+  // homepage content on /i/ URLs.
+  for (const path of ['/i/some-couple', '/dashboard', '/does-not-exist']) {
+    const html = await (await request.get(path)).text();
+    expect(html, path).toContain('<app-root></app-root>');
+    expect(html, path).not.toContain('Questions, answered');
+  }
+});
+
+test('missing static files are real 404s, not the app shell', async ({ request }) => {
+  expect((await request.get('/assets/does-not-exist.png')).status()).toBe(404);
 });
 
 test('home FAQ and features are in the server HTML (not deferred)', async ({ request }) => {
