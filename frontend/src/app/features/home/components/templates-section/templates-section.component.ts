@@ -15,6 +15,7 @@ import { ImageSlotComponent } from '../../../../shared/components/image-slot/ima
 import { TiltDirective } from '../../../../shared/directives/tilt.directive';
 import { RevealDirective } from '../../../../shared/directives/reveal.directive';
 import { TemplateCatalogService, formatPrice } from '../../../templates/data/template-catalog.service';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 
 /**
  * Templates carousel. A native scroll-snap track (so touch/trackpad swiping
@@ -37,6 +38,7 @@ import { TemplateCatalogService, formatPrice } from '../../../templates/data/tem
 })
 export class TemplatesSectionComponent implements AfterViewChecked {
   private readonly catalog = inject(TemplateCatalogService);
+  private readonly analytics = inject(AnalyticsService);
 
   /** Only published templates reach the public carousel. */
   protected readonly templates = this.catalog.published;
@@ -82,5 +84,14 @@ export class TemplatesSectionComponent implements AfterViewChecked {
     const el = this.track().nativeElement;
     this.atStart.set(el.scrollLeft <= 2);
     this.atEnd.set(el.scrollLeft + el.clientWidth >= el.scrollWidth - 2);
+  }
+
+  /** GA4 conversion: which template — and which page — led to a "use" click. */
+  protected trackUse(slotId: string, name: string): void {
+    this.analytics.event('select_template', {
+      template_id: slotId,
+      template_name: name,
+      source: 'home',
+    });
   }
 }

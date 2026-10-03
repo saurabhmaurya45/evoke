@@ -41,6 +41,7 @@
             class="cta cta--solid"
             [routerLink]="['/preview', tpl.slotId]"
             [queryParams]="{ mode: 'use' }"
+            (click)="trackUse(tpl.slotId, tpl.name)"
             >Use this template</a
           >
           <a class="cta cta--ghost" [routerLink]="['/preview', tpl.slotId]">Live preview</a>

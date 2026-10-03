@@ -76,6 +76,7 @@
                 [routerLink]="['/preview', tpl.slotId]"
                 [queryParams]="{ mode: 'use' }"
                 [attr.aria-label]="'Use the ' + tpl.name + ' template'"
+                (click)="trackUse(tpl.slotId, tpl.name)"
                 >Use Template</a
               >
             </div>

@@ -22,6 +22,8 @@ export interface LegalDocument {
 }
 
 const UPDATED = '2 October 2026';
+/** Privacy changes separately from the terms (Google Analytics, 3 Oct 2026). */
+const PRIVACY_UPDATED = '3 October 2026';
 
 export const PRIVACY_POLICY: LegalDocument = {
   slug: 'privacy',
@@ -29,7 +31,7 @@ export const PRIVACY_POLICY: LegalDocument = {
   title: 'Privacy Policy',
   description:
     'How theinvitely.in collects, uses, and shares information when you create an account, design an invitation, or visit a published page.',
-  updated: UPDATED,
+  updated: PRIVACY_UPDATED,
   intro:
     'This policy explains what theinvitely.in collects when you create an account, design an invitation website, pay to publish it, or open a page we host. It covers theinvitely.in and the invitation pages created with it.',
   relatedPath: '/terms',
@@ -61,6 +63,7 @@ export const PRIVACY_POLICY: LegalDocument = {
         'Your light or dark theme preference, saved in this browser.',
         'Editor cache data saved in this browser so a draft can be restored.',
         'Standard server logs, such as IP address, browser type, and the page requested, used to operate and protect the service.',
+        'Usage analytics from Google Analytics on our website pages: the pages you view, how you arrived (for example a search engine or a link), your device and browser type, and your approximate location. Google Analytics sets cookies in your browser to do this. It is not used on published invitation pages, so guests who open an invitation are not tracked.',
       ],
     },
     {
@@ -95,6 +98,7 @@ export const PRIVACY_POLICY: LegalDocument = {
       bullets: [
         'Supabase, which provides sign-in and stores account data.',
         'Razorpay, which processes payments.',
+        'Google, which provides Google Analytics and processes the usage data described above under its own privacy policy.',
         'The hosting providers that serve the website and published invitations.',
         'Guests who open an invitation you have published.',
         'Authorities, when the law requires us to disclose information.',
@@ -111,6 +115,7 @@ export const PRIVACY_POLICY: LegalDocument = {
       heading: 'Your choices',
       paragraphs: [
         `You can edit the invitation content you control, and you can ask us to access, correct, or delete personal information we hold about you. Reach us at ${CONTACT_LINE}, and include the account email you used. Where the Digital Personal Data Protection Act, 2023 applies, you may also raise a grievance with us first, and then with the Data Protection Board of India if it is not resolved.`,
+        'You can stop Google Analytics from collecting your usage data by blocking cookies for this site in your browser, or by installing the Google Analytics opt-out browser add-on.',
       ],
     },
     {

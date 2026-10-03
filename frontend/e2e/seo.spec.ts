@@ -211,3 +211,13 @@ test('JSON-LD is replaced, not carried over, on in-app navigation', async ({ pag
   expect(ld).toContain('/wedding-invitations#webpage');
   expect(ld).not.toContain('royal-gate-sikh-wedding#webpage');
 });
+
+test('analytics stays off until a GA4 Measurement ID is configured', async ({ page }) => {
+  const gaRequests: string[] = [];
+  page.on('request', (req) => {
+    if (/googletagmanager\.com|google-analytics\.com/.test(req.url())) gaRequests.push(req.url());
+  });
+  await page.goto('/');
+  await page.goto('/templates');
+  expect(gaRequests).toEqual([]);
+});

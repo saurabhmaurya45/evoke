@@ -10,6 +10,11 @@ export interface AppEnvironment {
   /** Supabase project URL and publishable (anon) key — safe to expose client-side. */
   readonly supabaseUrl: string;
   readonly supabasePublishableKey: string;
+  /**
+   * GA4 Measurement ID ("G-XXXXXXXXXX"). Empty disables Google Analytics even
+   * when `features.analytics` is on — tracking needs both.
+   */
+  readonly gaMeasurementId: string;
   readonly features: {
     readonly analytics: boolean;
     readonly themeToggle: boolean;

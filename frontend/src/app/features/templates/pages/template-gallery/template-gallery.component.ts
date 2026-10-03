@@ -17,6 +17,7 @@ import type { CatalogTemplate } from '../../data/template-catalog.service';
 import { ImageSlotComponent } from '../../../../shared/components/image-slot/image-slot.component';
 import { TiltDirective } from '../../../../shared/directives/tilt.directive';
 import { SeoService } from '../../../../core/services/seo.service';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 import {
   CORE_KEYWORDS,
   OCCASION_KEYWORDS,
@@ -43,6 +44,7 @@ type Filter = string;
 export class TemplateGalleryComponent implements OnInit, AfterViewInit, AfterViewChecked {
   private readonly seo = inject(SeoService);
   private readonly catalog = inject(TemplateCatalogService);
+  private readonly analytics = inject(AnalyticsService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly cardVideos = viewChildren<ElementRef<HTMLVideoElement>>('vid');
   private startedVideos = new WeakSet<HTMLVideoElement>();
@@ -173,5 +175,14 @@ export class TemplateGalleryComponent implements OnInit, AfterViewInit, AfterVie
   protected clearFilters(): void {
     this.activeFilter.set('All');
     this.query.set('');
+  }
+
+  /** GA4 conversion: which template — and which page — led to a "use" click. */
+  protected trackUse(slotId: string, name: string): void {
+    this.analytics.event('select_template', {
+      template_id: slotId,
+      template_name: name,
+      source: 'gallery',
+    });
   }
 }

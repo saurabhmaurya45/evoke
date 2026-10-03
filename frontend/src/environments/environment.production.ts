@@ -10,6 +10,8 @@ export const environment: AppEnvironment = {
   // key is safe to ship in the client bundle.
   supabaseUrl: 'https://kivrvvtlwvmtogpkrvoh.supabase.co',
   supabasePublishableKey: 'sb_publishable_bCKt-maGBHftHoI_3vbjmw_G2LfbeUz',
+  // Paste the GA4 Measurement ID from analytics.google.com (Admin → Data streams).
+  gaMeasurementId: '',
   features: {
     analytics: true,
     themeToggle: true,

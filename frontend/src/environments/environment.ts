@@ -9,6 +9,7 @@ export const environment: AppEnvironment = {
   appUrl: 'http://localhost:4200',
   supabaseUrl: 'https://jcyogzcqifqukleqtbtw.supabase.co',
   supabasePublishableKey: 'sb_publishable_XBcDrgEjVQfygZ4bnUOoxQ_YoFX7wlp',
+  gaMeasurementId: '',
   features: {
     analytics: false,
     themeToggle: true,

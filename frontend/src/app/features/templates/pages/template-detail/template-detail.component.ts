@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SeoService } from '../../../../core/services/seo.service';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 import { TEMPLATE_KEYWORDS } from '../../../../core/constants/seo.constants';
 import { environment } from '../../../../../environments/environment';
 import { TemplateCatalogService, formatPrice } from '../../data/template-catalog.service';
@@ -24,6 +25,7 @@ import { NotFoundComponent } from '../../../../shared/components/not-found/not-f
 export class TemplateDetailComponent {
   private readonly seo = inject(SeoService);
   private readonly catalog = inject(TemplateCatalogService);
+  private readonly analytics = inject(AnalyticsService);
 
   /** Route param, bound via component input binding. */
   readonly slug = input('');
@@ -86,6 +88,15 @@ export class TemplateDetailComponent {
           { name: tpl.name, path },
         ]),
       ]);
+    });
+  }
+
+  /** GA4 conversion: which template — and which page — led to a "use" click. */
+  protected trackUse(slotId: string, name: string): void {
+    this.analytics.event('select_template', {
+      template_id: slotId,
+      template_name: name,
+      source: 'template_page',
     });
   }
 }
