@@ -221,3 +221,10 @@ test('analytics stays off until a GA4 Measurement ID is configured', async ({ pa
   await page.goto('/templates');
   expect(gaRequests).toEqual([]);
 });
+
+test('Search Console verification file is served as-is from the site root', async ({ request }) => {
+  // If this falls through to the app shell, Google can't verify ownership.
+  const res = await request.get('/google7bd9a765b9d65998.html');
+  expect(res.status()).toBe(200);
+  expect((await res.text()).trim()).toBe('google-site-verification: google7bd9a765b9d65998.html');
+});
