@@ -11,10 +11,35 @@
 # marked RenderMode.Server in app.routes.server.ts render on the client here.
 # For true on-demand SSR on Netlify, add @netlify/angular-runtime, which wires
 # dist/wedding-website/server to a Netlify Function.
+# The Services stub was replaced by the wedding-invitations hub. Must sit above
+# the catch-all, since Netlify applies the first matching rule.
+[[redirects]]
+  from = "/services"
+  to = "/wedding-invitations"
+  status = 301
+
 [[redirects]]
   from = "/*"
   to = "/index.csr.html"
   status = 200
+
+# Private and duplicate routes render on the client, so a <meta robots> tag set
+# by Angular is invisible to crawlers that don't run JS. The response header is
+# seen by every crawler.
+[[headers]]
+  for = "/i/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/preview/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/editor/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
 
 # Self-hosted fonts carry content-hashed filenames from Google, so a given URL
 # never changes contents — safe to cache permanently.

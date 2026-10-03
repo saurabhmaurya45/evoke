@@ -17,7 +17,12 @@ import type { CatalogTemplate } from '../../data/template-catalog.service';
 import { ImageSlotComponent } from '../../../../shared/components/image-slot/image-slot.component';
 import { TiltDirective } from '../../../../shared/directives/tilt.directive';
 import { SeoService } from '../../../../core/services/seo.service';
-import { CORE_KEYWORDS, OCCASION_KEYWORDS } from '../../../../core/constants/seo.constants';
+import {
+  CORE_KEYWORDS,
+  OCCASION_KEYWORDS,
+  TEMPLATE_KEYWORDS,
+} from '../../../../core/constants/seo.constants';
+import { templateSeoBySlotId } from '../../data/template-seo.data';
 import { environment } from '../../../../../environments/environment';
 
 /** 'All' plus every category present in the catalogue. */
@@ -77,24 +82,48 @@ export class TemplateGalleryComponent implements OnInit, AfterViewInit, AfterVie
   }
 
   ngOnInit(): void {
+    const url = `${environment.appUrl}/templates`;
     this.seo.apply({
-      title: 'Invitation Card Templates — Wedding, Engagement & More',
+      title: 'Wedding Invitation Templates — Royal, Punjabi, Nikah & More',
       description:
-        'Browse ready-to-use digital invitation card templates for weddings, engagements and every celebration. Preview any design, personalise it, and share the link on WhatsApp.',
-      keywords: [...CORE_KEYWORDS, ...OCCASION_KEYWORDS['wedding'].slice(0, 6)],
-      canonical: `${environment.appUrl}/templates`,
+        'Wedding & engagement invitation website templates — royal, Punjabi, Sikh, Nikah, South Indian and classic. Preview live and share on WhatsApp.',
+      keywords: [...TEMPLATE_KEYWORDS, ...CORE_KEYWORDS.slice(0, 3), ...OCCASION_KEYWORDS['wedding'].slice(0, 3)],
+      url,
+      canonical: url,
     });
-    this.seo.setStructuredData({
-      '@context': 'https://schema.org',
-      '@type': 'CollectionPage',
-      name: 'Invitation card templates',
-      inLanguage: 'en-IN',
-      hasPart: this.all().map((template) => ({
-        '@type': 'CreativeWork',
-        name: template.name,
-        genre: template.category,
-      })),
-    });
+    this.seo.setStructuredData([
+      {
+        '@type': 'CollectionPage',
+        '@id': `${url}#webpage`,
+        url,
+        name: 'Wedding & Engagement Invitation Templates',
+        inLanguage: 'en-IN',
+        isPartOf: { '@id': `${environment.appUrl}/#website` },
+        mainEntity: {
+          '@type': 'ItemList',
+          itemListElement: this.all().map((template, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            url: `${url}/${this.slug(template)}`,
+            name: template.name,
+          })),
+        },
+      },
+      this.seo.breadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Templates', path: '/templates' },
+      ]),
+    ]);
+  }
+
+  /** URL slug of the template's own page. */
+  protected slug(template: CatalogTemplate): string {
+    return templateSeoBySlotId(template.slotId)?.slug ?? '';
+  }
+
+  /** Tradition label, e.g. "Sikh Wedding" — falls back to the category. */
+  protected label(template: CatalogTemplate): string {
+    return templateSeoBySlotId(template.slotId)?.label ?? template.category;
   }
 
   /** Gates play attempts until the post-hydration nudge burst (below) has finished. */

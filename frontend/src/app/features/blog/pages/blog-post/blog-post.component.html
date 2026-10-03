@@ -1,0 +1,67 @@
+@if (post(); as post) {
+  <article class="page page--narrow">
+    <nav aria-label="Breadcrumb">
+      <ol class="crumbs">
+        <li><a routerLink="/">Home</a></li>
+        <li><a routerLink="/blog">Blog</a></li>
+        <li aria-current="page">{{ post.title }}</li>
+      </ol>
+    </nav>
+
+    <header>
+      <h1 class="title">{{ post.title }}</h1>
+      <p class="meta">
+        <time [attr.datetime]="post.published">{{ post.published | date: 'd MMMM y' }}</time>
+        · {{ post.readMinutes }} min read
+      </p>
+      <p class="intro">{{ post.intro }}</p>
+    </header>
+
+    <div class="prose">
+      @for (section of post.sections; track section.heading) {
+        <section>
+          <h2>{{ section.heading }}</h2>
+          @for (paragraph of section.paragraphs ?? []; track paragraph) {
+            <p>{{ paragraph }}</p>
+          }
+          @if (section.bullets) {
+            <ul>
+              @for (item of section.bullets; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          }
+          @for (quote of section.quotes ?? []; track quote) {
+            <blockquote class="quote">{{ quote }}</blockquote>
+          }
+        </section>
+      }
+    </div>
+
+    <aside class="band">
+      <h2>Turn your wording into an invitation website</h2>
+      <p>Add your text, photos, music and venue maps — then share one link on WhatsApp.</p>
+      <div class="actions">
+        <a class="cta cta--solid" [routerLink]="'/' + post.hub">{{ post.hubLabel }}</a>
+      </div>
+    </aside>
+
+    <section class="block">
+      <h2>Templates to try</h2>
+      <app-template-strip [first]="post.templates" />
+    </section>
+
+    <section class="block prose">
+      <h2>Keep reading</h2>
+      <ul>
+        @for (other of others(); track other.slug) {
+          <li>
+            <a [routerLink]="['/blog', other.slug]">{{ other.title }}</a>
+          </li>
+        }
+      </ul>
+    </section>
+  </article>
+} @else {
+  <app-not-found />
+}

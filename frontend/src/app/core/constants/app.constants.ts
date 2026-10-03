@@ -3,8 +3,15 @@ export const APP_NAME = 'theinvitely.in';
 
 export const APP_TAGLINE = 'Create Beautiful Invitation Websites in Minutes';
 
+/**
+ * Doubles as the homepage meta description (≤155 chars), so it leads with the
+ * terms people search for: wedding invitation website, RSVP, WhatsApp.
+ */
 export const APP_DESCRIPTION =
-  'The premium platform for creating personalized invitation websites — for every occasion in life.';
+  'Create a beautiful wedding invitation website with photos, music, venue map & RSVP. Share one link on WhatsApp. Ready in minutes.';
+
+/** Absolute logo URL for structured data (Organization.logo). */
+export const APP_LOGO_PATH = '/assets/brand/logo.png';
 
 /**
  * Desktop nav (logo + six links + actions) needs about 1100px before the

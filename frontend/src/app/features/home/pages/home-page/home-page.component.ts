@@ -10,11 +10,16 @@ import { TestimonialsComponent } from '../../components/testimonials/testimonial
 import { FaqComponent } from '../../components/faq/faq.component';
 import { CtaComponent } from '../../components/cta/cta.component';
 import { SeoService } from '../../../../core/services/seo.service';
-import { APP_DESCRIPTION, APP_NAME } from '../../../../core/constants/app.constants';
+import {
+  APP_DESCRIPTION,
+  APP_LOGO_PATH,
+  APP_NAME,
+  CONTACT_EMAIL,
+  CONTACT_PHONE_TEL,
+} from '../../../../core/constants/app.constants';
 import { HOME_KEYWORDS, ORGANISATION } from '../../../../core/constants/seo.constants';
 import { environment } from '../../../../../environments/environment';
 import { HomeContentService } from '../../data/home-content.service';
-import { TemplateCatalogService } from '../../../templates/data/template-catalog.service';
 
 /**
  * Home page — composition only. Each section is an isolated, single-purpose
@@ -41,17 +46,18 @@ import { TemplateCatalogService } from '../../../templates/data/template-catalog
 export class HomePageComponent implements OnInit {
   private readonly seo = inject(SeoService);
   private readonly content = inject(HomeContentService);
-  private readonly catalog = inject(TemplateCatalogService);
 
   ngOnInit(): void {
     const url = environment.appUrl;
 
     this.seo.apply({
-      title: `${APP_NAME} — Digital Invitation Cards & Invitation Websites`,
+      title: `Wedding Invitation Website & Digital E-Invites | ${APP_NAME}`,
       description: APP_DESCRIPTION,
       type: 'website',
       keywords: HOME_KEYWORDS,
+      url,
     });
+
 
     // A @graph, so Organization / WebSite / WebApplication / FAQPage are all
     // declared once and can reference each other by @id.
@@ -62,7 +68,10 @@ export class HomePageComponent implements OnInit {
         name: APP_NAME,
         legalName: ORGANISATION.legalName,
         url,
+        logo: { '@type': 'ImageObject', url: `${url}${APP_LOGO_PATH}`, width: 640, height: 227 },
         description: APP_DESCRIPTION,
+        email: CONTACT_EMAIL,
+        telephone: CONTACT_PHONE_TEL,
         areaServed: { '@type': 'Country', name: 'India' },
         sameAs: ORGANISATION.sameAs,
       },
@@ -81,19 +90,17 @@ export class HomePageComponent implements OnInit {
       },
       {
         '@type': 'WebApplication',
+        '@id': `${url}/#app`,
         name: APP_NAME,
+        url,
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Web',
+        inLanguage: ORGANISATION.language,
         description: APP_DESCRIPTION,
         publisher: { '@id': `${url}/#organization` },
-        // One Offer per published template, at the price the catalog actually charges.
-        offers: this.catalog.published().map((tpl) => ({
-          '@type': 'Offer',
-          name: tpl.name,
-          price: tpl.pricing === 'paid' ? (tpl.price / 100).toFixed(2) : '0',
-          priceCurrency: 'INR',
-          availability: 'https://schema.org/InStock',
-        })),
+        // No `offers`: this page is prerendered, and prices only arrive from the
+        // backend in the browser — at build time every template reads as ₹0,
+        // which would be false markup for paid templates.
       },
       this.seo.faqSchema(this.content.faqs),
     ]);

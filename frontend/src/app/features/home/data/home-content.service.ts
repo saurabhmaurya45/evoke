@@ -402,6 +402,26 @@ export class HomeContentService {
       answer:
         'You receive a shareable link to your live invitation website immediately, ready to send to guests.',
     },
+    {
+      question: 'Can I send my wedding invitation on WhatsApp?',
+      answer:
+        'Yes. Your invitation is a single link, so you can send it on WhatsApp, Instagram, SMS or email. Guests open it in their phone browser — no app or download needed.',
+    },
+    {
+      question: 'Is an invitation website better than a PDF wedding card?',
+      answer:
+        'A PDF is a heavy file guests have to download and zoom into. An invitation website opens instantly, plays your music, shows your photos, gives one-tap directions to every venue and collects RSVPs — and you can update it any time.',
+    },
+    {
+      question: 'Can guests see the venue on Google Maps?',
+      answer:
+        'Yes. Each event can include its venue address with a Google Maps link, so guests get directions to the haldi, sangeet, wedding and reception in one tap.',
+    },
+    {
+      question: 'Do you have Punjabi, Sikh, Nikkah and South Indian designs?',
+      answer:
+        'Yes. Our templates include Rosewood (Punjabi), Royal Gate (Sikh Anand Karaj), Beloved (Nikkah), Temple Bells (South Indian temple wedding) and royal Hindu designs, alongside modern and classic styles.',
+    },
   ];
 
   /**

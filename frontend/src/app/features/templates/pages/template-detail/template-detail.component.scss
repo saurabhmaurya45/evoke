@@ -1,0 +1,28 @@
+@use 'abstracts' as *;
+
+.detail {
+  display: grid;
+  gap: 36px;
+  align-items: center;
+
+  @include respond-to('lg') {
+    grid-template-columns: 1.1fr 1fr;
+  }
+}
+
+.detail__video {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 560 / 316;
+  object-fit: cover;
+  border-radius: 20px;
+  background: rgba(var(--glass-rgb), 0.08);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+}
+
+.detail__price {
+  margin: 18px 0 0;
+  font-size: 22px;
+  font-weight: $fw-bold;
+  color: $color-sand;
+}

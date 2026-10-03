@@ -16,8 +16,14 @@ Disallow: /check-email
 Disallow: /email-verified
 Disallow: /auth/
 
-# Rendered invitation templates are demo content, not pages we want ranking
-# against our own marketing pages.
-Disallow: /invitation-templates/
+# /i/ (couples' invitations) and /preview/ are deliberately NOT disallowed:
+# they carry an X-Robots-Tag noindex header (netlify.toml), and a crawler that
+# is blocked here never fetches the page, so it would never see that header.
 
-Sitemap: https://evoke.app/sitemap.xml
+# Rendered invitation templates are demo content, not pages we want ranking
+# against our own marketing pages. Only the HTML is blocked: their posters and
+# preview clips are the images on /templates pages and in Product markup, so
+# Googlebot must be able to fetch them.
+Disallow: /invitation-templates/*.html$
+
+Sitemap: https://theinvitely.in/sitemap.xml

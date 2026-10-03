@@ -1,0 +1,78 @@
+@if (info() && template(); as tpl) {
+  <article class="page">
+    <nav aria-label="Breadcrumb">
+      <ol class="crumbs">
+        <li><a routerLink="/">Home</a></li>
+        <li><a routerLink="/templates">Templates</a></li>
+        <li aria-current="page">{{ tpl.name }}</li>
+      </ol>
+    </nav>
+
+    <div class="detail">
+      <div class="detail__media">
+        <!-- Real capture of the live template scrolling end to end. -->
+        <video
+          class="detail__video"
+          [poster]="tpl.previewPoster ?? tpl.photo"
+          [attr.aria-label]="tpl.name + ' invitation website template preview'"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          width="560"
+          height="316"
+        >
+          @if (tpl.previewVideo) {
+            <source [src]="tpl.previewVideo" type="video/mp4" />
+          }
+        </video>
+      </div>
+
+      <header class="detail__head">
+        <p class="eyebrow">{{ info()!.label }} Invitation</p>
+        <h1 class="title">{{ tpl.name }}</h1>
+        <p class="intro">{{ info()!.summary }}</p>
+        <p class="detail__price">{{ price() }}</p>
+        <div class="actions">
+          <a
+            class="cta cta--solid"
+            [routerLink]="['/preview', tpl.slotId]"
+            [queryParams]="{ mode: 'use' }"
+            >Use this template</a
+          >
+          <a class="cta cta--ghost" [routerLink]="['/preview', tpl.slotId]">Live preview</a>
+        </div>
+      </header>
+    </div>
+
+    <section class="prose block">
+      <h2>About the {{ tpl.name }} invitation</h2>
+      @for (paragraph of info()!.paragraphs; track paragraph) {
+        <p>{{ paragraph }}</p>
+      }
+      <h2>What your guests will see</h2>
+      <ul>
+        @for (item of info()!.highlights; track item) {
+          <li>{{ item }}</li>
+        }
+      </ul>
+      <h2>How to make it yours</h2>
+      <p>
+        Open the template, add your names, dates, venues and photos in the guided editor, and
+        preview it on your phone as you go. When you publish, you get one link to send to every
+        guest on WhatsApp — and you can keep editing it after it’s live.
+      </p>
+    </section>
+
+    <section class="block">
+      <h2>More invitation templates</h2>
+      <app-template-strip [exclude]="[tpl.slotId]" />
+      <p class="prose">
+        <a routerLink="/wedding-invitations">See all wedding invitation designs</a>
+      </p>
+    </section>
+  </article>
+} @else {
+  <app-not-found />
+}

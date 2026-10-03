@@ -31,5 +31,11 @@ export class LegalPageComponent implements OnInit {
       url,
       canonical: url,
     });
+    this.seo.setStructuredData(
+      this.seo.breadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: page.title, path: `/${page.slug}` },
+      ]),
+    );
   }
 }

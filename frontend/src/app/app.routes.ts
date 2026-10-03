@@ -34,15 +34,37 @@ export const routes: Routes = [
         loadChildren: () => import('./features/home/home.routes').then((m) => m.HOME_ROUTES),
       },
       {
+        // The occasion hubs replaced the old Services stub (also a 301 in netlify.toml).
         path: 'services',
-        component: ComingSoonComponent,
-        title: 'Services • theinvitely.in',
-        data: {
-          eyebrow: 'Services',
-          heading: 'Services',
-          description:
-            'Explore every occasion theinvitely.in supports — a dedicated services hub is on the way.',
-        },
+        pathMatch: 'full',
+        redirectTo: 'wedding-invitations',
+      },
+      {
+        path: 'wedding-invitations',
+        loadComponent: () =>
+          import('./features/landing/pages/landing-page/landing-page.component').then(
+            (m) => m.LandingPageComponent,
+          ),
+        data: { page: 'wedding-invitations' },
+      },
+      {
+        path: 'wedding-invitations/:community',
+        loadComponent: () =>
+          import('./features/landing/pages/landing-page/landing-page.component').then(
+            (m) => m.LandingPageComponent,
+          ),
+      },
+      {
+        path: 'engagement-invitations',
+        loadComponent: () =>
+          import('./features/landing/pages/landing-page/landing-page.component').then(
+            (m) => m.LandingPageComponent,
+          ),
+        data: { page: 'engagement-invitations' },
+      },
+      {
+        path: 'blog',
+        loadChildren: () => import('./features/blog/blog.routes').then((m) => m.BLOG_ROUTES),
       },
       {
         path: 'templates',

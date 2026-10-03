@@ -15,14 +15,28 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
   {
     title: 'Product',
     links: [
-      { label: 'Services', fragment: 'services' },
+      { label: 'Wedding Invitations', path: '/wedding-invitations' },
+      { label: 'Engagement Invitations', path: '/engagement-invitations' },
       { label: 'Templates', path: '/templates' },
       { label: 'How It Works', fragment: 'how-it-works' },
     ],
   },
   {
+    // Crawlable links to every community landing page.
+    title: 'By Tradition',
+    links: [
+      { label: 'Punjabi Wedding', path: '/wedding-invitations/punjabi' },
+      { label: 'Sikh Wedding', path: '/wedding-invitations/sikh' },
+      { label: 'Nikah Invitation', path: '/wedding-invitations/muslim-nikah' },
+      { label: 'Hindu Wedding', path: '/wedding-invitations/hindu' },
+      { label: 'South Indian Wedding', path: '/wedding-invitations/south-indian' },
+      { label: 'Christian Wedding', path: '/wedding-invitations/christian' },
+    ],
+  },
+  {
     title: 'Company',
     links: [
+      { label: 'Blog', path: '/blog' },
       { label: 'About', fragment: 'hero' },
       { label: 'FAQ', fragment: 'faq' },
       { label: 'Contact', fragment: 'footer-contact' },
