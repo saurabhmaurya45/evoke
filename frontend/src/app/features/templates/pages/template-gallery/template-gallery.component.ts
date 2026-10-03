@@ -57,6 +57,8 @@ export class TemplateGalleryComponent implements OnInit, AfterViewInit, AfterVie
   ]);
 
   protected readonly price = formatPrice;
+  /** Prices render only once they come from the backend — never the ₹0 seed. */
+  protected readonly pricesKnown = this.catalog.pricesKnown;
 
   protected readonly activeFilter = signal<Filter>('All');
   protected readonly query = signal('');

@@ -33,7 +33,9 @@
         <p class="eyebrow">{{ info()!.label }} Invitation</p>
         <h1 class="title">{{ tpl.name }}</h1>
         <p class="intro">{{ info()!.summary }}</p>
-        <p class="detail__price">{{ price() }}</p>
+        @if (pricesKnown()) {
+          <p class="detail__price">{{ price() }}</p>
+        }
         <div class="actions">
           <a
             class="cta cta--solid"

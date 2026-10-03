@@ -70,7 +70,7 @@ export const BLOG_POSTS: readonly BlogPost[] = [
       {
         heading: 'Hindi wedding invitation wording',
         quotes: [
-          '|| श्री गणेशाय नमः ||\nसादर आमंत्रित करते हैं\nहमारे सुपुत्र चि. अर्जुन\nसंग\nआयु. प्रिया\nके शुभ विवाह के पावन अवसर पर\nआपकी गरिमामयी उपस्थिति प्रार्थनीय है।\nदिनांक: 24 जनवरी 2027\nस्थान: लीला पैलेस, उदयपुर',
+          '|| श्री गणेशाय नमः ||\nहमारे सुपुत्र\nचि. अर्जुन\nका शुभ विवाह\nआयु. प्रिया\n(सुपुत्री श्रीमती एवं श्री सुरेश अय्यर)\nके साथ होना निश्चित हुआ है।\nदिनांक: रविवार, 24 जनवरी 2027\nस्थान: लीला पैलेस, उदयपुर\nइस मंगल अवसर पर आप सपरिवार सादर आमंत्रित हैं।',
           'आपके आगमन की प्रतीक्षा में\nशर्मा परिवार',
         ],
       },
@@ -243,7 +243,7 @@ export const BLOG_POSTS: readonly BlogPost[] = [
       {
         heading: 'Cost',
         paragraphs: [
-          'A good printed card with an envelope, inserts and courier can easily cost ₹100–₹500 per guest, and boxed invitations with sweets cost far more. For 300 families that adds up quickly. A digital invitation website is a one-time cost, no matter how many people you send it to.',
+          'Printed cards are priced per card sent to a family. A standard card is often well under ₹100, while a premium card with envelope, inserts and courier can reach ₹100–₹500 per family — and boxed invitations with sweets cost far more. For 300 families that adds up quickly. A digital invitation website is a one-time cost, no matter how many families you send it to.',
         ],
       },
       {
@@ -460,7 +460,7 @@ export const BLOG_POSTS: readonly BlogPost[] = [
       {
         heading: 'WhatsApp message with your link',
         quotes: [
-          'Sat Sri Akal ji 🙏 Arjan te Simran de viyah di saari jaankari — functions, venue te RSVP — is link te hai: [your link]. Tuhada intezaar rahega!',
+          'Sat Sri Akal ji 🙏 Arjan te Simran de viyah di saari jaankari — functions, venue te RSVP — is link te hai: [your link]. Tuhadi udeek rahegi!',
         ],
       },
     ],

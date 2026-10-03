@@ -37,7 +37,8 @@ for (const path of paths) {
     const canonical = html.match(/<link rel="canonical" href="([^"]*)"/)?.[1];
     const robots = html.match(/<meta name="robots" content="([^"]*)"/)?.[1] ?? '';
 
-    expect(title.replace(/ (•|\|) theinvitely\.in$/, '').length).toBeLessThanOrEqual(64);
+    // The full <title> as Google shows it, brand suffix included.
+    expect(title.replace(/&amp;/g, '&').length).toBeLessThanOrEqual(60);
     expect(description.length).toBeGreaterThan(50);
     expect(description.length).toBeLessThanOrEqual(160);
     expect(canonical).toBe(path === '/' ? SITE : `${SITE}${path}`);
@@ -81,18 +82,53 @@ test('no template is dropped: wedding hub and gallery show all templates', async
   for (const href of hrefs) expect(href).toMatch(/^\/templates\/[a-z0-9-]+$/);
 });
 
-test('every community page lists all templates, its own first', async ({ page }) => {
-  for (const [path, first] of [
-    ['/wedding-invitations/punjabi', 'Rosewood'],
-    ['/wedding-invitations/sikh', 'Royal Gate'],
-    ['/wedding-invitations/muslim-nikah', 'Beloved'],
-    ['/wedding-invitations/south-indian', 'Temple Bells'],
-    ['/wedding-invitations/christian', 'Château'],
+test('community pages show their own designs and link to the full catalogue', async ({ page }) => {
+  // Not the whole grid: repeating all templates on every community page makes
+  // them near-duplicates of the hub. The full set is one link away.
+  for (const [path, featured] of [
+    ['/wedding-invitations/punjabi', ['Rosewood', 'Royal Gate']],
+    ['/wedding-invitations/sikh', ['Royal Gate', 'Rosewood']],
+    ['/wedding-invitations/muslim-nikah', ['Beloved', 'Château']],
+    ['/wedding-invitations/south-indian', ['Temple Bells', 'Maroon & Gold']],
+    ['/wedding-invitations/christian', ['Château', 'Doorway']],
   ] as const) {
     await page.goto(path);
     const cards = page.locator('app-template-strip a');
-    await expect(cards).toHaveCount(TEMPLATE_COUNT);
-    await expect(cards.first()).toContainText(first);
+    await expect(cards).toHaveCount(featured.length);
+    for (const [i, name] of featured.entries()) await expect(cards.nth(i)).toContainText(name);
+    await expect(
+      page.getByRole('link', { name: `See all ${TEMPLATE_COUNT} invitation templates` }),
+    ).toHaveAttribute('href', '/templates');
+    // The shared hub copy stays on the hub only.
+    await expect(
+      page.getByRole('heading', { name: 'Why an invitation website beats a PDF card' }),
+    ).toHaveCount(0);
+  }
+});
+
+test('prerendered HTML never shows the ₹0 seed price', async ({ request }) => {
+  // Prerender has no backend prices; every template would read "Free".
+  for (const path of ['/templates', '/templates/royal-gate-sikh-wedding']) {
+    const html = await (await request.get(path)).text();
+    expect(html, path).not.toMatch(/class="(card__price|detail__price)[^"]*"/);
+    expect(html, path).not.toMatch(/>\s*Free\s*</);
+  }
+});
+
+test('homepage stats match the real catalogue', async ({ request }) => {
+  const html = await (await request.get('/')).text();
+  const values = [...html.matchAll(/class="stats__value"[^>]*>([^<]*)</g)].map((m) => m[1].trim());
+  expect(values).toContain(String(TEMPLATE_COUNT));
+  for (const claim of ['200+', '1000+', '99%']) expect(values).not.toContain(claim);
+  expect(html).not.toContain('thousands of couples');
+  expect(html).not.toContain('SearchAction');
+});
+
+test('sitemap lastmod only comes from real content dates', () => {
+  const entries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map((m) => m[1]);
+  for (const entry of entries) {
+    if (entry.includes('/blog/')) expect(entry).toMatch(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
+    else expect(entry).not.toContain('<lastmod>');
   }
 });
 

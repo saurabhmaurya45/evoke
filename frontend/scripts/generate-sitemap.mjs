@@ -5,6 +5,10 @@
 // page only if it is indexable (no "noindex" robots meta), canonical to itself,
 // and not disallowed in robots.txt. A new prerendered page appears in the
 // sitemap automatically; a noindex or duplicate page never does.
+//
+// <lastmod> is only written when the page states a real content date
+// (JSON-LD dateModified, e.g. blog posts). Stamping every URL with the build
+// date would make each deploy look like a full-site update.
 
 import { readdirSync, readFileSync, statSync, writeFileSync, existsSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
@@ -59,11 +63,11 @@ for (const file of htmlFiles(OUT_DIR)) {
     console.warn(`generate-sitemap: skipping ${path} (canonical ${canonical ?? 'missing'})`);
     continue;
   }
-  urls.push(expected);
+  const lastmod = attr(html, /"dateModified":"(\d{4}-\d{2}-\d{2})/);
+  urls.push({ loc: expected, lastmod });
 }
 
-urls.sort((a, b) => a.length - b.length || a.localeCompare(b));
-const today = new Date().toISOString().slice(0, 10);
+urls.sort((a, b) => a.loc.length - b.loc.length || a.loc.localeCompare(b.loc));
 const priority = (url) => {
   const depth = url.replace(SITE, '').split('/').filter(Boolean).length;
   return depth === 0 ? '1.0' : depth === 1 ? '0.8' : '0.6';
@@ -73,8 +77,8 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls
   .map(
-    (url) =>
-      `  <url>\n    <loc>${url}</loc>\n    <lastmod>${today}</lastmod>\n    <priority>${priority(url)}</priority>\n  </url>`,
+    ({ loc, lastmod }) =>
+      `  <url>\n    <loc>${loc}</loc>\n${lastmod ? `    <lastmod>${lastmod}</lastmod>\n` : ''}    <priority>${priority(loc)}</priority>\n  </url>`,
   )
   .join('\n')}
 </urlset>

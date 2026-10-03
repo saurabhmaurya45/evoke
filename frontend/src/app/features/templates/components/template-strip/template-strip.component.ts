@@ -8,8 +8,9 @@ import { templateSeoBySlotId } from '../../data/template-seo.data';
  * landing pages, template pages and blog posts — the internal links that pass
  * ranking signal to /templates/:slug.
  *
- * `first` sets the order only: every published template is always shown,
- * the listed ones first, so no design is ever hidden from a page.
+ * `first` sets the order: listed templates lead, the rest follow. With
+ * `only`, just the listed ones are shown — community pages use this so they
+ * don't each repeat the full catalogue (and link to it instead).
  */
 @Component({
   selector: 'app-template-strip',
@@ -43,19 +44,22 @@ export class TemplateStripComponent {
 
   /** slotIds to show first. */
   readonly first = input<readonly string[]>([]);
+  /** Show only the `first` templates instead of the whole catalogue. */
+  readonly only = input(false);
   /** slotIds to leave out (e.g. the template whose page this is). */
   readonly exclude = input<readonly string[]>([]);
 
   protected readonly items = computed(() => {
     const first = this.first();
     const exclude = new Set(this.exclude());
+    const only = this.only();
     const rank = (slotId: string) => {
       const i = first.indexOf(slotId);
       return i === -1 ? first.length : i;
     };
     return this.catalog
       .published()
-      .filter((tpl) => !exclude.has(tpl.slotId))
+      .filter((tpl) => !exclude.has(tpl.slotId) && (!only || first.includes(tpl.slotId)))
       .map((tpl) => ({ tpl, seo: templateSeoBySlotId(tpl.slotId) }))
       .filter((x): x is { tpl: typeof x.tpl; seo: NonNullable<typeof x.seo> } => !!x.seo)
       .sort((a, b) => rank(a.tpl.slotId) - rank(b.tpl.slotId))

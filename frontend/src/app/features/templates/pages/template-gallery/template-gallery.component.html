@@ -74,9 +74,11 @@
               <h2 class="card__name">
                 <a [routerLink]="['/templates', slug(tpl)]">{{ tpl.name }}</a>
               </h2>
-              <span class="card__price" [class.card__price--free]="tpl.pricing === 'free'">
-                {{ price(tpl) }}
-              </span>
+              @if (pricesKnown()) {
+                <span class="card__price" [class.card__price--free]="tpl.pricing === 'free'">
+                  {{ price(tpl) }}
+                </span>
+              }
             </div>
             <div class="card__actions">
               <a

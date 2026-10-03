@@ -33,6 +33,8 @@ export class TemplateDetailComponent {
     const info = this.info();
     return info ? this.catalog.published().find((tpl) => tpl.slotId === info.slotId) : undefined;
   });
+  /** Prices render only once they come from the backend — never the ₹0 seed. */
+  protected readonly pricesKnown = this.catalog.pricesKnown;
   protected readonly price = computed(() => {
     const tpl = this.template();
     return tpl ? formatPrice(tpl) : '';

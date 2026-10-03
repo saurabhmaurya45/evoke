@@ -9,6 +9,9 @@ import type { SeoMetadata } from '../models/seo.model';
 
 const STRUCTURED_DATA_ID = 'evoke-structured-data';
 
+/** Longest <title> before Google typically truncates it in results. */
+const MAX_TITLE_LENGTH = 60;
+
 /** Lets Google show large image previews and full-length snippets. */
 const DEFAULT_ROBOTS = 'index, follow, max-image-preview:large, max-snippet:-1';
 
@@ -25,7 +28,11 @@ export class SeoService {
   private readonly router = inject(Router);
 
   apply(data: SeoMetadata): void {
-    const fullTitle = data.title.includes(APP_NAME) ? data.title : `${data.title} • ${APP_NAME}`;
+    // Brand suffix only when it fits: Google truncates titles past ~60 chars,
+    // and the keyword-led part matters more than the brand.
+    const branded = `${data.title} • ${APP_NAME}`;
+    const fullTitle =
+      data.title.includes(APP_NAME) || branded.length > MAX_TITLE_LENGTH ? data.title : branded;
     const url = data.url ?? this.currentUrl();
     const image = data.image ?? DEFAULT_OG_IMAGE.url;
     const imageAlt = data.imageAlt ?? (data.image ? fullTitle : DEFAULT_OG_IMAGE.alt);

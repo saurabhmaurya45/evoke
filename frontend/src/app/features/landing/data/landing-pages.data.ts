@@ -10,8 +10,9 @@ import {
  * pages (/wedding-invitations/:community). One entry drives the route, the
  * prerender params, the page copy and the metadata, so they cannot drift.
  *
- * Every page lists ALL templates: the ones matching `featured` first, then the
- * rest under "More templates" — no template is ever hidden from a landing page.
+ * Hubs list every template, `featured` first. Community pages show only their
+ * `featured` designs and link to the full catalogue: repeating the whole grid
+ * on each would make them near-duplicates of the hub (doorway pages).
  */
 export interface LandingSection {
   readonly heading: string;
@@ -31,7 +32,7 @@ export interface LandingPage {
   readonly eyebrow: string;
   readonly h1: string;
   readonly intro: string;
-  /** Template slotIds shown first; every other template follows. */
+  /** Template slotIds shown first (hubs) or exclusively (community pages). */
   readonly featured: readonly string[];
   readonly sections: readonly LandingSection[];
   readonly faqs: readonly { question: string; answer: string }[];
@@ -77,7 +78,7 @@ export const LANDING_PAGES: readonly LandingPage[] = [
     breadcrumb: 'Wedding Invitations',
     title: 'Online Wedding Invitation with RSVP & WhatsApp Sharing',
     description:
-      'Create an online wedding invitation website with music, photos, maps and RSVP. Royal, Punjabi, Sikh, Nikkah & South Indian designs. Share on WhatsApp.',
+      'Create an online wedding invitation website with music, photos, maps and RSVP. Royal, Punjabi, Sikh, Nikah & South Indian designs. Share on WhatsApp.',
     keywords: [
       ...WEBSITE_KEYWORDS,
       ...WHATSAPP_KEYWORDS,
@@ -100,7 +101,7 @@ export const LANDING_PAGES: readonly LandingPage[] = [
       {
         heading: 'Designs for every tradition',
         paragraphs: [
-          'Choose from royal Hindu designs, a Punjabi mandap invitation, a Sikh Anand Karaj palace gate, an elegant Nikkah card, a South Indian temple wedding, a classic church-wedding watercolour and an interactive modern door — each fully customisable.',
+          'Choose from royal Hindu designs, a Punjabi mandap invitation, a Sikh Anand Karaj palace gate, an elegant Nikah card, a South Indian temple wedding, a classic church-wedding watercolour and an interactive modern door — each fully customisable.',
         ],
       },
       HOW_IT_WORKS,
@@ -188,10 +189,24 @@ export const LANDING_PAGES: readonly LandingPage[] = [
       {
         heading: 'Wording that sounds like your family',
         paragraphs: [
-          'Write your invitation in English, Hinglish or Punjabi — “Sharma parivar sadar amantrit karda hai…” works just as well as formal English. Add a dhol-heavy track as background music to set the mood the moment guests open the link.',
+          'Write your invitation in English, Hinglish or Punjabi — “Sharma parivar vallon nigha sadda…” works just as well as formal English. Add a dhol-heavy track as background music to set the mood the moment guests open the link.',
         ],
       },
-      WHY_WEBSITE,
+      {
+        heading: 'Functions to put on your Punjabi wedding invitation',
+        paragraphs: [
+          'Most Punjabi families spread the wedding across several days. Add each one as its own event so guests know exactly where to be — and what to wear.',
+        ],
+        bullets: [
+          'Roka or chunni ceremony',
+          'Sangeet and jaggo night',
+          'Mehendi',
+          'Vatna / haldi',
+          'Chooda ceremony on the wedding morning',
+          'Anand Karaj or pheras',
+          'Reception and doli',
+        ],
+      },
     ],
     faqs: [
       {
@@ -226,8 +241,20 @@ export const LANDING_PAGES: readonly LandingPage[] = [
           'List the Akhand Path, Anand Karaj at the gurdwara, milni, langar and reception — each with time and a Google Maps link — and let guests RSVP to you directly on WhatsApp.',
         ],
       },
-      WHY_WEBSITE,
-      HOW_IT_WORKS,
+      {
+        heading: 'Ceremonies to include in a Sikh wedding invitation',
+        paragraphs: [
+          'A Sikh wedding usually centres on the gurdwara, with family functions before and after. List each with its own time and map so the sangat and relatives can plan their day.',
+        ],
+        bullets: [
+          'Akhand Path or Sehaj Path at home or the gurdwara',
+          'Kurmai (engagement) and chunni',
+          'Milni of the two families',
+          'Anand Karaj with the four laavan',
+          'Langar',
+          'Reception',
+        ],
+      },
     ],
     faqs: [
       {
@@ -263,8 +290,20 @@ export const LANDING_PAGES: readonly LandingPage[] = [
           'Add the Nikah, Walima, Mehndi or Manjha with dates and venues, include both families as “Son of” and “Daughter of”, and show a countdown and photo gallery.',
         ],
       },
-      WHY_WEBSITE,
-      HOW_IT_WORKS,
+      {
+        heading: 'Events to include in a Nikah invitation',
+        paragraphs: [
+          'Muslim weddings in India often run over a few days. Give each event its own entry with timing — for example “after Asr prayers” — and the venue on Google Maps.',
+        ],
+        bullets: [
+          'Mangni (engagement)',
+          'Manjha or haldi',
+          'Mehndi',
+          'Nikah',
+          'Rukhsati',
+          'Walima',
+        ],
+      },
     ],
     faqs: [
       {
@@ -304,8 +343,21 @@ export const LANDING_PAGES: readonly LandingPage[] = [
           'Add the names of both families and elders, a countdown to the muhurat and a gallery of your photos.',
         ],
       },
-      WHY_WEBSITE,
-      HOW_IT_WORKS,
+      {
+        heading: 'Ceremonies to list on a Hindu wedding invitation',
+        paragraphs: [
+          'Rituals vary by region and family, so name each one the way your family does. Each gets its own date, time and venue.',
+        ],
+        bullets: [
+          'Sagai or tilak',
+          'Haldi',
+          'Mehndi',
+          'Sangeet',
+          'Baraat and jaimala',
+          'Pheras (saat phere) at the muhurat',
+          'Vidaai and reception',
+        ],
+      },
     ],
     faqs: [
       {
@@ -340,8 +392,21 @@ export const LANDING_PAGES: readonly LandingPage[] = [
           'List the nichayathartham, mehendi, muhurtham and reception with times and venue maps, add a “How We Met” timeline and a countdown, and set a nadaswaram track as background music.',
         ],
       },
-      WHY_WEBSITE,
-      HOW_IT_WORKS,
+      {
+        heading: 'Ceremonies to include in a South Indian wedding invitation',
+        paragraphs: [
+          'Temple weddings are timed to the muhurtham, often early in the morning, so exact times matter. Add each ceremony with its time and the temple or hall on Google Maps.',
+        ],
+        bullets: [
+          'Nichayathartham (engagement)',
+          'Pandakkal muhurtham',
+          'Nalangu',
+          'Kashi yatra and maalai maatral',
+          'Oonjal',
+          'Muhurtham (thali / mangalsutra)',
+          'Reception',
+        ],
+      },
     ],
     faqs: [
       {
@@ -377,8 +442,20 @@ export const LANDING_PAGES: readonly LandingPage[] = [
           'For something more playful, Doorway welcomes guests with a carved door they knock to open, and includes a timeline, venues, gallery and RSVP.',
         ],
       },
-      WHY_WEBSITE,
-      HOW_IT_WORKS,
+      {
+        heading: 'What to include in a Christian wedding invitation',
+        paragraphs: [
+          'Guests at a church wedding need the order of the day: when the service starts, where the reception is and what to wear. Each part gets its own time and map.',
+        ],
+        bullets: [
+          'Engagement or betrothal',
+          'Roce or haldi (Goan, Mangalorean and Kerala traditions)',
+          'Holy Matrimony / nuptial Mass at the church',
+          'Photographs with family',
+          'Reception and first dance',
+          'Dress code and gift registry',
+        ],
+      },
     ],
     faqs: [
       {

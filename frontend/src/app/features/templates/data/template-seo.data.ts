@@ -75,7 +75,7 @@ export const TEMPLATE_SEO: readonly TemplateSeo[] = [
   {
     slotId: 'tpl-beloved-nikkah',
     slug: 'beloved-nikkah-invitation',
-    label: 'Nikkah',
+    label: 'Nikah',
     communities: ['muslim-nikah'],
     keywords: [
       'nikah invitation online',
@@ -83,10 +83,10 @@ export const TEMPLATE_SEO: readonly TemplateSeo[] = [
       'nikah card for whatsapp',
     ],
     summary:
-      'Beloved is an elegant Nikkah invitation website with a save-the-date seal, Quranic verse, family names, event timeline, venue map and photo gallery.',
+      'Beloved is an elegant Nikah invitation website with a save-the-date seal, Quranic verse, family names, event timeline, venue map and photo gallery.',
     paragraphs: [
       'Beloved begins with a “Save the Date” wax seal on soft ivory. One tap reveals a floral illustration of the couple and an elegant script introduction, with room for a Quranic verse such as “And among His signs is that He created for you mates from among yourselves.”',
-      'Below, you can add both families’ names, a timeline for the Nikkah, Walima and other events, the venue with a Google Maps button, a countdown and a polaroid-style photo gallery. It works beautifully for Nikkah ceremonies, Walima receptions and Muslim weddings across India.',
+      'Below, you can add both families’ names, a timeline for the Nikah, Walima and other events, the venue with a Google Maps button, a countdown and a polaroid-style photo gallery. It works beautifully for Nikah ceremonies, Walima receptions and Muslim weddings across India.',
     ],
     highlights: [
       'Save-the-date wax seal opening',

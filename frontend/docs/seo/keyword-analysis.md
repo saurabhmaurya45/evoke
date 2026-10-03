@@ -50,4 +50,6 @@ The source for `src/app/core/constants/seo.constants.ts`. Last reviewed: 2026-10
 **Rules for new pages:**
 - Add the entry to the matching data file. The route, prerendering, metadata and sitemap all follow from it.
 - Never change a published slug without adding a 301 redirect in `netlify.toml`.
-- Keep titles at 60 characters or fewer and meta descriptions at 155 or fewer.
+- Keep the full `<title>` at 60 characters or fewer. `SeoService` adds " • theinvitely.in" only when it fits. Keep meta descriptions at 155 or fewer. `npm run test:e2e` checks both.
+- Community pages show only their own featured designs and link to `/templates`. Don't repeat the full grid or the hub's shared sections there; each community page needs its own content to avoid being treated as a doorway page.
+- Never render a price in prerendered HTML. Build-time prices are the ₹0 seed (see `TemplateCatalogService.pricesKnown`).

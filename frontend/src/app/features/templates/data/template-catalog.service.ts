@@ -67,6 +67,15 @@ export class TemplateCatalogService {
   private readonly _templates = signal<readonly CatalogTemplate[]>(this.seed());
 
   /**
+   * True once the backend has answered with real prices. Until then every
+   * template carries the seed price (free / ₹0), which must never be shown —
+   * in particular not in prerendered HTML, where it would tell search engines
+   * that paid designs are free. Prerender makes no API calls, so it stays false.
+   */
+  private readonly _pricesKnown = signal(false);
+  readonly pricesKnown = this._pricesKnown.asReadonly();
+
+  /**
    * Admin changes made before the slug → backend id map has loaded. They are
    * merged per slot and sent as soon as the map arrives, so an early click is
    * saved rather than silently staying local (and then being overwritten by the
@@ -201,6 +210,7 @@ export class TemplateCatalogService {
             };
           }),
         );
+        this._pricesKnown.set(true);
         this.persist();
       });
   }

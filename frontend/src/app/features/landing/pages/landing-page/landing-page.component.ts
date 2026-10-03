@@ -4,6 +4,7 @@ import { SeoService } from '../../../../core/services/seo.service';
 import { environment } from '../../../../../environments/environment';
 import { LANDING_PAGES, landingPageByPath } from '../../data/landing-pages.data';
 import { TemplateStripComponent } from '../../../templates/components/template-strip/template-strip.component';
+import { TemplateCatalogService } from '../../../templates/data/template-catalog.service';
 import { NotFoundComponent } from '../../../../shared/components/not-found/not-found.component';
 
 /**
@@ -20,6 +21,9 @@ import { NotFoundComponent } from '../../../../shared/components/not-found/not-f
 })
 export class LandingPageComponent {
   private readonly seo = inject(SeoService);
+  private readonly catalog = inject(TemplateCatalogService);
+
+  protected readonly templateCount = this.catalog.publishedCount;
 
   /** Hub path from route data. */
   readonly page = input('');

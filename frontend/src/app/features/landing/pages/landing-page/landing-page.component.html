@@ -23,8 +23,13 @@
     </header>
 
     <section class="block">
-      <h2>Invitation templates</h2>
-      <app-template-strip [first]="page.featured" />
+      <h2>{{ page.parent ? 'Recommended designs' : 'Invitation templates' }}</h2>
+      <app-template-strip [first]="page.featured" [only]="!!page.parent" />
+      @if (page.parent) {
+        <p class="prose">
+          <a routerLink="/templates">See all {{ templateCount() }} invitation templates</a>
+        </p>
+      }
     </section>
 
     <div class="prose">

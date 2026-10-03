@@ -51,7 +51,7 @@ export class HomePageComponent implements OnInit {
     const url = environment.appUrl;
 
     this.seo.apply({
-      title: `Wedding Invitation Website & Digital E-Invites | ${APP_NAME}`,
+      title: `Wedding Invitation Website & E-Invites | ${APP_NAME}`,
       description: APP_DESCRIPTION,
       type: 'website',
       keywords: HOME_KEYWORDS,
@@ -82,11 +82,8 @@ export class HomePageComponent implements OnInit {
         url,
         inLanguage: ORGANISATION.language,
         publisher: { '@id': `${url}/#organization` },
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: { '@type': 'EntryPoint', urlTemplate: `${url}/templates?q={search_term_string}` },
-          'query-input': 'required name=search_term_string',
-        },
+        // No SearchAction: the gallery search box doesn't read a ?q= param,
+        // so the advertised search URL would land on an unfiltered page.
       },
       {
         '@type': 'WebApplication',
