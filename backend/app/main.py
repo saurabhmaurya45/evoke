@@ -11,6 +11,7 @@ from app.config import get_settings
 from app.drafts.router import router as drafts_router
 from app.events.router import router as events_router
 from app.invitation.router import router as invitation_router
+from app.media.router import router as media_router
 from app.payments.router import router as payments_router
 from app.shared.database import get_db
 from app.shared.errors import RequestIdMiddleware, register_error_handlers
@@ -43,6 +44,12 @@ app = FastAPI(
             "name": "payments",
             "description": "Razorpay checkout for publishing invitations built on PAID templates.",
         },
+        {
+            "name": "media",
+            "description": (
+                "Presigned upload/retrieval of template and draft media via Backblaze B2."
+            ),
+        },
     ],
 )
 
@@ -65,6 +72,7 @@ app.include_router(drafts_router)
 app.include_router(admin_router)
 app.include_router(invitation_router)
 app.include_router(payments_router)
+app.include_router(media_router)
 
 
 @app.get("/health")

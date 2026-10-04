@@ -172,7 +172,12 @@ async def get_payment(db: AsyncSession, user: User, payment_id: uuid.UUID) -> Pa
     payment = await db.get(Payment, payment_id)
     if payment is None:
         raise NotFoundError("PAYMENT_NOT_FOUND", "Payment not found.")
-    ensure_owner_or_admin(user, payment.user_id)
+    ensure_owner_or_admin(
+        user,
+        payment.user_id,
+        not_found_code="PAYMENT_NOT_FOUND",
+        not_found_message="Payment not found.",
+    )
     template = await db.get(Template, payment.template_id)
     return _payment_out(payment, template.name if template else None)
 

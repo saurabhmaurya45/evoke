@@ -63,6 +63,10 @@ def validation_failed(message: str) -> dict[int, dict[str, Any]]:
     return error_response(422, "VALIDATION_FAILED", message)
 
 
+def service_unavailable(code: str, message: str) -> dict[int, dict[str, Any]]:
+    return error_response(503, code, message)
+
+
 UNAUTHORIZED = error_response(401, "AUTH_REQUIRED", "Authentication is required.")
 FORBIDDEN = error_response(403, "AUTH_FORBIDDEN", "You do not have access to this resource.")
 

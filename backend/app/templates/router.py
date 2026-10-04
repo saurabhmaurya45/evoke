@@ -1,8 +1,10 @@
 import uuid
+from typing import TypeVar
 
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.media.service import resolve_media_url
 from app.shared.auth.dependencies import get_current_user_optional, require_role
 from app.shared.database import get_db
 from app.shared.envelope import Envelope
@@ -15,6 +17,7 @@ from app.shared.openapi_responses import (
     validation_failed,
 )
 from app.shared.pagination import Page, PageParams, page_params
+from app.shared.storage.b2_client import B2Client, get_b2_client
 from app.templates.schemas import (
     CategoryCreate,
     CategoryOut,
@@ -50,6 +53,23 @@ from app.templates.service import (
 from app.users.models import User, UserRole
 
 router = APIRouter(prefix="/v1/templates")
+
+_TemplateResponseModel = TypeVar("_TemplateResponseModel", TemplateOut, TemplateGalleryOut)
+
+
+async def _resolve_template_media(
+    out: _TemplateResponseModel, b2: B2Client | None
+) -> _TemplateResponseModel:
+    """Resolves thumbnailUrl/previewUrl from stored storage paths to presigned,
+    time-limited GET URLs. Lives here (not in templates/service.py) because
+    `get_template`/`list_templates` return raw ORM `Template` rows consumed by
+    other internal callers (e.g. update_template's existence check) that must
+    not receive a response schema instead — response-schema construction
+    already happens in this router, not the service layer, for both routes
+    this is called from."""
+    out.thumbnail_url = await resolve_media_url(b2, out.thumbnail_url)
+    out.preview_url = await resolve_media_url(b2, out.preview_url)
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -270,6 +290,7 @@ async def list_templates_route(
     include_draft: bool = Query(False, description="Admin only: include draft templates."),
     current_user: User | None = Depends(get_current_user_optional),
     db: AsyncSession = Depends(get_db),
+    b2: B2Client | None = Depends(get_b2_client),
 ) -> Page[TemplateGalleryOut]:
     """Paginated, public listing of templates for the gallery/storefront.
 
@@ -287,10 +308,11 @@ async def list_templates_route(
         search=search,
         include_draft=include_draft and is_admin,
     )
-    return Page[TemplateGalleryOut](
-        data=[TemplateGalleryOut.model_validate(template) for template in page.data],
-        pagination=page.pagination,
-    )
+    data = [
+        await _resolve_template_media(TemplateGalleryOut.model_validate(template), b2)
+        for template in page.data
+    ]
+    return Page[TemplateGalleryOut](data=data, pagination=page.pagination)
 
 
 @router.get(
@@ -301,7 +323,9 @@ async def list_templates_route(
     responses=merge(not_found("TEMPLATE_NOT_FOUND", "Template not found.")),
 )
 async def get_template_route(
-    template_id: uuid.UUID, db: AsyncSession = Depends(get_db)
+    template_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    b2: B2Client | None = Depends(get_b2_client),
 ) -> Envelope[TemplateOut]:
     """Fetch a single template's metadata by id.
 
@@ -311,7 +335,8 @@ async def get_template_route(
     preview links). Returns `404` if the template doesn't exist.
     """
     template = await get_template(db, template_id)
-    return Envelope(data=TemplateOut.model_validate(template))
+    out = await _resolve_template_media(TemplateOut.model_validate(template), b2)
+    return Envelope(data=out)
 
 
 @router.patch(
