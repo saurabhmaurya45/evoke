@@ -48,6 +48,46 @@ closes that gap for the two places media gets attached:
 No existing frontend service currently touches this — there is no
 `MediaService`/`UploadService` yet. This doc assumes one will be created.
 
+## Prerequisite: B2 bucket CORS (ops/infra) — ✅ done
+
+There are **two separate CORS configs** involved in this feature — don't
+confuse them:
+
+1. **Our backend's `CORS_ORIGINS`** (`backend/.env.example` / Vercel env var)
+   — already exists, governs who can call `/v1/media/upload` and every other
+   API route. No change needed for this feature as long as the frontend
+   origin is already allowed there (it is, for existing endpoints).
+2. **The B2 bucket's own CORS policy** — governs the browser's direct `PUT`
+   to `uploadUrl` in step 2 below. **Configured** on the `TheInvitely` bucket
+   via the `b2` CLI (`b2 bucket update --cors-rules '...' TheInvitely`) on
+   2026-10-04. If step 2 ever fails with a browser CORS error (not an API
+   error from `/upload` or `/upload/ack`, which go through our own CORS
+   config above), check this rule first — it may need a new origin added
+   (e.g. a staging domain) via the same command.
+
+The rule in place allows the frontend's origins to `PUT` with a
+`Content-Type` header:
+
+```json
+[
+  {
+    "corsRuleName": "evoke-media-upload",
+    "allowedOrigins": ["http://localhost:4200", "https://theinvitely.in"],
+    "allowedOperations": ["s3_put"],
+    "allowedHeaders": ["content-type"],
+    "exposeHeaders": [],
+    "maxAgeSeconds": 3600
+  }
+]
+```
+
+Note `s3_head`/`s3_get` are **not** needed here — ack verification (`HEAD`)
+and signed-URL generation (`GET`) both happen server-side via `boto3` in
+Python, never from the browser, so they're outside the scope of the bucket's
+*browser*-facing CORS policy entirely. Only the direct-from-browser `PUT`
+needs a rule. This is an ops/infra task (B2 bucket console), not something
+either the frontend or backend code change.
+
 ## The flow, step by step
 
 ### 1. Request a presigned upload URL
