@@ -1,0 +1,8 @@
+{
+  "/v1": {
+    "target": "https://evokebackend.vercel.app",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "warn"
+  }
+}

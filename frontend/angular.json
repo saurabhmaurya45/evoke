@@ -75,7 +75,10 @@
           "configurations": {
             "production": { "buildTarget": "wedding-website:build:production" },
             "staging": { "buildTarget": "wedding-website:build:staging" },
-            "development": { "buildTarget": "wedding-website:build:development" }
+            "development": {
+              "buildTarget": "wedding-website:build:development",
+              "proxyConfig": "proxy.conf.json"
+            }
           },
           "defaultConfiguration": "development"
         },
