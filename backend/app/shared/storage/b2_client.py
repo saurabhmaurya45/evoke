@@ -14,6 +14,17 @@ from app.shared.errors import AppError
 _BOTO_CONFIG = Config(signature_version="s3v4", s3={"addressing_style": "path"})
 
 
+def region_from_endpoint(endpoint_url: str) -> str | None:
+    """`https://s3.us-east-005.backblazeb2.com` → `us-east-005`. SigV4 signatures
+    are scoped to a region; without one boto3 signs for `us-east-1`, which isn't
+    the bucket's region."""
+    host = urlsplit(endpoint_url).hostname or ""
+    parts = host.split(".")
+    if len(parts) >= 3 and parts[0] == "s3" and host.endswith(".backblazeb2.com"):
+        return parts[1]
+    return None
+
+
 class B2Client:
     """Thin wrapper over Backblaze B2's S3-compatible API, split across two
     credentials by pipeline stage (see aidlc-docs architecture doc, ADR-3):
@@ -34,11 +45,13 @@ class B2Client:
     ) -> None:
         self.bucket = bucket
         self._endpoint = urlsplit(endpoint_url)
+        region = region_from_endpoint(endpoint_url)
         self._producer = boto3.client(
             "s3",
             endpoint_url=endpoint_url,
             aws_access_key_id=producer_key_id,
             aws_secret_access_key=producer_key_secret,
+            region_name=region,
             config=_BOTO_CONFIG,
         )
         self._consumer = boto3.client(
@@ -46,6 +59,7 @@ class B2Client:
             endpoint_url=endpoint_url,
             aws_access_key_id=consumer_key_id,
             aws_secret_access_key=consumer_key_secret,
+            region_name=region,
             config=_BOTO_CONFIG,
         )
 

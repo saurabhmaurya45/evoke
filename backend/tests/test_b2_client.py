@@ -96,3 +96,28 @@ def test_head_object_reraises_unexpected_client_error():
 
     with pytest.raises(ClientError):
         client.head_object("asset/tpl-1/image/forbidden.jpg")
+
+
+def test_signatures_are_scoped_to_the_endpoints_region():
+    # Real boto3 clients (no network for presigning). Without a region boto3
+    # signs for us-east-1, which isn't the bucket's region.
+    client = B2Client(
+        endpoint_url="https://s3.us-east-005.backblazeb2.com",
+        bucket="evoke-media",
+        producer_key_id="005abc0000000000000000001",
+        producer_key_secret="producer-secret",
+        consumer_key_id="005abc0000000000000000002",
+        consumer_key_secret="consumer-secret",
+    )
+    put = client.presign_put("public/u/e/image/a.jpg", "image/jpeg", 600)
+    get = client.presign_get("public/u/e/image/a.jpg", 600)
+    assert "%2Fus-east-005%2Fs3%2Faws4_request" in put
+    assert "%2Fus-east-005%2Fs3%2Faws4_request" in get
+
+
+def test_region_from_endpoint():
+    from app.shared.storage.b2_client import region_from_endpoint
+
+    assert region_from_endpoint("https://s3.us-west-004.backblazeb2.com") == "us-west-004"
+    assert region_from_endpoint("https://s3.eu-central-003.backblazeb2.com/") == "eu-central-003"
+    assert region_from_endpoint("https://example.com") is None
