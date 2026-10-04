@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { templateSeoBySlotId } from '../../templates/data/template-seo.data';
 import type {
   FaqItem,
   FeatureItem,
@@ -51,19 +52,30 @@ export interface HeroCard {
   readonly slotId: string;
   /** Poster shown before the clip has data, and if it fails to load. */
   readonly img: string;
-  /** Muted, looping, full-page-scroll capture of the live template — same asset
-   * used by the templates carousel below (see `cardPreview()`). */
+  /** Muted loop of the template's opening, recorded on a phone viewport. */
   readonly video: string;
   readonly title: string;
+  /** Name without the descriptor ("Rosewood"), for compact card captions. */
+  readonly shortTitle: string;
+  /** Tradition label, e.g. "Punjabi Wedding". */
   readonly subtitle: string;
+  /** /templates/:slug — the indexable template page the card links to. */
+  readonly slug: string;
 }
 
+/**
+ * Hero phones, left to right. The middle one is the larger featured card and
+ * its poster is preloaded in index.html. Each has `hero-mobile.mp4/.jpg`: a
+ * short loop of the template's opening, recorded on a real phone viewport.
+ */
 const HERO_TEMPLATE_SHOTS = [
-  { slotId: 'tpl-samarpan-royal', templateNo: 1 },
-  { slotId: 'tpl-golden-promise', templateNo: 7 },
+  { slotId: 'tpl-royal-gate', templateNo: 8 },
   { slotId: 'tpl-rosewood-punjabi', templateNo: 4 },
-  { slotId: 'tpl-maroon-gold-royal', templateNo: 5 },
+  { slotId: 'tpl-eternal-bond', templateNo: 2 },
 ] as const;
+
+/** Index of the featured (larger, centre) hero phone. */
+export const HERO_FEATURE_INDEX = 1;
 
 /**
  * Card preview media: a muted clip scrolled through the live template end to end
@@ -374,7 +386,8 @@ export class HomeContentService {
     {
       name: 'Priya Nair',
       role: 'Event Planner',
-      quote: 'I now recommend theinvitely.in to every couple I work with. The quality speaks for itself.',
+      quote:
+        'I now recommend theinvitely.in to every couple I work with. The quality speaks for itself.',
       initials: 'PN',
     },
   ];
@@ -435,13 +448,17 @@ export class HomeContentService {
    */
   readonly heroCards: readonly HeroCard[] = HERO_TEMPLATE_SHOTS.map(({ slotId, templateNo }) => {
     const template = this.templateBySlotId(slotId);
-    const { previewVideo, previewPoster } = cardPreview(templateNo);
+    const seo = templateSeoBySlotId(slotId);
+    const dir = `/invitation-templates/template%20${templateNo}`;
+    const title = template?.name ?? '';
     return {
       slotId,
-      img: previewPoster,
-      video: previewVideo,
-      title: template?.name ?? '',
-      subtitle: template ? `${template.category} Invitation` : '',
+      img: `${dir}/hero-mobile.jpg`,
+      video: `${dir}/hero-mobile.mp4`,
+      title,
+      shortTitle: title.split(' — ')[0],
+      subtitle: seo?.label ?? (template ? `${template.category} Invitation` : ''),
+      slug: seo?.slug ?? '',
     };
   });
 }

@@ -69,7 +69,7 @@
 .hero__copy {
   position: relative;
   flex: 1 1 480px;
-  min-width: 320px;
+  min-width: min(100%, 320px);
   z-index: $z-content;
 }
 
@@ -146,131 +146,180 @@
   }
 }
 
-// ── Floating cards ──
+// ── Template showcase ──
+// Three phones in a grid — the centre one larger and lifted. A grid can't
+// overlap; earlier absolutely positioned cards collided on phones.
 .hero__stage {
   position: relative;
-  flex: 1 1 420px;
-  min-width: 320px;
-  height: 460px;
+  flex: 1 1 440px;
+  min-width: min(100%, 320px);
+  max-width: 560px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr 1fr;
+  align-items: end;
+  gap: 16px;
   z-index: $z-content;
+  animation: fadeInUp 0.9s ease 0.35s both;
 }
 
-// Two lanes (left: 1 over 3, right: 2 over 4), each card's vertical slot
-// sized with a real measured margin against its neighbours — not just eyeballed.
-// A prior pass ("loose overlapping cascade") looked fine in isolated
-// screenshots but put card 1 and card 3 on a genuine collision course at
-// every desktop width actually measured, hiding card 1's title under card 3.
 .hero__card {
-  position: absolute;
+  min-width: 0;
   transition: transform 0.15s ease-out;
   will-change: transform;
-
-  .hero__card-inner {
-    border-radius: $radius-lg;
-    padding: 14px;
-  }
-
-  &--1 {
-    top: 0;
-    left: 4%;
-    width: 200px;
-
-    .hero__card-inner {
-      animation: floatY 7s ease-in-out infinite;
-    }
-  }
-
-  &--2 {
-    top: 40px;
-    right: 2%;
-    width: 190px;
-
-    .hero__card-inner {
-      animation: floatY2 8s ease-in-out infinite;
-    }
-  }
-
-  &--3 {
-    top: 226px;
-    left: 4%;
-    width: 170px;
-
-    .hero__card-inner {
-      animation: floatY3 9s ease-in-out infinite;
-    }
-  }
-
-  &--4 {
-    top: 266px;
-    right: 2%;
-    width: 180px;
-
-    .hero__card-inner {
-      animation: floatY 10s ease-in-out infinite;
-    }
-  }
 }
 
 .hero__card-inner {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   color: inherit;
   text-decoration: none;
-  cursor: pointer;
-  background: linear-gradient(135deg, rgba(var(--glass-rgb), 0.1), rgba(var(--glass-rgb), 0.03));
-  border: 1px solid rgba(var(--glass-rgb), 0.14);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: $shadow-card;
+
+  &:hover .hero__phone,
+  &:focus-visible .hero__phone {
+    border-color: rgba(201, 162, 39, 0.7);
+    transform: translateY(-4px);
+  }
 }
 
-.hero__card-media {
+.hero__phone {
+  position: relative;
   display: block;
   width: 100%;
+  padding: 5px;
+  border-radius: 26px;
+  background: #0b0906;
+  border: 1px solid rgba(var(--glass-rgb), 0.18);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45);
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s ease;
+
+  // Camera island
+  &::after {
+    content: '';
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    width: 30%;
+    height: 7px;
+    border-radius: 99px;
+    background: #000;
+    transform: translateX(-50%);
+  }
+}
+
+.hero__phone-media {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 360 / 778;
   object-fit: cover;
-  border-radius: var(--radius, 14px);
-  background: rgba(0, 0, 0, 0.15);
+  border-radius: 21px;
+  background: rgba(var(--glass-rgb), 0.06);
 }
 
-.hero__card--1 .hero__card-media,
-.hero__card--2 .hero__card-media {
-  height: 130px;
+.hero__card--feature .hero__phone {
+  border-color: rgba(201, 162, 39, 0.45);
+  box-shadow:
+    0 34px 80px rgba(0, 0, 0, 0.5),
+    0 0 70px rgba(201, 162, 39, 0.16);
+  animation: floatY 8s ease-in-out infinite;
 }
 
-.hero__card--2 .hero__card-media {
-  height: 110px;
-}
-
-.hero__card--3 .hero__card-media {
-  // Was 180px — card 3's slot starts at top:226px in a 460px-tall stage, and
-  // this card has three collage photos stacked in its content, making it the
-  // tallest of the four; the full 180px media pushed its total height past
-  // the stage's bottom edge.
-  height: 130px;
-}
-
-.hero__card--4 .hero__card-media {
-  height: 110px;
+.hero__card-caption {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 2px;
+  max-width: 100%;
+  text-align: center;
 }
 
 .hero__card-title {
-  margin-top: 12px;
+  max-width: 100%;
   font-family: $font-serif;
-  font-size: font-size('md');
+  font-size: 17px;
   font-weight: $fw-semibold;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .hero__card-sub {
-  font-size: font-size('sm');
-  color: rgba(var(--text-rgb), 0.5);
+  max-width: 100%;
+  font-size: 10px;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $color-gold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hero__card--feature .hero__card-title {
+  font-size: 21px;
 }
 
 @include respond-below('nav') {
   .hero {
     padding-top: 140px;
     min-height: auto;
+    gap: 44px;
+  }
+
+  .hero__copy {
+    min-width: min(100%, 320px);
   }
 
   .hero__stage {
     width: 100%;
+  }
+}
+
+@include respond-below('sm') {
+  .hero {
+    padding-inline: 18px;
+  }
+
+  .hero__stage {
+    gap: 10px;
+  }
+
+  .hero__phone {
+    padding: 3px;
+    border-radius: 18px;
+
+    &::after {
+      top: 7px;
+      height: 5px;
+    }
+  }
+
+  .hero__phone-media {
+    border-radius: 15px;
+  }
+
+  .hero__card-title {
+    font-size: 13px;
+  }
+
+  .hero__card--feature .hero__card-title {
+    font-size: 15px;
+  }
+
+  .hero__card-sub {
+    font-size: 8.5px;
+    letter-spacing: 0.04em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__card--feature .hero__phone {
+    animation: none;
   }
 }
