@@ -49,6 +49,8 @@ export interface MediaAckOut {
   /** Server-verified status — not an echo of what was reported. */
   status: 'PENDING' | 'UPLOADED' | 'FAILED' | 'ABANDONED';
   storagePath: string;
+  /** When UPLOADED: signed URL to display the file now (valid 15 minutes). */
+  url?: string | null;
 }
 
 export interface MediaUploadOptions {

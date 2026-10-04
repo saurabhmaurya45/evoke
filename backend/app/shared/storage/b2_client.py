@@ -1,4 +1,5 @@
 from functools import lru_cache
+from urllib.parse import unquote, urlsplit
 
 import boto3
 from botocore.client import Config
@@ -32,6 +33,7 @@ class B2Client:
         consumer_key_secret: str,
     ) -> None:
         self.bucket = bucket
+        self._endpoint = urlsplit(endpoint_url)
         self._producer = boto3.client(
             "s3",
             endpoint_url=endpoint_url,
@@ -65,6 +67,24 @@ class B2Client:
             Params={"Bucket": self.bucket, "Key": key},
             ExpiresIn=expires_in,
         )
+
+    def key_from_presigned_url(self, url: str) -> str | None:
+        """The object key a presigned URL from this bucket points at, or None for
+        any other URL. Path-style addressing makes it `{endpoint}/{bucket}/{key}?…`.
+        Lets a client send back the signed URLs it was given and have them stored
+        as plain keys again (see app.media.service.to_storage_refs)."""
+        try:
+            parts = urlsplit(url)
+        except ValueError:
+            return None
+        prefix = f"/{self.bucket}/"
+        if (
+            parts.scheme != self._endpoint.scheme
+            or parts.netloc != self._endpoint.netloc
+            or not parts.path.startswith(prefix)
+        ):
+            return None
+        return unquote(parts.path[len(prefix) :]) or None
 
     def head_object(self, key: str) -> dict | None:
         """Confirms an object exists and returns its metadata (notably

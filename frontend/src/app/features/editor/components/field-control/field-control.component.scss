@@ -118,6 +118,12 @@
     }
   }
 
+  &__error {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #e57373;
+  }
+
   &__toggle {
     width: 1.2rem;
     height: 1.2rem;

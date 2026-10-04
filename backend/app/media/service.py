@@ -1,6 +1,8 @@
 import logging
 import uuid
+from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
+from typing import Any
 
 from botocore.exceptions import ClientError
 from fastapi import status
@@ -11,7 +13,12 @@ from app.media.models import MediaAsset, MediaOwnerKind, MediaStatus
 from app.media.paths import base_template_media_path, user_template_media_path
 from app.media.schemas import SIZE_CAP_BYTES, MediaAckRequest, MediaUploadRequest
 from app.shared.authorization import ensure_owner_or_admin
-from app.shared.errors import AppError, AuthForbiddenError, NotFoundError
+from app.shared.errors import (
+    AppError,
+    AuthForbiddenError,
+    NotFoundError,
+    ValidationFailedError,
+)
 from app.shared.storage.b2_client import B2Client, require_client
 from app.templates.models import Template
 from app.users.models import User, UserRole
@@ -190,4 +197,76 @@ async def resolve_media_url(b2: B2Client | None, storage_path: str | None) -> st
     working link into a signed URL for an object that doesn't exist."""
     if not storage_path or b2 is None or not _is_storage_path(storage_path):
         return storage_path
+    return b2.presign_get(storage_path, _GET_PRESIGN_TTL_SECONDS)
+
+
+# ---------------------------------------------------------------------------
+# Media references inside JSON blobs (Draft.data) — ADR-5. A draft stores plain
+# storage paths; every read hands out freshly signed URLs, and every write turns
+# the signed URLs a client echoes back into paths again.
+# ---------------------------------------------------------------------------
+
+
+def _map_strings(value: Any, fn: Callable[[str], str]) -> Any:
+    if isinstance(value, str):
+        return fn(value)
+    if isinstance(value, dict):
+        return {key: _map_strings(item, fn) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_map_strings(item, fn) for item in value]
+    return value
+
+
+def resolve_media_refs(b2: B2Client | None, data: Any) -> Any:
+    """Copy of `data` with every storage path replaced by a presigned GET URL.
+    Without B2 configured, returned unchanged (media simply doesn't display)."""
+    if b2 is None:
+        return data
+
+    def resolve(value: str) -> str:
+        if _is_storage_path(value):
+            return b2.presign_get(value, _GET_PRESIGN_TTL_SECONDS)
+        return value
+
+    return _map_strings(data, resolve)
+
+
+def to_storage_refs(b2: B2Client | None, data: Any) -> Any:
+    """Copy of `data` with every presigned URL for our bucket replaced by its
+    storage path — the inverse of `resolve_media_refs`, so a client can save back
+    exactly what it loaded without ever persisting a URL that expires."""
+    if b2 is None:
+        return data
+
+    def unresolve(value: str) -> str:
+        key = b2.key_from_presigned_url(value)
+        return key if key and _is_storage_path(key) else value
+
+    return _map_strings(data, unresolve)
+
+
+def ensure_event_media(data: Any, owner_id: uuid.UUID, event_id: uuid.UUID) -> None:
+    """Every user-uploaded path in an event's draft must belong to that event, so a
+    draft can't display (and so publish) another user's uploads by naming their
+    path. Base template media (`asset/…`) is shared and always allowed."""
+    allowed_prefix = f"public/{owner_id}/{event_id}/"
+    foreign: list[str] = []
+
+    def check(value: str) -> str:
+        if value.startswith("public/") and not value.startswith(allowed_prefix):
+            foreign.append(value)
+        return value
+
+    _map_strings(data, check)
+    if foreign:
+        raise ValidationFailedError(
+            "data references uploaded media that doesn't belong to this event.",
+            details={"paths": foreign[:10]},
+        )
+
+
+def presigned_get_url(b2: B2Client | None, storage_path: str) -> str | None:
+    """A displayable URL for a just-uploaded object, or None without B2."""
+    if b2 is None:
+        return None
     return b2.presign_get(storage_path, _GET_PRESIGN_TTL_SECONDS)

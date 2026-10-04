@@ -52,6 +52,29 @@
     'profiles.bridePhoto': 'bridePhoto'
   };
 
+  // Sample names in this template's own copy, by the data path that replaces them.
+  var SAMPLE_NAMES = {
+    'hero.groomName': 'Karan',
+    'hero.brideName': 'Nisha'
+  };
+  // Text fields whose copy mentions the couple by name.
+  var NAME_COPY = { 'ceremony.mid': true, 'hero.inviteLine': true, 'countdown.subtitle': true, 'ceremony.intro': true, 'footer.closing': true };
+
+  // Copy fields whose sample text names the couple (e.g. "The day when Karan &
+  // Nisha will tie the knot"). Those names follow the name fields: each whole-word
+  // sample name is swapped for the current one, so the sentence never shows the
+  // sample couple next to the user's own names.
+  function withNames(text, data) {
+    var out = String(text);
+    Object.keys(SAMPLE_NAMES).forEach(function (path) {
+      var current = get(data, path);
+      if (current === undefined || current === null) return;
+      var re = new RegExp('(^|[^\p{L}])' + SAMPLE_NAMES[path] + '(?![\p{L}])', 'gu');
+      out = out.replace(re, function (_, before) { return before + String(current); });
+    });
+    return out;
+  }
+
   function esc(v) {
     return String(v == null ? '' : v)
       .replace(/&/g, '&amp;')
@@ -126,8 +149,9 @@
     Object.keys(TEXT).forEach(function (path) {
       var v = get(data, path);
       if (v === undefined) return;
+      var text = v == null ? '' : NAME_COPY[path] ? withNames(v, data) : String(v);
       setAll('[data-ev="' + TEXT[path] + '"]', function (el) {
-        el.textContent = v == null ? '' : String(v);
+        el.textContent = text;
       });
     });
 

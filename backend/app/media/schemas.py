@@ -97,3 +97,9 @@ class MediaAckOut(CamelModel):
         "status if verification failed."
     )
     storage_path: str
+    url: str | None = Field(
+        default=None,
+        description="When UPLOADED: a signed URL to display the file right away (valid 15 "
+        "minutes). Put this — or storagePath — into the draft field; either is stored as "
+        "the path.",
+    )
