@@ -170,7 +170,7 @@
       </header>
 
       <div class="drawer__preview" [style.background]="editing()?.wash">
-        <img [src]="d.photo" alt="Card image preview" onerror="this.style.visibility='hidden'" />
+        <img [src]="uploadedImage() ?? d.photo" alt="Card image preview" onerror="this.style.visibility='hidden'" />
         <span class="drawer__badge" [style.border-color]="d.accent">{{ d.category }}</span>
       </div>
 
@@ -185,7 +185,36 @@
         </select>
       </label>
 
+      <div class="field upload">
+        <span>Card image</span>
+        <label class="upload__btn" [class.upload__btn--disabled]="!editingBackendId() || uploading()">
+          <input
+            type="file"
+            class="upload__input"
+            [accept]="imageAccept"
+            [disabled]="!editingBackendId() || uploading()"
+            (change)="uploadImage($event)"
+          />
+          {{ uploading() ? 'Uploading…' : uploadedImage() ? 'Replace image' : 'Upload image' }}
+        </label>
+        <small class="upload__hint">
+          @if (!editingBackendId()) {
+            Not linked to a backend template yet — uploads become available once it is.
+          } @else {
+            PNG, JPEG or WebP, up to 5 MB. Saved as soon as it uploads.
+          }
+        </small>
+        @if (uploadError(); as error) {
+          <small class="upload__error" role="alert">{{ error }}</small>
+        } @else if (uploadDone()) {
+          <small class="upload__ok" role="status">Image uploaded.</small>
+        }
+      </div>
+
       <label class="field">Card image URL
+        @if (uploadedImage()) {
+          <small class="upload__hint">An uploaded image is in use; this URL is the fallback.</small>
+        }
         <input
           type="url"
           [ngModel]="d.photo"

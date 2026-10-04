@@ -10,6 +10,11 @@ import {
 import { FormsModule } from '@angular/forms';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { AuthService } from '../../../../core/services/auth.service';
+import {
+  MediaUploadError,
+  MediaUploadService,
+  mediaAccept,
+} from '../../../../core/services/media-upload.service';
 import { SeoService } from '../../../../core/services/seo.service';
 import { DashboardContentService, formatCurrency } from '../../data/dashboard-content.service';
 import type { AdminCustomer, PaymentRecord } from '../../models/dashboard.model';
@@ -50,6 +55,7 @@ export class AdminDashboardComponent implements OnInit {
   protected readonly content = inject(DashboardContentService);
   protected readonly auth = inject(AuthService);
   private readonly catalog = inject(TemplateCatalogService);
+  private readonly media = inject(MediaUploadService);
 
   protected readonly tabs: readonly AdminTab[] = ['templates', 'customers', 'sites', 'payments'];
   protected readonly tab = signal<AdminTab>('templates');
@@ -60,6 +66,25 @@ export class AdminDashboardComponent implements OnInit {
   /** slotId of the template open in the edit drawer, or null when closed. */
   protected readonly editingId = signal<string | null>(null);
   protected readonly draft = signal<TemplateDraft | null>(null);
+
+  protected readonly imageAccept = mediaAccept('IMAGE');
+  /** Upload of the card image in progress, for the open template. */
+  protected readonly uploading = signal(false);
+  protected readonly uploadError = signal<string | null>(null);
+  /** Shown just after a successful upload; cleared when the drawer closes. */
+  protected readonly uploadDone = signal(false);
+
+  /** Backend id of the open template — uploads need it, and it's only known once the API answers. */
+  protected readonly editingBackendId = computed(() => {
+    const id = this.editingId();
+    return id ? this.catalog.backendId(id) : null;
+  });
+
+  /** Uploaded image for the open template, if any — it replaces the URL below. */
+  protected readonly uploadedImage = computed(() => {
+    const id = this.editingId();
+    return id ? this.catalog.thumbnail(id) : null;
+  });
 
   protected readonly editing = computed(() => {
     const id = this.editingId();
@@ -110,7 +135,9 @@ export class AdminDashboardComponent implements OnInit {
       name: template.name,
       category: template.category,
       monogram: template.monogram,
-      photo: template.photo,
+      // The locally configured URL, not an uploaded thumbnail's signed URL —
+      // that expires in 15 minutes and must never be saved as the card image.
+      photo: this.catalog.basePhoto(template.slotId),
       accent: template.accent,
       pricing: template.pricing,
       priceRupees: Math.round(template.price / 100),
@@ -132,6 +159,43 @@ export class AdminDashboardComponent implements OnInit {
   protected closeEditor(): void {
     this.editingId.set(null);
     this.draft.set(null);
+    this.uploadError.set(null);
+    this.uploadDone.set(false);
+  }
+
+  /**
+   * Upload a new card image to storage. Saved on the backend as soon as it's
+   * verified — independent of the drawer's Save / Cancel.
+   */
+  protected async uploadImage(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = ''; // let the same file be picked again after an error
+    const slotId = this.editingId();
+    const ownerId = this.editingBackendId();
+    if (!file || !slotId || !ownerId) return;
+
+    this.uploadError.set(null);
+    this.uploadDone.set(false);
+    this.uploading.set(true);
+    try {
+      await this.media.uploadMedia(file, {
+        ownerKind: 'BASE',
+        ownerId,
+        mediaType: 'IMAGE',
+        targetField: 'thumbnail',
+      });
+      await this.catalog.refreshThumbnail(slotId);
+      if (this.editingId() === slotId) this.uploadDone.set(true);
+    } catch (err) {
+      if (this.editingId() === slotId) {
+        this.uploadError.set(
+          err instanceof MediaUploadError ? err.message : 'Upload failed — please try again.',
+        );
+      }
+    } finally {
+      this.uploading.set(false);
+    }
   }
 
   protected saveEditor(): void {

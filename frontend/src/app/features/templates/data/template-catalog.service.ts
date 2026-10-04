@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, effect, inject, signal } from '@angular/core';
-import { catchError, of } from 'rxjs';
+import { catchError, firstValueFrom, of } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { WINDOW } from '../../../core/tokens/window.token';
 import { HomeContentService } from '../../home/data/home-content.service';
@@ -12,6 +12,8 @@ interface BackendTemplateApiOut {
   storefrontStatus: string;
   pricingModel: 'FREE' | 'PAID';
   priceAmountMinor: number | null;
+  /** Signed, short-lived (15 min) URL of an uploaded thumbnail, or null. */
+  thumbnailUrl: string | null;
 }
 interface ApiPage<T> { data: T[]; }
 /** Minimal backend record cached in memory for UUID lookups. */
@@ -67,6 +69,21 @@ export class TemplateCatalogService {
   private readonly _templates = signal<readonly CatalogTemplate[]>(this.seed());
 
   /**
+   * slug → uploaded thumbnail from the backend. Kept apart from `_templates` so it
+   * is never persisted: the URLs are signed and expire after 15 minutes, so each
+   * page load takes fresh ones from the API instead.
+   */
+  private readonly _thumbnails = signal<Record<string, string>>({});
+
+  /** The catalogue with any uploaded thumbnail standing in for the card image. */
+  private readonly _withThumbnails = computed(() => {
+    const thumbs = this._thumbnails();
+    return this._templates().map((template) =>
+      thumbs[template.slotId] ? { ...template, photo: thumbs[template.slotId] } : template,
+    );
+  });
+
+  /**
    * True once the backend has answered with real prices. Until then every
    * template carries the seed price (free / ₹0), which must never be shown —
    * in particular not in prerendered HTML, where it would tell search engines
@@ -104,10 +121,48 @@ export class TemplateCatalogService {
   }
 
   /** Everything, published or not — the admin view. */
-  readonly all = this._templates.asReadonly();
+  readonly all = this._withThumbnails;
 
   /** Only what the public should see. */
-  readonly published = computed(() => this._templates().filter((template) => template.published));
+  readonly published = computed(() =>
+    this._withThumbnails().filter((template) => template.published),
+  );
+
+  /** Backend template id (UUID) for a slot — known only to admins, once the API has answered. */
+  backendId(slotId: string): string | null {
+    return this._backendMap()[slotId]?.id ?? null;
+  }
+
+  /** The uploaded thumbnail (signed URL) for a slot, if it has one. */
+  thumbnail(slotId: string): string | null {
+    return this._thumbnails()[slotId] ?? null;
+  }
+
+  /** The card image URL as configured locally, ignoring any uploaded thumbnail. */
+  basePhoto(slotId: string): string {
+    return this._templates().find((template) => template.slotId === slotId)?.photo ?? '';
+  }
+
+  /** Re-read one template's thumbnail after an upload, so the new image shows at once. */
+  async refreshThumbnail(slotId: string): Promise<void> {
+    const id = this.backendId(slotId);
+    if (!id) return;
+    try {
+      const res = await firstValueFrom(
+        this.http.get<{ data: Pick<BackendTemplateApiOut, 'thumbnailUrl'> }>(`v1/templates/${id}`),
+      );
+      this.setThumbnail(slotId, res.data.thumbnailUrl);
+    } catch (err) {
+      console.error('[TemplateCatalog] GET template failed:', err);
+    }
+  }
+
+  private setThumbnail(slotId: string, url: string | null): void {
+    this._thumbnails.update((thumbs) => {
+      const { [slotId]: _old, ...rest } = thumbs;
+      return url ? { ...rest, [slotId]: url } : rest;
+    });
+  }
 
   readonly publishedCount = computed(() => this.published().length);
 
@@ -180,6 +235,11 @@ export class TemplateCatalogService {
         // Slots with an admin change still waiting to reach the backend: their local
         // state is newer than this response, so it must not overwrite them.
         const pending = new Map(this.pendingPatches);
+        this._thumbnails.set(
+          Object.fromEntries(
+            page.data.filter((t) => t.thumbnailUrl).map((t) => [t.slug, t.thumbnailUrl!]),
+          ),
+        );
         if (admin) {
           const map: Record<string, BackendEntry> = {};
           for (const t of page.data) {

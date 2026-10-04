@@ -337,6 +337,53 @@ $nav-height: 76px;
   legend { padding: 0; margin-bottom: 6px; }
 }
 
+.upload__btn {
+  justify-self: start;
+  position: relative;
+  padding: 9px 16px;
+  border-radius: $radius-pill;
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  background: rgba(201, 162, 39, 0.12);
+  color: $color-gold;
+  cursor: pointer;
+  transition: background $transition-base;
+
+  &:hover { background: rgba(201, 162, 39, 0.2); }
+  &:focus-within { @include focus-ring; }
+}
+
+.upload__btn--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+
+  &:hover { background: rgba(201, 162, 39, 0.12); }
+}
+
+// Visually hidden but still focusable and clickable through its label.
+.field .upload__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.upload__hint {
+  font-weight: $fw-regular;
+  color: rgba(var(--text-rgb), 0.55);
+}
+
+.upload__error {
+  font-weight: $fw-regular;
+  color: #e57373;
+}
+
+.upload__ok {
+  font-weight: $fw-regular;
+  color: #6ec177;
+}
+
 .field-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
