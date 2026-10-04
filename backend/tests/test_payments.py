@@ -254,5 +254,6 @@ async def test_other_user_cannot_checkout_someone_elses_event(
     event = await _make_event(client, owner, template)
 
     resp = await _checkout(client, auth_headers(), event["id"])
-    assert resp.status_code == 403
+    assert resp.status_code == 404
+    assert resp.json()["error"]["code"] == "EVENT_NOT_FOUND"
     assert razorpay.created == []

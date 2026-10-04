@@ -28,7 +28,12 @@ async def _get_draft_by_event_id(db: AsyncSession, event_id: uuid.UUID) -> Draft
 
 async def get_draft(db: AsyncSession, event_id: uuid.UUID, current_user: User) -> Draft:
     event = await _get_event_or_404(db, event_id)
-    ensure_owner_or_admin(current_user, event.owner_id)
+    ensure_owner_or_admin(
+        current_user,
+        event.owner_id,
+        not_found_code="DRAFT_NOT_FOUND",
+        not_found_message="Draft not found.",
+    )
     return await _get_draft_by_event_id(db, event_id)
 
 
@@ -36,7 +41,12 @@ async def save_draft(
     db: AsyncSession, event_id: uuid.UUID, current_user: User, update: DraftUpdate
 ) -> Draft:
     event = await _get_event_or_404(db, event_id)
-    ensure_owner_or_admin(current_user, event.owner_id)
+    ensure_owner_or_admin(
+        current_user,
+        event.owner_id,
+        not_found_code="DRAFT_NOT_FOUND",
+        not_found_message="Draft not found.",
+    )
     draft = await _get_draft_by_event_id(db, event_id)
 
     if update.revision != draft.revision:
