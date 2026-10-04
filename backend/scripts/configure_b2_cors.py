@@ -11,7 +11,7 @@ An external, idempotent script — never run by the app itself. Allowed origins 
 the API's own `CORS_ORIGINS` (the frontend origins), unless `--origin` is given.
 
   cd backend
-  .venv/Scripts/python scripts/configure_b2_cors.py            # dry run: shows current + planned rules
+  .venv/Scripts/python scripts/configure_b2_cors.py            # dry run: current + planned
   .venv/Scripts/python scripts/configure_b2_cors.py --apply    # writes
 
 Changing bucket settings needs a B2 application key with the `writeBuckets`
@@ -33,6 +33,7 @@ from botocore.exceptions import ClientError
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from app.config import get_settings
+
 
 class _AdminKey(BaseSettings):
     """Read from the environment or .env, like the app's own settings — but only
