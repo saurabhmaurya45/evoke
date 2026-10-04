@@ -72,7 +72,7 @@ The rule in place allows the frontend's origins to `PUT` with a
 [
   {
     "corsRuleName": "evoke-media-upload",
-    "allowedOrigins": ["http://localhost:4200", "https://theinvitely.in"],
+    "allowedOrigins": ["http://localhost:4500", "https://theinvitely.in"],
     "allowedOperations": ["s3_put"],
     "allowedHeaders": ["content-type"],
     "exposeHeaders": [],
