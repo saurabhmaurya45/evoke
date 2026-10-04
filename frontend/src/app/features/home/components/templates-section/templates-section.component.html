@@ -19,64 +19,61 @@
       ‹
     </button>
 
-    <div class="carousel__track" #track (scroll)="onScroll()" tabindex="0" aria-label="Template carousel">
+    <div
+      class="carousel__track"
+      #track
+      (scroll)="onScroll()"
+      tabindex="0"
+      aria-label="Template carousel"
+    >
       @for (tpl of templates(); track tpl.slotId) {
-        <article class="templates__card" appTilt [style.--accent]="tpl.accent">
-          <div class="templates__preview" [style.background]="tpl.wash">
-            <span class="templates__monogram" aria-hidden="true">{{ tpl.monogram }}</span>
-            @if (tpl.previewVideo) {
-              <!-- Live capture of the real template, scrolled end-to-end. Autoplays muted and
-                   loops — the section itself is @defer (on viewport), so by the time these mount
-                   the carousel is already on/near screen. -->
-              <video
-                #vid
-                class="templates__media"
-                [poster]="tpl.previewPoster ?? tpl.photo"
-                [attr.aria-label]="tpl.name + ' template preview'"
-                autoplay
-                muted
-                loop
-                playsinline
-                preload="auto"
-              >
-                <source [src]="tpl.previewVideo" type="video/mp4" />
-              </video>
-            } @else {
-              <app-image-slot
-                [src]="tpl.photo"
-                [alt]="tpl.name + ' template preview'"
-                [radius]="20"
-                [credit]="tpl.credit"
-                [creditHref]="tpl.creditHref"
-              />
+        <article class="tcard" [style.--accent]="tpl.accent">
+          <!-- Phone-shaped preview: the template's real opening, recorded on a phone.
+               Only cards on screen play (see TemplatesSectionComponent). -->
+          <a
+            class="tcard__phone"
+            [routerLink]="['/templates', slug(tpl)]"
+            [attr.aria-label]="tpl.name + ' — ' + label(tpl) + ' invitation template'"
+          >
+            <video
+              #vid
+              class="tcard__media"
+              [poster]="tpl.phonePoster ?? tpl.previewPoster ?? tpl.photo"
+              aria-hidden="true"
+              muted
+              loop
+              playsinline
+              preload="none"
+              width="360"
+              height="778"
+            >
+              <source [src]="tpl.phoneVideo ?? tpl.previewVideo" type="video/mp4" />
+            </video>
+          </a>
+
+          <div class="tcard__body">
+            <span class="tcard__label">{{ label(tpl) }}</span>
+            <h3 class="tcard__name">
+              <a [routerLink]="['/templates', slug(tpl)]">{{ shortName(tpl) }}</a>
+            </h3>
+            @if (pricesKnown()) {
+              <span class="tcard__price" [class.tcard__price--free]="tpl.pricing === 'free'">{{
+                price(tpl)
+              }}</span>
             }
-            <span class="templates__badge">
-              <span class="templates__badge-dot" [style.background]="tpl.accent"></span>
-              {{ tpl.category }}
-            </span>
-          </div>
-          <div class="templates__body">
-            <div class="templates__head">
-              <h3 class="templates__name">{{ tpl.name }}</h3>
-              @if (pricesKnown()) {
-                <span class="templates__price" [class.templates__price--free]="tpl.pricing === 'free'">{{
-                  price(tpl)
-                }}</span>
-              }
-            </div>
-            <div class="templates__actions">
+            <div class="tcard__actions">
               <a
-                class="templates__btn templates__btn--ghost"
+                class="tcard__btn tcard__btn--ghost"
                 [routerLink]="['/preview', tpl.slotId]"
                 [attr.aria-label]="'Preview the ' + tpl.name + ' template'"
                 >Preview</a
               >
               <a
-                class="templates__btn templates__btn--solid"
+                class="tcard__btn tcard__btn--solid"
                 [routerLink]="['/preview', tpl.slotId]"
                 [queryParams]="{ mode: 'use' }"
                 [attr.aria-label]="'Use the ' + tpl.name + ' template'"
-                >Use Template</a
+                >Use</a
               >
             </div>
           </div>
@@ -96,6 +93,8 @@
   </div>
 
   <div class="templates__more" appReveal>
-    <a class="templates__more-link" routerLink="/templates">View all templates →</a>
+    <a class="templates__more-link" routerLink="/templates"
+      >View all {{ templates().length }} templates →</a
+    >
   </div>
 </section>

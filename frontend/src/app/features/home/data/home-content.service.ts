@@ -83,10 +83,18 @@ export const HERO_FEATURE_INDEX = 1;
  * `hero.component.ts`, which both autoplay it). `n` is the
  * `public/invitation-templates/template N` folder holding `card.mp4` / `card-poster.jpg`.
  */
-function cardPreview(n: number): { previewVideo: string; previewPoster: string } {
+function cardPreview(n: number): {
+  previewVideo: string;
+  previewPoster: string;
+  phoneVideo: string;
+  phonePoster: string;
+} {
+  const dir = `/invitation-templates/template%20${n}`;
   return {
-    previewVideo: `/invitation-templates/template%20${n}/card.mp4`,
-    previewPoster: `/invitation-templates/template%20${n}/card-poster.jpg`,
+    previewVideo: `${dir}/card.mp4`,
+    previewPoster: `${dir}/card-poster.jpg`,
+    phoneVideo: `${dir}/hero-mobile.mp4`,
+    phonePoster: `${dir}/hero-mobile.jpg`,
   };
 }
 

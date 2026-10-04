@@ -37,6 +37,10 @@ export interface TemplateCard extends ImageCredit {
   readonly previewVideo?: string;
   /** Poster frame for `previewVideo` — shown at rest and while the clip loads. */
   readonly previewPoster?: string;
+  /** Portrait loop of the template's opening, recorded on a phone viewport (360x778). */
+  readonly phoneVideo?: string;
+  /** Poster frame for `phoneVideo`. */
+  readonly phonePoster?: string;
 }
 
 export interface FeatureItem {

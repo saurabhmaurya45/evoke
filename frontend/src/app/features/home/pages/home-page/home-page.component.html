@@ -1,15 +1,21 @@
 <!-- Above the fold — render eagerly for fast LCP. -->
 <app-hero />
 <app-stats />
+
+<!-- Templates right after the hero: the designs are what visitors came for.
+     Deferred until near the viewport — its preview clips aren't needed for
+     the first paint. The placeholder carries id="templates" so the hero's
+     "Browse Templates" (#templates) link works before the section loads. -->
+@defer (on viewport) {
+  <app-templates-section />
+} @placeholder {
+  <div id="templates" class="section-skeleton" aria-hidden="true"></div>
+}
+
 <app-services-section />
 <app-how-it-works />
 
 <!-- Below the fold — hydrate on scroll to trim the initial payload. -->
-@defer (on viewport) {
-  <app-templates-section />
-} @placeholder {
-  <div class="section-skeleton" aria-hidden="true"></div>
-}
 
 <!-- Rendered eagerly so its text is in the prerendered HTML: feature keywords are
      what this page ranks for. -->
