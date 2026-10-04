@@ -1,0 +1,79 @@
+@let tpl = template();
+<article class="tcard" [style.--accent]="tpl.accent">
+  <a
+    class="tcard__phone"
+    [routerLink]="['/templates', slug()]"
+    [attr.aria-label]="tpl.name + ' — ' + label() + ' invitation template'"
+  >
+    <video
+      #vid
+      class="tcard__media"
+      [poster]="tpl.phonePoster ?? tpl.previewPoster ?? tpl.photo"
+      aria-hidden="true"
+      muted
+      loop
+      playsinline
+      preload="none"
+      width="360"
+      height="778"
+    >
+      <source [src]="tpl.phoneVideo ?? tpl.previewVideo" type="video/mp4" />
+    </video>
+  </a>
+
+  <div class="tcard__body">
+    <span class="tcard__label">{{ label() }}</span>
+    @if (headingLevel() === 2) {
+      <h2 class="tcard__name">
+        <a [routerLink]="['/templates', slug()]">{{ shortName() }}</a>
+      </h2>
+    } @else {
+      <h3 class="tcard__name">
+        <a [routerLink]="['/templates', slug()]">{{ shortName() }}</a>
+      </h3>
+    }
+    @if (showPrice()) {
+      <span class="tcard__price" [class.tcard__price--free]="tpl.pricing === 'free'">{{
+        price()
+      }}</span>
+    }
+    <div class="tcard__actions">
+      <a
+        class="tcard__btn tcard__btn--ghost"
+        [routerLink]="['/preview', tpl.slotId]"
+        [attr.aria-label]="'Preview the ' + tpl.name + ' template'"
+        >Preview</a
+      >
+      <a
+        class="tcard__btn tcard__btn--solid"
+        [routerLink]="['/preview', tpl.slotId]"
+        [queryParams]="{ mode: 'use' }"
+        [attr.aria-label]="'Use the ' + tpl.name + ' template'"
+        >Use</a
+      >
+    </div>
+    <a
+      class="tcard__wa"
+      [href]="whatsapp()"
+      target="_blank"
+      rel="noopener noreferrer"
+      [attr.aria-label]="'Ask about the ' + tpl.name + ' template on WhatsApp'"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        aria-hidden="true"
+      >
+        <path d="M12 4.2a7.8 7.8 0 0 0-6.7 11.8L4.2 19.8l3.9-1A7.8 7.8 0 1 0 12 4.2z"></path>
+        <path
+          d="M9.2 9.4c.2-.4.3-.4.6-.4h.4c.2 0 .4 0 .5.4.1.4.6 1.5.6 1.6s0 .3-.2.4l-.2.3c-.1.1-.2.3 0 .5.2.4.8 1.2 1.6 1.6.3.2.4.1.5 0l.4-.3c.2-.1.3-.1.5.1.1.1 1 .5 1.2.6s.3.2.3.4c0 .4-.2 1.2-.6 1.5-.4.3-1 .3-1.6.2-1.2-.3-2.9-1.2-4-2.6-.9-1.1-1.4-2.2-1.5-3-.1-.5.2-1 .5-1.3z"
+        ></path>
+      </svg>
+      <span><span class="tcard__wa-long">Contact on </span>WhatsApp</span>
+    </a>
+  </div>
+</article>

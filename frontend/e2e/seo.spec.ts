@@ -76,7 +76,7 @@ test('no template is dropped: wedding hub and gallery show all templates', async
   await expect(page.locator('app-template-strip a')).toHaveCount(TEMPLATE_COUNT);
 
   await page.goto('/templates');
-  const links = page.locator('.card__name a');
+  const links = page.locator('.tcard__name a');
   await expect(links).toHaveCount(TEMPLATE_COUNT);
   const hrefs = await links.evaluateAll((els) => els.map((el) => el.getAttribute('href')));
   for (const href of hrefs) expect(href).toMatch(/^\/templates\/[a-z0-9-]+$/);
@@ -110,7 +110,7 @@ test('prerendered HTML never shows the ₹0 seed price', async ({ request }) => 
   // Prerender has no backend prices; every template would read "Free".
   for (const path of ['/templates', '/templates/royal-gate-sikh-wedding']) {
     const html = await (await request.get(path)).text();
-    expect(html, path).not.toMatch(/class="(card__price|detail__price)[^"]*"/);
+    expect(html, path).not.toMatch(/class="(tcard__price|detail__price)[^"]*"/);
     expect(html, path).not.toMatch(/>\s*Free\s*</);
   }
 });

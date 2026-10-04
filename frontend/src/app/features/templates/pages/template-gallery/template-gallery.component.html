@@ -37,66 +37,7 @@
   @if (visible().length) {
     <div class="gallery__grid">
       @for (tpl of visible(); track tpl.slotId) {
-        <article class="card" appTilt [style.--accent]="tpl.accent">
-          <div class="card__preview" [style.background]="tpl.wash">
-            <span class="card__monogram" aria-hidden="true">{{ tpl.monogram }}</span>
-            @if (tpl.previewVideo) {
-              <!-- Live capture of the real template, scrolled end-to-end. Autoplays muted. -->
-              <video
-                #vid
-                class="card__media"
-                [poster]="tpl.previewPoster ?? tpl.photo"
-                [attr.aria-label]="tpl.name + ' ' + label(tpl) + ' invitation website template preview'"
-                autoplay
-                muted
-                loop
-                playsinline
-                preload="auto"
-              >
-                <source [src]="tpl.previewVideo" type="video/mp4" />
-              </video>
-            } @else {
-              <app-image-slot
-                [src]="tpl.photo"
-                [alt]="tpl.name + ' template preview'"
-                [radius]="20"
-                [credit]="tpl.credit"
-                [creditHref]="tpl.creditHref"
-              />
-            }
-            <span class="card__badge">
-              <span class="card__badge-dot" [style.background]="tpl.accent"></span>
-              {{ label(tpl) }}
-            </span>
-          </div>
-          <div class="card__body">
-            <div class="card__head">
-              <h2 class="card__name">
-                <a [routerLink]="['/templates', slug(tpl)]">{{ tpl.name }}</a>
-              </h2>
-              @if (pricesKnown()) {
-                <span class="card__price" [class.card__price--free]="tpl.pricing === 'free'">
-                  {{ price(tpl) }}
-                </span>
-              }
-            </div>
-            <div class="card__actions">
-              <a
-                class="btn btn--ghost"
-                [routerLink]="['/preview', tpl.slotId]"
-                [attr.aria-label]="'Preview the ' + tpl.name + ' template'"
-                >Preview</a
-              >
-              <a
-                class="btn btn--solid"
-                [routerLink]="['/preview', tpl.slotId]"
-                [queryParams]="{ mode: 'use' }"
-                [attr.aria-label]="'Use the ' + tpl.name + ' template'"
-                >Use Template</a
-              >
-            </div>
-          </div>
-        </article>
+        <app-template-card [template]="tpl" [showPrice]="pricesKnown()" [headingLevel]="2" />
       }
     </div>
   } @else {

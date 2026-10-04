@@ -97,149 +97,8 @@
 
 .gallery__grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 22px;
-}
-
-.card {
-  background: linear-gradient(160deg, rgba(48, 46, 42, 0.55), rgba(27, 26, 23, 0.88));
-  border: 1px solid rgba(210, 190, 153, 0.2);
-  border-radius: 22px;
-  padding: 12px;
-  min-width: 0;
-  will-change: transform;
-  transition: border-color $transition-base;
-
-  &:hover { border-color: var(--accent, #{$color-clay}); }
-}
-
-.card__preview {
-  position: relative;
-  height: 190px;
-  border-radius: 18px;
-  overflow: hidden;
-}
-
-.card__monogram {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: $font-serif;
-  font-size: 120px;
-  font-weight: $fw-semibold;
-  color: rgba(var(--glass-rgb), 0.08);
-  pointer-events: none;
-}
-
-.card__preview app-image-slot {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.card__media {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  background: rgba(0, 0, 0, 0.15);
-}
-
-.card__badge {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: $fw-semibold;
-  padding: 6px 14px;
-  border-radius: $radius-pill;
-  background: rgba(var(--nav-rgb), 0.55);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(var(--glass-rgb), 0.18);
-  pointer-events: none;
-  color: #f3ecdd;
-}
-
-.card__badge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-}
-
-.card__body { padding: 16px 8px 6px; }
-
-.card__head {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 14px;
-}
-
-.card__name {
-  font-family: $font-serif;
-  min-height: 41px;
-  font-size: 17px;
-  line-height: 1.2;
-  font-weight: $fw-semibold;
-  margin: 0;
-  color: #f3ecdd;
-}
-
-.card__price {
-  flex-shrink: 0;
-  padding: 4px 10px;
-  border-radius: $radius-pill;
-  font-size: 11px;
-  font-weight: $fw-semibold;
-  white-space: nowrap;
-  color: $color-gold;
-  background: rgba(201, 162, 39, 0.14);
-  border: 1px solid rgba(201, 162, 39, 0.3);
-}
-
-.card__price--free {
-  color: #6ec177;
-  background: rgba(76, 175, 80, 0.14);
-  border-color: rgba(76, 175, 80, 0.3);
-}
-
-.card__actions {
-  display: flex;
-  gap: 8px;
-}
-
-.btn {
-  flex: 1;
-  text-align: center;
-  font-size: 11px;
-  font-weight: $fw-semibold;
-  padding: 10px 8px;
-  border-radius: $radius-pill;
-}
-
-.btn--ghost {
-  background: rgba(243, 236, 221, 0.06);
-  border: 1px solid rgba(243, 236, 221, 0.14);
-  color: #f3ecdd;
-
-  &:hover { background: rgba(243, 236, 221, 0.12); }
-}
-
-.btn--solid {
-  background: linear-gradient(135deg, #d5a52f, #b78120);
-  color: #1a1408;
-
-  &:hover { filter: brightness(1.08); }
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 28px 20px;
 }
 
 .gallery__empty {
@@ -257,13 +116,17 @@
   text-decoration: underline;
 }
 
-@media (max-width: 980px) {
-  .gallery__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+// Phone cards: 5 → 4 → 3 → 2 across (same sizes as the homepage carousel).
+@media (max-width: 1180px) {
+  .gallery__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 900px) {
+  .gallery__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
   .gallery { padding-top: 120px; }
-  .gallery__grid { grid-template-columns: 1fr; }
-  .card__preview { height: 220px; }
+  .gallery__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; }
   .gallery__controls { justify-content: center; }
 }

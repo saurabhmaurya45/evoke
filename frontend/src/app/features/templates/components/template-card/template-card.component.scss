@@ -1,0 +1,247 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+// ── Phone preview + details ──
+.tcard {
+  // Narrow cards (2-up on phones) drop "Contact on" from the WhatsApp button.
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.tcard__phone {
+  position: relative;
+  display: block;
+  padding: 5px;
+  border-radius: 26px;
+  background: #0b0906;
+  border: 1px solid rgba(243, 236, 221, 0.16);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.4);
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+
+  // Camera island
+  &::after {
+    content: '';
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    width: 30%;
+    height: 7px;
+    border-radius: 99px;
+    background: #000;
+    transform: translateX(-50%);
+  }
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-6px);
+    border-color: color-mix(in srgb, var(--accent, #c9a227) 70%, #c9a227);
+    box-shadow:
+      0 28px 56px rgba(0, 0, 0, 0.45),
+      0 0 40px rgba(201, 162, 39, 0.18);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.tcard__media {
+  display: block;
+  width: 100%;
+  height: auto;
+  // Shorter than the 360x778 recording — the bottom is cropped, the opening
+  // (names, seal, headline) sits in the top part of every template.
+  aspect-ratio: 3 / 5;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 21px;
+  background: rgba(243, 236, 221, 0.06);
+}
+
+.tcard__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-inline: 4px;
+}
+
+.tcard__label {
+  font-size: 10px;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $color-gold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tcard__name {
+  margin: 0;
+  font-family: $font-serif;
+  font-size: 22px;
+  font-weight: $fw-semibold;
+  line-height: 1.15;
+  color: #f3ecdd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  a {
+    color: inherit;
+  }
+}
+
+.tcard__price {
+  align-self: flex-start;
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: $fw-semibold;
+  color: $color-sand;
+}
+
+.tcard__price--free {
+  color: #7bc67e;
+}
+
+.tcard__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.tcard__btn {
+  padding: 10px 8px;
+  border-radius: $radius-pill;
+  text-align: center;
+  font-size: 13px;
+  font-weight: $fw-semibold;
+  white-space: nowrap;
+  transition:
+    background $transition-base,
+    filter $transition-base;
+
+  &--ghost {
+    background: rgba(243, 236, 221, 0.06);
+    border: 1px solid rgba(243, 236, 221, 0.16);
+    color: #f3ecdd;
+
+    &:hover {
+      background: rgba(243, 236, 221, 0.12);
+    }
+  }
+
+  &--solid {
+    background: linear-gradient(135deg, #d5a52f, #b78120);
+    color: #1a1408;
+
+    &:hover {
+      filter: brightness(1.08);
+    }
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.tcard__wa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 9px 8px;
+  border-radius: $radius-pill;
+  border: 1px solid rgba(37, 211, 102, 0.45);
+  background: rgba(37, 211, 102, 0.1);
+  color: #5fe08f;
+  font-size: 13px;
+  font-weight: $fw-semibold;
+  white-space: nowrap;
+  transition: background $transition-base;
+
+  &:hover {
+    background: rgba(37, 211, 102, 0.2);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+@container (width < 190px) {
+  .tcard__wa-long {
+    display: none;
+  }
+}
+
+:host-context(:root[data-theme='light']) {
+  .tcard__phone {
+    background: #1f1a12;
+    border-color: rgba(75, 57, 31, 0.25);
+    box-shadow: 0 18px 36px rgba(75, 57, 31, 0.22);
+  }
+
+  .tcard__name {
+    color: #241c13;
+  }
+
+  .tcard__label {
+    color: #8a6410;
+  }
+
+  .tcard__price {
+    color: #8a6410;
+  }
+
+  .tcard__price--free {
+    color: #2e7d32;
+  }
+
+  .tcard__btn--ghost {
+    background: rgba(75, 57, 31, 0.05);
+    border-color: rgba(75, 57, 31, 0.2);
+    color: #2b241b;
+
+    &:hover {
+      background: rgba(75, 57, 31, 0.1);
+    }
+  }
+
+  .tcard__wa {
+    color: #1a7f3e;
+    border-color: rgba(26, 127, 62, 0.4);
+    background: rgba(37, 211, 102, 0.1);
+
+    &:hover {
+      background: rgba(37, 211, 102, 0.18);
+    }
+  }
+}
+
+@media (width <= 680px) {
+  .tcard__name {
+    font-size: 19px;
+  }
+
+  .tcard__phone {
+    padding: 4px;
+    border-radius: 22px;
+  }
+
+  .tcard__media {
+    border-radius: 18px;
+  }
+}

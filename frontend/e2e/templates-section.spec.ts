@@ -55,3 +55,18 @@ test('templates come right after the hero stats, and "Browse Templates" reaches 
   await page.getByRole('link', { name: 'Browse Templates' }).click();
   await expect(page.locator('.tcard').first()).toBeInViewport({ timeout: 15_000 });
 });
+
+test('every template card has a WhatsApp enquiry naming that template', async ({ page }) => {
+  await page.goto('/templates');
+  const wa = page.locator('.tcard__wa');
+  await expect(wa).toHaveCount(10);
+  const hrefs = await wa.evaluateAll((els) => els.map((el) => el.getAttribute('href') ?? ''));
+  for (const href of hrefs) {
+    expect(href).toMatch(/^https:\/\/wa\.me\/917985981123\?text=/);
+    expect(decodeURIComponent(href.split('text=')[1])).toMatch(/interested in the .+ template/);
+  }
+  // Cards are phones on /templates too, and the grid never scrolls sideways.
+  await expect(page.locator('.tcard__phone')).toHaveCount(10);
+  const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+  expect(scrollWidth).toBeLessThanOrEqual(page.viewportSize()!.width);
+});

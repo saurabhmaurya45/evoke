@@ -29,8 +29,12 @@ export const CONTACT_PHONE = '+91 79859 81123';
 /** E.164 form used by `tel:` links. */
 export const CONTACT_PHONE_TEL = '+917985981123';
 
+/** Opens a WhatsApp chat with the public support number, pre-filled with `message`. */
+export function whatsappLink(message: string): string {
+  return `https://wa.me/${CONTACT_PHONE_TEL.slice(1)}?text=${encodeURIComponent(message)}`;
+}
+
 /** Opens a WhatsApp chat with the public support number. */
-export const CONTACT_WHATSAPP =
-  'https://wa.me/917985981123?text=Hi%2C%20I%20would%20like%20to%20know%20more%20about%20theinvitely.in';
+export const CONTACT_WHATSAPP = whatsappLink('Hi, I would like to know more about theinvitely.in');
 
 export const CONTACT_INSTAGRAM = 'https://www.instagram.com/theinvitely.in/';
