@@ -202,17 +202,68 @@ document.addEventListener('DOMContentLoaded', async function() {
       venueName: 'The Royal Palace Gardens',
       venueAddress: 'Jorawar Singh Gate, Amer Road, Jaipur, Rajasthan',
     };
-    function replaceText(oldStr, newStr) {
-      if (!oldStr || !newStr || oldStr === newStr || !document.body) return;
-      var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
-      var hits = [];
-      var node;
-      while ((node = walker.nextNode())) {
-        if (node.nodeValue && node.nodeValue.indexOf(oldStr) !== -1) hits.push(node);
+    // Each field is bound to the exact places its sample text appears, found once
+    // in the untouched page and wrapped in <span data-evoke-key>. Updates then set
+    // those spans only. (A find-and-replace of the previous value instead rewrote
+    // any matching text on every keystroke — "v" → "va" turned "November" into
+    // "Novaember" — and never reflected a cleared field.)
+    var SAMPLE = {};
+    Object.keys(state).forEach(function (k) {
+      SAMPLE[k] = state[k];
+    });
+    var LETTER = /[A-Za-zÀ-ɏऀ-ॿ]/;
+    function isWordAt(text, start, len) {
+      return !LETTER.test(text.charAt(start - 1) || '') && !LETTER.test(text.charAt(start + len) || '');
+    }
+    // Wrap every not-yet-bound occurrence of each sample value. Runs on every
+    // update, so sections the bundle renders later are bound too. Longest first,
+    // so a value containing another (a full date, a tagline) is claimed whole.
+    function bindSamples() {
+      if (!document.body) return;
+      Object.keys(SAMPLE)
+        .sort(function (a, b) {
+          return SAMPLE[b].length - SAMPLE[a].length;
+        })
+        .forEach(function (key) {
+          var sample = SAMPLE[key];
+          var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+            acceptNode: function (n) {
+              var p = n.parentElement;
+              if (!p || /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/.test(p.tagName) || p.closest('[data-evoke-key]')) {
+                return NodeFilter.FILTER_REJECT;
+              }
+              return n.nodeValue.indexOf(sample) !== -1 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+            },
+          });
+          var hits = [];
+          var node;
+          while ((node = walker.nextNode())) hits.push(node);
+          hits.forEach(function (textNode) {
+            var at = textNode.nodeValue.indexOf(sample);
+            while (at !== -1) {
+              if (!isWordAt(textNode.nodeValue, at, sample.length)) {
+                at = textNode.nodeValue.indexOf(sample, at + 1);
+                continue;
+              }
+              var match = textNode.splitText(at);
+              var rest = match.splitText(sample.length);
+              var span = document.createElement('span');
+              span.setAttribute('data-evoke-key', key);
+              match.parentNode.insertBefore(span, match);
+              span.appendChild(match);
+              span.textContent = state[key];
+              textNode = rest;
+              at = textNode.nodeValue.indexOf(sample);
+            }
+          });
+        });
+    }
+    function setField(key, value) {
+      state[key] = value;
+      var spans = document.querySelectorAll('[data-evoke-key="' + key + '"]');
+      for (var i = 0; i < spans.length; i++) {
+        if (spans[i].textContent !== value) spans[i].textContent = value;
       }
-      hits.forEach(function (n) {
-        n.nodeValue = n.nodeValue.split(oldStr).join(newStr);
-      });
     }
     function fmtDate(v) {
       if (!v) return '';
@@ -293,6 +344,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         var section = data[m[0]] || {};
         setImgByAlt(m[2], section[m[1]]);
       });
+      bindSamples();
       [
         ['groomName', hero.groomName],
         ['brideName', hero.brideName],
@@ -302,21 +354,13 @@ document.addEventListener('DOMContentLoaded', async function() {
         ['storyIntro', story.intro],
         ['venueName', venue.name],
         ['venueAddress', venue.address],
+        ['date', 'date' in hero ? fmtDate(hero.date) : undefined],
       ].forEach(function (pair) {
-        var key = pair[0];
-        var val = pair[1];
-        if (val && val !== state[key]) {
-          replaceText(state[key], val);
-          state[key] = val;
-        }
+        // Absent from the data: keep what's shown. Present but empty: the user
+        // cleared it, so show nothing.
+        if (pair[1] === undefined || pair[1] === null) return;
+        setField(pair[0], String(pair[1]));
       });
-      if (hero.date) {
-        var nd = fmtDate(hero.date);
-        if (nd && nd !== state.date) {
-          replaceText(state.date, nd);
-          state.date = nd;
-        }
-      }
     }
     var parentOrigin = document.referrer ? new URL(document.referrer).origin : window.location.origin;
     window.addEventListener('message', function (e) {
