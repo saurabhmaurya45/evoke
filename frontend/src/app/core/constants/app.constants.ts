@@ -17,7 +17,7 @@ export const APP_LOGO_PATH = '/assets/brand/logo.png';
  * Desktop nav (logo + six links + actions) needs about 1100px before the
  * items collide. Below this width the header uses the menu button.
  */
-export const BREAKPOINT_NAV = 1180;
+export const BREAKPOINT_NAV = 1180; // Keep in step with $nav-collapse in navbar.component.scss.
 
 export const COPYRIGHT_YEAR = 2026;
 

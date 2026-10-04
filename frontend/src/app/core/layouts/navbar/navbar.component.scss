@@ -1,5 +1,10 @@
 @use 'abstracts' as *;
 
+// Below this width the bar collapses to the menu button. Must match
+// BREAKPOINT_NAV in app.constants.ts. It's a CSS media query (not a JS width
+// check) so the prerendered HTML is already right on the first paint.
+$nav-collapse: 1180px;
+
 .nav {
   position: fixed;
   inset: 0 0 auto;
@@ -37,6 +42,38 @@
   align-items: center;
   flex-shrink: 0;
   min-width: 0;
+  --logo-h: 42px;
+}
+
+// Both layouts are in the DOM; exactly one is shown. `contents` lets the
+// wrapper's children lay out in the bar as if the wrapper weren't there.
+.nav__desktop {
+  display: contents;
+}
+
+.nav__compact {
+  display: none;
+}
+
+@media (max-width: #{$nav-collapse - 0.02px}) {
+  .nav__brand {
+    --logo-h: 34px;
+  }
+
+  .nav__desktop {
+    display: none;
+  }
+
+  .nav__compact {
+    display: contents;
+  }
+}
+
+@media (min-width: $nav-collapse) {
+  // An open mobile menu stays hidden if the window is widened past the breakpoint.
+  .nav__mobile {
+    display: none;
+  }
 }
 
 .nav__links {

@@ -17,7 +17,13 @@ import { APP_NAME } from '../../constants/app.constants';
 @Component({
   selector: 'app-navbar',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LogoComponent, ThemeToggleComponent, MagneticDirective, RouterLink, ProfileMenuComponent],
+  imports: [
+    LogoComponent,
+    ThemeToggleComponent,
+    MagneticDirective,
+    RouterLink,
+    ProfileMenuComponent,
+  ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
