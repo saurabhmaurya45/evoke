@@ -10,7 +10,12 @@ import { ThemeService } from '../../../core/services/theme.service';
 @Component({
   selector: 'app-logo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<img class="logo" [style.height.px]="height()" [src]="src()" [alt]="name" />`,
+  template: `<img
+    class="logo"
+    [style.height]="height() === null ? 'var(--logo-h, 46px)' : height() + 'px'"
+    [src]="src()"
+    [alt]="name"
+  />`,
   styles: [
     `
       .logo {
@@ -22,7 +27,8 @@ import { ThemeService } from '../../../core/services/theme.service';
 })
 export class LogoComponent {
   private readonly theme = inject(ThemeService);
-  readonly height = input(46);
+  /** Pixel height, or null to size from the `--logo-h` CSS variable (responsive). */
+  readonly height = input<number | null>(46);
   protected readonly name = APP_NAME;
   protected readonly src = computed(() =>
     this.theme.isDark() ? 'assets/brand/logo.png' : 'assets/brand/logo-light.png',

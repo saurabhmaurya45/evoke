@@ -18,9 +18,12 @@
   background:
     radial-gradient(circle at 18% 8%, rgba(214, 167, 54, 0.22) 0 1px, transparent 1.5px),
     radial-gradient(circle at 80% 26%, rgba(214, 167, 54, 0.2) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 58% 74%, rgba(214, 167, 54, 0.16) 0 1px, transparent 1.5px),
-    #12110f;
-  background-size: 170px 150px, 220px 190px, 260px 220px, auto;
+    radial-gradient(circle at 58% 74%, rgba(214, 167, 54, 0.16) 0 1px, transparent 1.5px), #12110f;
+  background-size:
+    170px 150px,
+    220px 190px,
+    260px 220px,
+    auto;
   border-radius: $radius-2xl;
 }
 
@@ -35,8 +38,8 @@
 .carousel__track {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: calc((100% - 3 * 22px) / 4);
-  gap: 22px;
+  grid-auto-columns: calc((100% - 4 * 20px) / 5);
+  gap: 20px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
@@ -44,8 +47,12 @@
   padding: 4px;
   margin: -4px;
 
-  &::-webkit-scrollbar { display: none; }
-  &:focus-visible { @include focus-ring; }
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  &:focus-visible {
+    @include focus-ring;
+  }
 }
 
 .carousel__track > * {
@@ -54,6 +61,7 @@
 
 .carousel__nav {
   flex-shrink: 0;
+
   // Was 44px at rgba(var(--nav-rgb), 0.6) — in dark mode --nav-rgb is almost
   // the same colour as this section's own background, so at rest the button
   // nearly disappeared into it. Bigger and more opaque so it reads without
@@ -67,6 +75,7 @@
   background: rgba(var(--nav-rgb), 0.85);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   color: #f3ecdd;
+
   // The ‹/› glyph itself, not body copy — scaled with the button, not the
   // type scale (same reasoning as the monogram/icon sizes below).
   font-size: 30px;
@@ -84,149 +93,146 @@
     cursor: not-allowed;
   }
 
-  &:focus-visible { @include focus-ring; }
-}
-
-@include reduced-motion {
-  .carousel__track { scroll-behavior: auto; }
-}
-
-.templates__card {
-  background: linear-gradient(160deg, rgba(48, 46, 42, 0.55), rgba(27, 26, 23, 0.88));
-  border: 1px solid rgba(210, 190, 153, 0.2);
-  border-radius: $radius-lg;
-  padding: 12px;
-  min-width: 0;
-  will-change: transform;
-  transition: border-color $transition-base;
-
-  &:hover {
-    border-color: var(--accent, #{$color-clay});
+  &:focus-visible {
+    @include focus-ring;
   }
 }
 
-.templates__preview {
-  position: relative;
-  height: 190px;
-  // Concentric with the card's own $radius-lg (20px) minus its 12px padding.
-  border-radius: $radius-sm;
-  overflow: hidden;
+@include reduced-motion {
+  .carousel__track {
+    scroll-behavior: auto;
+  }
 }
 
-.templates__monogram {
-  position: absolute;
-  inset: 0;
+// ── Template card: phone preview + details ──
+.tcard {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: $font-serif;
-  font-size: 120px;
-  font-weight: $fw-semibold;
-  color: rgba(var(--glass-rgb), 0.08);
-  pointer-events: none;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
 }
 
-.templates__preview app-image-slot {
+.tcard__phone {
   position: relative;
   display: block;
-  width: 100%;
-  height: 100%;
+  padding: 5px;
+  border-radius: 26px;
+  background: #0b0906;
+  border: 1px solid rgba(243, 236, 221, 0.16);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.4);
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+
+  // Camera island
+  &::after {
+    content: '';
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    width: 30%;
+    height: 7px;
+    border-radius: 99px;
+    background: #000;
+    transform: translateX(-50%);
+  }
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-6px);
+    border-color: color-mix(in srgb, var(--accent, #c9a227) 70%, #c9a227);
+    box-shadow:
+      0 28px 56px rgba(0, 0, 0, 0.45),
+      0 0 40px rgba(201, 162, 39, 0.18);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
 }
 
-.templates__media {
-  position: absolute;
-  inset: 0;
+.tcard__media {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 360 / 778;
   object-fit: cover;
-  background: rgba(0, 0, 0, 0.15);
+  border-radius: 21px;
+  background: rgba(243, 236, 221, 0.06);
 }
 
-.templates__badge {
-  position: absolute;
-  top: 14px;
-  left: 14px;
+.tcard__body {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: font-size('xs');
+  flex-direction: column;
+  gap: 4px;
+  padding-inline: 4px;
+}
+
+.tcard__label {
+  font-size: 10px;
   font-weight: $fw-semibold;
-  letter-spacing: 0.02em;
-  padding: 6px 14px;
-  border-radius: $radius-pill;
-  background: rgba(var(--nav-rgb), 0.55);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(var(--glass-rgb), 0.18);
-  pointer-events: none;
-}
-
-.templates__badge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-}
-
-.templates__body {
-  padding: 16px 8px 6px;
-}
-
-.templates__head {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  justify-content: space-between;
-  min-height: 41px;
-  margin-bottom: 14px;
-}
-
-.templates__name {
-  font-family: $font-serif;
-  font-size: font-size('2xl');
-  line-height: 1.2;
-  font-weight: $fw-semibold;
-  margin: 0;
-}
-
-.templates__price {
-  flex-shrink: 0;
-  padding: 4px 10px;
-  border-radius: $radius-pill;
-  font-size: font-size('xs');
-  font-weight: $fw-semibold;
-  white-space: nowrap;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: $color-gold;
-  background: rgba(201, 162, 39, 0.14);
-  border: 1px solid rgba(201, 162, 39, 0.3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.templates__price--free {
-  color: #6ec177;
-  background: rgba(76, 175, 80, 0.14);
-  border-color: rgba(76, 175, 80, 0.3);
-}
-
-.templates__actions {
-  display: flex;
-  gap: 8px;
-}
-
-.templates__btn {
-  flex: 1;
-  text-align: center;
-  font-size: font-size('xs');
+.tcard__name {
+  margin: 0;
+  font-family: $font-serif;
+  font-size: 22px;
   font-weight: $fw-semibold;
+  line-height: 1.15;
+  color: #f3ecdd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  a {
+    color: inherit;
+  }
+}
+
+.tcard__price {
+  align-self: flex-start;
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: $fw-semibold;
+  color: $color-sand;
+}
+
+.tcard__price--free {
+  color: #7bc67e;
+}
+
+.tcard__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.tcard__btn {
   padding: 10px 8px;
   border-radius: $radius-pill;
+  text-align: center;
+  font-size: 13px;
+  font-weight: $fw-semibold;
+  white-space: nowrap;
+  transition:
+    background $transition-base,
+    filter $transition-base;
 
   &--ghost {
-    background: rgba(var(--glass-rgb), 0.06);
-    border: 1px solid rgba(var(--glass-rgb), 0.14);
-    color: var(--text);
+    background: rgba(243, 236, 221, 0.06);
+    border: 1px solid rgba(243, 236, 221, 0.16);
+    color: #f3ecdd;
 
     &:hover {
-      background: rgba(var(--glass-rgb), 0.12);
+      background: rgba(243, 236, 221, 0.12);
     }
   }
 
@@ -237,6 +243,10 @@
     &:hover {
       filter: brightness(1.08);
     }
+  }
+
+  &:focus-visible {
+    @include focus-ring;
   }
 }
 
@@ -253,7 +263,9 @@
   color: #f3ecdd;
   font-size: font-size('base');
   font-weight: $fw-semibold;
-  transition: border-color $transition-base, background $transition-base;
+  transition:
+    border-color $transition-base,
+    background $transition-base;
 
   &:hover {
     border-color: $color-gold;
@@ -270,39 +282,37 @@
       radial-gradient(circle at 80% 26%, rgba(139, 100, 29, 0.18) 0 1px, transparent 1.5px),
       radial-gradient(circle at 58% 74%, rgba(139, 100, 29, 0.14) 0 1px, transparent 1.5px),
       linear-gradient(180deg, #f1e8d6, #eadfc8);
-    background-size: 170px 150px, 220px 190px, 260px 220px, auto;
+    background-size:
+      170px 150px,
+      220px 190px,
+      260px 220px,
+      auto;
     box-shadow: inset 0 0 0 1px rgba(75, 57, 31, 0.08);
   }
 
-  .templates__card {
-    background: linear-gradient(160deg, rgba(255, 253, 247, 0.96), rgba(250, 244, 232, 0.92));
-    border-color: rgba(75, 57, 31, 0.14);
-    box-shadow: 0 14px 30px rgba(75, 57, 31, 0.1);
+  .tcard__phone {
+    background: #1f1a12;
+    border-color: rgba(75, 57, 31, 0.25);
+    box-shadow: 0 18px 36px rgba(75, 57, 31, 0.22);
   }
 
-  .templates__name {
+  .tcard__name {
     color: #241c13;
   }
 
-  .templates__price {
+  .tcard__label {
     color: #8a6410;
-    background: rgba(201, 162, 39, 0.16);
-    border-color: rgba(139, 100, 29, 0.35);
   }
 
-  .templates__price--free {
+  .tcard__price {
+    color: #8a6410;
+  }
+
+  .tcard__price--free {
     color: #2e7d32;
-    background: rgba(76, 175, 80, 0.14);
-    border-color: rgba(46, 125, 50, 0.35);
   }
 
-  .templates__badge {
-    background: rgba(255, 252, 244, 0.82);
-    border-color: rgba(75, 57, 31, 0.14);
-    color: #2b241b;
-  }
-
-  .templates__btn--ghost {
+  .tcard__btn--ghost {
     background: rgba(75, 57, 31, 0.05);
     border-color: rgba(75, 57, 31, 0.2);
     color: #2b241b;
@@ -335,27 +345,52 @@
   }
 }
 
-@media (max-width: 980px) {
+// Cards per view: 5 → 4 → 3, then a swipeable row on phones where the next
+// card peeks in so it's obvious there's more.
+@media (width <= 1280px) {
   .carousel__track {
-    grid-auto-columns: calc((100% - 22px) / 2);
+    grid-auto-columns: calc((100% - 3 * 20px) / 4);
   }
 }
 
-@media (max-width: 560px) {
+@media (width <= 980px) {
+  .carousel__track {
+    grid-auto-columns: calc((100% - 2 * 20px) / 3);
+  }
+}
+
+@media (width <= 680px) {
   .templates {
     padding-inline: 18px;
   }
 
-  .carousel__track {
-    grid-auto-columns: 100%;
-  }
-
-  /* Arrows would eat the card width on phones — swipe instead. */
+  // Arrows would eat the card width on phones — swipe instead.
   .carousel__nav {
     display: none;
   }
 
-  .templates__preview {
-    height: 220px;
+  .carousel__track {
+    grid-auto-columns: 58%;
+    gap: 14px;
+    scroll-padding-inline: 2px;
+  }
+
+  .tcard__name {
+    font-size: 19px;
+  }
+
+  .tcard__phone {
+    padding: 4px;
+    border-radius: 22px;
+  }
+
+  .tcard__media {
+    border-radius: 18px;
+  }
+}
+
+@media (width <= 380px) {
+  .carousel__track {
+    grid-auto-columns: 66%;
   }
 }

@@ -45,37 +45,40 @@
     </div>
   </div>
 
-  <!-- Floating preview cards -->
+  <!--
+    Template showcase: three phones side by side, the centre one featured.
+    A grid (no absolute positioning), so nothing overlaps at any width. Each
+    phone loops the template's real opening, recorded on a phone viewport.
+  -->
   <div class="hero__stage">
     @for (card of content.heroCards; track card.slotId; let i = $index) {
-      <div class="hero__card" [class]="'hero__card--' + (i + 1)" #floatCard>
+      <div class="hero__card" [class.hero__card--feature]="i === featureIndex" #floatCard>
         <a
           class="hero__card-inner"
-          [routerLink]="['/preview', card.slotId]"
-          [attr.aria-label]="'Preview the ' + card.title + ' template'"
+          [routerLink]="['/templates', card.slug]"
+          [attr.aria-label]="card.title + ' — ' + card.subtitle + ' invitation template'"
         >
-          <!-- Live capture of the real template, scrolled end-to-end — same clip the
-               templates carousel uses. Hero cards are above the fold, so all four
-               autoplay immediately rather than waiting on hover/viewport. -->
-          <video
-            #vid
-            class="hero__card-media"
-            [style.--radius.px]="cardRadii[i]"
-            [poster]="card.img"
-            [attr.aria-label]="card.title + ' template preview'"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="auto"
-          >
-            <source [src]="card.video" type="video/mp4" />
-          </video>
-          <!-- The laptop-style card (4th) is media-only by design. -->
-          @if (i < 3) {
-            <div class="hero__card-title">{{ card.title }}</div>
-            <div class="hero__card-sub">{{ card.subtitle }}</div>
-          }
+          <span class="hero__phone">
+            <video
+              #vid
+              class="hero__phone-media"
+              [poster]="card.img"
+              aria-hidden="true"
+              autoplay
+              muted
+              loop
+              playsinline
+              [attr.preload]="i === featureIndex ? 'auto' : 'metadata'"
+              width="360"
+              height="778"
+            >
+              <source [src]="card.video" type="video/mp4" />
+            </video>
+          </span>
+          <span class="hero__card-caption">
+            <span class="hero__card-title">{{ card.shortTitle }}</span>
+            <span class="hero__card-sub">{{ card.subtitle }}</span>
+          </span>
         </a>
       </div>
     }

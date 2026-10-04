@@ -1,10 +1,17 @@
 <nav class="nav" [class.nav--scrolled]="viewport.scrolled()" aria-label="Primary">
   <div class="nav__bar">
     <a class="nav__brand" routerLink="/" fragment="hero" [attr.aria-label]="appName + ' home'">
-      <app-logo [height]="viewport.isMobile() ? 34 : 42" />
+      <!-- Size comes from CSS (--logo-h), so it is right before JS runs. -->
+      <app-logo [height]="null" />
     </a>
 
-    @if (!viewport.isMobile()) {
+    <!--
+      Desktop and compact layouts are both rendered; a CSS media query picks
+      one. Choosing in JS (viewport width) made prerendered HTML — built with
+      no screen, so assumed desktop — flash the full desktop bar on phones
+      until the app booted.
+    -->
+    <div class="nav__desktop">
       <ul class="nav__links">
         @for (link of navLinks; track link.label) {
           <li>
@@ -26,7 +33,8 @@
           <a class="nav__cta" routerLink="/signup" appMagnetic>Start Creating</a>
         }
       </div>
-    } @else {
+    </div>
+    <div class="nav__compact">
       <div class="nav__actions">
         <app-theme-toggle />
         <button
@@ -40,10 +48,10 @@
           <span aria-hidden="true">☰</span>
         </button>
       </div>
-    }
+    </div>
   </div>
 
-  @if (viewport.isMobile() && mobileMenuOpen()) {
+  @if (mobileMenuOpen()) {
     <div class="nav__mobile" id="mobile-menu">
       @for (link of navLinks; track link.label) {
         @if (link.path) {
@@ -51,20 +59,39 @@
             {{ link.label }}
           </a>
         } @else {
-          <a class="nav__mobile-link" routerLink="/" [fragment]="link.fragment" (click)="closeMobileMenu()">
+          <a
+            class="nav__mobile-link"
+            routerLink="/"
+            [fragment]="link.fragment"
+            (click)="closeMobileMenu()"
+          >
             {{ link.label }}
           </a>
         }
       }
       @if (auth.isAuthenticated()) {
-        <a class="nav__mobile-link nav__mobile-link--auth" routerLink="/dashboard" (click)="closeMobileMenu()">My dashboard</a>
+        <a
+          class="nav__mobile-link nav__mobile-link--auth"
+          routerLink="/dashboard"
+          (click)="closeMobileMenu()"
+          >My dashboard</a
+        >
         @if (auth.isAdmin()) {
-          <a class="nav__mobile-link" routerLink="/admin" (click)="closeMobileMenu()">Admin dashboard</a>
+          <a class="nav__mobile-link" routerLink="/admin" (click)="closeMobileMenu()"
+            >Admin dashboard</a
+          >
         }
         <button class="nav__mobile-link" type="button" (click)="signOut()">Sign out</button>
       } @else {
-        <a class="nav__mobile-link nav__mobile-link--auth" routerLink="/login" (click)="closeMobileMenu()">Log in</a>
-        <a class="nav__mobile-cta" routerLink="/signup" (click)="closeMobileMenu()">Start Creating</a>
+        <a
+          class="nav__mobile-link nav__mobile-link--auth"
+          routerLink="/login"
+          (click)="closeMobileMenu()"
+          >Log in</a
+        >
+        <a class="nav__mobile-cta" routerLink="/signup" (click)="closeMobileMenu()"
+          >Start Creating</a
+        >
       }
     </div>
   }

@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
 import { MagneticDirective } from '../../../../shared/directives/magnetic.directive';
 import { ViewportService } from '../../../../core/services/viewport.service';
 import { WINDOW } from '../../../../core/tokens/window.token';
-import { HomeContentService } from '../../data/home-content.service';
+import { HERO_FEATURE_INDEX, HomeContentService } from '../../data/home-content.service';
 
 /**
  * Hero: scroll-driven parallax blobs and cursor-driven floating preview cards
@@ -32,10 +32,7 @@ export class HeroComponent implements AfterViewInit, AfterViewChecked {
   private readonly window = inject(WINDOW);
   private readonly cdr = inject(ChangeDetectorRef);
   protected readonly content = inject(HomeContentService);
-
-  /** Media corner radius, one shared value now that all four card shells
-   * share the same outer radius ($radius-lg, see hero.component.scss). */
-  protected readonly cardRadii = [12, 12, 12, 12];
+  protected readonly featureIndex = HERO_FEATURE_INDEX;
 
   private readonly floatCards = viewChildren<ElementRef<HTMLElement>>('floatCard');
   private readonly cardVideos = viewChildren<ElementRef<HTMLVideoElement>>('vid');
@@ -93,7 +90,8 @@ export class HeroComponent implements AfterViewInit, AfterViewChecked {
     const x = (event.clientX - rect.left) / rect.width - 0.5;
     const y = (event.clientY - rect.top) / rect.height - 0.5;
     this.floatCards().forEach((ref, i) => {
-      const factor = (i + 1) * 10;
+      // Subtle depth: the featured phone drifts more than its neighbours.
+      const factor = i === HERO_FEATURE_INDEX ? 10 : 5;
       ref.nativeElement.style.transform = `translate(${x * -factor}px, ${y * -factor}px)`;
     });
   }
