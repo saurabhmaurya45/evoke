@@ -49,15 +49,18 @@ async def test_other_user_cannot_access_someone_elses_event(client, auth_headers
     other_headers = auth_headers()
 
     get_resp = await client.get(f"/v1/events/{event_id}", headers=other_headers)
-    assert get_resp.status_code == 403
+    assert get_resp.status_code == 404
+    assert get_resp.json()["error"]["code"] == "EVENT_NOT_FOUND"
 
     patch_resp = await client.patch(
         f"/v1/events/{event_id}", headers=other_headers, json={"title": "Hacked"}
     )
-    assert patch_resp.status_code == 403
+    assert patch_resp.status_code == 404
+    assert patch_resp.json()["error"]["code"] == "EVENT_NOT_FOUND"
 
     delete_resp = await client.delete(f"/v1/events/{event_id}", headers=other_headers)
-    assert delete_resp.status_code == 403
+    assert delete_resp.status_code == 404
+    assert delete_resp.json()["error"]["code"] == "EVENT_NOT_FOUND"
 
 
 async def test_archive_event_via_delete(client, auth_headers):

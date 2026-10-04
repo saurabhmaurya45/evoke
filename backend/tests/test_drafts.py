@@ -61,11 +61,13 @@ async def test_other_user_cannot_access_someone_elses_draft(client, auth_headers
     other_headers = auth_headers()
 
     get_resp = await client.get(f"/v1/events/{event_id}/draft", headers=other_headers)
-    assert get_resp.status_code == 403
+    assert get_resp.status_code == 404
+    assert get_resp.json()["error"]["code"] == "DRAFT_NOT_FOUND"
 
     put_resp = await client.put(
         f"/v1/events/{event_id}/draft",
         headers=other_headers,
         json={"data": {}, "revision": 0},
     )
-    assert put_resp.status_code == 403
+    assert put_resp.status_code == 404
+    assert put_resp.json()["error"]["code"] == "DRAFT_NOT_FOUND"

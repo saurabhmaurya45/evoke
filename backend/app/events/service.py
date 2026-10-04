@@ -185,7 +185,12 @@ async def get_event(db: AsyncSession, event_id: uuid.UUID, current_user: User) -
     event = await db.get(Event, event_id)
     if event is None:
         raise NotFoundError("EVENT_NOT_FOUND", "Event not found.")
-    ensure_owner_or_admin(current_user, event.owner_id)
+    ensure_owner_or_admin(
+        current_user,
+        event.owner_id,
+        not_found_code="EVENT_NOT_FOUND",
+        not_found_message="Event not found.",
+    )
     return event
 
 

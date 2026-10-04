@@ -38,6 +38,18 @@ class Settings(BaseSettings):
     # Razorpay rejects payment links that expire in under 15 minutes.
     payment_link_expiry_minutes: int = 30
 
+    # Backblaze B2 (S3-compatible), single private bucket for all media. Two
+    # application keys, split by pipeline stage: Producer (read+write) owns
+    # upload presigning + ack verification; Consumer (read-only) owns signed
+    # GET presigning on read. All unset -> get_b2_client() returns None and
+    # media upload/retrieval is disabled, same as Razorpay's optional wiring.
+    b2_endpoint_url: str | None = None
+    b2_bucket_name: str | None = None
+    b2_producer_key_id: str | None = None
+    b2_producer_key_secret: str | None = None
+    b2_consumer_key_id: str | None = None
+    b2_consumer_key_secret: str | None = None
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
