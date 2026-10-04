@@ -11,7 +11,7 @@ from app.media.models import MediaAsset, MediaOwnerKind, MediaStatus
 from app.media.paths import base_template_media_path, user_template_media_path
 from app.media.schemas import SIZE_CAP_BYTES, MediaAckRequest, MediaUploadRequest
 from app.shared.authorization import ensure_owner_or_admin
-from app.shared.errors import AppError, AuthForbiddenError, NotFoundError, ValidationFailedError
+from app.shared.errors import AppError, AuthForbiddenError, NotFoundError
 from app.shared.storage.b2_client import B2Client, require_client
 from app.templates.models import Template
 from app.users.models import User, UserRole
@@ -83,6 +83,17 @@ async def request_upload(
     return asset, upload_url
 
 
+def _verification_failed(reason: str, details: dict | None = None) -> AppError:
+    """422 with its own code, so a client can tell "the upload didn't land — start
+    again" apart from an ordinary invalid request (which is VALIDATION_FAILED)."""
+    return AppError(
+        "UPLOAD_VERIFICATION_FAILED",
+        f"Upload verification failed: {reason}",
+        status.HTTP_422_UNPROCESSABLE_ENTITY,
+        details,
+    )
+
+
 async def _get_asset_or_404(db: AsyncSession, upload_id: uuid.UUID) -> MediaAsset:
     asset = await db.get(MediaAsset, upload_id)
     if asset is None:
@@ -105,17 +116,15 @@ async def _verify_and_mark_uploaded(
             status.HTTP_502_BAD_GATEWAY,
         ) from exc
     if metadata is None:
-        raise ValidationFailedError(
-            "Upload verification failed: the object was not found in storage."
-        )
+        raise _verification_failed("the object was not found in storage.")
 
     actual_size = metadata["ContentLength"]
     cap = SIZE_CAP_BYTES[asset.media_type]
     within_declared_tolerance = actual_size <= asset.declared_size_bytes * (1 + _SIZE_TOLERANCE)
     if actual_size > cap or not within_declared_tolerance:
-        raise ValidationFailedError(
-            "Upload verification failed: the uploaded object's size does not match what "
-            "was declared, or exceeds the allowed limit.",
+        raise _verification_failed(
+            "the uploaded object's size does not match what was declared, or exceeds the "
+            "allowed limit.",
             details={
                 "actualSizeBytes": actual_size,
                 "declaredSizeBytes": asset.declared_size_bytes,
@@ -165,10 +174,20 @@ async def ack_upload(
     return asset
 
 
+def _is_storage_path(value: str) -> bool:
+    """True for an object key this pipeline wrote — see app.media.paths."""
+    return value.startswith(("asset/", "public/"))
+
+
 async def resolve_media_url(b2: B2Client | None, storage_path: str | None) -> str | None:
     """Resolves a stored storage_path to a presigned GET URL. Returns the input
     unchanged if there's no media set, or if B2 isn't configured (a template
-    without B2 configured simply shows no media, rather than erroring)."""
-    if not storage_path or b2 is None:
+    without B2 configured simply shows no media, rather than erroring).
+
+    Also unchanged: a value that isn't a storage path at all — an absolute URL
+    (`https://…`) or site-relative path (`/invitation-templates/…`) set before
+    uploads existed. Presigning one of those as an object key would turn a
+    working link into a signed URL for an object that doesn't exist."""
+    if not storage_path or b2 is None or not _is_storage_path(storage_path):
         return storage_path
     return b2.presign_get(storage_path, _GET_PRESIGN_TTL_SECONDS)

@@ -219,6 +219,22 @@ our API. Two things to get right:
    interceptor chain's assumptions (every request is ours, every request may
    get a bearer token) from applying somewhere they don't belong.
 
+### The bucket needs a CORS rule
+
+Because the `PUT` goes from the browser straight to B2, it is a cross-origin
+request with a `Content-Type` header — the browser sends a CORS preflight first.
+Without a CORS rule on the bucket allowing `PUT` from the frontend's origin(s),
+**every upload fails** before any bytes are sent (it surfaces as a network error
+from `fetch`, not an HTTP status). Set it once per bucket with:
+
+```bash
+cd backend
+python scripts/configure_b2_cors.py            # dry run
+python scripts/configure_b2_cors.py --apply    # needs a key with writeBuckets (B2_ADMIN_KEY_ID/SECRET)
+```
+
+It allows the API's own `CORS_ORIGINS` by default; pass `--origin` to override.
+
 ## Error handling checklist
 
 | Scenario | Status | What the UI should do |

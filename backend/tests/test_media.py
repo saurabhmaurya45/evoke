@@ -307,6 +307,20 @@ async def test_template_with_no_thumbnail_returns_null_not_a_presign_call(client
     assert b2.get_calls == []
 
 
+async def test_template_with_a_pasted_url_returns_it_unchanged(client, db_session, b2):
+    # Set before uploads existed — not an object key, so it must not be presigned.
+    template = await _make_template(db_session)
+    template.thumbnail_url = "https://cdn.example.com/card.jpg"
+    template.preview_url = "/invitation-templates/template 1/card.jpg"
+    await db_session.commit()
+
+    resp = await client.get(f"/v1/templates/{template.id}")
+    assert resp.status_code == 200
+    assert resp.json()["data"]["thumbnailUrl"] == "https://cdn.example.com/card.jpg"
+    assert resp.json()["data"]["previewUrl"] == "/invitation-templates/template 1/card.jpg"
+    assert b2.get_calls == []
+
+
 async def test_ack_success_writes_back_onto_template_for_base_owner(
     client, db_session, auth_headers, b2
 ):
@@ -356,9 +370,7 @@ async def test_ack_success_object_missing_in_storage_is_422_and_stays_pending(
         json={"uploadId": upload["uploadId"], "status": "SUCCESS"},
     )
     assert resp.status_code == 422
-    assert resp.json()["error"]["code"] == "UPLOAD_VERIFICATION_FAILED" or resp.json()["error"][
-        "code"
-    ] == "VALIDATION_FAILED"
+    assert resp.json()["error"]["code"] == "UPLOAD_VERIFICATION_FAILED"
 
     # Re-ack after "uploading" succeeds, proving the row genuinely stayed PENDING.
     b2.head_response = {"ContentLength": 1000}
