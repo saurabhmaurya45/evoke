@@ -55,6 +55,10 @@ class FakeB2Client(B2Client):
         self.get_calls.append((key, expires_in))
         return f"https://fake-b2.invalid/{key}?get-signed"
 
+    def key_from_presigned_url(self, url: str) -> str | None:
+        prefix = "https://fake-b2.invalid/"
+        return url[len(prefix) :].split("?")[0] if url.startswith(prefix) else None
+
     def head_object(self, key: str) -> dict | None:
         if self.head_object_error is not None:
             raise self.head_object_error
@@ -500,3 +504,69 @@ async def test_ack_success_b2_outage_during_verification_is_502_not_a_bare_500(
     )
     assert resp.status_code == 502
     assert resp.json()["error"]["code"] == "MEDIA_STORAGE_ERROR"
+
+
+# ---------------------------------------------------------------------------
+# Draft media: stored as paths, read as signed URLs (ADR-5).
+# ---------------------------------------------------------------------------
+
+
+async def test_ack_returns_a_displayable_url_for_an_upload(client, auth_headers, b2):
+    headers = auth_headers()
+    event = await _make_event(client, headers)
+    upload = await _request_upload(client, headers, event["id"])
+    b2.head_response = {"ContentLength": 1000}
+
+    resp = await client.post(
+        "/v1/media/upload/ack",
+        headers=headers,
+        json={"uploadId": upload["uploadId"], "status": "SUCCESS"},
+    )
+    assert resp.status_code == 200
+    assert resp.json()["data"]["url"] == f"https://fake-b2.invalid/{upload['storagePath']}?get-signed"
+
+
+async def test_draft_stores_paths_and_reads_back_signed_urls(client, auth_headers, b2, db_session):
+    headers = auth_headers()
+    event = await _make_event(client, headers)
+    upload = await _request_upload(client, headers, event["id"])
+    path = upload["storagePath"]
+    signed = f"https://fake-b2.invalid/{path}?get-signed"
+
+    # The editor sends back the signed URL it was given…
+    save = await client.put(
+        f"/v1/events/{event['id']}/draft",
+        headers=headers,
+        json={"data": {"hero": {"photo": signed, "title": "Hi"}}, "revision": 0},
+    )
+    assert save.status_code == 200
+    assert save.json()["data"]["data"]["hero"] == {"photo": signed, "title": "Hi"}
+
+    # …which is stored as the path, never as an expiring URL.
+    from sqlalchemy import select
+
+    from app.drafts.models import Draft
+
+    draft = (
+        await db_session.execute(select(Draft).where(Draft.event_id == uuid.UUID(event["id"])))
+    ).scalar_one()
+    assert draft.data["hero"]["photo"] == path
+
+    read = await client.get(f"/v1/events/{event['id']}/draft", headers=headers)
+    assert read.json()["data"]["data"]["hero"]["photo"] == signed
+
+
+async def test_draft_rejects_another_events_upload(client, auth_headers, b2):
+    headers = auth_headers()
+    mine = await _make_event(client, headers)
+    other_headers = auth_headers()
+    theirs = await _make_event(client, other_headers)
+    their_upload = await _request_upload(client, other_headers, theirs["id"])
+
+    resp = await client.put(
+        f"/v1/events/{mine['id']}/draft",
+        headers=headers,
+        json={"data": {"hero": {"photo": their_upload["storagePath"]}}, "revision": 0},
+    )
+    assert resp.status_code == 422
+    assert resp.json()["error"]["code"] == "VALIDATION_FAILED"

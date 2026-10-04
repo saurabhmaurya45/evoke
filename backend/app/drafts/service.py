@@ -6,8 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.drafts.models import Draft
 from app.drafts.schemas import DraftUpdate
 from app.events.models import Event
+from app.media.service import ensure_event_media, to_storage_refs
 from app.shared.authorization import ensure_owner_or_admin
 from app.shared.errors import ConflictError, NotFoundError
+from app.shared.storage.b2_client import B2Client
 from app.users.models import User
 
 
@@ -38,7 +40,11 @@ async def get_draft(db: AsyncSession, event_id: uuid.UUID, current_user: User) -
 
 
 async def save_draft(
-    db: AsyncSession, event_id: uuid.UUID, current_user: User, update: DraftUpdate
+    db: AsyncSession,
+    event_id: uuid.UUID,
+    current_user: User,
+    update: DraftUpdate,
+    b2: B2Client | None = None,
 ) -> Draft:
     event = await _get_event_or_404(db, event_id)
     ensure_owner_or_admin(
@@ -55,6 +61,11 @@ async def save_draft(
             "The draft was modified since you last loaded it.",
             details={"currentRevision": draft.revision},
         )
+
+    # Clients send back the signed media URLs they loaded; store the paths, which
+    # don't expire, and refuse uploads that belong to some other event.
+    update.data = to_storage_refs(b2, update.data)
+    ensure_event_media(update.data, event.owner_id, event.id)
 
     changes = update.model_dump(exclude_unset=True, exclude={"revision"})
     for field, value in changes.items():

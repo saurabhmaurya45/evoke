@@ -19,6 +19,7 @@ import { SeoService } from '../../../../core/services/seo.service';
 import { WINDOW } from '../../../../core/tokens/window.token';
 import { TemplateMigrationService } from '../../data/template-migration.service';
 import { HttpTemplateRepository } from '../../data/http-template-repository';
+import { EditorMediaService } from '../../data/editor-media.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
@@ -39,7 +40,7 @@ const AUTOSAVE_DELAY = 800;
 @Component({
   selector: 'app-editor-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [TemplateEditorStore],
+  providers: [TemplateEditorStore, EditorMediaService],
   imports: [FormEngineComponent, TemplateRendererComponent, LoaderComponent],
   templateUrl: './editor-page.component.html',
   styleUrl: './editor-page.component.scss',

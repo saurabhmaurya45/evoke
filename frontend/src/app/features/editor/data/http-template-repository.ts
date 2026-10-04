@@ -124,6 +124,15 @@ export class HttpTemplateRepository implements TemplateRepository {
     }
   }
 
+  /**
+   * The backend event this template's draft belongs to, creating it on first
+   * use. Media uploads are owned by an event, so the editor needs it before the
+   * first autosave has happened.
+   */
+  ensureEventId(templateId: string): Promise<string> {
+    return this.getOrCreateEvent(templateId);
+  }
+
   private async getOrCreateEvent(templateId: string): Promise<string> {
     const cached = this.readEventId(templateId);
     if (cached) return cached;

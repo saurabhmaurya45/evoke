@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.media.models import MediaStatus
 from app.media.schemas import MediaAckOut, MediaAckRequest, MediaUploadOut, MediaUploadRequest
-from app.media.service import ack_upload, request_upload
+from app.media.service import ack_upload, presigned_get_url, request_upload
 from app.shared.auth.dependencies import get_current_user
 from app.shared.database import get_db
 from app.shared.envelope import Envelope
@@ -109,6 +110,12 @@ async def ack_upload_route(
     user who requested the upload (or an ADMIN) may ack it.
     """
     asset = await ack_upload(db, current_user, b2, data)
+    uploaded = asset.status == MediaStatus.UPLOADED
     return Envelope(
-        data=MediaAckOut(upload_id=asset.id, status=asset.status, storage_path=asset.storage_path)
+        data=MediaAckOut(
+            upload_id=asset.id,
+            status=asset.status,
+            storage_path=asset.storage_path,
+            url=presigned_get_url(b2, asset.storage_path) if uploaded else None,
+        )
     )

@@ -6,9 +6,11 @@ from app.drafts.models import Draft
 from app.events.models import EventStatus
 from app.events.schemas import InvitationOut
 from app.events.service import get_event_by_slug, resolve_event_template
+from app.media.service import resolve_media_refs
 from app.shared.auth.dependencies import get_current_user_optional
 from app.shared.database import get_db
 from app.shared.errors import AuthForbiddenError, AuthRequiredError, NotFoundError
+from app.shared.storage.b2_client import B2Client, get_b2_client
 from app.users.models import User
 
 router = APIRouter(prefix="/v1/i", tags=["invitation"])
@@ -19,12 +21,15 @@ async def get_invitation_route(
     slug: str,
     current_user: User | None = Depends(get_current_user_optional),
     db: AsyncSession = Depends(get_db),
+    b2: B2Client | None = Depends(get_b2_client),
 ) -> InvitationOut:
     """Public viewer endpoint for an invitation page.
 
     - PUBLISHED events are visible to everyone (no auth required).
     - DRAFT events are visible only to the owner (auth required).
     - ARCHIVED events are never visible here.
+
+    Uploaded media in `draftData` is returned as signed URLs valid for 15 minutes.
     """
     event = await get_event_by_slug(db, slug)
     if event is None:
@@ -57,6 +62,6 @@ async def get_invitation_route(
         status=event.status,
         owner_id=event.owner_id,
         template_slot_id=template_slot_id,
-        draft_data=draft.data if draft else {},
+        draft_data=resolve_media_refs(b2, draft.data) if draft else {},
         schema_version=draft.schema_version if draft else None,
     )
