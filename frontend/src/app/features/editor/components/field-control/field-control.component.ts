@@ -185,8 +185,8 @@ export class FieldControlComponent {
   }
 
   /**
-   * Optimize the chosen image (≤1 MB), then upload it to media storage and emit
-   * its URL — or, when signed out, emit it inline as a data URL.
+   * Compress the chosen image (≤1 MB), then upload the file to media storage and
+   * emit its URL — or, when signed out, emit it inline as a data URL.
    */
   protected async emitFile(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
@@ -198,20 +198,19 @@ export class FieldControlComponent {
     }
     this.uploadError.set(null);
     this.optimizing.set(true);
-    let dataUrl: string;
+    let compressed: File;
     try {
-      dataUrl = await this.optimizer.optimize(file);
+      compressed = await this.optimizer.compress(file);
     } catch {
       return; // decode/read failed — leave the current value untouched
     } finally {
       this.optimizing.set(false);
     }
     if (!this.media?.canUpload()) {
-      this.valueChange.emit(dataUrl);
+      this.valueChange.emit(await readAsDataUrl(compressed));
       return;
     }
-    const optimized = await dataUrlToFile(dataUrl, file.name);
-    await this.uploadAndEmit(optimized, 'IMAGE', () => Promise.resolve(dataUrl));
+    await this.uploadAndEmit(compressed, 'IMAGE', () => readAsDataUrl(compressed));
   }
 
   /** Upload the chosen audio file and emit its URL (inline data URL when signed out). */
@@ -274,15 +273,7 @@ export class FieldControlComponent {
   }
 }
 
-/** The optimizer's data URL back as a File, so it can be uploaded. */
-async function dataUrlToFile(dataUrl: string, originalName: string): Promise<File> {
-  const blob = await (await fetch(dataUrl)).blob();
-  const ext = blob.type.split('/')[1]?.replace('jpeg', 'jpg') ?? 'bin';
-  const base = originalName.replace(/\.[^.]+$/, '') || 'image';
-  return new File([blob], `${base}.${ext}`, { type: blob.type });
-}
-
-function readAsDataUrl(file: File): Promise<string> {
+function readAsDataUrl(file: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => (typeof reader.result === 'string' ? resolve(reader.result) : reject());

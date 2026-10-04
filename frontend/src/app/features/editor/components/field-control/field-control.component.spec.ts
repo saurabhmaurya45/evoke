@@ -10,8 +10,9 @@ describe('FieldControlComponent uploads', () => {
   let emitted: unknown[];
   let media: jasmine.SpyObj<EditorMediaService>;
 
-  const PNG_DATA_URL =
-    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+  // What the compressor hands back — the test checks this exact file is uploaded.
+  const COMPRESSED = new File([new Uint8Array([1, 2, 3])], 'me.jpg', { type: 'image/jpeg' });
+  const COMPRESSED_DATA_URL = 'data:image/jpeg;base64,AQID';
 
   function setup(field: Partial<FieldSchema>): void {
     media = jasmine.createSpyObj<EditorMediaService>('EditorMediaService', ['canUpload', 'upload']);
@@ -19,8 +20,8 @@ describe('FieldControlComponent uploads', () => {
       imports: [FieldControlComponent],
       providers: [
         { provide: EditorMediaService, useValue: media },
-        // Skip real canvas work: the "optimized" image is a fixed PNG.
-        { provide: ImageOptimizerService, useValue: { optimize: () => Promise.resolve(PNG_DATA_URL) } },
+        // Skip real canvas work: the compressed image is a fixed file.
+        { provide: ImageOptimizerService, useValue: { compress: () => Promise.resolve(COMPRESSED) } },
       ],
     });
     fixture = TestBed.createComponent(FieldControlComponent);
@@ -55,9 +56,8 @@ describe('FieldControlComponent uploads', () => {
 
     await pick(image());
 
-    expect(media.upload).toHaveBeenCalledWith(jasmine.any(File), 'IMAGE');
-    const sent = media.upload.calls.mostRecent().args[0];
-    expect(sent.type).toBe('image/png');
+    // The compressed file itself — no base64 round trip on the way.
+    expect(media.upload).toHaveBeenCalledWith(COMPRESSED, 'IMAGE');
     expect(emitted).toEqual(['https://s3.example/bucket/public/u/e/image/x.png?sig']);
   });
 
@@ -68,7 +68,7 @@ describe('FieldControlComponent uploads', () => {
     await pick(image());
 
     expect(media.upload).not.toHaveBeenCalled();
-    expect(emitted).toEqual([PNG_DATA_URL]);
+    expect(emitted).toEqual([COMPRESSED_DATA_URL]);
   });
 
   it('shows the error and leaves the value alone when the upload fails', async () => {
@@ -95,7 +95,7 @@ describe('FieldControlComponent uploads', () => {
 
     await pick(image());
 
-    expect(emitted).toEqual([PNG_DATA_URL]);
+    expect(emitted).toEqual([COMPRESSED_DATA_URL]);
     expect(fixture.nativeElement.querySelector('.field__error')).toBeNull();
   });
 

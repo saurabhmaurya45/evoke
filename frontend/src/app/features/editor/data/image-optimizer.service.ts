@@ -13,8 +13,10 @@ const MIN_DIMENSION = 480;
 /**
  * Compresses an uploaded image to fit under {@link MAX_BYTES} while keeping
  * quality as high as possible: it re-encodes at high quality first and only
- * steps quality/scale down when the result is still too large. Used by every
- * image upload so drafts stay small (localStorage / payload friendly).
+ * steps quality/scale down when the result is still too large.
+ *
+ * Returns a file — uploaded to media storage as-is, or read as a data URL only
+ * when the image is kept inline in the draft (signed-out editing).
  *
  * Browser-only (needs canvas). Non-raster or animated types (SVG/GIF) and
  * already-small files are passed through untouched.
@@ -23,30 +25,32 @@ const MIN_DIMENSION = 480;
 export class ImageOptimizerService {
   private readonly window = inject(WINDOW);
 
-  async optimize(file: File): Promise<string> {
+  /** The compressed image as a file — the original when it needs no work. */
+  async compress(file: File): Promise<File> {
     const canCanvas = !!this.window && typeof this.window.document !== 'undefined';
     const raster = /^image\/(jpe?g|png|webp|bmp)$/i.test(file.type);
 
     // Pass through when we can't/shouldn't rasterize, or it's already small.
     if (!canCanvas || !raster || (file.size <= MAX_BYTES && file.type !== 'image/bmp')) {
-      return this.readAsDataUrl(file);
+      return file;
     }
 
     let bitmap: HTMLImageElement;
     try {
       bitmap = await this.loadImage(file);
     } catch {
-      return this.readAsDataUrl(file);
+      return file;
     }
 
     const start = this.fit(bitmap.naturalWidth, bitmap.naturalHeight, MAX_DIMENSION);
     let width = start.width;
     let height = start.height;
     let quality = START_QUALITY;
-    let dataUrl = this.encode(bitmap, width, height, quality);
+    let blob = await this.encode(bitmap, width, height, quality);
+    if (!blob) return file;
 
     // Shrink quality first (cheap, near-lossless), then dimensions, until it fits.
-    while (this.byteLength(dataUrl) > MAX_BYTES) {
+    while (blob.size > MAX_BYTES) {
       if (quality > MIN_QUALITY) {
         quality = Math.max(MIN_QUALITY, quality - 0.08);
       } else if (Math.min(width, height) > MIN_DIMENSION) {
@@ -56,10 +60,11 @@ export class ImageOptimizerService {
       } else {
         break; // Smallest acceptable render — accept whatever we have.
       }
-      dataUrl = this.encode(bitmap, width, height, quality);
+      blob = (await this.encode(bitmap, width, height, quality)) ?? blob;
     }
 
-    return dataUrl;
+    const name = (file.name.replace(/\.[^.]+$/, '') || 'image') + '.jpg';
+    return new File([blob], name, { type: 'image/jpeg' });
   }
 
   private loadImage(file: File): Promise<HTMLImageElement> {
@@ -86,33 +91,20 @@ export class ImageOptimizerService {
     return { width: Math.round(w * scale), height: Math.round(h * scale) };
   }
 
-  private encode(img: HTMLImageElement, width: number, height: number, quality: number): string {
+  private encode(
+    img: HTMLImageElement,
+    width: number,
+    height: number,
+    quality: number,
+  ): Promise<Blob | null> {
     const canvas = this.window!.document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');
     if (!ctx) {
-      return img.src;
+      return Promise.resolve(null);
     }
     ctx.drawImage(img, 0, 0, width, height);
-    return canvas.toDataURL('image/jpeg', quality);
-  }
-
-  /** Approximate byte size of a base64 data URL without decoding it. */
-  private byteLength(dataUrl: string): number {
-    const comma = dataUrl.indexOf(',');
-    const base64 = comma >= 0 ? dataUrl.slice(comma + 1) : dataUrl;
-    const padding = base64.endsWith('==') ? 2 : base64.endsWith('=') ? 1 : 0;
-    return Math.floor((base64.length * 3) / 4) - padding;
-  }
-
-  private readAsDataUrl(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () =>
-        typeof reader.result === 'string' ? resolve(reader.result) : reject(new Error('read'));
-      reader.onerror = () => reject(new Error('read'));
-      reader.readAsDataURL(file);
-    });
+    return new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', quality));
   }
 }
