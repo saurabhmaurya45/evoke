@@ -4,7 +4,9 @@ import asyncio
 import random
 import re
 import string
+import unicodedata
 import uuid
+from typing import Any
 
 from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
@@ -38,6 +40,79 @@ def _slugify(title: str) -> str:
 
 def _random_suffix(length: int = 6) -> str:
     return "".join(random.choices(_SLUG_SUFFIX_ALPHABET, k=length))
+
+
+# ---------------------------------------------------------------------------
+# Published links. A draft keeps the random link it was created with; on first
+# publish it gets a readable one from the couple's names — `arjun-and-priya-k7x2`.
+# The code is always added (not only on a clash) so a couple's link can't be
+# guessed from their names, and so there's no counting `-2`, `-3`… to walk
+# through other couples' invitations.
+# ---------------------------------------------------------------------------
+
+_PUBLISHED_CODE_LENGTH = 4
+_PUBLISHED_SLUG_ATTEMPTS = 8
+# Name fields, most preferred first: a first-name field when the template has
+# one (Temple Bells' `groomShort`), else the name field every template has.
+_GROOM_KEYS = ("groomShort", "groomName")
+_BRIDE_KEYS = ("brideShort", "brideName")
+
+
+def _find_name(data: dict[str, Any], keys: tuple[str, ...]) -> str:
+    """The first non-empty value for any of `keys` in any section of draft data."""
+    for key in keys:
+        for section in data.values():
+            if isinstance(section, dict):
+                value = section.get(key)
+                if isinstance(value, str) and value.strip():
+                    return value
+    return ""
+
+
+def _name_part(name: str) -> str:
+    """First name as ASCII slug text: "Zoë Mehra" → "zoe". Names written only in
+    a non-Latin script (e.g. Devanagari) have no ASCII form and give ""."""
+    ascii_name = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
+    words = re.findall(r"[a-z0-9]+", ascii_name.lower())
+    return words[0][:24] if words else ""
+
+
+def published_slug_base(data: dict[str, Any]) -> str | None:
+    """`arjun-and-priya` from a draft's couple names, or None without both."""
+    groom = _name_part(_find_name(data, _GROOM_KEYS))
+    bride = _name_part(_find_name(data, _BRIDE_KEYS))
+    if not groom or not bride:
+        return None
+    return f"{groom}-and-{bride}"
+
+
+def _is_draft_slug(event: Event) -> bool:
+    """Still the random link from creation (`{title}-xxxxxx`)? Published links
+    are never renamed again."""
+    prefix = _slugify(event.title)[:140] + "-"
+    suffix = event.slug[len(prefix) :]
+    return event.slug.startswith(prefix) and len(suffix) == 6 and suffix.isalnum()
+
+
+async def assign_published_slug(db: AsyncSession, event: Event) -> None:
+    """On first publish, swap the event's random draft link for a readable one.
+    Keeps the current link when the draft has no usable names, or if every
+    attempt is taken (practically impossible with ~1.7M codes per name pair).
+    Call before committing the publish."""
+    if not _is_draft_slug(event):
+        return
+    draft = (await db.execute(select(Draft).where(Draft.event_id == event.id))).scalar_one_or_none()
+    base = published_slug_base(draft.data if draft else {})
+    if base is None:
+        return
+    for _ in range(_PUBLISHED_SLUG_ATTEMPTS):
+        candidate = f"{base}-{_random_suffix(_PUBLISHED_CODE_LENGTH)}"
+        # Checked first so a clash just picks another code; the unique index on
+        # events.slug remains the last-resort guard.
+        taken = await db.scalar(select(func.count()).where(Event.slug == candidate))
+        if not taken:
+            event.slug = candidate
+            return
 
 
 async def create_event(db: AsyncSession, owner: User, data: EventCreate) -> Event:
@@ -231,9 +306,7 @@ async def resolve_event_template(db: AsyncSession, event: Event) -> Template | N
         if template:
             return template
 
-    draft = (
-        await db.execute(select(Draft).where(Draft.event_id == event.id))
-    ).scalar_one_or_none()
+    draft = (await db.execute(select(Draft).where(Draft.event_id == event.id))).scalar_one_or_none()
     if draft and draft.template_id:
         template = await db.get(Template, draft.template_id)
         if template:
@@ -265,6 +338,7 @@ async def publish_event(db: AsyncSession, event_id: uuid.UUID, current_user: Use
                 raise PaymentRequiredError(price.amount_minor, price.currency)
 
     event.status = EventStatus.PUBLISHED
+    await assign_published_slug(db, event)
     await log_action(
         db,
         action="EVENT_PUBLISHED",
