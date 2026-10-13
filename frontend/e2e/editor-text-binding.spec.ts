@@ -37,6 +37,8 @@ async function previewFrame(page: Page): Promise<Frame> {
  */
 async function previewText(frame: Frame): Promise<string> {
   const text = await frame.evaluate(() => {
+    // The template can be mid-reload (no <body> yet) — treat as no text; callers poll.
+    if (!document.body) return '';
     const out: string[] = [];
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     for (let node = walker.nextNode(); node; node = walker.nextNode()) {

@@ -3,6 +3,7 @@ import {
   Component,
   DestroyRef,
   OnInit,
+  effect,
   inject,
   input,
   signal,
@@ -15,6 +16,7 @@ import { WINDOW } from '../../../../core/tokens/window.token';
 import { PREVIEW_PROTOCOL_VERSION, PREVIEW_READY, PREVIEW_UPDATE } from '../../../editor/data/preview-protocol';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { SeoService } from '../../../../core/services/seo.service';
+import { environment } from '../../../../../environments/environment';
 
 interface InvitationApiOut {
   eventId: string;
@@ -28,6 +30,14 @@ interface InvitationApiOut {
 }
 
 type PageState = 'loading' | 'ready' | 'draft-forbidden' | 'not-found' | 'error';
+
+/**
+ * Where the "Made with theinvitely.in" pill leads. Tagged so GA4 shows how many
+ * visitors (and published invitations) come from guests of other invitations.
+ */
+const MADE_WITH_URL = `${environment.appUrl}/?utm_source=invitation&utm_medium=referral&utm_campaign=made_with`;
+/** Let the invitation make its own first impression before the pill appears. */
+const MADE_WITH_DELAY_MS = 2500;
 
 const REQUEST_TIMEOUT_MS = 15000;
 const MAX_RETRIES = 3;
@@ -84,6 +94,28 @@ function isTransient(err: unknown): boolean {
             sandbox="allow-scripts allow-same-origin"
           ></iframe>
         }
+        @if (!madeWithDismissed()) {
+          <div class="made-with" [class.made-with--in]="madeWithShown()">
+            <a
+              class="made-with__link"
+              [href]="madeWithUrl"
+              target="_blank"
+              rel="noopener"
+              [attr.tabindex]="madeWithShown() ? null : -1"
+            >
+              Made with <strong>theinvitely.in</strong> ✨
+            </a>
+            <button
+              type="button"
+              class="made-with__close"
+              aria-label="Hide"
+              [attr.tabindex]="madeWithShown() ? null : -1"
+              (click)="madeWithDismissed.set(true)"
+            >
+              ×
+            </button>
+          </div>
+        }
       }
     }
     @if (state() === 'loading' || state() === 'ready') {
@@ -99,6 +131,64 @@ function isTransient(err: unknown): boolean {
     }
   `,
   styles: [`
+    /* ---------- "Made with theinvitely.in": small, bottom-left, dismissable.
+       Bottom-left because templates put their own controls (music, RSVP)
+       bottom-right or centred. ---------- */
+    .made-with {
+      position: absolute;
+      left: 12px;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      border-radius: 999px;
+      background: rgba(14, 10, 6, 0.62);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      font: 500 11.5px/1 Manrope, system-ui, sans-serif;
+      letter-spacing: 0.01em;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .made-with--in {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+    .made-with__link {
+      padding: 8px 4px 8px 12px;
+      color: #f3ecdd;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .made-with__link strong {
+      color: #e6c78a;
+      font-weight: 700;
+    }
+    .made-with__link:hover strong {
+      text-decoration: underline;
+    }
+    .made-with__close {
+      padding: 6px 10px 6px 6px;
+      border: 0;
+      background: none;
+      color: rgba(243, 236, 221, 0.6);
+      font-size: 15px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .made-with__close:hover {
+      color: #f3ecdd;
+    }
+    .made-with__link:focus-visible,
+    .made-with__close:focus-visible {
+      outline: 2px solid #d4af37;
+      outline-offset: 2px;
+      border-radius: 999px;
+    }
     :host {
       position: relative;
       display: block;
@@ -211,6 +301,19 @@ export class InvitationPageComponent implements OnInit {
   protected readonly safeSrc = signal<SafeResourceUrl | null>(null);
   /** True once the template iframe has received the invitation data. */
   protected readonly frameReady = signal(false);
+
+  protected readonly madeWithUrl = MADE_WITH_URL;
+  /** The pill fades in a moment after the invitation is ready. */
+  protected readonly madeWithShown = signal(false);
+  /** The guest closed it — gone for the rest of this visit. */
+  protected readonly madeWithDismissed = signal(false);
+
+  /** Fade the pill in MADE_WITH_DELAY_MS after the invitation has rendered. */
+  private readonly revealMadeWith = effect((onCleanup) => {
+    if (!this.frameReady() || !this.window) return;
+    const id = this.window.setTimeout(() => this.madeWithShown.set(true), MADE_WITH_DELAY_MS);
+    onCleanup(() => this.window?.clearTimeout(id));
+  });
 
   private frameEl: HTMLIFrameElement | null = null;
   private pendingData: Record<string, unknown> | null = null;
