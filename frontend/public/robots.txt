@@ -17,7 +17,7 @@ Disallow: /email-verified
 Disallow: /auth/
 
 # /i/ (couples' invitations) and /preview/ are deliberately NOT disallowed:
-# they carry an X-Robots-Tag noindex header (netlify.toml), and a crawler that
+# they carry an X-Robots-Tag noindex header (vercel.json), and a crawler that
 # is blocked here never fetches the page, so it would never see that header.
 
 # Rendered invitation templates are demo content, not pages we want ranking

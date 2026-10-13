@@ -46,4 +46,39 @@
       <button type="button" class="gallery__reset" (click)="clearFilters()">Clear filters</button>
     </p>
   }
+
+  <section class="info">
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li>
+        <strong>Pick a design.</strong> Preview any template live — the same page your guests will
+        see, with its music, animations and gallery.
+      </li>
+      <li>
+        <strong>Add your details.</strong> Names, date, venue, events, photos and music. The preview
+        updates as you type, and nothing needs designing or printing.
+      </li>
+      <li>
+        <strong>Share one link.</strong> Publish and send the link on WhatsApp, Instagram or SMS.
+        Guests open it in their browser — no app to install — and RSVP from the page.
+      </li>
+    </ol>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      @for (faq of faqs; track faq.question) {
+        <details>
+          <summary>{{ faq.question }}</summary>
+          <p>{{ faq.answer }}</p>
+        </details>
+      }
+    </div>
+
+    <h2>Invitations for every tradition</h2>
+    <ul class="links">
+      @for (link of traditionLinks; track link.path) {
+        <li><a [routerLink]="link.path">{{ link.label }}</a></li>
+      }
+    </ul>
+  </section>
 </section>

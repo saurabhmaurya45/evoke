@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { TemplateCatalogService } from '../../data/template-catalog.service';
 import type { CatalogTemplate } from '../../data/template-catalog.service';
+import { RouterLink } from '@angular/router';
 import { TemplateCardComponent } from '../../components/template-card/template-card.component';
 import { SeoService } from '../../../../core/services/seo.service';
 import {
@@ -17,6 +18,48 @@ import {
 } from '../../../../core/constants/seo.constants';
 import { templateSeoBySlotId } from '../../data/template-seo.data';
 import { environment } from '../../../../../environments/environment';
+
+/** Questions answered on the page — also emitted as FAQPage structured data. */
+const GALLERY_FAQS: readonly { question: string; answer: string }[] = [
+  {
+    question: 'What is a wedding invitation website?',
+    answer:
+      'It is your invitation as a single web page instead of a printed or PDF card. Guests open one link and see the couple, every function with its date, time and venue map, your photos and music, a countdown, and a way to RSVP.',
+  },
+  {
+    question: 'Can I see a template with my own details before publishing?',
+    answer:
+      'Yes. Every template opens in a live editor: as you type names, dates and venues the preview updates instantly, so you see exactly what your guests will get before you publish.',
+  },
+  {
+    question: 'Do guests need to install an app?',
+    answer:
+      'No. The invitation is a link that opens in any phone or computer browser, so it works for every guest — including elders who only use WhatsApp.',
+  },
+  {
+    question: 'How do guests RSVP?',
+    answer:
+      'From the invitation itself. Guests fill in their name and which functions they will attend, and the reply comes to you on WhatsApp.',
+  },
+  {
+    question: 'Are the templates free?',
+    answer:
+      'Several designs are free to publish, and premium designs show their price on the template card. You can preview and personalise any template before deciding.',
+  },
+];
+
+/** Tradition and occasion pages, linked from the gallery for guests browsing by community. */
+const TRADITION_LINKS: readonly { path: string; label: string }[] = [
+  { path: '/wedding-invitations', label: 'Wedding Invitations' },
+  { path: '/wedding-invitations/hindu', label: 'Hindu Wedding Invitations' },
+  { path: '/wedding-invitations/punjabi', label: 'Punjabi Wedding Invitations' },
+  { path: '/wedding-invitations/sikh', label: 'Sikh (Anand Karaj) Invitations' },
+  { path: '/wedding-invitations/muslim-nikah', label: 'Nikah Invitations' },
+  { path: '/wedding-invitations/south-indian', label: 'South Indian Wedding Invitations' },
+  { path: '/wedding-invitations/christian', label: 'Christian Wedding Invitations' },
+  { path: '/engagement-invitations', label: 'Engagement Invitations' },
+  { path: '/blog', label: 'Invitation wording & ideas' },
+];
 
 /** 'All' plus every category present in the catalogue. */
 type Filter = string;
@@ -29,7 +72,7 @@ type Filter = string;
 @Component({
   selector: 'app-template-gallery',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [TemplateCardComponent],
+  imports: [TemplateCardComponent, RouterLink],
   templateUrl: './template-gallery.component.html',
   styleUrl: './template-gallery.component.scss',
 })
@@ -48,6 +91,9 @@ export class TemplateGalleryComponent implements OnInit {
 
   /** Prices render only once they come from the backend — never the ₹0 seed. */
   protected readonly pricesKnown = this.catalog.pricesKnown;
+
+  protected readonly faqs = GALLERY_FAQS;
+  protected readonly traditionLinks = TRADITION_LINKS;
 
   protected readonly activeFilter = signal<Filter>('All');
   protected readonly query = signal('');
@@ -100,6 +146,7 @@ export class TemplateGalleryComponent implements OnInit {
           })),
         },
       },
+      this.seo.faqSchema(GALLERY_FAQS),
       this.seo.breadcrumbSchema([
         { name: 'Home', path: '/' },
         { name: 'Templates', path: '/templates' },
