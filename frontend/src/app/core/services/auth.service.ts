@@ -4,6 +4,7 @@ import type { AuthChangeEvent, AuthError, Provider, Session } from '@supabase/su
 import { catchError, firstValueFrom, of, timeout } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { SupabaseClientService } from './supabase-client.service';
+import { AnalyticsService } from './analytics.service';
 
 export type SocialProvider = 'google' | 'apple' | 'facebook' | 'github' | 'microsoft';
 export type AuthErrorCode =
@@ -60,6 +61,7 @@ interface CurrentUserResponse {
 export class AuthService {
   private readonly supabase = inject(SupabaseClientService).client;
   private readonly http = inject(HttpClient);
+  private readonly analytics = inject(AnalyticsService);
 
   private readonly _session = signal<AuthSession | null>(null, {
     // Structural equality: a session rebuilt from the same token/user is not a change —
@@ -147,6 +149,7 @@ export class AuthService {
     if (error) {
       return { ok: false, error: this.mapError(error) };
     }
+    this.analytics.track('sign_up', { method: 'email' });
     if (data.session) {
       await this.handleAuthChange('SIGNED_IN', data.session);
       // Best-effort: seed the profile fields already collected on the signup form.
@@ -271,6 +274,9 @@ export class AuthService {
     if (event === 'TOKEN_REFRESHED' && current) {
       this._session.set({ token: session.access_token, expiresAt: session.expires_at, user: current.user });
       return;
+    }
+    if (event === 'SIGNED_IN' && !current) {
+      this.analytics.track('login');
     }
     const profile = await this.getOrFetchProfile(session);
     this._session.set({

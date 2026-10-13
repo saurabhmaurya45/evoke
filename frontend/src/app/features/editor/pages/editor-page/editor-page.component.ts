@@ -9,6 +9,7 @@ import {
   untracked,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 import { FormEngineComponent } from '../../components/form-engine/form-engine.component';
 import { TemplateRendererComponent } from '../../components/template-renderer/template-renderer.component';
 import { TemplateEditorStore } from '../../data/template-editor.store';
@@ -56,6 +57,7 @@ export class EditorPageComponent {
   private readonly migrations = inject(TemplateMigrationService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly auth = inject(AuthService);
+  private readonly analytics = inject(AnalyticsService);
   protected readonly store = inject(TemplateEditorStore);
 
   /** Route param `:templateId`. */
@@ -93,6 +95,7 @@ export class EditorPageComponent {
           description: `Personalise the ${schema.name} invitation and publish your wedding website.`,
           robots: 'noindex, nofollow',
         });
+        this.analytics.track('begin_editing', { content_name: schema.name });
         // When arriving from the dashboard "Edit" link, the event UUID is passed
         // as ?eventId= so the draft can be loaded even if the localStorage cache
         // was cleared (different device, fresh browser, etc.).

@@ -9,6 +9,9 @@ export const environment: AppEnvironment = {
   // a staging Supabase project, not the dev one in environment.ts.
   supabaseUrl: 'https://CHANGE_ME.supabase.co',
   supabasePublishableKey: 'CHANGE_ME',
+  // Analytics only ever runs in production.
+  ga4MeasurementId: null,
+  metaPixelId: null,
   features: {
     analytics: true,
     themeToggle: true,

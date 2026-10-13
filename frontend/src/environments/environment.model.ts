@@ -10,6 +10,10 @@ export interface AppEnvironment {
   /** Supabase project URL and publishable (anon) key — safe to expose client-side. */
   readonly supabaseUrl: string;
   readonly supabasePublishableKey: string;
+  /** GA4 measurement ID (`G-…`); null disables Google Analytics. */
+  readonly ga4MeasurementId: string | null;
+  /** Meta (Facebook/Instagram) Pixel ID; null disables the pixel. */
+  readonly metaPixelId: string | null;
   readonly features: {
     readonly analytics: boolean;
     readonly themeToggle: boolean;

@@ -29,7 +29,7 @@ export const PRIVACY_POLICY: LegalDocument = {
   title: 'Privacy Policy',
   description:
     'How theinvitely.in collects, uses, and shares information when you create an account, design an invitation, or visit a published page.',
-  updated: UPDATED,
+  updated: '13 October 2026',
   intro:
     'This policy explains what theinvitely.in collects when you create an account, design an invitation website, pay to publish it, or open a page we host. It covers theinvitely.in and the invitation pages created with it.',
   relatedPath: '/terms',
@@ -64,6 +64,14 @@ export const PRIVACY_POLICY: LegalDocument = {
       ],
     },
     {
+      heading: 'Analytics and advertising cookies',
+      paragraphs: [
+        'If you choose “Accept” on our cookie notice, we use Google Analytics and the Meta (Facebook/Instagram) Pixel to understand how people find theinvitely.in and to measure our ads — for example, which ad led to a visit, and whether that visit ended with an invitation being published. These services set cookies and receive technical information such as pages viewed, device and browser type, and an approximate location.',
+        'If you choose “Decline”, or never answer, neither service is loaded. You can change your mind by clearing this site’s data in your browser, which shows the notice again.',
+        'These tools are never loaded on published invitation pages, so guests who open an invitation are not tracked, and we never send your invitation content or guest RSVPs to them.',
+      ],
+    },
+    {
       heading: 'How we use information',
       paragraphs: ['We use this information to:'],
       bullets: [
@@ -95,6 +103,7 @@ export const PRIVACY_POLICY: LegalDocument = {
       bullets: [
         'Supabase, which provides sign-in and stores account data.',
         'Razorpay, which processes payments.',
+        'Google (Analytics) and Meta (Pixel), only if you accept analytics cookies — see “Analytics and advertising cookies” above.',
         'The hosting providers that serve the website and published invitations.',
         'Guests who open an invitation you have published.',
         'Authorities, when the law requires us to disclose information.',

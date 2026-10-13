@@ -14,6 +14,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { EMPTY, catchError, switchMap, take, takeWhile, timer } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 import { SeoService } from '../../../../core/services/seo.service';
 import {
   PaymentApiService,
@@ -43,6 +44,7 @@ const POLL_ATTEMPTS = 10;
 export class PaymentResultPageComponent {
   private readonly api = inject(PaymentApiService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly analytics = inject(AnalyticsService);
 
   readonly status = input('');
   readonly paymentId = input('');
@@ -95,7 +97,9 @@ export class PaymentResultPageComponent {
 
     if (!isUuid(paymentId)) {
       // Free publish, or a callback we couldn't match to a payment.
-      this.state.set(status === 'success' && isUuid(eventId) ? 'success' : 'failed');
+      const published = status === 'success' && isUuid(eventId);
+      this.state.set(published ? 'success' : 'failed');
+      if (published) this.analytics.trackPublished(eventId, 0, 'INR');
       return;
     }
 
@@ -112,6 +116,11 @@ export class PaymentResultPageComponent {
           this.payment.set(payment);
           if (payment.status === 'PAID') {
             this.state.set('success');
+            this.analytics.trackPublished(
+              payment.eventId,
+              payment.amountMinor / 100,
+              payment.currency || 'INR',
+            );
             this.loadQuote(payment.eventId);
           } else if (status !== 'success' || payment.status !== 'CREATED') {
             this.state.set('failed');

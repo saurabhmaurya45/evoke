@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 import { SeoService } from '../../../../core/services/seo.service';
 import { WINDOW } from '../../../../core/tokens/window.token';
 import {
@@ -40,6 +41,7 @@ export class CheckoutPageComponent {
   private readonly api = inject(PaymentApiService);
   private readonly router = inject(Router);
   private readonly window = inject(WINDOW);
+  private readonly analytics = inject(AnalyticsService);
   private readonly destroyRef = inject(DestroyRef);
 
   /** Query param `?site=` — the event id. */
@@ -78,6 +80,10 @@ export class CheckoutPageComponent {
     }
     this.state.set('processing');
     this.error.set('');
+    this.analytics.track('begin_checkout', {
+      value: q.paymentRequired ? q.amountMinor / 100 : 0,
+      currency: q.currency || 'INR',
+    });
     this.api
       .checkout(q.eventId)
       .pipe(takeUntilDestroyed(this.destroyRef))
