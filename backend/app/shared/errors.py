@@ -8,6 +8,8 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
+from app.shared.observability import request_id_ctx
+
 logger = logging.getLogger("evoke.errors")
 
 
@@ -88,6 +90,9 @@ class RequestIdMiddleware:
         headers = dict(scope.get("headers") or [])
         request_id = headers.get(b"x-request-id", b"").decode() or str(uuid.uuid4())
         scope.setdefault("state", {})["request_id"] = request_id
+        # Set for this request's asyncio task so every log line emitted while handling
+        # it — in any module, not just this one — carries the same request ID.
+        token = request_id_ctx.set(request_id)
 
         async def send_with_request_id(message: Message) -> None:
             if message["type"] == "http.response.start":
@@ -97,7 +102,10 @@ class RequestIdMiddleware:
                 ]
             await send(message)
 
-        await self.app(scope, receive, send_with_request_id)
+        try:
+            await self.app(scope, receive, send_with_request_id)
+        finally:
+            request_id_ctx.reset(token)
 
 
 def _error_body(code: str, message: str, request_id: str, details: dict[str, Any]) -> dict:
@@ -142,7 +150,7 @@ def register_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(Exception)
     async def handle_unexpected_error(request: Request, exc: Exception) -> JSONResponse:
         request_id = getattr(request.state, "request_id", "unknown")
-        logger.exception("Unhandled exception", extra={"request_id": request_id})
+        logger.exception("Unhandled exception")
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content=_error_body(

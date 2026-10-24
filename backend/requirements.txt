@@ -14,3 +14,5 @@ httpx>=0.27
 jsonschema>=4.23
 bleach>=6.1
 boto3>=1.34
+sentry-sdk[fastapi]>=2.0
+axiom-py>=0.15

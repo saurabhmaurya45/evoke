@@ -12,6 +12,14 @@ import os
 import uuid
 from collections.abc import AsyncGenerator
 
+# Force-override before any Settings() is built: pydantic-settings reads real env vars
+# ahead of the local .env file, so without this, a developer's own Sentry/Axiom
+# credentials in .env would mean every test run ships test-triggered errors/logs to
+# their real dashboards and burns real quota.
+os.environ["SENTRY_DSN"] = ""
+os.environ["AXIOM_TOKEN"] = ""
+os.environ["AXIOM_DATASET"] = ""
+
 import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient

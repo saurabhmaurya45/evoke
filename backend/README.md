@@ -138,6 +138,29 @@ International cards such as `4242 4242 4242 4242` are rejected unless internatio
 payments are enabled on the Razorpay account, and Razorpay rejects obvious dummy
 mobile numbers (`9999999999`).
 
+## Observability
+
+- **Logs:** stdlib `logging`, configured in `app/shared/observability.py`. Every log
+  line is tagged `[req=<request-id>]`, correlating it with the `requestId` in the error
+  envelope a user might report. On Vercel, stdout/stderr logs are ephemeral (short
+  retention, no durable store) — set `AXIOM_TOKEN` / `AXIOM_DATASET` to also ship every
+  log line to [Axiom](https://axiom.co) (free tier: ~500GB/month ingest). Unset means
+  logs stay local-only, same optional pattern as Razorpay/B2.
+- **Errors:** set `SENTRY_DSN` ([sentry.io](https://sentry.io), free tier: 5k
+  events/month) to report unhandled exceptions with full stack traces and alerting.
+  Unset means `init_sentry()` is a no-op and unexpected 500s are only visible in
+  whatever log sink is configured above. `SENTRY_TRACES_SAMPLE_RATE` controls
+  performance-trace sampling (default `0.0`; traces are a separate, smaller quota from
+  error events).
+- **Audit trail:** `app/shared/audit.py`'s `audit_logs` table records domain actions
+  (`EVENT_CREATED`, `PAYMENT_PAID`, `TEMPLATE_UPDATED`, etc.) as part of the same
+  transaction as the change they describe. `GET /v1/admin/audit-logs` (admin-only,
+  paginated, filterable by `resource_type` / `actor_user_id`) reads it back — previously
+  write-only, inspectable only via direct SQL.
+- **Health:** `GET /health` is a pure liveness check; `GET /ready` additionally verifies
+  Postgres connectivity (`SELECT 1`). Neither checks Supabase Auth, B2, or Razorpay
+  reachability.
+
 ## Tests
 
 Tests never touch a real Supabase project or issue real JWTs — auth is exercised

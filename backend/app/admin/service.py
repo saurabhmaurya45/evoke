@@ -1,12 +1,21 @@
 from __future__ import annotations
 
+import uuid
+
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.admin.schemas import AdminCustomerOut, AdminMetricsOut, AdminPaymentOut, AdminSiteOut
+from app.admin.schemas import (
+    AdminAuditLogOut,
+    AdminCustomerOut,
+    AdminMetricsOut,
+    AdminPaymentOut,
+    AdminSiteOut,
+)
 from app.events.models import Event, EventStatus
 from app.payments.models import Payment, PaymentStatus
 from app.payments.schemas import PaymentOut
+from app.shared.audit import AuditLog
 from app.shared.pagination import Page, PageParams, make_page
 from app.templates.models import Template
 from app.users.models import User
@@ -137,3 +146,48 @@ async def get_metrics(db: AsyncSession) -> AdminMetricsOut:
         draft_count=draft_count,
         archived_count=archived_count,
     )
+
+
+async def list_audit_logs(
+    db: AsyncSession,
+    params: PageParams,
+    *,
+    resource_type: str | None = None,
+    actor_user_id: uuid.UUID | None = None,
+) -> Page[AdminAuditLogOut]:
+    """The append-only `audit_logs` trail (`app.shared.audit.log_action`), newest
+    first. Write-only until now — this is the only way to read it back short of a
+    direct DB query."""
+    filters = []
+    if resource_type is not None:
+        filters.append(AuditLog.resource_type == resource_type)
+    if actor_user_id is not None:
+        filters.append(AuditLog.actor_user_id == actor_user_id)
+
+    total = (
+        await db.execute(select(func.count()).select_from(AuditLog).where(*filters))
+    ).scalar_one()
+    rows = (
+        await db.execute(
+            select(AuditLog, User.email)
+            .outerjoin(User, User.id == AuditLog.actor_user_id)
+            .where(*filters)
+            .order_by(AuditLog.created_at.desc())
+            .offset((params.page - 1) * params.page_size)
+            .limit(params.page_size)
+        )
+    ).all()
+    items = [
+        AdminAuditLogOut(
+            id=log.id,
+            actor_user_id=log.actor_user_id,
+            actor_email=email,
+            action=log.action,
+            resource_type=log.resource_type,
+            resource_id=log.resource_id,
+            metadata=log.metadata_,
+            created_at=log.created_at,
+        )
+        for log, email in rows
+    ]
+    return make_page(items, total, params)

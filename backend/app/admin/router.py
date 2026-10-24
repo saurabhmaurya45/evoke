@@ -1,8 +1,22 @@
-from fastapi import APIRouter, Depends
+import uuid
+
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.admin.schemas import AdminCustomerOut, AdminMetricsOut, AdminPaymentOut, AdminSiteOut
-from app.admin.service import get_metrics, list_all_payments, list_all_sites, list_customers
+from app.admin.schemas import (
+    AdminAuditLogOut,
+    AdminCustomerOut,
+    AdminMetricsOut,
+    AdminPaymentOut,
+    AdminSiteOut,
+)
+from app.admin.service import (
+    get_metrics,
+    list_all_payments,
+    list_all_sites,
+    list_audit_logs,
+    list_customers,
+)
 from app.shared.auth.dependencies import require_role
 from app.shared.database import get_db
 from app.shared.envelope import Envelope
@@ -47,3 +61,21 @@ async def list_payments_route(
 ) -> Page[AdminPaymentOut]:
     """Every payment across the platform, newest first (all statuses)."""
     return await list_all_payments(db, params)
+
+
+@router.get("/audit-logs", response_model=Page[AdminAuditLogOut])
+async def list_audit_logs_route(
+    resource_type: str | None = Query(
+        None, description="Filter to one resource type, e.g. 'event' or 'payment'."
+    ),
+    actor_user_id: uuid.UUID | None = Query(None, description="Filter to one actor's actions."),
+    params: PageParams = Depends(page_params),
+    admin_user: User = Depends(require_role(UserRole.ADMIN)),
+    db: AsyncSession = Depends(get_db),
+) -> Page[AdminAuditLogOut]:
+    """The append-only audit trail (every `EVENT_*`, `PAYMENT_*`, `TEMPLATE_*`, etc.
+    action recorded by `app.shared.audit.log_action`), newest first. Previously
+    write-only — this is the first endpoint that surfaces it through the API."""
+    return await list_audit_logs(
+        db, params, resource_type=resource_type, actor_user_id=actor_user_id
+    )
