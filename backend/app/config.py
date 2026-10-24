@@ -35,7 +35,9 @@ class Settings(BaseSettings):
     # Public URL of this API — Razorpay redirects the browser back to it after payment.
     api_base_url: str = "http://localhost:8000"
     frontend_base_url: str = "http://localhost:4200"
-    # Razorpay rejects payment links that expire in under 15 minutes.
+    # Razorpay rejects payment links that expire in under 15 minutes. Values below
+    # app.payments.service._MIN_EXPIRY_MINUTES (20) are floored there, not here, so
+    # that margin lives in one place next to the constant it protects.
     payment_link_expiry_minutes: int = 30
 
     # Backblaze B2 (S3-compatible), single private bucket for all media. Two
