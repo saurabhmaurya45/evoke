@@ -1,26 +1,30 @@
-import logging
-
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.admin.router import router as admin_router
-from app.auth.router import router as auth_router
 from app.config import get_settings
-from app.drafts.router import router as drafts_router
-from app.events.router import router as events_router
-from app.invitation.router import router as invitation_router
-from app.media.router import router as media_router
-from app.payments.router import router as payments_router
-from app.shared.database import get_db
-from app.shared.errors import RequestIdMiddleware, register_error_handlers
-from app.templates.router import router as templates_router
-from app.users.router import router as users_router
+from app.shared.observability import configure_logging, init_sentry
 
 settings = get_settings()
 
-logging.basicConfig(level=settings.log_level)
+# Must run before any other app module's `logging.getLogger(...)` calls emit, and
+# before Sentry (which hooks the logging module) — hence first, ahead of router
+# imports below.
+configure_logging(settings)
+init_sentry(settings)
+
+from app.admin.router import router as admin_router  # noqa: E402
+from app.auth.router import router as auth_router  # noqa: E402
+from app.drafts.router import router as drafts_router  # noqa: E402
+from app.events.router import router as events_router  # noqa: E402
+from app.invitation.router import router as invitation_router  # noqa: E402
+from app.media.router import router as media_router  # noqa: E402
+from app.payments.router import router as payments_router  # noqa: E402
+from app.shared.database import get_db  # noqa: E402
+from app.shared.errors import RequestIdMiddleware, register_error_handlers  # noqa: E402
+from app.templates.router import router as templates_router  # noqa: E402
+from app.users.router import router as users_router  # noqa: E402
 
 app = FastAPI(
     title="Evoke API",

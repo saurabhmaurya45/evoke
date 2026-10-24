@@ -50,6 +50,17 @@ class Settings(BaseSettings):
     b2_consumer_key_id: str | None = None
     b2_consumer_key_secret: str | None = None
 
+    # Sentry (error tracking). Unset -> init_observability() skips Sentry entirely,
+    # same "optional, no-op if unset" pattern as Razorpay/B2 above.
+    sentry_dsn: str | None = None
+    # Fraction of transactions traced for performance monitoring, not just errors.
+    # Kept low by default since it's a separate, smaller quota than error events.
+    sentry_traces_sample_rate: float = 0.0
+
+    # Axiom (log shipping). Both unset -> logs stay local-only (stdout), same pattern.
+    axiom_token: str | None = None
+    axiom_dataset: str | None = None
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
