@@ -35,6 +35,12 @@ logger = logging.getLogger("evoke.payments")
 # Don't hand out a link that will expire while the user is still on Razorpay's page.
 _REUSE_MIN_REMAINING = timedelta(minutes=5)
 
+# Razorpay hard-rejects `expire_by` under 15 minutes out ("timestamp must be atleast 15
+# minutes in future"). Enforce a few minutes of margin above that floor so request/DB
+# latency between computing this timestamp and Razorpay receiving it can never tip the
+# value under 15 — independent of whatever `payment_link_expiry_minutes` is configured to.
+_MIN_EXPIRY_MINUTES = 20
+
 
 async def _event_and_template(
     db: AsyncSession, user: User, event_id: uuid.UUID, *, lock: bool = False
@@ -112,7 +118,8 @@ async def start_checkout(
 
     razorpay = require_client(client)
     settings = get_settings()
-    expires_at = now + timedelta(minutes=settings.payment_link_expiry_minutes)
+    expiry_minutes = max(settings.payment_link_expiry_minutes, _MIN_EXPIRY_MINUTES)
+    expires_at = now + timedelta(minutes=expiry_minutes)
 
     payment = Payment(
         event_id=event.id,

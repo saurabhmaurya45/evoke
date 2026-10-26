@@ -35,7 +35,9 @@ class Settings(BaseSettings):
     # Public URL of this API — Razorpay redirects the browser back to it after payment.
     api_base_url: str = "http://localhost:8000"
     frontend_base_url: str = "http://localhost:4200"
-    # Razorpay rejects payment links that expire in under 15 minutes.
+    # Razorpay rejects payment links that expire in under 15 minutes. Values below
+    # app.payments.service._MIN_EXPIRY_MINUTES (20) are floored there, not here, so
+    # that margin lives in one place next to the constant it protects.
     payment_link_expiry_minutes: int = 30
 
     # Backblaze B2 (S3-compatible), single private bucket for all media. Two
@@ -49,6 +51,17 @@ class Settings(BaseSettings):
     b2_producer_key_secret: str | None = None
     b2_consumer_key_id: str | None = None
     b2_consumer_key_secret: str | None = None
+
+    # Sentry (error tracking). Unset -> init_observability() skips Sentry entirely,
+    # same "optional, no-op if unset" pattern as Razorpay/B2 above.
+    sentry_dsn: str | None = None
+    # Fraction of transactions traced for performance monitoring, not just errors.
+    # Kept low by default since it's a separate, smaller quota than error events.
+    sentry_traces_sample_rate: float = 0.0
+
+    # Axiom (log shipping). Both unset -> logs stay local-only (stdout), same pattern.
+    axiom_token: str | None = None
+    axiom_dataset: str | None = None
 
     @property
     def cors_origin_list(self) -> list[str]:

@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from typing import Any
 
 from app.events.models import EventStatus, EventType
 from app.payments.schemas import PaymentOut
@@ -42,3 +43,14 @@ class AdminMetricsOut(CamelModel):
 class AdminPaymentOut(PaymentOut):
     customer_email: str
     event_slug: str
+
+
+class AdminAuditLogOut(CamelModel):
+    id: uuid.UUID
+    actor_user_id: uuid.UUID | None
+    actor_email: str | None
+    action: str
+    resource_type: str
+    resource_id: uuid.UUID | None
+    metadata: dict[str, Any] | None = None
+    created_at: datetime
