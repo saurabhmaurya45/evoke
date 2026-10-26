@@ -367,6 +367,10 @@ async def update_template_route(
     `storefrontStatus` (e.g. `LISTED` -> `UNLISTED` to unpublish a template
     from the storefront without deleting it — there is no hard-delete for
     templates). Returns `404` if the template doesn't exist.
+
+    Pricing: switching to `PAID` without a `currencyId` uses INR (₹); switching
+    to `FREE` clears the price and currency. The merged result must be valid —
+    `PAID` with a positive price, or `FREE` with neither — otherwise `422`.
     """
     template = await update_template(db, admin_user, template_id, data)
     return Envelope(data=TemplateOut.model_validate(template))
@@ -399,7 +403,8 @@ async def create_template_route(
     `storefrontStatus=UNLISTED` (invisible to the public gallery). Use
     `POST /{templateId}/versions` to attach a schema, then
     `POST /{templateId}/versions/{version}/publish` to activate it.
-    `slug` must be unique.
+    `slug` must be unique. A `PAID` template needs a positive `priceAmountMinor`;
+    `currencyId` defaults to INR (₹) when omitted.
     """
     template = await create_template(db, admin_user, data)
     return Envelope(data=TemplateOut.model_validate(template))

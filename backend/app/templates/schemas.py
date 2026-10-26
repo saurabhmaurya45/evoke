@@ -121,7 +121,8 @@ class TemplateCreate(CamelModel):
     )
     currency_id: uuid.UUID | None = Field(
         default=None,
-        description="Currency for price_amount_minor. Required only when pricingModel=PAID.",
+        description="Currency for price_amount_minor. Only for pricingModel=PAID; defaults "
+        "to INR (₹) when omitted.",
     )
     thumbnail_url: str | None = Field(default=None, description="Gallery thumbnail image URL.")
     preview_url: str | None = Field(default=None, description="Full-size preview image/link URL.")
@@ -133,8 +134,6 @@ class TemplateCreate(CamelModel):
                 raise ValueError(
                     "priceAmountMinor is required and must be positive when pricingModel is PAID."
                 )
-            if self.currency_id is None:
-                raise ValueError("currencyId is required when pricingModel is PAID.")
         elif self.price_amount_minor is not None or self.currency_id is not None:
             raise ValueError(
                 "priceAmountMinor and currencyId must not be set when pricingModel is FREE."
@@ -164,7 +163,8 @@ class TemplateUpdate(CamelModel):
         default=None, description="Price in minor units (e.g. cents)."
     )
     currency_id: uuid.UUID | None = Field(
-        default=None, description="Currency for price_amount_minor."
+        default=None,
+        description="Currency for price_amount_minor. A PAID template without one gets INR (₹).",
     )
     thumbnail_url: str | None = Field(default=None, description="Gallery thumbnail image URL.")
     preview_url: str | None = Field(default=None, description="Full-size preview image/link URL.")

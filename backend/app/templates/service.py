@@ -279,6 +279,9 @@ async def create_template(db: AsyncSession, admin_user: User, data: TemplateCrea
         raise ConflictError("TEMPLATE_SLUG_EXISTS", "A template with this slug already exists.")
 
     await _validate_catalog_refs(db, category_id=data.category_id, currency_id=data.currency_id)
+    currency_id = data.currency_id
+    if data.pricing_model == PricingModel.PAID and currency_id is None:
+        currency_id = await _default_currency_id(db)
 
     template = Template(
         slug=data.slug,
@@ -287,7 +290,7 @@ async def create_template(db: AsyncSession, admin_user: User, data: TemplateCrea
         category_id=data.category_id,
         pricing_model=data.pricing_model,
         price_amount_minor=data.price_amount_minor,
-        currency_id=data.currency_id,
+        currency_id=currency_id,
         thumbnail_url=data.thumbnail_url,
         preview_url=data.preview_url,
         status=TemplateStatus.DRAFT,
@@ -307,6 +310,25 @@ async def create_template(db: AsyncSession, admin_user: User, data: TemplateCrea
     return template
 
 
+# Prices are in rupees unless a client explicitly picks another currency.
+DEFAULT_CURRENCY_CODE = "INR"
+
+
+async def _default_currency_id(db: AsyncSession) -> uuid.UUID:
+    """The active INR currency, for a PAID template that didn't name one."""
+    currency = (
+        await db.execute(
+            select(Currency).where(Currency.code == DEFAULT_CURRENCY_CODE, Currency.is_active)
+        )
+    ).scalar_one_or_none()
+    if currency is None:
+        raise ValidationFailedError(
+            f"currencyId is required when pricingModel is PAID — no active "
+            f"{DEFAULT_CURRENCY_CODE} currency is configured to default to."
+        )
+    return currency.id
+
+
 async def update_template(
     db: AsyncSession, admin_user: User, template_id: uuid.UUID, data: TemplateUpdate
 ) -> Template:
@@ -319,6 +341,17 @@ async def update_template(
 
     for field, value in changes.items():
         setattr(template, field, value)
+
+    # Switching to FREE clears the price and currency unless the client sent them
+    # (in which case the invariant below rejects the contradiction). Switching to
+    # PAID without a currency uses rupees.
+    if changes.get("pricing_model") == PricingModel.FREE:
+        if "price_amount_minor" not in changes:
+            template.price_amount_minor = None
+        if "currency_id" not in changes:
+            template.currency_id = None
+    if template.pricing_model == PricingModel.PAID and template.currency_id is None:
+        template.currency_id = await _default_currency_id(db)
 
     if changes:
         _validate_pricing_invariant(template)
