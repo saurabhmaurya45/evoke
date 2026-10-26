@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, effect, inject, signal } from '@angular/core';
-import { catchError, firstValueFrom, of } from 'rxjs';
+import { catchError, firstValueFrom, forkJoin, of } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { WINDOW } from '../../../core/tokens/window.token';
 import { HomeContentService } from '../../home/data/home-content.service';
@@ -18,6 +18,10 @@ interface BackendTemplateApiOut {
 interface ApiPage<T> { data: T[]; }
 /** Minimal backend record cached in memory for UUID lookups. */
 interface BackendEntry { id: string; storefrontStatus: string; }
+/** IDs a PATCH must send instead of display values (the API takes categoryId / currencyId). */
+interface CatalogRefs { currencyId: string | null; categoryIds: Record<string, string>; }
+/** The storefront sells in INR. */
+const PAID_CURRENCY = 'INR';
 
 /** The backend is the source of truth for pricing — checkout charges what it says. */
 function backendPricing(t: BackendTemplateApiOut): Pick<CatalogTemplate, 'pricing' | 'price'> {
@@ -65,6 +69,9 @@ export class TemplateCatalogService {
 
   /** slug → backend {id, status}, populated once the admin user is confirmed. */
   private readonly _backendMap = signal<Record<string, BackendEntry>>({});
+  /** Loaded with the admin catalogue; null until then. */
+  private refs: CatalogRefs | null = null;
+  private refsLoading = false;
 
   private readonly _templates = signal<readonly CatalogTemplate[]>(this.seed());
 
@@ -187,12 +194,18 @@ export class TemplateCatalogService {
     });
     const payload: Record<string, string | number | null> = {};
     if (changes.name !== undefined) payload['name'] = changes.name;
-    if (changes.category !== undefined) payload['category'] = changes.category;
+    // Resolved to categoryId / currencyId when sent (see resolveRefs).
+    if (changes.category !== undefined) payload['@category'] = changes.category;
     if (changes.pricing !== undefined || changes.price !== undefined) {
       const updated = this._templates().find((template) => template.slotId === slotId);
       if (updated) {
-        payload['pricingModel'] = updated.pricing === 'paid' ? 'PAID' : 'FREE';
-        payload['priceAmountMinor'] = updated.pricing === 'paid' ? updated.price : null;
+        const paid = updated.pricing === 'paid';
+        payload['pricingModel'] = paid ? 'PAID' : 'FREE';
+        payload['priceAmountMinor'] = paid ? updated.price : null;
+        // The backend checks the merged template: PAID needs a currency, and
+        // FREE must have none — so both directions send currencyId explicitly.
+        if (paid) payload['@currency'] = PAID_CURRENCY;
+        else payload['currencyId'] = null;
       }
     }
     if (Object.keys(payload).length) this.sendPatch(slotId, payload);
@@ -204,15 +217,22 @@ export class TemplateCatalogService {
     this.persist();
   }
 
-  /** PATCH the backend now if the template's id is known, otherwise queue it. */
+  /**
+   * PATCH the backend now if the template's id (and, when needed, the category /
+   * currency ids) are known; otherwise queue it until they load.
+   */
   private sendPatch(slotId: string, payload: Record<string, string | number | null>): void {
     const backendId = this._backendMap()[slotId]?.id;
-    if (!backendId) {
+    const needsRefs = Object.keys(payload).some((k) => k.startsWith('@'));
+    if (!backendId || (needsRefs && !this.refs)) {
       this.pendingPatches.set(slotId, { ...this.pendingPatches.get(slotId), ...payload });
+      if (needsRefs) this.loadRefs();
       return;
     }
+    const body = this.resolveRefs(payload);
+    if (!Object.keys(body).length) return;
     this.http
-      .patch(`v1/templates/${backendId}`, payload)
+      .patch(`v1/templates/${backendId}`, body)
       .pipe(
         catchError((err) => {
           console.error('[TemplateCatalog] PATCH failed:', err.status, err.message);
@@ -220,6 +240,54 @@ export class TemplateCatalogService {
         }),
       )
       .subscribe();
+  }
+
+  /** Replace display values with the ids the API expects. */
+  private resolveRefs(payload: Record<string, string | number | null>): Record<string, string | number | null> {
+    const body: Record<string, string | number | null> = {};
+    for (const [key, value] of Object.entries(payload)) {
+      if (key === '@category') {
+        const id = this.refs?.categoryIds[String(value).toLowerCase()];
+        if (id) body['categoryId'] = id;
+        else console.error('[TemplateCatalog] unknown category:', value);
+      } else if (key === '@currency') {
+        if (this.refs?.currencyId) body['currencyId'] = this.refs.currencyId;
+        else console.error('[TemplateCatalog] no active currency', value, '— a PAID price will be rejected');
+      } else {
+        body[key] = value;
+      }
+    }
+    return body;
+  }
+
+  /** Category and currency ids, loaded once for admin edits. */
+  private loadRefs(): void {
+    if (this.refs || this.refsLoading) return;
+    this.refsLoading = true;
+    forkJoin({
+      currencies: this.http.get<ApiPage<{ id: string; code: string; isActive: boolean }>>('v1/templates/currencies'),
+      categories: this.http.get<ApiPage<{ id: string; slug: string; name: string }>>('v1/templates/categories'),
+    })
+      .pipe(catchError((err) => { console.error('[TemplateCatalog] GET currencies/categories failed:', err.status, err.message); return of(null); }))
+      .subscribe((res) => {
+        this.refsLoading = false;
+        if (!res) return;
+        const currency = res.currencies.data.find((c) => c.code === PAID_CURRENCY && c.isActive) ?? null;
+        const categoryIds: Record<string, string> = {};
+        for (const c of res.categories.data) {
+          categoryIds[c.name.toLowerCase()] = c.id;
+          categoryIds[c.slug.toLowerCase()] = c.id;
+        }
+        this.refs = { currencyId: currency?.id ?? null, categoryIds };
+        this.flushPending();
+      });
+  }
+
+  /** Send every queued admin change whose ids are now known. */
+  private flushPending(): void {
+    const pending = new Map(this.pendingPatches);
+    this.pendingPatches.clear();
+    for (const [slotId, payload] of pending) this.sendPatch(slotId, payload);
   }
 
   private syncFromBackend(admin: boolean): void {
@@ -246,6 +314,7 @@ export class TemplateCatalogService {
             map[t.slug] = { id: t.id, storefrontStatus: t.storefrontStatus };
           }
           this._backendMap.set(map);
+          this.loadRefs(); // category / currency ids for admin edits
           this.pendingPatches.clear();
           for (const [slotId, payload] of pending) this.sendPatch(slotId, payload);
         }
