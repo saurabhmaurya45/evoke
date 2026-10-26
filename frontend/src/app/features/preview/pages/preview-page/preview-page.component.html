@@ -20,7 +20,7 @@
       >
         Open in new tab
       </a>
-      <a class="preview__use" [routerLink]="['/editor', template().slotId]">
+      <a class="preview__use" [routerLink]="useLink()" [queryParams]="useQueryParams()">
         Use this template
       </a>
     </div>

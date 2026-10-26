@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeResourceUrl } from '@angular/platform-browser';
 import { HomeContentService } from '../../../home/data/home-content.service';
 import { SeoService } from '../../../../core/services/seo.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { environment } from '../../../../../environments/environment';
 import { templateSeoBySlotId } from '../../../templates/data/template-seo.data';
 
@@ -24,6 +25,7 @@ export class PreviewPageComponent {
   private readonly catalog = inject(HomeContentService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly seo = inject(SeoService);
+  private readonly auth = inject(AuthService);
 
   /** Route param `:templateId` (a template slot id). */
   readonly templateId = input('');
@@ -41,6 +43,17 @@ export class PreviewPageComponent {
   );
 
   protected readonly isUseMode = computed(() => this.mode() === 'use');
+
+  /** "Use this template" opens the editor when signed in; otherwise it goes to
+   * login first and comes back to this template's preview afterwards. */
+  protected readonly useLink = computed(() =>
+    this.auth.isAuthenticated() ? ['/editor', this.template().slotId] : ['/login'],
+  );
+  protected readonly useQueryParams = computed(() =>
+    this.auth.isAuthenticated()
+      ? null
+      : { returnUrl: `/preview/${this.template().slotId}?mode=use` },
+  );
 
   constructor() {
     effect(() => {

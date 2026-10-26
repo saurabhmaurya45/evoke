@@ -5,6 +5,18 @@ import { LogoComponent } from '../../../../shared/components/logo/logo.component
 import { AuthService, type AuthErrorCode } from '../../../../core/services/auth.service';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { APP_NAME } from '../../../../core/constants/app.constants';
+import { WINDOW } from '../../../../core/tokens/window.token';
+
+/** Where to go after signing in, kept across full-page hops (Google OAuth, the
+ * email-verification link) that drop `?returnUrl=`. Expires so a stale one can't
+ * hijack a later, unrelated login. */
+const RETURN_URL_KEY = 'evoke:return-url';
+const RETURN_URL_TTL_MS = 60 * 60 * 1000;
+
+/** Only same-site paths — never `//evil.com` or `https://…` (open redirect). */
+function safeReturnUrl(url: string | null | undefined): string | null {
+  return url && url.startsWith('/') && !url.startsWith('//') && !url.startsWith('/\\') ? url : null;
+}
 
 type AuthMode = 'login' | 'signup' | 'otp' | 'forgot' | 'reset' | 'check-email' | 'verified' | 'callback';
 type FormModel = { firstName: FormControl<string>; lastName: FormControl<string>; email: FormControl<string>; password: FormControl<string>; confirmPassword: FormControl<string>; remember: FormControl<boolean>; terms: FormControl<boolean>; otp: FormControl<string> };
@@ -20,7 +32,7 @@ type FormModel = { firstName: FormControl<string>; lastName: FormControl<string>
         <div class="auth-mobile-nav"><a class="back-home" routerLink="/">← Back to homepage</a><a class="brand" routerLink="/"><app-logo [height]="38" /></a></div>
         <div class="auth-card">
           @if (mode() === 'callback') { <div class="status"><app-loader label="Completing sign in" /><h1 id="auth-title">Completing sign in</h1><p>Taking you back to {{ appName }}…</p></div> }
-          @else if (mode() === 'verified') { <div class="status"><div class="success">✓</div><h1 id="auth-title">Email verified</h1><p>Your account is ready. Continue to your {{ appName }} dashboard.</p><a class="primary" routerLink="/dashboard">Continue to dashboard</a></div> }
+          @else if (mode() === 'verified') { <div class="status"><div class="success">✓</div><h1 id="auth-title">Email verified</h1><p>Your account is ready. Continue to your {{ appName }} dashboard.</p><button class="primary" type="button" (click)="continueAfterVerify()">{{ hasReturnUrl() ? 'Continue' : 'Continue to dashboard' }}</button></div> }
           @else if (mode() === 'check-email') { <div class="status"><div class="mail">✦</div><h1 id="auth-title">Check your email</h1><p>We sent a verification link. It may take a moment to arrive.</p><button class="secondary" type="button" (click)="resend()">Resend email</button><a routerLink="/login">Back to sign in</a></div> }
           @else {
             <p class="eyebrow">{{ mode() === 'login' ? 'Welcome back' : mode() === 'signup' ? 'Begin your story' : appName + ' account' }}</p>
@@ -36,7 +48,7 @@ type FormModel = { firstName: FormControl<string>; lastName: FormControl<string>
                 <button class="primary" type="submit" [disabled]="auth.loading()">{{ auth.loading() ? 'Please wait…' : mode() === 'login' ? 'Sign in' : 'Create account' }}</button>
               </form>
               <div class="divider"><span>or continue with</span></div><button class="google" type="button" (click)="continueWithGoogle()"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="currentColor" class="g-blue" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="currentColor" class="g-green" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="currentColor" class="g-yellow" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="currentColor" class="g-red" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>Continue with Google</button>
-              <p class="switch">{{ mode() === 'login' ? 'New to ' + appName + '?' : 'Already have an account?' }} <a [routerLink]="mode() === 'login' ? '/signup' : '/login'">{{ mode() === 'login' ? 'Create account' : 'Sign in' }}</a></p>
+              <p class="switch">{{ mode() === 'login' ? 'New to ' + appName + '?' : 'Already have an account?' }} <a [routerLink]="mode() === 'login' ? '/signup' : '/login'" queryParamsHandling="preserve">{{ mode() === 'login' ? 'Create account' : 'Sign in' }}</a></p>
             } @else if (mode() === 'otp') { <form [formGroup]="form" (ngSubmit)="submitOtp()"><label>6-digit verification code<input class="otp" inputmode="numeric" maxlength="6" formControlName="otp" autocomplete="one-time-code" placeholder="000000" /></label><button class="primary" type="submit">Verify code</button></form><p class="switch"><a routerLink="/login">Change email</a></p> }
             @else if (mode() === 'forgot') { <form [formGroup]="form" (ngSubmit)="sendReset()"><label>Email address<input type="email" formControlName="email" autocomplete="email" /></label><button class="primary" type="submit">Send reset link</button></form><p class="switch"><a routerLink="/login">Back to sign in</a></p> }
             @else { <form [formGroup]="form" (ngSubmit)="reset()"><label>New password<input type="password" formControlName="password" autocomplete="new-password" /></label><label>Confirm password<input type="password" formControlName="confirmPassword" autocomplete="new-password" /></label><button class="primary" type="submit">Reset password</button></form> }
@@ -65,7 +77,13 @@ export class AuthPageComponent {
   protected readonly artTitle = computed(() => this.mode() === 'signup' ? 'Your story starts here' : 'The moment is yours');
   protected fieldError(name: keyof FormModel): string { const control = this.form.controls[name]; return control.invalid && control.touched ? 'Please enter a valid value.' : ''; }
 
+  private readonly window = inject(WINDOW);
+  protected readonly hasReturnUrl = signal(false);
+
   constructor() {
+    const returnUrl = safeReturnUrl(this.route.snapshot.queryParamMap.get('returnUrl'));
+    if (returnUrl) this.storeReturnUrl(returnUrl);
+    this.hasReturnUrl.set(!!(returnUrl ?? this.readReturnUrl()));
     // OAuth/email-link callbacks land here after a full-page redirect; by this point
     // the app initializer has already awaited Supabase's session restore, so success or
     // failure is already known — no polling/timeout needed.
@@ -101,8 +119,37 @@ export class AuthPageComponent {
     void this.router.navigateByUrl(this.destination());
   }
 
-  /** Honour ?returnUrl= when the guard bounced us here; admins land on /admin. */
-  private destination(): string { const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl'); if (returnUrl) return returnUrl; return this.auth.isAdmin() ? '/admin' : '/dashboard'; }
+  /** Honour ?returnUrl= (or the one remembered across an OAuth/email-link hop);
+   * otherwise admins land on /admin, everyone else on /dashboard. Consumed once. */
+  private destination(): string {
+    const returnUrl = safeReturnUrl(this.route.snapshot.queryParamMap.get('returnUrl')) ?? this.readReturnUrl();
+    this.clearReturnUrl();
+    if (returnUrl) return returnUrl;
+    return this.auth.isAdmin() ? '/admin' : '/dashboard';
+  }
+
+  protected continueAfterVerify(): void {
+    void this.router.navigateByUrl(this.destination());
+  }
+
+  private storeReturnUrl(url: string): void {
+    try { this.window?.localStorage.setItem(RETURN_URL_KEY, JSON.stringify({ url, at: Date.now() })); } catch {}
+  }
+
+  private readReturnUrl(): string | null {
+    try {
+      const raw = this.window?.localStorage.getItem(RETURN_URL_KEY);
+      if (!raw) return null;
+      const { url, at } = JSON.parse(raw) as { url?: string; at?: number };
+      return typeof at === 'number' && Date.now() - at < RETURN_URL_TTL_MS ? safeReturnUrl(url) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  private clearReturnUrl(): void {
+    try { this.window?.localStorage.removeItem(RETURN_URL_KEY); } catch {}
+  }
 
   protected async submitOtp(): Promise<void> {
     this.form.controls.otp.markAsTouched();
