@@ -12,9 +12,11 @@ from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.config import get_settings
 from app.drafts.models import Draft
 from app.events.models import Event, EventStatus, EventType
 from app.events.schemas import EventCreate, EventUpdate
+from app.payments.models import Payment, PaymentStatus
 from app.payments.pricing import get_template_price, has_paid_payment
 from app.shared.audit import log_action
 from app.shared.authorization import ensure_owner_or_admin
@@ -319,10 +321,29 @@ async def resolve_event_template(db: AsyncSession, event: Event) -> Template | N
     return None
 
 
+async def count_free_published(db: AsyncSession, owner_id: uuid.UUID) -> int:
+    """Published invitations this user didn't pay for — the free-template quota.
+
+    Decided by payment rather than the template's current price, so changing a
+    template's price later doesn't move invitations in or out of the quota.
+    """
+    paid = (
+        select(Payment.id)
+        .where(Payment.event_id == Event.id, Payment.status == PaymentStatus.PAID)
+        .exists()
+    )
+    stmt = select(func.count(Event.id)).where(
+        Event.owner_id == owner_id, Event.status == EventStatus.PUBLISHED, ~paid
+    )
+    return (await db.execute(stmt)).scalar_one()
+
+
 async def publish_event(db: AsyncSession, event_id: uuid.UUID, current_user: User) -> Event:
     """Transition a DRAFT event to PUBLISHED — makes it publicly visible.
 
-    Events on a PAID template need a PAID payment first (admins are exempt).
+    Events on a PAID template need a PAID payment first. A user can have at most
+    `free_invitation_limit` published invitations that weren't paid for
+    (409 FREE_INVITATION_LIMIT). Admins are exempt from both.
     """
     event = await get_event(db, event_id, current_user)
     if event.status == EventStatus.ARCHIVED:
@@ -336,6 +357,17 @@ async def publish_event(db: AsyncSession, event_id: uuid.UUID, current_user: Use
             price = await get_template_price(db, template)
             if not price.is_free and not await has_paid_payment(db, event.id):
                 raise PaymentRequiredError(price.amount_minor, price.currency)
+        # Publishing without a payment uses the free quota.
+        if not await has_paid_payment(db, event.id):
+            limit = get_settings().free_invitation_limit
+            used = await count_free_published(db, event.owner_id)
+            if used >= limit:
+                raise ConflictError(
+                    "FREE_INVITATION_LIMIT",
+                    f"You can publish up to {limit} invitations with free templates. "
+                    "Archive one of them, or choose a premium template.",
+                    details={"limit": limit, "published": used},
+                )
 
     event.status = EventStatus.PUBLISHED
     await assign_published_slug(db, event)

@@ -16,6 +16,7 @@ from app.events.service import (
 from app.shared.auth.dependencies import get_current_user
 from app.shared.database import get_db
 from app.shared.envelope import Envelope
+from app.shared.openapi_responses import conflict
 from app.shared.pagination import Page, PageParams, page_params
 from app.users.models import User
 
@@ -68,12 +69,28 @@ async def update_event_route(
     return Envelope(data=EventOut.model_validate(event))
 
 
-@router.post("/{event_id}/publish", response_model=Envelope[EventOut])
+@router.post(
+    "/{event_id}/publish",
+    response_model=Envelope[EventOut],
+    summary="Publish an invitation",
+    responses=conflict(
+        "FREE_INVITATION_LIMIT",
+        "You already have the maximum number of published invitations on free templates"
+        " (default 2). Archive one, or use a premium template.",
+    ),
+)
 async def publish_event_route(
     event_id: uuid.UUID,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> Envelope[EventOut]:
+    """Make a DRAFT invitation public (idempotent for one already published).
+
+    Requires the owner (or an ADMIN). An invitation on a PAID template needs a
+    completed payment first (`402 PAYMENT_REQUIRED`). Invitations published
+    without a payment are limited per user — `409 FREE_INVITATION_LIMIT` once
+    the limit (default 2) is reached. Admins are exempt from both.
+    """
     event = await publish_event(db, event_id, current_user)
     return Envelope(data=EventOut.model_validate(event))
 

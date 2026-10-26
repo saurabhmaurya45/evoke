@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:4200"
 
     log_level: str = "INFO"
+    # How many invitations a user may publish without paying (free templates).
+    # Paid templates are unlimited; admins are exempt.
+    free_invitation_limit: int = 2
 
     razorpay_key_id: str | None = None
     razorpay_key_secret: str | None = None

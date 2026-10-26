@@ -17,6 +17,7 @@ from app.payments.service import (
 from app.shared.auth.dependencies import get_current_user
 from app.shared.database import get_db
 from app.shared.envelope import Envelope
+from app.shared.openapi_responses import conflict
 from app.shared.pagination import Page, PageParams, page_params
 from app.users.models import User
 
@@ -33,7 +34,16 @@ async def quote_route(
     return Envelope(data=await get_quote(db, current_user, event_id))
 
 
-@router.post("/checkout", response_model=Envelope[CheckoutOut])
+@router.post(
+    "/checkout",
+    response_model=Envelope[CheckoutOut],
+    summary="Publish a free invitation or start payment for a paid one",
+    responses=conflict(
+        "FREE_INVITATION_LIMIT",
+        "You already have the maximum number of published invitations on free templates"
+        " (default 2). Archive one, or use a premium template.",
+    ),
+)
 async def checkout_route(
     data: CheckoutRequest,
     current_user: User = Depends(get_current_user),
@@ -41,7 +51,10 @@ async def checkout_route(
     client: RazorpayClient | None = Depends(get_razorpay_client),
 ) -> Envelope[CheckoutOut]:
     """Free template (or already paid): publishes and returns `paymentRequired=false`.
-    Paid template: returns a Razorpay `checkoutUrl` the frontend should redirect to."""
+    Paid template: returns a Razorpay `checkoutUrl` the frontend should redirect to.
+
+    Publishing a free template counts toward the per-user free limit (default 2);
+    past it, `409 FREE_INVITATION_LIMIT`."""
     return Envelope(data=await start_checkout(db, client, current_user, data.event_id))
 
 

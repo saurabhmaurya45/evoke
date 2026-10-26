@@ -148,6 +148,8 @@ export class CheckoutPageComponent {
     switch (code) {
       case 'PAYMENTS_NOT_CONFIGURED':
         return 'Online payments are not available right now. Please try again later.';
+      case 'FREE_INVITATION_LIMIT':
+        return 'You have already published 2 invitations with free templates. Archive one from your dashboard, or choose a premium template to publish this one.';
       case 'PAYMENT_PROVIDER_ERROR':
         return 'The payment gateway did not respond. Please try again.';
       default:
