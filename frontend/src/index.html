@@ -37,6 +37,11 @@
     <link rel="manifest" href="site.webmanifest" />
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
 
+    <!-- Preload the two above-the-fold fonts (Latin Manrope + Cormorant Garamond) so the
+         hero doesn't paint in a fallback font and visibly swap a moment later. -->
+    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/font-11.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/font-5.woff2" crossorigin />
+
     <!-- Preload the first hero card's poster (the LCP image) so it starts fetching immediately. -->
     <link rel="preload" as="image" href="/invitation-templates/template%204/hero-mobile.jpg" fetchpriority="high" />
 

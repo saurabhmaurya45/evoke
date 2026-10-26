@@ -12,6 +12,7 @@ import {
   withRouterConfig,
 } from '@angular/router';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 import { routes } from './app.routes';
 import { apiBaseUrlInterceptor } from './core/interceptors/api-base-url.interceptor';
@@ -26,6 +27,10 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
+    // Reuse the prerendered DOM instead of wiping and re-rendering it on boot —
+    // without this the page flashed blank and replayed its entrance animations.
+    // Event replay keeps clicks made before boot finishes from being lost.
+    provideClientHydration(withEventReplay()),
     provideRouter(
       routes,
       // Route `data` → component signal inputs (ComingSoon page).
