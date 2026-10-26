@@ -13,7 +13,7 @@ interface DraftApiOut {
   revision: number;
   schemaVersion: number | null;
 }
-interface EventApiOut { id: string; slug: string; }
+interface EventApiOut { id: string; slug: string; status: string; }
 
 /** `currentRevision` from a DRAFT_CONFLICT (409) error envelope, else null. */
 function conflictRevision(err: unknown): number | null {
@@ -29,8 +29,11 @@ const LOCAL_DRAFT_PREFIX = 'evoke:draft:';
 /**
  * API-backed template repository. Replaces LocalStorageTemplateRepository when
  * the user is authenticated: drafts are persisted as event+draft pairs on the
- * backend, keyed by the frontend template slot ID via a localStorage event-ID
- * cache. Falls back to localStorage for unauthenticated (preview) edits.
+ * backend. A localStorage cache maps each template slot ID to the event being
+ * edited with it right now; the editor points it at a specific event (dashboard
+ * "Edit") or, when starting from the template, at its unpublished draft only —
+ * so one template can back several websites. Falls back to localStorage for
+ * unauthenticated (preview) edits.
  */
 @Injectable()
 export class HttpTemplateRepository implements TemplateRepository {
@@ -63,11 +66,11 @@ export class HttpTemplateRepository implements TemplateRepository {
         const res = await firstValueFrom(
           this.http.put<ApiEnvelope<DraftApiOut>>(`v1/events/${eventId}/draft`, {
             data: document.data,
-            revision: this.readRevision(document.templateId),
+            revision: this.readRevision(eventId),
             schemaVersion: document.schemaVersion,
           }),
         );
-        this.storeRevision(document.templateId, res.data.revision);
+        this.storeRevision(eventId, res.data.revision);
         return;
       } catch (err) {
         // The cached revision was stale (another tab/device saved, or the cache was
@@ -75,7 +78,7 @@ export class HttpTemplateRepository implements TemplateRepository {
         // the server's revision and write again once; anything else is a real failure.
         const current = conflictRevision(err);
         if (attempt === 0 && current !== null) {
-          this.storeRevision(document.templateId, current);
+          this.storeRevision(eventId, current);
           continue;
         }
         throw err;
@@ -95,7 +98,7 @@ export class HttpTemplateRepository implements TemplateRepository {
       );
       const draft = res.data;
       if (!draft.data || Object.keys(draft.data).length === 0) return null;
-      this.storeRevision(templateId, draft.revision);
+      this.storeRevision(eventId, draft.revision);
       return {
         templateId,
         schemaVersion: draft.schemaVersion ?? 1,
@@ -112,15 +115,33 @@ export class HttpTemplateRepository implements TemplateRepository {
   }
 
   /**
-   * Pre-populate the localStorage event-id cache for this template. Called by
-   * the editor page when it receives an `?eventId=` query param from the
-   * dashboard "Edit" link, so the user's draft is always resolved even when the
-   * cache was cleared or the user is on a different device.
+   * Edit this specific event with the template. Called by the editor page when it
+   * receives an `?eventId=` query param (dashboard "Edit", checkout "Back to
+   * editor"). Always overrides the cache: a user can have several websites on one
+   * template, and the link names exactly which one to open.
    */
-  primeEventId(templateId: string, eventId: string): void {
-    const cached = this.readEventId(templateId);
-    if (!cached) {
-      this.storeEventId(templateId, eventId);
+  useEvent(templateId: string, eventId: string): void {
+    this.storeEventId(templateId, eventId);
+  }
+
+  /**
+   * Opening the editor from the template itself ("Use this template") resumes only
+   * an unpublished draft. If the cached event is already live (or archived, or
+   * gone), forget it so the next save starts a new website rather than editing
+   * the published one.
+   */
+  async startFromTemplate(templateId: string): Promise<void> {
+    const eventId = this.readEventId(templateId);
+    if (!eventId || !this.auth.isAuthenticated()) return;
+    try {
+      const res = await firstValueFrom(
+        this.http.get<ApiEnvelope<EventApiOut>>(`v1/events/${eventId}`),
+      );
+      if (res.data.status !== 'DRAFT') this.forgetEventId(templateId);
+    } catch (err) {
+      // 404/403: not this user's event any more. A network error keeps the cache.
+      const status = (err as { status?: number })?.status;
+      if (status === 403 || status === 404) this.forgetEventId(templateId);
     }
   }
 
@@ -168,23 +189,34 @@ export class HttpTemplateRepository implements TemplateRepository {
     } catch {}
   }
 
-  private readRevision(templateId: string): number {
+  private forgetEventId(templateId: string): void {
+    try {
+      const map = JSON.parse(
+        this.window?.localStorage.getItem(EVENT_CACHE_KEY) ?? '{}',
+      ) as Record<string, string>;
+      delete map[templateId];
+      this.window?.localStorage.setItem(EVENT_CACHE_KEY, JSON.stringify(map));
+    } catch {}
+  }
+
+  /** Draft revisions are per event: two websites on one template save independently. */
+  private readRevision(eventId: string): number {
     try {
       const map = JSON.parse(
         this.window?.localStorage.getItem(REVISION_CACHE_KEY) ?? '{}',
       ) as Record<string, number>;
-      return map[templateId] ?? 0;
+      return map[eventId] ?? 0;
     } catch {
       return 0;
     }
   }
 
-  private storeRevision(templateId: string, revision: number): void {
+  private storeRevision(eventId: string, revision: number): void {
     try {
       const map = JSON.parse(
         this.window?.localStorage.getItem(REVISION_CACHE_KEY) ?? '{}',
       ) as Record<string, number>;
-      map[templateId] = revision;
+      map[eventId] = revision;
       this.window?.localStorage.setItem(REVISION_CACHE_KEY, JSON.stringify(map));
     } catch {}
   }

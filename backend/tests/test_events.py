@@ -76,7 +76,7 @@ async def test_archive_event_via_delete(client, auth_headers):
     assert get_resp.json()["data"]["status"] == "ARCHIVED"
 
 
-async def test_only_one_active_event_per_template(client, auth_headers):
+async def test_only_one_draft_per_template(client, auth_headers):
     """`title` is the template slot id for events created from the editor — reopening
     the editor, a second tab, or a cleared localStorage cache must resume the same
     draft, not fork a new one."""
@@ -111,6 +111,27 @@ async def test_new_template_event_allowed_after_archiving_the_old_one(client, au
     second_event = second.json()["data"]
     assert second_event["id"] != first_id
     assert second_event["status"] == "DRAFT"
+
+
+async def test_same_template_can_back_a_second_website_once_published(client, auth_headers):
+    """Only the unpublished draft is deduped: after publishing, using the same
+    template again starts a separate website instead of reopening the live one."""
+    headers = auth_headers()
+
+    first = await client.post("/v1/events", headers=headers, json={"title": "tpl-royal-gate"})
+    first_id = first.json()["data"]["id"]
+    published = await client.post(f"/v1/events/{first_id}/publish", headers=headers)
+    assert published.status_code == 200, published.text
+
+    second = await client.post("/v1/events", headers=headers, json={"title": "tpl-royal-gate"})
+    assert second.status_code == 201
+    second_event = second.json()["data"]
+    assert second_event["id"] != first_id
+    assert second_event["status"] == "DRAFT"
+
+    # ...and that new draft is now the one that gets resumed.
+    third = await client.post("/v1/events", headers=headers, json={"title": "tpl-royal-gate"})
+    assert third.json()["data"]["id"] == second_event["id"]
 
 
 async def test_template_event_dedup_is_per_owner(client, auth_headers):

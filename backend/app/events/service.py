@@ -123,10 +123,11 @@ async def create_event(db: AsyncSession, owner: User, data: EventCreate) -> Even
 
     `title` doubles as the template slot id for events created from the editor
     (e.g. 'tpl-samarpan-royal' — see `resolve_event_template`), and a user editing
-    the same template should only ever have one active (non-archived) draft for
-    it: reopening the editor, a second tab, or a cleared localStorage cache must
-    resume that draft, not fork a new one. Checked up front so the common case
-    (no duplicate) never pays for a wasted slug/draft insert; `ix_events_owner_title_active`
+    the same template should only ever have one unpublished draft for it: reopening
+    the editor, a second tab, or a cleared localStorage cache must resume that draft,
+    not fork a new one. Published invitations don't count, so once a draft goes live
+    the same template can be used again for another website. Checked up front so the common case
+    (no duplicate) never pays for a wasted slug/draft insert; `ix_events_owner_title_draft`
     is the last-resort guard if two requests for the same new template race each other —
     caught below and resolved the same way, by adopting the winner instead of erroring.
 
@@ -184,15 +185,15 @@ async def create_event(db: AsyncSession, owner: User, data: EventCreate) -> Even
         # poll budget), but a clean 409 beats a raw IntegrityError reaching the client.
         raise ConflictError(
             "EVENT_ALREADY_EXISTS",
-            "You already have an active draft for this template.",
+            "You already have an unpublished draft for this template.",
             details={"title": data.title},
         )
     raise last_error
 
 
 async def _find_active_event(db: AsyncSession, owner_id: uuid.UUID, title: str) -> Event | None:
-    """The owner's non-archived event for this template slot id, if any — see
-    `ix_events_owner_title_active`. Only template-backed titles ('tpl-*') are deduped;
+    """The owner's unpublished draft for this template slot id, if any — see
+    `ix_events_owner_title_draft`. Only template-backed titles ('tpl-*') are deduped;
     this app has no other event-creation path today, but scoping it keeps a future
     freeform-titled event (e.g. two same-named birthday parties) from colliding here.
     """
@@ -202,7 +203,7 @@ async def _find_active_event(db: AsyncSession, owner_id: uuid.UUID, title: str) 
         select(Event).where(
             Event.owner_id == owner_id,
             Event.title == title,
-            Event.status != EventStatus.ARCHIVED,
+            Event.status == EventStatus.DRAFT,
         )
     )
     return result.scalar_one_or_none()
@@ -213,7 +214,7 @@ _WINNER_POLL_DELAY_S = 0.05
 
 
 async def _await_active_event(owner_id: uuid.UUID, title: str) -> Event | None:
-    """After our own insert lost a race on `ix_events_owner_title_active`, the winning
+    """After our own insert lost a race on `ix_events_owner_title_draft`, the winning
     request's row exists but may not be visible yet — under READ COMMITTED it only
     becomes visible once that request's transaction *commits*, which happens a few
     statements (and an audit-log insert) after the point our insert collided with it.

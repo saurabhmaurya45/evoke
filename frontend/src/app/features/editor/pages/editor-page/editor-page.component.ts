@@ -96,17 +96,20 @@ export class EditorPageComponent {
           robots: 'noindex, nofollow',
         });
         this.analytics.track('begin_editing', { content_name: schema.name });
-        // When arriving from the dashboard "Edit" link, the event UUID is passed
-        // as ?eventId= so the draft can be loaded even if the localStorage cache
-        // was cleared (different device, fresh browser, etc.).
+        // With ?eventId= (dashboard "Edit", checkout "Back to editor") edit exactly
+        // that website. Without it the user came from the template, so resume its
+        // unpublished draft or start a new website — never reopen a published one.
         const eventId = this.route.snapshot.queryParamMap.get('eventId');
-        if (eventId && this.repository instanceof HttpTemplateRepository) {
-          this.repository.primeEventId(schema.id, eventId);
-        }
+        const target =
+          this.repository instanceof HttpTemplateRepository
+            ? eventId
+              ? Promise.resolve(this.repository.useEvent(schema.id, eventId))
+              : this.repository.startFromTemplate(schema.id)
+            : Promise.resolve();
         // Seed from a saved draft when present, otherwise the template's default
         // sample content (JSON) — never values baked into the markup/schema.
         void Promise.all([
-          this.repository.loadDraft(schema.id),
+          target.then(() => this.repository.loadDraft(schema.id)),
           this.content.loadDefaults(schema.defaultsUrl, schema),
         ]).then(([draft, defaults]) => {
           const safeDraft = this.migrations.prepareDocument(schema, draft);
