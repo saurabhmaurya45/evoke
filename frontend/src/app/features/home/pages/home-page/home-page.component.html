@@ -4,12 +4,12 @@
 
 <!-- Templates right after the hero: the designs are what visitors came for.
      Deferred until near the viewport — its preview clips aren't needed for
-     the first paint. The placeholder carries id="templates" so the hero's
-     "Browse Templates" (#templates) link works before the section loads. -->
+     the first paint. Until then a shimmering skeleton of the section stands in
+     (it carries id="templates" so the hero's "Browse Templates" link works). -->
 @defer (on viewport) {
   <app-templates-section />
 } @placeholder {
-  <div id="templates" class="section-skeleton" aria-hidden="true"></div>
+  <app-templates-section-skeleton />
 }
 
 <app-services-section />

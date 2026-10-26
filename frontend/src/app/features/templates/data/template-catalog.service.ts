@@ -100,6 +100,14 @@ export class TemplateCatalogService {
   readonly pricesKnown = this._pricesKnown.asReadonly();
 
   /**
+   * True once the first templates request has settled — answered, empty or failed.
+   * Lets views show a loading skeleton instead of the local seed list, which the
+   * response may then reshuffle (unlisted templates drop out, prices appear).
+   */
+  private readonly _loaded = signal(false);
+  readonly loaded = this._loaded.asReadonly();
+
+  /**
    * Admin changes made before the slug → backend id map has loaded. They are
    * merged per slot and sent as soon as the map arrives, so an early click is
    * saved rather than silently staying local (and then being overwritten by the
@@ -296,6 +304,7 @@ export class TemplateCatalogService {
       .get<ApiPage<BackendTemplateApiOut>>(url)
       .pipe(catchError((err) => { console.error('[TemplateCatalog] GET templates failed:', err.status, err.message); return of({ data: [] }); }))
       .subscribe((page) => {
+        this._loaded.set(true);
         // A failed or empty response says nothing — keep what we have rather than hide everything.
         if (!page.data.length) return;
         // Keyed by slug, which must equal the FE slotId (e.g. 'tpl-samarpan-royal').

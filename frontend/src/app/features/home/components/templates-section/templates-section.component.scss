@@ -102,9 +102,38 @@
   }
 }
 
+// Real cards fade in over the skeleton they replace.
+.carousel__card {
+  animation: card-in 0.35s ease both;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+  }
+}
+
+// Loading states (also used by TemplatesSectionSkeletonComponent).
+.carousel__nav--idle {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.carousel__track--loading {
+  overflow: hidden;
+}
+
+.templates__more-link--idle {
+  opacity: 0.5;
+}
+
 @include reduced-motion {
   .carousel__track {
     scroll-behavior: auto;
+  }
+
+  .carousel__card {
+    animation: none;
   }
 }
 

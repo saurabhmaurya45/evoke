@@ -4,6 +4,7 @@ import { StatsComponent } from '../../components/stats/stats.component';
 import { ServicesSectionComponent } from '../../components/services-section/services-section.component';
 import { HowItWorksComponent } from '../../components/how-it-works/how-it-works.component';
 import { TemplatesSectionComponent } from '../../components/templates-section/templates-section.component';
+import { TemplatesSectionSkeletonComponent } from '../../components/templates-section/templates-section-skeleton.component';
 import { FeaturesSectionComponent } from '../../components/features-section/features-section.component';
 import { ComparisonComponent } from '../../components/comparison/comparison.component';
 import { TestimonialsComponent } from '../../components/testimonials/testimonials.component';
@@ -35,6 +36,7 @@ import { HomeContentService } from '../../data/home-content.service';
     ServicesSectionComponent,
     HowItWorksComponent,
     TemplatesSectionComponent,
+    TemplatesSectionSkeletonComponent,
     FeaturesSectionComponent,
     ComparisonComponent,
     TestimonialsComponent,

@@ -1,19 +1,18 @@
 <section id="templates" class="templates">
   <app-section-aura tone="clay" />
   <app-section-heading
-    appReveal
     eyebrow="Templates"
     title="Wedding invitations"
     subtitle="Choose a beautifully crafted design and make it yours."
     accent="#c97b63"
   />
 
-  <div class="carousel" appReveal>
+  <div class="carousel">
     <button
       type="button"
       class="carousel__nav carousel__nav--prev"
       aria-label="Previous templates"
-      [disabled]="atStart()"
+      [disabled]="loading() || atStart()"
       (click)="scrollBy(-1)"
     >
       ‹
@@ -25,9 +24,16 @@
       (scroll)="onScroll()"
       tabindex="0"
       aria-label="Template carousel"
+      [attr.aria-busy]="loading()"
     >
-      @for (tpl of templates(); track tpl.slotId) {
-        <app-template-card [template]="tpl" [showPrice]="pricesKnown()" />
+      @if (loading()) {
+        @for (i of skeletonSlots; track i) {
+          <app-template-card-skeleton />
+        }
+      } @else {
+        @for (tpl of templates(); track tpl.slotId) {
+          <app-template-card class="carousel__card" [template]="tpl" [showPrice]="pricesKnown()" />
+        }
       }
     </div>
 
@@ -35,16 +41,16 @@
       type="button"
       class="carousel__nav carousel__nav--next"
       aria-label="More templates"
-      [disabled]="atEnd()"
+      [disabled]="loading() || atEnd()"
       (click)="scrollBy(1)"
     >
       ›
     </button>
   </div>
 
-  <div class="templates__more" appReveal>
+  <div class="templates__more">
     <a class="templates__more-link" routerLink="/templates"
-      >View all {{ templates().length }} templates →</a
+      >View all {{ loading() ? '' : templates().length + ' ' }}templates →</a
     >
   </div>
 </section>
