@@ -194,6 +194,64 @@
   }
 }
 
+// Phones: one row can't fit back + title + save state + tabs + Publish, and the
+// overflow is clipped by :host — Publish ended up off-screen. Two rows instead:
+// back · title · Publish, then the pane tabs with the save state beside them.
+@media (max-width: 600px) {
+  .editor {
+    &__bar {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-areas:
+        'back title publish'
+        'tabs tabs save';
+      gap: 0.6rem 0.75rem;
+      padding: 0.6rem 1rem;
+    }
+
+    &__back {
+      grid-area: back;
+    }
+
+    &__title {
+      grid-area: title;
+      min-width: 0;
+    }
+
+    &__eyebrow {
+      display: none;
+    }
+
+    &__name {
+      font-size: 1.15rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__publish {
+      grid-area: publish;
+      padding: 0.5rem 1rem;
+    }
+
+    &__tabs {
+      grid-area: tabs;
+    }
+
+    &__tab {
+      flex: 1;
+    }
+
+    &__save {
+      grid-area: save;
+      margin-right: 0;
+      align-self: center;
+      text-align: right;
+      white-space: nowrap;
+    }
+  }
+}
+
 .editor__missing {
   display: flex;
   flex-direction: column;
