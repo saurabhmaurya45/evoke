@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -12,6 +13,9 @@ class Settings(BaseSettings):
     app_version: str = "dev"
 
     database_url: str
+    # True on Vercel (it sets VERCEL=1 in every function): each instance gets its
+    # own engine, so it must not hold a connection pool — see app/shared/database.py.
+    serverless: bool = Field(default=False, validation_alias=AliasChoices("SERVERLESS", "VERCEL"))
 
     supabase_url: str
     supabase_publishable_key: str
