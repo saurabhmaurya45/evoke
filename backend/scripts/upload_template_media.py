@@ -43,7 +43,7 @@ from urllib.parse import quote, urlsplit
 
 import boto3
 from botocore.client import Config
-from botocore.exceptions import ClientError
+from botocore.exceptions import BotoCoreError, ClientError
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 MEDIA_ROOT = Path(__file__).resolve().parents[2] / "frontend" / "public"
@@ -144,7 +144,8 @@ def main() -> None:
 
     files = media_files()
     total = sum(p.stat().st_size for p in files)
-    print(f"{len(files)} media files, {total / 1024 / 1024:.1f} MB, bucket {bucket}, prefix {KEY_PREFIX}")
+    size_mb = total / 1024 / 1024
+    print(f"{len(files)} media files, {size_mb:.1f} MB, bucket {bucket}, prefix {KEY_PREFIX}")
 
     def sync(path: Path) -> tuple[str, str]:
         key = object_key(path)
@@ -172,7 +173,7 @@ def main() -> None:
         for future, path in futures.items():
             try:
                 outcome, detail = future.result()
-            except Exception as exc:  # report every failure, keep going
+            except (BotoCoreError, ClientError, OSError) as exc:  # report every failure, keep going
                 failures.append(f"{object_key(path)}: {exc}")
                 continue
             counts[outcome] += 1
