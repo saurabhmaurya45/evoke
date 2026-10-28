@@ -32,6 +32,16 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection) -> None:
+    # The app role has statement / idle-in-transaction timeouts (15s / 30s) so a
+    # stuck request can't hold a pooled connection; a migration (index build,
+    # backfill) may legitimately run longer. Session-level, so this needs the
+    # session pooler (5432) or a direct connection — never the 6543 pooler.
+    connection.exec_driver_sql("SET statement_timeout = 0")
+    connection.exec_driver_sql("SET idle_in_transaction_session_timeout = 0")
+    # Commit the autobegun transaction: otherwise Alembic sees one already open,
+    # treats it as the caller's and never commits the migration itself. Plain
+    # SET (not SET LOCAL) outlives the commit for the rest of the session.
+    connection.commit()
     context.configure(connection=connection, target_metadata=target_metadata)
     with context.begin_transaction():
         context.run_migrations()

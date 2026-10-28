@@ -20,22 +20,39 @@ class Base(DeclarativeBase):
 # ("EMAXCONNSESSION max clients reached in session mode").
 SUPABASE_TRANSACTION_POOLER_PORT = 6543
 
+# Client-side pool per instance on the transaction pooler. Idle client connections
+# hold no Postgres connection there, so keeping a few open is free and saves the
+# TCP+TLS+auth handshake on every warm request. Budget: instances x (size +
+# overflow) must stay well under the pooler's client limit (200 on Nano) — at 5
+# per instance that's ~30 instances with room for the dashboard and migrations.
+TRANSACTION_POOL_SIZE = 2
+TRANSACTION_POOL_MAX_OVERFLOW = 3
+# Under the pooler's idle-client timeout, so a pooled connection is replaced
+# before the server side drops it (pre-ping catches any that slip through).
+TRANSACTION_POOL_RECYCLE_SECONDS = 300
+# Wait this long for a pooled connection, then fail the request cleanly rather
+# than queueing indefinitely.
+TRANSACTION_POOL_TIMEOUT_SECONDS = 10
+
 
 def engine_options(database_url: str, *, serverless: bool) -> dict[str, Any]:
     """`create_async_engine` options for where the app runs.
 
-    - Transaction pooler: the pooler owns pooling, so no client-side pool
-      (NullPool), and no prepared-statement caching — a statement prepared on
-      one server connection is gone by the next transaction, which may run on
-      another. Unique statement names keep asyncpg from colliding with ones a
-      previous client left on a shared server connection.
-    - Serverless on a direct/session connection: NullPool too, so an idle
-      instance doesn't sit on connections other instances need.
+    - Transaction pooler: a small persistent pool per instance (see
+      TRANSACTION_POOL_*), and no prepared-statement caching — a statement
+      prepared on one server connection is gone by the next transaction, which
+      may run on another. Unique statement names keep asyncpg from colliding
+      with ones a previous client left on a shared server connection.
+    - Serverless on a direct/session connection: NullPool, because there an
+      idle client still pins a Postgres connection other instances need.
     - Otherwise (local dev, tests, a long-running server): a regular pool.
     """
     options: dict[str, Any] = {"pool_pre_ping": True}
     if make_url(database_url).port == SUPABASE_TRANSACTION_POOLER_PORT:
-        options["poolclass"] = NullPool
+        options["pool_size"] = TRANSACTION_POOL_SIZE
+        options["max_overflow"] = TRANSACTION_POOL_MAX_OVERFLOW
+        options["pool_recycle"] = TRANSACTION_POOL_RECYCLE_SECONDS
+        options["pool_timeout"] = TRANSACTION_POOL_TIMEOUT_SECONDS
         options["connect_args"] = {
             "statement_cache_size": 0,
             "prepared_statement_name_func": lambda: f"__asyncpg_{uuid4()}__",

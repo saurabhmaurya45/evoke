@@ -10,9 +10,12 @@ TRANSACTION_URL = "postgresql+asyncpg://u:p@aws-0-us-east-1.pooler.supabase.com:
 LOCAL_URL = "postgresql+asyncpg://u:p@127.0.0.1:5432/evoke"
 
 
-def test_transaction_pooler_uses_null_pool_and_no_statement_cache():
+def test_transaction_pooler_keeps_small_persistent_pool_and_no_statement_cache():
     options = engine_options(TRANSACTION_URL, serverless=True)
-    assert options["poolclass"] is NullPool
+    assert "poolclass" not in options  # default QueuePool: connections reused
+    assert (options["pool_size"], options["max_overflow"]) == (2, 3)
+    assert options["pool_recycle"] == 300
+    assert options["pool_timeout"] == 10
     assert options["connect_args"]["statement_cache_size"] == 0
     name_func = options["connect_args"]["prepared_statement_name_func"]
     assert name_func() != name_func()
