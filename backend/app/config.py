@@ -58,6 +58,11 @@ class Settings(BaseSettings):
     b2_producer_key_secret: str | None = None
     b2_consumer_key_id: str | None = None
     b2_consumer_key_secret: str | None = None
+    # Public base URL of the (public) media bucket — Cloudflare R2's `r2.dev` host or
+    # a custom domain, e.g. https://media.theinvitely.in. When set, every uploaded
+    # object is served from here permanently (no expiring signed URLs) and the
+    # Consumer key is not needed. Unset -> signed GET URLs, as before.
+    public_media_base_url: str | None = None
 
     # Sentry (error tracking). Unset -> init_observability() skips Sentry entirely,
     # same "optional, no-op if unset" pattern as Razorpay/B2 above.

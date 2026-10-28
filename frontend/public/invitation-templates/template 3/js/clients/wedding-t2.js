@@ -45,8 +45,8 @@
   var openingLoaderDone = false;
   var openingLoaderEnabled = body.getAttribute('data-opening-loader') === 'true' && !!openingLoader;
 
-  var SONG_MUSLIM = { src: 'assets/audio/eid_song.mp3' };
-  var SONG_GENERAL = { src: 'assets/audio/wedding-t1-song.mp3' };
+  var SONG_MUSLIM = { src: 'https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%203/assets/audio/eid_song.mp3' };
+  var SONG_GENERAL = { src: 'https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%203/assets/audio/wedding-t1-song.mp3' };
   var COPY_MUSLIM = {
     quote: 'And among His signs is that He created for you mates from among yourselves, that you may dwell in tranquility with them, and He has put love and mercy between your hearts.',
     invitationMessage: 'With hearts full of joy, we request the honor of your presence as we begin our journey together. Your blessings and company would mean the world to us on this blessed day.',
@@ -1117,7 +1117,7 @@
 
     var coupleImg = document.getElementById('wed2-hero-couple');
     if (coupleImg) {
-      coupleImg.src = getAttr('data-couple-photo', 'assets/images/red-gAndb.png');
+      coupleImg.src = getAttr('data-couple-photo', 'https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%203/assets/images/red-gAndb.png');
     }
 
     hydrateTimeline();

@@ -5,6 +5,11 @@
       "source": "/services",
       "destination": "/wedding-invitations",
       "permanent": true
+    },
+    {
+      "source": "/invitation-templates/:path(.+\\.(?:mp4|webm|mp3|m4a|jpg|jpeg|png|webp|gif))",
+      "destination": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/:path",
+      "permanent": false
     }
   ],
   "rewrites": [

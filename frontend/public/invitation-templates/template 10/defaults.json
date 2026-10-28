@@ -3,11 +3,11 @@
     "groomName": "Vihaan Kapoor",
     "groomShort": "Vihaan",
     "groomParents": "Son of Mr. Rajeev Kapoor & Mrs. Anjali Kapoor",
-    "groomPhoto": "/invitation-templates/template%2010/static/images/groom.jpg",
+    "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/groom.jpg",
     "brideName": "Meera Joshi",
     "brideShort": "Meera",
     "brideParents": "Daughter of Mr. Sanjay Joshi & Mrs. Kavita Joshi",
-    "bridePhoto": "/invitation-templates/template%2010/static/images/bride.jpg"
+    "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/bride.jpg"
   },
   "wedding": {
     "date": "2027-02-14",
@@ -46,14 +46,14 @@
   },
   "gallery": {
     "photos": [
-      { "image": "/invitation-templates/template%2010/static/images/gallery-1.png" },
-      { "image": "/invitation-templates/template%2010/static/images/gallery-2.png" },
-      { "image": "/invitation-templates/template%2010/static/images/gallery-3.png" },
-      { "image": "/invitation-templates/template%2010/static/images/gallery-4.png" },
-      { "image": "/invitation-templates/template%2010/static/images/gallery-5.png" }
+      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png" },
+      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png" },
+      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png" },
+      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png" },
+      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png" }
     ]
   },
   "music": {
-    "track": "/invitation-templates/template%2010/static/media/background-music.mp3"
+    "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/media/background-music.mp3"
   }
 }

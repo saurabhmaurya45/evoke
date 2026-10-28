@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import uuid
 from collections.abc import Callable
@@ -114,7 +115,9 @@ async def _verify_and_mark_uploaded(
     """HEAD-verifies the object B2-side before trusting the ack (see ADR-6) —
     the client's claimed status is never the trust signal on its own."""
     try:
-        metadata = client.head_object(asset.storage_path)
+        # boto3 is blocking: in a thread, so a slow B2 doesn't stall every other
+        # request this instance is serving concurrently.
+        metadata = await asyncio.to_thread(client.head_object, asset.storage_path)
     except ClientError as exc:
         logger.exception("B2 head_object failed during ack verification")
         raise AppError(
@@ -197,7 +200,7 @@ async def resolve_media_url(b2: B2Client | None, storage_path: str | None) -> st
     working link into a signed URL for an object that doesn't exist."""
     if not storage_path or b2 is None or not _is_storage_path(storage_path):
         return storage_path
-    return b2.presign_get(storage_path, _GET_PRESIGN_TTL_SECONDS)
+    return b2.get_url(storage_path, _GET_PRESIGN_TTL_SECONDS)
 
 
 # ---------------------------------------------------------------------------
@@ -225,7 +228,7 @@ def resolve_media_refs(b2: B2Client | None, data: Any) -> Any:
 
     def resolve(value: str) -> str:
         if _is_storage_path(value):
-            return b2.presign_get(value, _GET_PRESIGN_TTL_SECONDS)
+            return b2.get_url(value, _GET_PRESIGN_TTL_SECONDS)
         return value
 
     return _map_strings(data, resolve)
@@ -269,4 +272,4 @@ def presigned_get_url(b2: B2Client | None, storage_path: str) -> str | None:
     """A displayable URL for a just-uploaded object, or None without B2."""
     if b2 is None:
         return None
-    return b2.presign_get(storage_path, _GET_PRESIGN_TTL_SECONDS)
+    return b2.get_url(storage_path, _GET_PRESIGN_TTL_SECONDS)

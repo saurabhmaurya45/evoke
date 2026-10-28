@@ -121,3 +121,47 @@ def test_region_from_endpoint():
     assert region_from_endpoint("https://s3.us-west-004.backblazeb2.com") == "us-west-004"
     assert region_from_endpoint("https://s3.eu-central-003.backblazeb2.com/") == "eu-central-003"
     assert region_from_endpoint("https://example.com") is None
+
+
+def test_region_from_r2_endpoint():
+    from app.shared.storage.b2_client import region_from_endpoint
+
+    assert region_from_endpoint("https://abc123.r2.cloudflarestorage.com") == "auto"
+
+
+def _r2_public_client() -> B2Client:
+    # Public bucket: no Consumer key at all — nothing is presigned for reading.
+    return B2Client(
+        endpoint_url="https://abc123.r2.cloudflarestorage.com",
+        bucket="theinvitely",
+        producer_key_id="p",
+        producer_key_secret="p",
+        public_base_url="https://media.theinvitely.in/",
+    )
+
+
+def test_public_bucket_serves_permanent_urls_without_a_consumer_key():
+    client = _r2_public_client()
+    key = "asset/invitation-templates/template 4/card.mp4"
+
+    url = client.get_url(key, 900)
+    assert url == "https://media.theinvitely.in/asset/invitation-templates/template%204/card.mp4"
+    assert "X-Amz-" not in url
+    assert client.key_from_presigned_url(url) == key
+
+
+def test_public_bucket_still_presigns_uploads():
+    put = _r2_public_client().presign_put("public/u/e/image/a.png", "image/png", 600)
+    assert put.startswith("https://abc123.r2.cloudflarestorage.com/theinvitely/public/u/e/image/a.png?")
+    assert "%2Fauto%2Fs3%2Faws4_request" in put
+
+
+def test_without_public_url_presign_get_needs_the_consumer_key():
+    client = B2Client(
+        endpoint_url="https://abc123.r2.cloudflarestorage.com",
+        bucket="theinvitely",
+        producer_key_id="p",
+        producer_key_secret="p",
+    )
+    with pytest.raises(RuntimeError):
+        client.get_url("asset/x.png", 900)

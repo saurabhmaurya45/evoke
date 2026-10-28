@@ -67,3 +67,19 @@ def test_event_media_must_belong_to_the_event():
     with pytest.raises(ValidationFailedError) as exc:
         ensure_event_media({"list": [{"image": other}]}, OWNER, EVENT)
     assert exc.value.details == {"paths": [other]}
+
+
+def test_round_trip_with_a_public_bucket():
+    b2 = B2Client(
+        endpoint_url="https://abc123.r2.cloudflarestorage.com",
+        bucket="theinvitely",
+        producer_key_id="p",
+        producer_key_secret="p",
+        public_base_url="https://media.theinvitely.in",
+    )
+    data = {"hero": {"photo": PATH, "title": "Hi"}}
+
+    resolved = resolve_media_refs(b2, data)
+    assert resolved["hero"]["photo"] == f"https://media.theinvitely.in/{PATH}"
+
+    assert to_storage_refs(b2, resolved) == data

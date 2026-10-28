@@ -4,7 +4,7 @@
     "groomFullName": "Kabir Malhotra",
     "brideName": "Anaya",
     "brideFullName": "Anaya Kapoor",
-    "image": "/invitation-templates/template%209/static/images/couple-watercolor.png"
+    "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/images/couple-watercolor.png"
   },
   "wedding": {
     "date": "2027-07-03",
@@ -25,7 +25,7 @@
     "name": "Château de Lumière",
     "address": "Route des Vignes, Loire Valley, France",
     "mapUrl": "",
-    "image": "/invitation-templates/template%209/static/images/chateau.png"
+    "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/images/chateau.png"
   },
   "dressCode": {
     "text": "Dress to celebrate — formal evening wear in soft, romantic tones that suit a summer garden wedding.",
@@ -46,6 +46,6 @@
     "phone": "Riya: +91 90000 00000"
   },
   "music": {
-    "track": "/invitation-templates/template%209/static/media/background-music.mp3"
+    "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/media/background-music.mp3"
   }
 }

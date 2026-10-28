@@ -1,9 +1,9 @@
 {
   "hero": {
-    "entryVideo": "/invitation-templates/template%208/static/media/gate-entry.mp4",
-    "poster": "/invitation-templates/template%208/static/images/gate-poster.webp",
-    "monogram": "/invitation-templates/template%208/static/images/seal-monogram.png",
-    "music": "/invitation-templates/template%208/static/media/background-music.mp3",
+    "entryVideo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/media/gate-entry.mp4",
+    "poster": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/gate-poster.webp",
+    "monogram": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/seal-monogram.png",
+    "music": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/media/background-music.mp3",
     "tapText": "Tap to Begin",
     "loadingText": "✨ A Beautiful Love Story Awaits... ✨",
     "joiner": "Weds",
@@ -44,9 +44,9 @@
       { "text": "We cannot wait to celebrate the beginning of our forever with the people who mean the most to us!" }
     ],
     "photos": [
-      { "image": "/invitation-templates/template%208/static/images/story-1.webp" },
-      { "image": "/invitation-templates/template%208/static/images/story-2.webp" },
-      { "image": "/invitation-templates/template%208/static/images/story-3.webp" }
+      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/story-1.webp" },
+      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/story-2.webp" },
+      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/story-3.webp" }
     ]
   },
   "events": {
@@ -61,7 +61,7 @@
         "address": "Surrey, BC",
         "country": "Canada",
         "mapUrl": "",
-        "image": "/invitation-templates/template%208/static/images/event-sangeet.webp"
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-sangeet.webp"
       },
       {
         "title": "Mehndi & Maiyan",
@@ -71,7 +71,7 @@
         "address": "White Rock, BC",
         "country": "Canada",
         "mapUrl": "",
-        "image": "/invitation-templates/template%208/static/images/event-mehndi.webp"
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-mehndi.webp"
       },
       {
         "title": "Anand Karaj",
@@ -81,7 +81,7 @@
         "address": "Surrey, BC",
         "country": "Canada",
         "mapUrl": "",
-        "image": "/invitation-templates/template%208/static/images/event-anand-karaj.webp"
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-anand-karaj.webp"
       },
       {
         "title": "Reception",
@@ -91,15 +91,15 @@
         "address": "Ludhiana, Punjab",
         "country": "India",
         "mapUrl": "",
-        "image": "/invitation-templates/template%208/static/images/event-reception.webp"
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-reception.webp"
       }
     ],
     "showJourney": true,
     "journeyAfter": "3",
     "fromLabel": "CANADA",
-    "fromImage": "/invitation-templates/template%208/static/images/landmark-canada.webp",
+    "fromImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-canada.webp",
     "toLabel": "INDIA",
-    "toImage": "/invitation-templates/template%208/static/images/landmark-india.webp"
+    "toImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp"
   },
   "family": {
     "title": "With Blessings From",

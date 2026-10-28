@@ -373,7 +373,7 @@ export class TemplateCatalogService {
   private seed(ignoreStored = false): readonly CatalogTemplate[] {
     const stored = ignoreStored ? null : this.readStored();
     return this.content.templates.map((template) => {
-      const override = stored?.[template.slotId];
+      const override = pickEditable(stored?.[template.slotId]);
       return {
         ...template,
         ...override,
@@ -403,6 +403,22 @@ export class TemplateCatalogService {
       // Storage unavailable — edits still apply for this page load.
     }
   }
+}
+
+const EDITABLE_KEYS = ['name', 'category', 'monogram', 'photo', 'accent', 'pricing', 'price', 'published'] as const;
+
+/**
+ * The stored fields an admin can actually change. Everything else (media URLs,
+ * preview links…) is owned by the template definition, so an old stored copy can
+ * never shadow it — e.g. when media moved from the site to the bucket.
+ */
+function pickEditable(stored: Partial<CatalogTemplate> | undefined): Partial<CatalogTemplate> {
+  if (!stored) return {};
+  const out: Record<string, unknown> = {};
+  for (const key of EDITABLE_KEYS) {
+    if (stored[key] !== undefined) out[key] = stored[key];
+  }
+  return out as Partial<CatalogTemplate>;
 }
 
 /** Minor units -> ₹ display string, or "Free". */

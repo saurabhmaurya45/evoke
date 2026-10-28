@@ -9,6 +9,7 @@ import {
   inject,
   viewChildren,
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MagneticDirective } from '../../../../shared/directives/magnetic.directive';
 import { ViewportService } from '../../../../core/services/viewport.service';
@@ -44,6 +45,22 @@ export class HeroComponent implements AfterViewInit, AfterViewChecked {
 
   /** Gates play attempts until the post-hydration nudge burst (below) has finished. */
   private settled = false;
+
+  constructor() {
+    // Preload the featured card's poster (the LCP image). Emitted while
+    // prerendering so it lands in the static <head>; its URL comes from the
+    // environment (the media bucket in production), so it can't live in index.html.
+    if (!this.window) {
+      const doc = inject(DOCUMENT);
+      // Attributes, not properties: the server DOM doesn't reflect `link.as`.
+      const link = doc.createElement('link');
+      link.setAttribute('rel', 'preload');
+      link.setAttribute('as', 'image');
+      link.setAttribute('href', this.content.heroCards[HERO_FEATURE_INDEX].img);
+      link.setAttribute('fetchpriority', 'high');
+      doc.head.appendChild(link);
+    }
+  }
 
   ngAfterViewInit(): void {
     // The hero renders in the server-sent HTML (unlike the deferred, client-only

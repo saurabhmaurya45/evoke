@@ -141,6 +141,9 @@ $nav-collapse: 1180px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  // Above the open menu's backdrop (z-nav - 1, also inside .nav), so the ✕ stays tappable.
+  position: relative;
+  z-index: $z-nav;
 }
 
 .nav__backdrop {

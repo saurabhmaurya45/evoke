@@ -26,7 +26,11 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              { "glob": "**/*", "input": "public" },
+              {
+                "glob": "**/*",
+                "input": "public",
+                "ignore": ["invitation-templates/**/*.{mp4,webm,mp3,m4a,jpg,jpeg,png,webp,gif}"]
+              },
               { "glob": "**/*", "input": "src/assets", "output": "assets" }
             ],
             "stylePreprocessorOptions": {

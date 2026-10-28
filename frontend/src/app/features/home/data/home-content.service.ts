@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { mediaUrl } from '../../../core/utils/media-url';
 import { templateSeoBySlotId } from '../../templates/data/template-seo.data';
 import type {
   FaqItem,
@@ -89,7 +90,7 @@ function cardPreview(n: number): {
   phoneVideo: string;
   phonePoster: string;
 } {
-  const dir = `/invitation-templates/template%20${n}`;
+  const dir = mediaUrl(`/invitation-templates/template%20${n}`);
   return {
     previewVideo: `${dir}/card.mp4`,
     previewPoster: `${dir}/card-poster.jpg`,
@@ -457,7 +458,7 @@ export class HomeContentService {
   readonly heroCards: readonly HeroCard[] = HERO_TEMPLATE_SHOTS.map(({ slotId, templateNo }) => {
     const template = this.templateBySlotId(slotId);
     const seo = templateSeoBySlotId(slotId);
-    const dir = `/invitation-templates/template%20${templateNo}`;
+    const dir = mediaUrl(`/invitation-templates/template%20${templateNo}`);
     const title = template?.name ?? '';
     return {
       slotId,

@@ -7,6 +7,12 @@ export interface AppEnvironment {
   readonly name: 'development' | 'staging' | 'production';
   readonly apiBaseUrl: string;
   readonly appUrl: string;
+  /**
+   * Origin + bucket prefix that template media (videos, audio, images) is served
+   * from, e.g. `https://pub-xxxx.r2.dev/asset` (a Cloudflare R2 public bucket). Empty = same origin
+   * (`public/`), which is what local development uses. See `mediaUrl()`.
+   */
+  readonly mediaBaseUrl: string;
   /** Supabase project URL and publishable (anon) key — safe to expose client-side. */
   readonly supabaseUrl: string;
   readonly supabasePublishableKey: string;

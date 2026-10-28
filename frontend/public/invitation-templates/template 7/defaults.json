@@ -1,11 +1,11 @@
 {
   "hero": {
-    "image": "/invitation-templates/template%207/static/images/hero-couple.png",
-    "entryVideo": "/invitation-templates/template%207/static/media/entry.mp4",
-    "audioTrack": "/invitation-templates/template%207/static/media/background-music.mp3"
+    "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/hero-couple.png",
+    "entryVideo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/entry.mp4",
+    "audioTrack": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/background-music.mp3"
   },
   "family": {
-    "deityImage": "/invitation-templates/template%207/static/images/ganesh.png",
+    "deityImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/ganesh.png",
     "invocation": "वक्रतुंड महाकाय सूर्यकोटि समप्रभा<br>निर्विघ्न कुरुमेदव सर्वकार्येषु सर्वदा",
     "blessingsLabel": "With Divine Blessings Of",
     "blessingsNames": "Late Smt. Savitri Malhotra and Shri Ramesh Chandra Malhotra",
@@ -33,14 +33,14 @@
         "date": "6th July 2026",
         "venue": "Garden Lawn (Poolside)",
         "dressCode": "Light Shades of Pink",
-        "image": "/invitation-templates/template%207/static/images/event-haldi.png"
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-haldi.png"
       },
       {
         "title": "Sparkling Night",
         "date": "6th July 2026",
         "venue": "Aamantran Banquet Hall",
         "dressCode": "Glitz and Glam",
-        "image": "/invitation-templates/template%207/static/images/event-sangeet.png"
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-sangeet.png"
       },
       {
         "title": "Threads of Traditional",
@@ -48,7 +48,7 @@
         "time": "10:00 AM",
         "venue": "Aavednam Conference Hall",
         "dressCode": "Bandhej, Lahriya or Gharchola",
-        "image": "/invitation-templates/template%207/static/images/event-mayra.png"
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-mayra.png"
       },
       {
         "title": "Two Souls, One Journey",
@@ -56,14 +56,14 @@
         "time": "5:00 PM Baarat · 7:00 PM Varmala",
         "venue": "Sky Lawn",
         "dressCode": "Indian Traditional",
-        "image": "/invitation-templates/template%207/static/images/event-wedding.png"
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-wedding.png"
       }
     ]
   },
   "venue": {
     "label": "Where Love Awaits",
     "heading": "Our Cherished<br>Venue",
-    "image": "/invitation-templates/template%207/static/images/venue.png",
+    "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/venue.png",
     "name": "Anantum Gateway Resort",
     "address": "Jim Corbett, Ramnagar, Uttarakhand",
     "directionsUrl": "https://maps.google.com/?q=Anantum+Gateway+Resort+Jim+Corbett+Ramnagar"
@@ -71,7 +71,7 @@
   "memories": {
     "label": "A Glimpse of Us",
     "heading": "Our Beautiful<br>Moments",
-    "video": "/invitation-templates/template%207/static/media/memories.mp4",
+    "video": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/memories.mp4",
     "caption": "A moment captured in time, forever in our hearts"
   },
   "footer": {
