@@ -42,6 +42,7 @@ class FakeB2Client(B2Client):
     def __init__(self) -> None:
         # Deliberately skip B2Client.__init__ (no real boto3 clients needed).
         self.bucket = "test-bucket"
+        self._public_base_url: str | None = None  # a private bucket unless a test sets it
         self.put_calls: list[tuple[str, str, int]] = []
         self.get_calls: list[tuple[str, int]] = []
         self.head_response: dict | None = {"ContentLength": 0}
@@ -299,6 +300,26 @@ async def test_successful_ack_flips_to_uploaded(client, auth_headers, b2):
     body = resp.json()["data"]
     assert body["status"] == "UPLOADED"
     assert body["storagePath"] == upload["storagePath"]
+    assert body["url"].endswith("?get-signed")  # private bucket: an expiring signed URL
+
+
+async def test_ack_returns_a_permanent_public_url_when_the_bucket_is_public(
+    client, auth_headers, b2
+):
+    b2._public_base_url = "https://media.example.com"
+    headers = auth_headers()
+    event = await _make_event(client, headers)
+    upload = await _request_upload(client, headers, event["id"])
+    b2.head_response = {"ContentLength": 1000}
+
+    resp = await client.post(
+        "/v1/media/upload/ack",
+        headers=headers,
+        json={"uploadId": upload["uploadId"], "status": "SUCCESS"},
+    )
+    assert resp.status_code == 200
+    assert resp.json()["data"]["url"] == f"https://media.example.com/{upload['storagePath']}"
+    assert b2.get_calls == []  # nothing was presigned for reading
 
 
 async def test_template_with_no_thumbnail_returns_null_not_a_presign_call(client, db_session, b2):
