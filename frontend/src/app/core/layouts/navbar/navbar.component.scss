@@ -143,6 +143,23 @@ $nav-collapse: 1180px;
   justify-content: center;
 }
 
+.nav__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: calc($z-nav - 1);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .nav__mobile {
   display: flex;
   flex-direction: column;
@@ -152,6 +169,8 @@ $nav-collapse: 1180px;
   padding: 8px 20px 20px;
   background: rgb(var(--nav-rgb));
   border-top: 1px solid rgba(var(--glass-rgb), 0.08);
+  position: relative;
+  z-index: $z-nav;
 }
 
 .nav__mobile-link {
