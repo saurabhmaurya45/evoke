@@ -16,9 +16,9 @@
         @for (link of navLinks; track link.label) {
           <li>
             @if (link.path) {
-              <a class="nav__link" [routerLink]="link.path">{{ link.label }}</a>
+              <a class="nav__link" [routerLink]="link.path" [class.nav__link--active]="isLinkActive(link)">{{ link.label }}</a>
             } @else {
-              <a class="nav__link" routerLink="/" [fragment]="link.fragment">{{ link.label }}</a>
+              <a class="nav__link" routerLink="/" [fragment]="link.fragment" [class.nav__link--active]="isLinkActive(link)">{{ link.label }}</a>
             }
           </li>
         }
@@ -45,17 +45,18 @@
           aria-label="Toggle navigation menu"
           (click)="toggleMobileMenu()"
         >
-          <span aria-hidden="true">☰</span>
+          <span aria-hidden="true">{{ mobileMenuOpen() ? '✕' : '☰' }}</span>
         </button>
       </div>
     </div>
   </div>
 
   @if (mobileMenuOpen()) {
+    <div class="nav__backdrop" (click)="closeMobileMenu()"></div>
     <div class="nav__mobile" id="mobile-menu">
       @for (link of navLinks; track link.label) {
         @if (link.path) {
-          <a class="nav__mobile-link" [routerLink]="link.path" (click)="closeMobileMenu()">
+          <a class="nav__mobile-link" [routerLink]="link.path" [class.nav__mobile-link--active]="isLinkActive(link)" (click)="closeMobileMenu()">
             {{ link.label }}
           </a>
         } @else {
@@ -63,6 +64,7 @@
             class="nav__mobile-link"
             routerLink="/"
             [fragment]="link.fragment"
+            [class.nav__mobile-link--active]="isLinkActive(link)"
             (click)="closeMobileMenu()"
           >
             {{ link.label }}

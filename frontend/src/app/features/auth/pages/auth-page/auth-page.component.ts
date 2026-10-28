@@ -142,6 +142,10 @@ export class AuthPageComponent {
       case 'weak_password': return 'Please choose a stronger password (at least 8 characters).';
       case 'invalid_otp': return 'That code is invalid. Please check it and try again.';
       case 'expired_otp': return 'That code has expired. Request a new one and try again.';
+      case 'email_not_confirmed': return 'Please confirm your email address first. Check your inbox for a verification link.';
+      case 'user_not_found': return 'That email and password combination is not recognised.';
+      case 'user_banned': return 'This account has been deactivated. Contact support for assistance.';
+      case 'session_expired': return 'Your session has expired. Please sign in again.';
       case 'network_error': return 'We could not reach the server. Check your connection and try again.';
       default: return 'We could not complete that request. Please try again.';
     }

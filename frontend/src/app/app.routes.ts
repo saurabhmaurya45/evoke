@@ -93,13 +93,8 @@ export const routes: Routes = [
       },
       {
         path: 'contact',
-        component: ComingSoonComponent,
-        title: 'Contact • theinvitely.in',
-        data: {
-          eyebrow: 'Company',
-          heading: 'Contact us',
-          description: 'A dedicated contact experience is on its way.',
-        },
+        loadChildren: () =>
+          import('./features/contact/contact.routes').then((m) => m.CONTACT_ROUTES),
       },
       {
         path: 'privacy',
