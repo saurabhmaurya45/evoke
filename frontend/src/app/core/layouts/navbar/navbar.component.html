@@ -52,6 +52,7 @@
   </div>
 
   @if (mobileMenuOpen()) {
+    <div class="nav__backdrop" (click)="closeMobileMenu()"></div>
     <div class="nav__mobile" id="mobile-menu">
       @for (link of navLinks; track link.label) {
         @if (link.path) {
