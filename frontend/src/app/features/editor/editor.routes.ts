@@ -11,6 +11,8 @@ export const EDITOR_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/editor-page/editor-page.component').then((m) => m.EditorPageComponent),
     title: 'Edit Template • theinvitely.in',
+    // Separate chunk from this routes file; preloaded with it (IdlePreloadingStrategy).
+    data: { preload: true },
   },
   { path: '', pathMatch: 'full', redirectTo: 'tpl-samarpan-royal' },
 ];

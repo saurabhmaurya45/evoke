@@ -761,6 +761,17 @@
           grid-template-columns: 52px 1fr;
           gap: 18px;
         }
+        /* The empty spacer cells only balance the desktop 3-column layout; on
+           phones they'd auto-place into the grid and push the text below its icon. */
+        .t-row > div:empty {
+          display: none;
+        }
+        .t-row {
+          align-items: start;
+        }
+        .t-row .txt {
+          grid-row: 1;
+        }
         .t-row .txt.right {
           text-align: left;
           grid-column: 2;

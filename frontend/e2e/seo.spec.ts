@@ -20,7 +20,9 @@ test('sitemap lists every template, hub, community page and post', () => {
   expect(paths).toContain('/engagement-invitations');
   expect(paths.filter((p) => p.startsWith('/wedding-invitations/'))).toHaveLength(6);
   expect(paths.filter((p) => p.startsWith('/blog/'))).toHaveLength(8);
-  for (const blocked of ['/login', '/signup', '/pricing', '/about', '/contact', '/services']) {
+  expect(paths).toContain('/contact');
+  // Auth screens, "coming soon" placeholders and redirects never belong in it.
+  for (const blocked of ['/login', '/signup', '/pricing', '/about', '/services']) {
     expect(paths).not.toContain(blocked);
   }
 });

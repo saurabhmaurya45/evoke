@@ -45,7 +45,7 @@
           aria-label="Toggle navigation menu"
           (click)="toggleMobileMenu()"
         >
-          <span aria-hidden="true">☰</span>
+          <span aria-hidden="true">{{ mobileMenuOpen() ? '✕' : '☰' }}</span>
         </button>
       </div>
     </div>

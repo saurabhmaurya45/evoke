@@ -8,7 +8,7 @@ export const PRIMARY_NAV: readonly NavLink[] = [
   { label: 'Templates', path: '/templates' },
   { label: 'How It Works', fragment: 'how-it-works' },
   { label: 'FAQ', fragment: 'faq' },
-  { label: 'Contact', fragment: 'footer-contact' },
+  { label: 'Contact', path: '/contact' },
 ];
 
 export const FOOTER_COLUMNS: readonly FooterColumn[] = [
@@ -39,7 +39,7 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
       { label: 'Blog', path: '/blog' },
       { label: 'About', fragment: 'hero' },
       { label: 'FAQ', fragment: 'faq' },
-      { label: 'Contact', fragment: 'footer-contact' },
+      { label: 'Contact', path: '/contact' },
     ],
   },
   {

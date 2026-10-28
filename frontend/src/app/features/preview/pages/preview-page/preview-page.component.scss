@@ -114,8 +114,21 @@
 }
 
 .preview__frame-wrap {
+  position: relative;
   flex: 1;
   min-height: 0;
+}
+
+// Covers the iframe until the template has loaded (its media can take seconds
+// on a slow connection) — the server HTML shows it too, so it's there from first paint.
+.preview__loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #15120e;
+  --ld-size: clamp(88px, 22vw, 128px);
 }
 
 .preview__frame {

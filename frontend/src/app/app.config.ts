@@ -9,6 +9,7 @@ import {
   provideRouter,
   withComponentInputBinding,
   withInMemoryScrolling,
+  withPreloading,
   withRouterConfig,
 } from '@angular/router';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
@@ -24,6 +25,7 @@ import { authTokenInterceptor } from './core/interceptors/auth-token.interceptor
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { AnalyticsService } from './core/services/analytics.service';
 import { AuthService } from './core/services/auth.service';
+import { IdlePreloadingStrategy } from './core/routing/idle-preloading.strategy';
 import { HttpTemplateRepository } from './features/editor/data/http-template-repository';
 import { TEMPLATE_REPOSITORY } from './features/editor/data/template-repository';
 
@@ -44,6 +46,8 @@ export const appConfig: ApplicationConfig = {
       // Restore scroll on back/forward and honour in-page #fragment anchors.
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' }),
       withRouterConfig({ paramsInheritanceStrategy: 'always' }),
+      // Fetch the preview/editor code ahead of the first tap on a template card.
+      withPreloading(IdlePreloadingStrategy),
     ),
     provideHttpClient(
       withFetch(),

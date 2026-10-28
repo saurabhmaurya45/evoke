@@ -13,11 +13,14 @@ export const routes: Routes = [
     // Full-screen template preview — rendered outside the marketing shell.
     path: 'preview',
     loadChildren: () => import('./features/preview/preview.routes').then((m) => m.PREVIEW_ROUTES),
+    // Preloaded after startup (IdlePreloadingStrategy): opened from every template card.
+    data: { preload: true },
   },
   {
     // Full-screen split-pane template editor — also outside the marketing shell.
     path: 'editor',
     loadChildren: () => import('./features/editor/editor.routes').then((m) => m.EDITOR_ROUTES),
+    data: { preload: true },
   },
   {
     // Public/owner-only invitation viewer — full-screen, no marketing shell.
@@ -93,13 +96,11 @@ export const routes: Routes = [
       },
       {
         path: 'contact',
-        component: ComingSoonComponent,
-        title: 'Contact • theinvitely.in',
-        data: {
-          eyebrow: 'Company',
-          heading: 'Contact us',
-          description: 'A dedicated contact experience is on its way.',
-        },
+        loadComponent: () =>
+          import('./features/contact/pages/contact-page/contact-page.component').then(
+            (m) => m.ContactPageComponent,
+          ),
+        title: 'Contact Us • theinvitely.in',
       },
       {
         path: 'privacy',

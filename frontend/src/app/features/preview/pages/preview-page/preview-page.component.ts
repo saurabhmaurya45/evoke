@@ -9,6 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { DomSanitizer, type SafeResourceUrl } from '@angular/platform-browser';
 import { WINDOW } from '../../../../core/tokens/window.token';
 import { HomeContentService } from '../../../home/data/home-content.service';
@@ -29,7 +30,7 @@ type PreviewMode = 'preview' | 'use';
 @Component({
   selector: 'app-preview-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
+  imports: [RouterLink, LoaderComponent],
   templateUrl: './preview-page.component.html',
   styleUrl: './preview-page.component.scss',
 })
@@ -63,6 +64,9 @@ export class PreviewPageComponent {
    */
   protected readonly showFrame = signal(false);
 
+  /** False until the template inside the iframe has loaded; a loader covers it meanwhile. */
+  protected readonly frameLoaded = signal(false);
+
   /** "Use this template" opens the editor when signed in; otherwise it goes to
    * login first and comes back to this template's preview afterwards. */
   protected readonly useLink = computed(() =>
@@ -76,8 +80,27 @@ export class PreviewPageComponent {
       : { returnUrl: `/preview/${this.template().slotId}#use` },
   );
 
+  /**
+   * The iframe also fires `load` for the empty about:blank document it has
+   * the moment it's inserted, before `src` is applied — that one must not hide
+   * the loader.
+   */
+  protected onFrameLoad(frame: HTMLIFrameElement): void {
+    try {
+      if (frame.contentWindow?.location.href === 'about:blank') return;
+    } catch {
+      // Cross-origin document (e.g. served from the media bucket): it's the real one.
+    }
+    this.frameLoaded.set(true);
+  }
+
   constructor() {
     afterNextRender(() => this.showFrame.set(true));
+    // Switching template (same component, new param) loads a new document.
+    effect(() => {
+      this.safeSrc();
+      this.frameLoaded.set(false);
+    });
     effect(() => {
       const tpl = this.template();
       const seo = templateSeoBySlotId(tpl.slotId);

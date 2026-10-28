@@ -10,6 +10,9 @@ export const PREVIEW_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/preview-page/preview-page.component').then((m) => m.PreviewPageComponent),
     title: 'Template Preview • theinvitely.in',
+    // The page chunk is separate from this routes file; flag it too so
+    // IdlePreloadingStrategy fetches it along with the parent.
+    data: { preload: true },
   },
   { path: '', pathMatch: 'full', redirectTo: 'tpl-samarpan-royal' },
 ];

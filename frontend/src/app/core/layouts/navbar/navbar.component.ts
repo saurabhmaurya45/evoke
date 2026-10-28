@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  signal,
+} from '@angular/core';
 import { LogoComponent } from '../../../shared/components/logo/logo.component';
 import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/theme-toggle.component';
 import { MagneticDirective } from '../../../shared/directives/magnetic.directive';
@@ -12,7 +19,8 @@ import { APP_NAME } from '../../constants/app.constants';
 /**
  * Fixed top navigation. Reacts to scroll (glass background) and viewport
  * width (desktop links vs. mobile menu) purely through ViewportService
- * signals — no local scroll/resize listeners.
+ * signals — no local scroll/resize listeners. The mobile menu closes on a
+ * link tap, an outside tap, and Escape.
  */
 @Component({
   selector: 'app-navbar',
@@ -29,6 +37,7 @@ import { APP_NAME } from '../../constants/app.constants';
 })
 export class NavbarComponent {
   private readonly router = inject(Router);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   protected readonly viewport = inject(ViewportService);
   protected readonly auth = inject(AuthService);
   protected readonly navLinks = PRIMARY_NAV;
@@ -47,5 +56,17 @@ export class NavbarComponent {
 
   protected closeMobileMenu(): void {
     this.mobileMenuOpen.set(false);
+  }
+
+  @HostListener('document:click', ['$event'])
+  protected onDocumentClick(event: MouseEvent): void {
+    if (this.mobileMenuOpen() && !this.host.nativeElement.contains(event.target as Node)) {
+      this.closeMobileMenu();
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  protected onEscape(): void {
+    this.closeMobileMenu();
   }
 }

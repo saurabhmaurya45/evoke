@@ -35,7 +35,13 @@
         loading="eager"
         referrerpolicy="no-referrer"
         sandbox="allow-scripts allow-same-origin allow-popups"
+        (load)="onFrameLoad($any($event.target))"
       ></iframe>
+    }
+    @if (!frameLoaded()) {
+      <div class="preview__loading">
+        <app-loader [label]="'Loading ' + template().name" />
+      </div>
     }
   </div>
 </div>
