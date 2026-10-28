@@ -14,6 +14,10 @@ export type AuthErrorCode =
   | 'invalid_otp'
   | 'expired_otp'
   | 'weak_password'
+  | 'email_not_confirmed'
+  | 'user_not_found'
+  | 'user_banned'
+  | 'session_expired'
   | 'unknown';
 export type UserRole = 'user' | 'admin';
 export interface AuthUser {
@@ -366,6 +370,14 @@ export class AuthService {
         return 'expired_otp';
       case 'otp_disabled':
         return 'invalid_otp';
+      case 'email_not_confirmed':
+        return 'email_not_confirmed';
+      case 'user_not_found':
+        return 'user_not_found';
+      case 'user_banned':
+        return 'user_banned';
+      case 'session_expired':
+        return 'session_expired';
       default:
         break;
     }
@@ -373,8 +385,10 @@ export class AuthService {
     if (message.includes('already registered') || message.includes('already exists')) return 'user_exists';
     if (message.includes('invalid login credentials')) return 'invalid_credentials';
     if (message.includes('password')) return 'weak_password';
-    if (message.includes('expired')) return 'expired_otp';
+    if (message.includes('expired')) return 'session_expired';
     if (message.includes('token') || message.includes('otp') || message.includes('code')) return 'invalid_otp';
+    if (message.includes('email') && message.includes('confirmed')) return 'email_not_confirmed';
+    if (message.includes('banned') || message.includes('deactivated')) return 'user_banned';
     if (!error.status || message.includes('fetch') || message.includes('network')) return 'network_error';
     return fallback;
   }
