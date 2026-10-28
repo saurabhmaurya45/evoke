@@ -4,7 +4,7 @@
 
 - Validate at every layer that actually has the information to validate, and no other layer.
   - **Pydantic schema level** (`app/*/schemas.py`): shape and self-contained cross-field rules — things fully knowable from the request body alone (e.g. `pricingModel=PAID` requires `priceAmountMinor` + `currencyId` in the same payload). Use `model_validator(mode="after")`, raise `ValueError` with a message referencing the camelCase field name the client sent.
-  - **Service layer** (`app/*/service.py`): anything requiring a DB read — foreign-key existence/active checks, uniqueness checks, invariants that depend on a partial update's *merged* state (a `PATCH` payload alone can't see fields it didn't touch). Never rely on a DB constraint to surface a validation error to the client — check first, raise a typed error, and let the constraint be the last-resort safety net, not the primary mechanism.
+  - **Service layer** (`app/*/service.py`): anything requiring a DB read — foreign-key existence/active checks, uniqueness checks, invariants that depend on a partial update's _merged_ state (a `PATCH` payload alone can't see fields it didn't touch). Never rely on a DB constraint to surface a validation error to the client — check first, raise a typed error, and let the constraint be the last-resort safety net, not the primary mechanism.
 - Before writing an `INSERT`/`UPDATE` that has a `UNIQUE` or `FOREIGN KEY` constraint backing it, check for the conflict/missing-reference explicitly and raise the matching typed error. Do not let `IntegrityError` reach the client — it becomes a generic, unhelpful 500 instead of a clean 409/422 with a message that says what was actually wrong. (Concrete instance of this bug: `create_template` was missing a duplicate-slug pre-check that `create_category`/`create_currency` already had — fixed by adding the same pre-check pattern.)
 - For every new mutating endpoint, ask explicitly: what makes this input invalid, and at which layer can that actually be detected? Write that check down instead of assuming the ORM/DB will catch it acceptably.
 
@@ -32,3 +32,19 @@
 - Match an existing pattern before inventing a new one. If two similar resources (e.g. categories/currencies) already implement create/update/delete a certain way, a third resource joining that pattern should follow it exactly, not a variant.
 - No mock/seed data in application code or startup lifespan — the app must boot clean with an empty catalog. Seeding, if ever needed, is an external script, never something `main.py` runs automatically.
 - After any schema/model change, verify the actual database matches (`information_schema.columns`) rather than assuming a migration applied cleanly — migration chains can end up partially applied during iteration.
+
+Implement this feature in the existing Evoke Angular 18 admin
+dashboard. Read and follow EVOKE_DASHBOARD_DESIGN_RULES.md and
+CLAUDE.md before making changes. Inspect the existing admin shell,
+shared components, theme tokens, nearby feature implementations,
+services, models, and API contracts. Reuse established patterns and
+preserve the current architecture. Maintain the premium, restrained,
+Apple-inspired visual language; consistent spacing and typography;
+WCAG AA contrast; keyboard accessibility; responsive behavior; and
+purposeful, reduced-motion-aware transitions. Do not assume
+React-specific libraries such as Framer Motion work directly in
+Angular. Implement loading, empty, error, success, and validation
+states as applicable. Do not invent API contracts or alter
+authentication behavior unrelated to the task. Run available checks,
+inspect the rendered UI when tools permit, fix issues, and summarize
+the files changed and validations performed.

@@ -13,6 +13,10 @@ export type AuthErrorCode =
   | 'invalid_otp'
   | 'expired_otp'
   | 'weak_password'
+  | 'email_not_confirmed'
+  | 'user_not_found'
+  | 'user_banned'
+  | 'session_expired'
   | 'unknown';
 export type UserRole = 'user' | 'admin';
 export interface AuthUser {
@@ -29,6 +33,13 @@ export interface AuthResult { readonly ok: boolean; readonly error?: AuthErrorCo
 type PendingAction = 'confirm-signup' | 'password-reset' | 'otp';
 
 const PROFILE_TIMEOUT_MS = 8000;
+const DEV_BYPASS_KEY = 'DEV_BYPASS_AUTH';
+const DEV_BYPASS_USER: AuthUser = {
+  id: 'dev-bypass-admin',
+  email: 'dev-bypass@local',
+  emailVerified: true,
+  role: 'admin',
+};
 
 /** Supabase's OAuth provider id for each button — Microsoft/Entra ID is "azure" in Supabase. */
 const SUPABASE_PROVIDER: Record<SocialProvider, Provider> = {
@@ -255,12 +266,30 @@ export class AuthService {
     void this.supabase.auth.signOut();
   }
 
+  /**
+   * DEVELOPMENT ONLY: flips on the navbar's "🔓 Admin" bypass. Writes the flag
+   * `admin.guard.dev.ts` reads for route access, and also seeds a fake admin session
+   * here so every `isAdmin()`-gated signal (incl. `TemplateHttpService.getTemplatesQuery`'s
+   * `include_draft` param) sees a real admin, not just the route guard.
+   */
+  enableDevBypass(): void {
+    if (environment.production) return;
+    localStorage.setItem(DEV_BYPASS_KEY, 'true');
+    this._session.set(this.devBypassSession());
+  }
+
+  private devBypassSession(): AuthSession | null {
+    if (environment.production) return null;
+    const enabled = typeof localStorage !== 'undefined' && localStorage.getItem(DEV_BYPASS_KEY) === 'true';
+    return enabled ? { token: 'dev-bypass-token', user: DEV_BYPASS_USER } : null;
+  }
+
   private async handleAuthChange(
     event: AuthChangeEvent | 'INITIAL_SESSION',
     session: Session | null,
   ): Promise<void> {
     if (!session) {
-      this._session.set(null);
+      this._session.set(this.devBypassSession());
       this.profileFetch = null;
       return;
     }
@@ -360,6 +389,14 @@ export class AuthService {
         return 'expired_otp';
       case 'otp_disabled':
         return 'invalid_otp';
+      case 'email_not_confirmed':
+        return 'email_not_confirmed';
+      case 'user_not_found':
+        return 'user_not_found';
+      case 'user_banned':
+        return 'user_banned';
+      case 'session_expired':
+        return 'session_expired';
       default:
         break;
     }
@@ -367,8 +404,10 @@ export class AuthService {
     if (message.includes('already registered') || message.includes('already exists')) return 'user_exists';
     if (message.includes('invalid login credentials')) return 'invalid_credentials';
     if (message.includes('password')) return 'weak_password';
-    if (message.includes('expired')) return 'expired_otp';
+    if (message.includes('expired')) return 'session_expired';
     if (message.includes('token') || message.includes('otp') || message.includes('code')) return 'invalid_otp';
+    if (message.includes('email') && message.includes('confirmed')) return 'email_not_confirmed';
+    if (message.includes('banned') || message.includes('deactivated')) return 'user_banned';
     if (!error.status || message.includes('fetch') || message.includes('network')) return 'network_error';
     return fallback;
   }
