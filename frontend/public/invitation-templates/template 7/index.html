@@ -147,6 +147,11 @@
             height: 100%;
             object-fit: cover;
         }
+        /* The entry video is portrait (720x1280). On a landscape screen "cover" crops it
+           to a huge zoomed-in sliver of the envelope, so show it whole instead. */
+        @media (min-aspect-ratio: 1/1) {
+            .entry-video-container video { object-fit: contain; }
+        }
 
         /* ============================================================
            AUDIO TOGGLE
@@ -216,8 +221,19 @@
             height: auto;
             display: block;
         }
+        /* The hero photo is portrait. At full width on a landscape screen it becomes
+           several screens tall, so fit it to the viewport height and centre it instead. */
+        @media (min-aspect-ratio: 1/1) {
+            .hero-img {
+                width: auto;
+                max-width: 100%;
+                height: 100vh;
+                margin: 0 auto;
+                object-fit: contain;
+            }
+        }
 
-        .scroll-cue { 
+        .scroll-cue {
             position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); 
             z-index: 5; display: flex; flex-direction: column; align-items: center; 
             gap: 0.4rem; opacity: 0.85; animation: scrollBounce 2s ease infinite; 
@@ -882,6 +898,92 @@
         @keyframes fadeIn { from{opacity:0} to{opacity:1} }
         .fade-in { animation: fadeIn 0.8s ease both; }
     </style>
+    <style id="evoke-ambient-css">
+        /* Landscape/desktop: drifting gold sparkles and warm glows fill the space beside the portrait
+           entry video, so the whole screen feels alive. Decoration only (aria-hidden, no input). */
+        .ea-ambient { display: none; }
+        @media (min-aspect-ratio: 1/1) {
+            .ea-ambient {
+                display: block;
+                position: absolute;
+                inset: 0;
+                overflow: hidden;
+                pointer-events: none;
+                background:
+                    radial-gradient(60% 55% at 12% 85%, rgba(201, 150, 62, 0.2), transparent 70%),
+                    radial-gradient(55% 50% at 90% 20%, rgba(184, 89, 64, 0.22), transparent 70%),
+                    #1a0d08;
+            }
+            .ea-ambient .ea-spark {
+                position: absolute;
+                bottom: -24px;
+                left: var(--x);
+                width: var(--s);
+                height: var(--s);
+                border-radius: 50%;
+                background: radial-gradient(circle, #fff3c4 0%, #e3bd4a 45%, rgba(201, 162, 39, 0) 72%);
+                box-shadow: 0 0 calc(var(--s) * 2.2) rgba(227, 189, 74, 0.55);
+                opacity: 0;
+                animation: ea-rise var(--d) linear var(--delay) infinite;
+            }
+            .ea-ambient .ea-glow {
+                position: absolute;
+                left: var(--x);
+                top: var(--y);
+                width: var(--s);
+                height: var(--s);
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(255, 214, 122, 0.3), rgba(255, 170, 60, 0.1) 45%, transparent 70%);
+                filter: blur(6px);
+                animation: ea-drift var(--d) ease-in-out var(--delay) infinite alternate;
+            }
+            @keyframes ea-rise {
+                0% { transform: translate3d(0, 0, 0) scale(0.6); opacity: 0; }
+                12% { opacity: 0.95; }
+                50% { transform: translate3d(calc(var(--sway) * 1px), -55vh, 0) scale(1); }
+                88% { opacity: 0.8; }
+                100% { transform: translate3d(calc(var(--sway) * -0.6px), -112vh, 0) scale(0.7); opacity: 0; }
+            }
+            @keyframes ea-drift {
+                0% { transform: translate3d(0, 0, 0) scale(0.9); opacity: 0.55; }
+                100% { transform: translate3d(40px, -50px, 0) scale(1.15); opacity: 1; }
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ea-ambient .ea-spark, .ea-ambient .ea-glow { animation: none; opacity: 0.5; }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var gate = document.getElementById('entry-gate');
+            if (!gate || gate.querySelector('.ea-ambient')) return;
+            var wrap = document.createElement('div');
+            wrap.className = 'ea-ambient';
+            wrap.setAttribute('aria-hidden', 'true');
+            var i, el;
+            for (i = 0; i < 38; i++) {
+                el = document.createElement('span');
+                el.className = 'ea-spark';
+                el.style.setProperty('--x', (Math.random() * 100).toFixed(1) + '%');
+                el.style.setProperty('--s', (3 + Math.random() * 6).toFixed(1) + 'px');
+                el.style.setProperty('--d', (9 + Math.random() * 12).toFixed(1) + 's');
+                el.style.setProperty('--delay', (-Math.random() * 20).toFixed(1) + 's');
+                el.style.setProperty('--sway', (Math.random() * 80 - 40).toFixed(0));
+                wrap.appendChild(el);
+            }
+            for (i = 0; i < 7; i++) {
+                el = document.createElement('span');
+                el.className = 'ea-glow';
+                el.style.setProperty('--x', (Math.random() * 90).toFixed(1) + '%');
+                el.style.setProperty('--y', (10 + Math.random() * 75).toFixed(1) + '%');
+                el.style.setProperty('--s', (90 + Math.random() * 140).toFixed(0) + 'px');
+                el.style.setProperty('--d', (6 + Math.random() * 7).toFixed(1) + 's');
+                el.style.setProperty('--delay', (-Math.random() * 8).toFixed(1) + 's');
+                wrap.appendChild(el);
+            }
+            gate.insertBefore(wrap, gate.firstChild);
+        });
+    </script>
 </head>
 <body>
 

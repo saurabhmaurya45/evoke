@@ -1152,8 +1152,8 @@ body:not(.wed2-has-hero-verse) .wed2-hero-verse {
   font-size: clamp(2.3rem, 8.4vw, 3.85rem);
   color: var(--wed2-red);
   line-height: 1.05;
-  max-width: 44%;
-  overflow-wrap: anywhere;
+  /* Keep each name on one line: wrapping split them mid-word ("Ja/me/s") inside the narrow ring. */
+  white-space: nowrap;
   opacity: 0;
 }
 
@@ -3267,5 +3267,70 @@ body[data-opening-loader="true"] .wed2-opening-loader-hint {
   body[data-opening-loader="true"] .wed2-opening-loader-bloom span,
   body[data-opening-loader="true"] .wed2-opening-loader-hint {
     animation: none;
+  }
+}
+
+/* Desktop: the ring is a fixed ~280px, so the names must be sized for it too.
+   Without this the base clamp() lets them grow to 4.2rem and break letter by letter. */
+@media (min-width: 1025px) {
+  body.wed2-has-hero-verse .wed2-ring-wrap {
+    top: 51%;
+  }
+
+  .wed2-ring-wrap {
+    width: 280px;
+  }
+
+  body.wed2-ring-larger .wed2-ring-wrap {
+    width: 290px;
+  }
+
+  body.wed2-ring-xl .wed2-ring-wrap {
+    width: 320px;
+  }
+
+  body.wed2-ring-higher .wed2-ring-wrap {
+    top: 42%;
+  }
+
+  .wed2-ring-name {
+    font-size: 2.65rem;
+  }
+
+  body.wed2-ring-names-smaller .wed2-ring-name {
+    font-size: 2.5rem;
+  }
+
+  body.wed2-ring-names-smaller.wed2-ring-font-allura .wed2-ring-name {
+    font-size: 2.4rem;
+  }
+
+  .wed2-ring-amp {
+    font-size: 2.2rem;
+  }
+
+  .wed2-ring-name-bride {
+    right: 12%;
+  }
+
+  body.wed2-bride-name-shift-left .wed2-ring-name-bride {
+    right: 20%;
+  }
+
+  body.wed2-general.wed2-bride-name-shift-left .wed2-ring-name-bride,
+  body.wed2-general.wed2-bride-name-shift-more-left .wed2-ring-name-bride {
+    right: 10%;
+  }
+
+  body.wed2-bride-name-shift-extra-left .wed2-ring-name-bride {
+    right: 28%;
+  }
+
+  body.wed2-bride-name-shift-further-left .wed2-ring-name-bride {
+    right: 34%;
+  }
+
+  body.wed2-bride-first.wed2-groom-name-shift-left .wed2-ring-name-groom {
+    right: 22%;
   }
 }

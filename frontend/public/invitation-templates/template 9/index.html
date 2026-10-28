@@ -9,7 +9,98 @@
     <script src="/invitation-templates/evoke-fit.js"></script>
     <link rel="stylesheet" href="static/fonts/fonts.css" />
     <link rel="stylesheet" href="css/app.css" />
-  </head>
+      <style id="evoke-ambient-css">
+      /* Landscape/desktop: soft drifting gold specks and warm glows fill the space beside the phone
+         column so the whole screen feels alive. Decoration only (aria-hidden, no input). */
+      .ea-ambient { display: none; }
+      @media (min-aspect-ratio: 1/1) {
+        html { background: #f6ede4; }
+        body, #root, #root > div { background: transparent !important; }
+        /* The app paints its own full-page cream backdrop; let the ambient layer show through. */
+        #root [class*='bg-[#faf5f0]'] { background: transparent !important; }
+        #root { position: relative; z-index: 1; }
+        .ea-ambient {
+          display: block;
+          position: fixed;
+          inset: 0;
+          z-index: 0;
+          overflow: hidden;
+          pointer-events: none;
+          background:
+            radial-gradient(55% 50% at 10% 88%, rgba(201, 149, 58, 0.2), transparent 70%),
+            radial-gradient(50% 50% at 92% 18%, rgba(214, 140, 150, 0.2), transparent 70%),
+            linear-gradient(180deg, #faf5f0, #f3e7da);
+        }
+        .ea-ambient .ea-spark {
+          position: absolute;
+          bottom: -24px;
+          left: var(--x);
+          width: var(--s);
+          height: var(--s);
+          border-radius: 50%;
+          background: radial-gradient(circle, #fff4cf 0%, #d9a93a 50%, rgba(201, 149, 58, 0) 74%);
+          box-shadow: 0 0 calc(var(--s) * 2) rgba(201, 149, 58, 0.5);
+          opacity: 0;
+          animation: ea-rise var(--d) linear var(--delay) infinite;
+        }
+        .ea-ambient .ea-glow {
+          position: absolute;
+          left: var(--x);
+          top: var(--y);
+          width: var(--s);
+          height: var(--s);
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(255, 208, 120, 0.4), rgba(240, 170, 150, 0.14) 45%, transparent 70%);
+          filter: blur(6px);
+          animation: ea-drift var(--d) ease-in-out var(--delay) infinite alternate;
+        }
+        @keyframes ea-rise {
+          0% { transform: translate3d(0, 0, 0) scale(0.6); opacity: 0; }
+          12% { opacity: 0.95; }
+          50% { transform: translate3d(calc(var(--sway) * 1px), -55vh, 0) scale(1); }
+          88% { opacity: 0.8; }
+          100% { transform: translate3d(calc(var(--sway) * -0.6px), -112vh, 0) scale(0.7); opacity: 0; }
+        }
+        @keyframes ea-drift {
+          0% { transform: translate3d(0, 0, 0) scale(0.9); opacity: 0.55; }
+          100% { transform: translate3d(40px, -50px, 0) scale(1.15); opacity: 1; }
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .ea-ambient .ea-spark, .ea-ambient .ea-glow { animation: none; opacity: 0.5; }
+      }
+    </style>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        if (document.querySelector('.ea-ambient')) return;
+        var wrap = document.createElement('div');
+        wrap.className = 'ea-ambient';
+        wrap.setAttribute('aria-hidden', 'true');
+        var i, el;
+        for (i = 0; i < 38; i++) {
+          el = document.createElement('span');
+          el.className = 'ea-spark';
+          el.style.setProperty('--x', (Math.random() * 100).toFixed(1) + '%');
+          el.style.setProperty('--s', (3 + Math.random() * 6).toFixed(1) + 'px');
+          el.style.setProperty('--d', (9 + Math.random() * 12).toFixed(1) + 's');
+          el.style.setProperty('--delay', (-Math.random() * 20).toFixed(1) + 's');
+          el.style.setProperty('--sway', (Math.random() * 80 - 40).toFixed(0));
+          wrap.appendChild(el);
+        }
+        for (i = 0; i < 7; i++) {
+          el = document.createElement('span');
+          el.className = 'ea-glow';
+          el.style.setProperty('--x', (Math.random() * 90).toFixed(1) + '%');
+          el.style.setProperty('--y', (10 + Math.random() * 75).toFixed(1) + '%');
+          el.style.setProperty('--s', (90 + Math.random() * 140).toFixed(0) + 'px');
+          el.style.setProperty('--d', (6 + Math.random() * 7).toFixed(1) + 's');
+          el.style.setProperty('--delay', (-Math.random() * 8).toFixed(1) + 's');
+          wrap.appendChild(el);
+        }
+        document.body.insertBefore(wrap, document.body.firstChild);
+      });
+    </script>
+</head>
   <body>
     <div id="root"></div>
     <script src="evoke-bridge.js"></script>

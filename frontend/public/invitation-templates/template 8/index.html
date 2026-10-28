@@ -49,7 +49,154 @@
 ._storySection_35koi_1{background-color:#0000;justify-content:center;align-items:center;padding:clamp(4rem,10vw,8rem) 2rem;display:flex}._container_35koi_9{align-items:center;gap:4rem;width:100%;max-width:1100px;display:flex}._imageCol_35koi_17{flex:1;width:100%;position:relative}._carouselContainer_35koi_23{perspective:1000px;touch-action:pan-y;-webkit-user-select:none;user-select:none;justify-content:center;align-items:center;width:100%;height:600px;display:flex;position:relative}._imageWrapper_35koi_35{box-shadow:var(--shadow-elegant);border:var(--border-gold);background-color:var(--color-secondary);will-change:transform, opacity, z-index;cursor:grab;border-radius:12px;justify-content:center;align-items:center;width:320px;height:480px;padding:14px;display:flex;position:absolute}._imageWrapper_35koi_35:active{cursor:grabbing}._imageWrapper_35koi_35:after{content:"";pointer-events:none;z-index:10;border:1px solid #c9a2274d;border-radius:8px;position:absolute;inset:6px}._image_35koi_17{object-fit:cover;pointer-events:none;border-radius:4px;width:100%;height:100%}._textCol_35koi_76{flex-direction:column;flex:1;gap:1.5rem;display:flex}._title_35koi_83{color:var(--color-primary);margin-bottom:1rem;font-family:Great Vibes,cursive;font-size:4rem;font-weight:400}._paragraph_35koi_91{font-family:var(--font-body);color:var(--color-text);opacity:.9;font-size:1.1rem;font-weight:500;line-height:1.8}@media (width<=900px){._container_35koi_9{text-align:center;flex-direction:column}._carouselContainer_35koi_23{height:450px}._imageWrapper_35koi_35{width:260px;height:390px}._title_35koi_83{font-size:3.5rem}}
 
 ._footerSection_xna73_1{background-color:var(--color-primary);color:var(--color-secondary);text-align:center;padding:4rem 2rem 2rem;position:relative}._thankYouText_xna73_9{font-family:var(--font-script);color:var(--color-accent);margin-bottom:2rem;font-size:3.5rem}._contactsContainer_xna73_16{flex-wrap:wrap;justify-content:center;gap:4rem;margin-bottom:3rem;display:flex}._contactInfo_xna73_24{flex-direction:column;align-items:center;gap:.5rem;display:flex}._contactName_xna73_31{font-family:var(--font-heading);letter-spacing:.05em;color:var(--color-secondary);font-size:1.2rem}._phone_xna73_38{font-family:var(--font-heading);color:var(--color-accent);font-size:1.1rem;text-decoration:none;transition:opacity .3s}._phone_xna73_38:hover{opacity:.8}._socialContainer_xna73_50{justify-content:center;gap:1.5rem;margin-bottom:2rem;display:flex}._socialIcon_xna73_57{color:var(--color-accent);font-size:1.5rem;transition:all .3s}._socialIcon_xna73_57:hover{color:var(--color-secondary);transform:translateY(-3px)}._divider_xna73_68{background:linear-gradient(90deg,#0000,#c9a2274d,#0000);width:100%;max-width:800px;height:1px;margin:0 auto 1.5rem}._madeWithLove_xna73_76{font-family:var(--font-body);color:#faf5ebb3;letter-spacing:.05em;font-size:.95rem}@media (width<=768px){._contactsContainer_xna73_16{flex-direction:column;gap:1.5rem}}
-</style></head>
+</style>    <style id="evoke-phone-column">
+      /* Desktop / landscape: show the invitation as a phone-width column (the entry video is
+         portrait 1080x1920 and was cropped to a sliver when stretched across a wide screen). */
+      @media (min-aspect-ratio: 1/1) {
+        html, body { background: transparent; }
+        html { background: #14110d; }
+        #root {
+          width: min(100%, 440px);
+          margin: 0 auto;
+          position: relative;
+          overflow-x: hidden;
+          background: ivory;
+        }
+        #root ._hero_11gmz_1 { width: 100%; }
+        /* The hero text is sized with phone breakpoints (max-width), which a wide window never hits. */
+        #root ._name_11gmz_88 { font-size: 2.3rem; }
+        #root ._weds_11gmz_142 { font-size: 1.2rem; }
+        #root ._tapIcon_11gmz_80 { width: 140px; height: 140px; }
+        #root ._musicPlayerWrapper_11gmz_214 { bottom: 1rem; right: 1rem; }
+        #root ._player_1m9ai_5 { right: max(16px, calc(50% - 220px + 16px)); }
+        #root ._preloaderContainer_icvh7_1 { width: 100%; max-width: 440px; left: 50%; transform: translateX(-50%); }
+      }
+    </style>
+    <style id="evoke-phone-rules">
+      /* Landscape/desktop: apply the same rules a phone gets (the app's own max-width media
+         queries) so every section lays out as it does on a phone inside the column. */
+      @media (min-aspect-ratio: 1/1) {
+/* <=768px */
+._familySection_1tjuu_1{padding:4rem .5rem}._title_1tjuu_9{font-size:3rem;font-weight:500}._container_1tjuu_18{flex-direction:column}._familyCard_1tjuu_26{padding:3rem .5rem}._relationGroup_1tjuu_61 p{font-size:1.15rem}
+/* <=768px */
+._container_zlpx8_9{padding:3rem 1rem}._heading_zlpx8_58{font-size:1.5rem}._paragraph_zlpx8_68{margin-bottom:1rem;font-size:.95rem}._name_zlpx8_80{font-size:1.9rem}._parentsName_zlpx8_101{font-size:1rem}._withText_zlpx8_109{margin:.5rem 0}
+/* <=768px */
+._timelineSection_4071w_2{padding:4rem 1rem}._title_4071w_10{font-size:3rem}._eventTitle_4071w_51{font-size:2.5rem}._card_4071w_28{padding:1.5rem}._venueName_4071w_109{font-size:1.5rem}._journeySection_4071w_165{margin:4rem 0}._buildingIcon_4071w_195,._buildingIconIndia_4071w_195{width:240px;height:auto;max-height:180px}._flightTrack_4071w_225{height:300px}._airplaneWrapper_4071w_243{width:60px;height:60px}._locationTitle_4071w_209{font-size:1.8rem}
+/* <=600px */
+._card_varjt_1{gap:8px;min-width:65px}._digitWrap_varjt_9{width:65px;height:65px}._digit_varjt_9{font-size:24px}._label_varjt_31{letter-spacing:1px;font-size:8px}
+/* <=600px */
+._title_whetm_15{font-size:2.5rem}._cardsContainer_whetm_23{flex-wrap:nowrap;gap:8px}
+/* <=480px */
+._scratchSection_ryx1z_1{padding:40px 10px}._headingSub_ryx1z_30{font-size:1.5rem}._dateText_ryx1z_115{font-size:2rem}._card_ryx1z_50{max-width:320px}._instructionText_ryx1z_239{font-size:1rem}
+/* <=768px */
+._title_13l2k_37{font-size:2.5rem}._rsvpCard_13l2k_14{padding:3rem 1.5rem}._successTitle_13l2k_207{font-size:2rem}._text_13l2k_45,._label_13l2k_58,._radioLabel_13l2k_113{font-size:1.15rem}
+/* <=768px */
+._player_1m9ai_5{width:58px;height:58px;bottom:18px;right:18px}
+/* <=768px */
+._tapIcon_11gmz_80{width:140px;height:140px}
+/* <=480px */
+._name_11gmz_88{-webkit-text-stroke:.9px #ffffffb3;letter-spacing:.05em;font-size:2.3rem}
+/* <=768px */
+._tapButton_11gmz_52{transform-origin:50%;margin:2rem 0;transform:scale(1)}
+/* <=900px */
+._container_35koi_9{text-align:center;flex-direction:column}._carouselContainer_35koi_23{height:450px}._imageWrapper_35koi_35{width:260px;height:390px}._title_35koi_83{font-size:3.5rem}
+/* <=768px */
+._contactsContainer_xna73_16{flex-direction:column;gap:1.5rem}
+      }
+    </style>
+    <style id="evoke-ambient-css">
+      /* Desktop / landscape only: drifting gold sparkles and warm glows fill the space beside the
+         phone column so the whole screen feels alive. Pure decoration (aria-hidden, no input). */
+      #evoke-ambient { display: none; }
+      @media (min-aspect-ratio: 1/1) {
+        #evoke-ambient {
+          display: block;
+          position: fixed;
+          inset: 0;
+          z-index: 0;
+          overflow: hidden;
+          pointer-events: none;
+          background:
+            radial-gradient(60% 55% at 12% 85%, rgba(201, 162, 39, 0.16), transparent 70%),
+            radial-gradient(55% 50% at 90% 20%, rgba(110, 31, 47, 0.28), transparent 70%),
+            radial-gradient(40% 40% at 50% 50%, rgba(201, 162, 39, 0.06), transparent 70%),
+            #14110d;
+        }
+        #root { z-index: 1; }
+        #evoke-ambient .ea-spark {
+          position: absolute;
+          bottom: -24px;
+          left: var(--x);
+          width: var(--s);
+          height: var(--s);
+          border-radius: 50%;
+          background: radial-gradient(circle, #fff3c4 0%, #e3bd4a 45%, rgba(201, 162, 39, 0) 72%);
+          box-shadow: 0 0 calc(var(--s) * 2.2) rgba(227, 189, 74, 0.55);
+          opacity: 0;
+          animation: ea-rise var(--d) linear var(--delay) infinite;
+        }
+        #evoke-ambient .ea-glow {
+          position: absolute;
+          left: var(--x);
+          top: var(--y);
+          width: var(--s);
+          height: var(--s);
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(255, 214, 122, 0.32), rgba(255, 170, 60, 0.1) 45%, transparent 70%);
+          filter: blur(6px);
+          animation: ea-drift var(--d) ease-in-out var(--delay) infinite alternate;
+        }
+        @keyframes ea-rise {
+          0% { transform: translate3d(0, 0, 0) scale(0.6); opacity: 0; }
+          12% { opacity: 0.95; }
+          50% { transform: translate3d(calc(var(--sway) * 1px), -55vh, 0) scale(1); }
+          88% { opacity: 0.8; }
+          100% { transform: translate3d(calc(var(--sway) * -0.6px), -112vh, 0) scale(0.7); opacity: 0; }
+        }
+        @keyframes ea-drift {
+          0% { transform: translate3d(0, 0, 0) scale(0.9); opacity: 0.55; }
+          100% { transform: translate3d(40px, -50px, 0) scale(1.15); opacity: 1; }
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #evoke-ambient .ea-spark, #evoke-ambient .ea-glow { animation: none; opacity: 0.5; }
+      }
+    </style>
+    <script>
+      (function () {
+        function build() {
+          if (document.getElementById('evoke-ambient')) return;
+          var wrap = document.createElement('div');
+          wrap.id = 'evoke-ambient';
+          wrap.setAttribute('aria-hidden', 'true');
+          // Spread across the whole width; the phone column simply covers the middle.
+          var sparks = 38, glows = 7, i, el;
+          for (i = 0; i < sparks; i++) {
+            el = document.createElement('span');
+            el.className = 'ea-spark';
+            el.style.setProperty('--x', (Math.random() * 100).toFixed(1) + '%');
+            el.style.setProperty('--s', (3 + Math.random() * 6).toFixed(1) + 'px');
+            el.style.setProperty('--d', (9 + Math.random() * 12).toFixed(1) + 's');
+            el.style.setProperty('--delay', (-Math.random() * 20).toFixed(1) + 's');
+            el.style.setProperty('--sway', (Math.random() * 80 - 40).toFixed(0));
+            wrap.appendChild(el);
+          }
+          for (i = 0; i < glows; i++) {
+            el = document.createElement('span');
+            el.className = 'ea-glow';
+            el.style.setProperty('--x', (Math.random() * 90).toFixed(1) + '%');
+            el.style.setProperty('--y', (10 + Math.random() * 75).toFixed(1) + '%');
+            el.style.setProperty('--s', (90 + Math.random() * 140).toFixed(0) + 'px');
+            el.style.setProperty('--d', (6 + Math.random() * 7).toFixed(1) + 's');
+            el.style.setProperty('--delay', (-Math.random() * 8).toFixed(1) + 's');
+            wrap.appendChild(el);
+          }
+          document.body.insertBefore(wrap, document.body.firstChild);
+        }
+        if (document.body) build(); else document.addEventListener('DOMContentLoaded', build);
+      })();
+    </script>
+</head>
   <body>
     <div id="root"></div>
   <body>

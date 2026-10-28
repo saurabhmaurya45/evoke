@@ -235,7 +235,36 @@
     if (sessionInvite) sessionInvite.scrollTop = 0;
   }
 
+  // Grow the ring (and, if it hits the screen edge, shrink the names) so long names
+  // always sit inside it. The ring has a fixed size in CSS, tuned for ~5-6 letter names.
+  var RING_NAME_MAX_SHARE = 0.56; // widest name may use this share of the ring's width
+  function fitRing() {
+    var wrap = document.getElementById('wed2-ring-wrap');
+    var groom = document.getElementById('wed2-groom-name');
+    var bride = document.getElementById('wed2-bride-name');
+    if (!wrap || !groom || !bride) return;
+    wrap.style.width = '';
+    groom.style.fontSize = '';
+    bride.style.fontSize = '';
+    var baseWidth = wrap.offsetWidth;
+    var need = Math.max(groom.offsetWidth, bride.offsetWidth);
+    if (!baseWidth || !need) return;
+    if (need <= baseWidth * RING_NAME_MAX_SHARE) return;
+    // The ring is square, so it must also fit the screen height (hero text sits above/below it).
+    var cap = Math.min(window.innerWidth * 0.92, window.innerHeight * 0.6);
+    var target = Math.max(baseWidth, Math.min(need / RING_NAME_MAX_SHARE, cap));
+    wrap.style.width = target + 'px';
+    var room = target * RING_NAME_MAX_SHARE;
+    if (need > room) {
+      var scale = room / need;
+      [groom, bride].forEach(function (el) {
+        el.style.fontSize = parseFloat(getComputedStyle(el).fontSize) * scale + 'px';
+      });
+    }
+  }
+
   function showSession(target) {
+    setTimeout(fitRing, 50);
     if (target === sessionInvite && sessionInvite) {
       sessionInvite.classList.add('is-active');
       sessionInvite.removeAttribute('aria-hidden');
@@ -893,6 +922,7 @@
     setText('wed2-invitation-message', getAttr('data-invitation-message', ''));
     setText('wed2-groom-name', groomDisplay);
     setText('wed2-bride-name', brideDisplay);
+    fitRing();
     setText('wed2-details-groom-name', groomName);
     setText('wed2-details-bride-name', brideName);
     setText('wed2-details-groom-prefix', getAttr('data-groom-parent-prefix', sharedParentPrefix));
@@ -1614,6 +1644,8 @@
     } catch (_) {}
   }
 
+  window.addEventListener('resize', fitRing);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitRing);
   hydrate();
   initializeAudio();
   initPolaroidThreads();

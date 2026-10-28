@@ -56,6 +56,8 @@
     for (var i = 0; i < all.length; i++) {
       var el = all[i];
       if (SKIP_TAGS.test(el.tagName.toUpperCase())) continue;
+      // A template that sizes some names itself (e.g. a ring that grows with them) opts out.
+      if (el.closest && el.closest('[data-evoke-fit="off"]')) continue;
       var text = el.textContent;
       if (!text || text.length > 400) continue;
       if (!containsName(text.replace(/\s+/g, ' ').toLowerCase())) continue;

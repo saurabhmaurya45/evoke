@@ -3823,3 +3823,32 @@ body {
     height: min(88svh, 38rem);
   }
 }
+
+/* Desktop / landscape: show the whole invitation as a phone-width column, exactly as it
+   looks on a phone, centred with the door's dark brown on either side. */
+@media (min-aspect-ratio: 1/1) {
+  html,
+  body {
+    background: #2a1f17;
+  }
+
+  .wed6-session {
+    --wed6-col: min(100%, 440px);
+    left: calc(50% - var(--wed6-col) / 2);
+    right: auto;
+    width: var(--wed6-col);
+    box-shadow: 0 0 0 100vmax #2a1f17;
+    clip-path: inset(0 -100vmax);
+  }
+
+  .wed6-session:not(.is-active) {
+    clip-path: none;
+    box-shadow: none;
+  }
+}
+
+@media (min-aspect-ratio: 1/1) {
+  .wed6-mute-btn {
+    right: calc(50% - var(--wed6-col) / 2 + 14px);
+  }
+}
