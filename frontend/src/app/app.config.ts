@@ -12,7 +12,11 @@ import {
   withRouterConfig,
 } from '@angular/router';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import {
+  provideClientHydration,
+  withEventReplay,
+  withIncrementalHydration,
+} from '@angular/platform-browser';
 
 import { routes } from './app.routes';
 import { apiBaseUrlInterceptor } from './core/interceptors/api-base-url.interceptor';
@@ -30,7 +34,9 @@ export const appConfig: ApplicationConfig = {
     // Reuse the prerendered DOM instead of wiping and re-rendering it on boot —
     // without this the page flashed blank and replayed its entrance animations.
     // Event replay keeps clicks made before boot finishes from being lost.
-    provideClientHydration(withEventReplay()),
+    // Incremental hydration lets `@defer (hydrate …)` blocks ship their content
+    // in the static HTML (crawlable) while their JS still loads lazily.
+    provideClientHydration(withEventReplay(), withIncrementalHydration()),
     provideRouter(
       routes,
       // Route `data` → component signal inputs (ComingSoon page).

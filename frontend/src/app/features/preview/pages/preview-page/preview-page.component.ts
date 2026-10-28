@@ -1,6 +1,16 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  afterNextRender,
+  computed,
+  effect,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, type SafeResourceUrl } from '@angular/platform-browser';
+import { WINDOW } from '../../../../core/tokens/window.token';
 import { HomeContentService } from '../../../home/data/home-content.service';
 import { SeoService } from '../../../../core/services/seo.service';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -12,7 +22,9 @@ type PreviewMode = 'preview' | 'use';
 /**
  * Full-screen template preview. Resolves the template from the route param
  * (bound to a signal input), then renders the rendered invitation in a
- * sandboxed iframe. `mode=use` biases the toolbar toward checkout.
+ * sandboxed iframe. Arriving via "Use" adds `#use` (older links: `?mode=use`) —
+ * a fragment, not a query param, so crawlers don't see a second URL that
+ * duplicates the preview page.
  */
 @Component({
   selector: 'app-preview-page',
@@ -26,6 +38,7 @@ export class PreviewPageComponent {
   private readonly sanitizer = inject(DomSanitizer);
   private readonly seo = inject(SeoService);
   private readonly auth = inject(AuthService);
+  private readonly window = inject(WINDOW);
 
   /** Route param `:templateId` (a template slot id). */
   readonly templateId = input('');
@@ -44,24 +57,33 @@ export class PreviewPageComponent {
 
   protected readonly isUseMode = computed(() => this.mode() === 'use');
 
+  /**
+   * The iframe is added only after the first browser render. In the prerendered
+   * HTML, hydration re-applies its `src` and the template would load twice.
+   */
+  protected readonly showFrame = signal(false);
+
   /** "Use this template" opens the editor when signed in; otherwise it goes to
    * login first and comes back to this template's preview afterwards. */
   protected readonly useLink = computed(() =>
     this.auth.isAuthenticated() ? ['/editor', this.template().slotId] : ['/login'],
   );
+  // Browser only: in the prerendered HTML the link is plain /login, so crawlers
+  // don't find one /login?returnUrl=… URL per template.
   protected readonly useQueryParams = computed(() =>
-    this.auth.isAuthenticated()
+    this.auth.isAuthenticated() || !this.window
       ? null
-      : { returnUrl: `/preview/${this.template().slotId}?mode=use` },
+      : { returnUrl: `/preview/${this.template().slotId}#use` },
   );
 
   constructor() {
+    afterNextRender(() => this.showFrame.set(true));
     effect(() => {
       const tpl = this.template();
       const seo = templateSeoBySlotId(tpl.slotId);
       this.seo.apply({
         title: `${tpl.name} — Template Preview • theinvitely.in`,
-        description: `Preview the ${tpl.name} ${tpl.category.toLowerCase()} invitation template on theinvitely.in.`,
+        description: `Live preview of the ${tpl.name} invitation template — see it full-screen, then personalise it on theinvitely.in.`,
         robots: 'noindex, follow',
         // The indexable version of this template lives at /templates/:slug.
         ...(seo && { canonical: `${environment.appUrl}/templates/${seo.slug}` }),

@@ -7,7 +7,7 @@
 
     <div class="preview__meta">
       <span class="preview__dot" [style.background]="template().accent" aria-hidden="true"></span>
-      <span class="preview__name">{{ template().name }}</span>
+      <h1 class="preview__name">{{ template().name }}</h1>
       <span class="preview__category">{{ template().category }}</span>
     </div>
 
@@ -27,13 +27,15 @@
   </header>
 
   <div class="preview__frame-wrap">
-    <iframe
-      class="preview__frame"
-      [src]="safeSrc()"
-      [title]="template().name + ' invitation template preview'"
-      loading="eager"
-      referrerpolicy="no-referrer"
-      sandbox="allow-scripts allow-same-origin allow-popups"
-    ></iframe>
+    @if (showFrame()) {
+      <iframe
+        class="preview__frame"
+        [src]="safeSrc()"
+        [title]="template().name + ' invitation template preview'"
+        loading="eager"
+        referrerpolicy="no-referrer"
+        sandbox="allow-scripts allow-same-origin allow-popups"
+      ></iframe>
+    }
   </div>
 </div>

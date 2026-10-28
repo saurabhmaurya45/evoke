@@ -33,7 +33,7 @@ export class BlogPostComponent {
       if (!post) return;
       const url = `${environment.appUrl}/blog/${post.slug}`;
       this.seo.apply({
-        title: post.title,
+        title: post.seoTitle ?? post.title,
         description: post.description,
         keywords: post.keywords,
         url,

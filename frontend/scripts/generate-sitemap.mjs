@@ -1,4 +1,4 @@
-// Writes sitemap.xml into the build output from the prerendered pages.
+// Writes sitemap.xml and llms.txt into the build output from the prerendered pages.
 //
 // Runs after `ng build` (npm postbuild). Rather than a hand-kept list that
 // drifts from the routes, it walks every prerendered index.html and includes a
@@ -9,6 +9,10 @@
 // <lastmod> is only written when the page states a real content date
 // (JSON-LD dateModified, e.g. blog posts). Stamping every URL with the build
 // date would make each deploy look like a full-site update.
+//
+// llms.txt (https://llmstxt.org) lists the same indexable pages, grouped, with
+// each page's own <title> and meta description — without it, /llms.txt fell
+// through to the SPA shell and AI crawlers got HTML instead of the file.
 
 import { readdirSync, readFileSync, statSync, writeFileSync, existsSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
@@ -41,6 +45,14 @@ function* htmlFiles(dir) {
 }
 
 const attr = (html, re) => html.match(re)?.[1];
+const decode = (text) =>
+  text
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
 
 const urls = [];
 for (const file of htmlFiles(OUT_DIR)) {
@@ -64,7 +76,11 @@ for (const file of htmlFiles(OUT_DIR)) {
     continue;
   }
   const lastmod = attr(html, /"dateModified":"(\d{4}-\d{2}-\d{2})/);
-  urls.push({ loc: expected, lastmod });
+  const title = decode(attr(html, /<title>([^<]*)<\/title>/i) ?? path);
+  const description = decode(
+    attr(html, /<meta[^>]+name="description"[^>]+content="([^"]*)"/i) ?? '',
+  );
+  urls.push({ loc: expected, lastmod, path, title, description });
 }
 
 urls.sort((a, b) => a.loc.length - b.loc.length || a.loc.localeCompare(b.loc));
@@ -86,3 +102,37 @@ ${urls
 
 writeFileSync(join(OUT_DIR, 'sitemap.xml'), xml);
 console.log(`generate-sitemap: wrote ${urls.length} URLs to ${OUT_DIR}/sitemap.xml`);
+
+// --- llms.txt ---------------------------------------------------------------
+const SECTIONS = [
+  [
+    'Wedding & engagement invitations',
+    (p) => /^\/(wedding-invitations|engagement-invitations)/.test(p),
+  ],
+  ['Invitation templates', (p) => p.startsWith('/templates')],
+  ['Guides', (p) => p.startsWith('/blog')],
+  ['Legal', (p) => p === '/privacy' || p === '/terms'],
+];
+const home = urls.find((u) => u.path === '/');
+const grouped = SECTIONS.map(([name, test]) => [
+  name,
+  urls.filter((u) => u.path !== '/' && test(u.path)),
+]);
+const other = urls.filter((u) => u.path !== '/' && !SECTIONS.some(([, test]) => test(u.path)));
+if (other.length) grouped.push(['Other', other]);
+
+const link = (u) =>
+  `- [${u.title.replace(/[[\]]/g, '')}](${u.loc})${u.description ? `: ${u.description}` : ''}`;
+const llms = `# theinvitely.in
+
+> ${home?.description ?? 'Wedding invitation websites for India.'}
+
+theinvitely.in lets couples in India create a wedding or engagement invitation website from a ready-made template — photos, events, music, venue map and RSVP — and share it as one link on WhatsApp.
+
+${grouped
+  .filter(([, items]) => items.length)
+  .map(([name, items]) => `## ${name}\n\n${items.map(link).join('\n')}`)
+  .join('\n\n')}
+`;
+writeFileSync(join(OUT_DIR, 'llms.txt'), llms);
+console.log(`generate-sitemap: wrote ${urls.length - 1} links to ${OUT_DIR}/llms.txt`);

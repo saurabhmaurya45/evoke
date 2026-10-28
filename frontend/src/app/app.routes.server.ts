@@ -50,6 +50,17 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'login', renderMode: RenderMode.Prerender },
   { path: 'signup', renderMode: RenderMode.Prerender },
 
+  // Template previews: noindex (vercel.json), but crawlers still fetch them from
+  // the template pages' links. Prerendered so that static HTML has the
+  // per-template title, description, canonical and h1 — as a client-only shell
+  // they all shared the homepage's default <title> and description.
+  {
+    path: 'preview/:templateId',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: () =>
+      Promise.resolve(TEMPLATE_SEO.map(({ slotId }) => ({ templateId: slotId }))),
+  },
+
   // Session-dependent or runtime-driven — client-only.
   { path: 'dashboard', renderMode: RenderMode.Client },
   { path: 'admin', renderMode: RenderMode.Client },

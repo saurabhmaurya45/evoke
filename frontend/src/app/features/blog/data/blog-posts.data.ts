@@ -16,7 +16,13 @@ export interface BlogSection {
 
 export interface BlogPost {
   readonly slug: string;
+  /** On-page h1. */
   readonly title: string;
+  /**
+   * `<title>`, ≤60 chars, when it should differ from the h1 — set on posts whose
+   * h1 is too long for the brand suffix, which would otherwise make the two identical.
+   */
+  readonly seoTitle?: string;
   /** Meta description, ≤155 chars. */
   readonly description: string;
   readonly keywords: readonly string[];
@@ -36,6 +42,7 @@ export const BLOG_POSTS: readonly BlogPost[] = [
   {
     slug: 'wedding-invitation-wording-hindi-english',
     title: 'Wedding Invitation Wording in Hindi & English + Examples',
+    seoTitle: 'Wedding Invitation Wording: Hindi & English Samples',
     description:
       'Ready-to-use wedding invitation wording in English, Hindi and Hinglish — formal, family-led, couple-led and WhatsApp-friendly examples you can copy.',
     keywords: [
@@ -109,6 +116,7 @@ export const BLOG_POSTS: readonly BlogPost[] = [
   {
     slug: 'haldi-mehndi-sangeet-invitation-messages',
     title: 'Haldi, Mehndi & Sangeet Invitation Messages You Can Copy',
+    seoTitle: 'Haldi, Mehndi & Sangeet Invitation Messages & Wording',
     description:
       'Fun and traditional invitation messages for haldi, mehndi and sangeet functions — in English and Hinglish — plus tips for inviting guests on WhatsApp.',
     keywords: [
@@ -166,6 +174,7 @@ export const BLOG_POSTS: readonly BlogPost[] = [
   {
     slug: 'how-to-send-wedding-invitation-on-whatsapp',
     title: 'How to Send a Wedding Invitation on WhatsApp (The Right Way)',
+    seoTitle: 'Send Wedding Invitations on WhatsApp: Step-by-Step',
     description:
       'Step-by-step guide to sending your wedding invitation on WhatsApp — broadcast lists vs groups, message etiquette, timing and why a link beats a PDF.',
     keywords: [
@@ -228,6 +237,7 @@ export const BLOG_POSTS: readonly BlogPost[] = [
   {
     slug: 'digital-vs-printed-wedding-cards',
     title: 'Digital vs Printed Wedding Cards: Cost & Etiquette',
+    seoTitle: 'Digital vs Printed Wedding Cards: Which Is Better?',
     description:
       'Comparing digital wedding invitations with printed cards in India — cost, delivery, etiquette for elders and why many couples now do both.',
     keywords: [
@@ -282,6 +292,7 @@ export const BLOG_POSTS: readonly BlogPost[] = [
   {
     slug: 'wedding-reminder-message-for-guests',
     title: 'Wedding Reminder Messages for Guests (WhatsApp Templates)',
+    seoTitle: 'Wedding Reminder Messages for Guests: WhatsApp Samples',
     description:
       'Polite wedding reminder messages to send guests on WhatsApp before the haldi, sangeet, wedding and reception — in English and Hinglish.',
     keywords: [
@@ -380,6 +391,7 @@ export const BLOG_POSTS: readonly BlogPost[] = [
   {
     slug: 'nikah-invitation-wording',
     title: 'Nikah Invitation Wording: Islamic Wedding Card Messages',
+    seoTitle: 'Nikah Invitation Wording & Muslim Wedding Card Messages',
     description:
       'Nikah and Walima invitation wording in English and Urdu-style phrasing, with Quranic verses often used on Muslim wedding invitations.',
     keywords: [
@@ -426,6 +438,7 @@ export const BLOG_POSTS: readonly BlogPost[] = [
   {
     slug: 'punjabi-wedding-card-wording',
     title: 'Punjabi Wedding Card Wording & Invitation Messages',
+    seoTitle: 'Punjabi Wedding Card Wording: Shaadi Invitation Samples',
     description:
       'Punjabi wedding invitation wording in English, Punjabi and Hinglish — for the main card, Anand Karaj, sangeet and WhatsApp messages.',
     keywords: [

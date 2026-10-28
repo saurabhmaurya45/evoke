@@ -28,8 +28,11 @@ import { SceneBackdropComponent } from '../scene-backdrop/scene-backdrop.compone
       <router-outlet />
     </main>
     @if (!isAuthRoute()) {
-      <!-- Always below the fold: load the footer chunk when it scrolls near. -->
-      @defer (on viewport) {
+      <!-- Rendered into the static HTML so crawlers see its links to every
+           landing page, blog and template list; its JS still only loads (and
+           hydrates) once it scrolls near. On client-side navigations, where
+           there's no server HTML, it falls back to the placeholder + viewport. -->
+      @defer (on viewport; hydrate on viewport) {
         <app-footer />
       } @placeholder {
         <div class="footer-skeleton" aria-hidden="true"></div>

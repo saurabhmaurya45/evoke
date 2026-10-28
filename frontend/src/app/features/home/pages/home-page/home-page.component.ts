@@ -61,8 +61,12 @@ export class HomePageComponent implements OnInit {
     });
 
 
-    // A @graph, so Organization / WebSite / WebApplication / FAQPage are all
-    // declared once and can reference each other by @id.
+    // A @graph, so Organization / WebSite / FAQPage are all declared once and
+    // can reference each other by @id. No WebApplication item: Google requires
+    // `offers` and a rating/review for it, and neither can be stated truthfully
+    // here (prices only arrive from the backend in the browser — at build time
+    // every template reads as ₹0 — and there are no reviews yet), so it was
+    // reported as invalid structured data.
     this.seo.setStructuredData([
       {
         '@type': 'Organization',
@@ -86,20 +90,6 @@ export class HomePageComponent implements OnInit {
         publisher: { '@id': `${url}/#organization` },
         // No SearchAction: the gallery search box doesn't read a ?q= param,
         // so the advertised search URL would land on an unfiltered page.
-      },
-      {
-        '@type': 'WebApplication',
-        '@id': `${url}/#app`,
-        name: APP_NAME,
-        url,
-        applicationCategory: 'LifestyleApplication',
-        operatingSystem: 'Web',
-        inLanguage: ORGANISATION.language,
-        description: APP_DESCRIPTION,
-        publisher: { '@id': `${url}/#organization` },
-        // No `offers`: this page is prerendered, and prices only arrive from the
-        // backend in the browser — at build time every template reads as ₹0,
-        // which would be false markup for paid templates.
       },
       this.seo.faqSchema(this.content.faqs),
     ]);
