@@ -14,6 +14,11 @@ with the repo, under the `asset/` prefix:
 app.media.paths; the `invitation-templates/` sub-tree never collides with its
 `asset/<template-id>/…` keys.)
 
+The media files themselves are no longer kept in the repo (the bucket is the source of truth).
+To add or replace a template's media, put the file back under
+`frontend/public/invitation-templates/template N/…` locally, run this script, and don't commit
+the file. (Older copies live in git history, e.g. `git checkout de7a51e~1 -- frontend/public`.)
+
 An external, idempotent script — never run by the app itself.
 
   cd backend

@@ -7,7 +7,8 @@
 // ("/invitation-templates/template%2010/static/…") — into absolute bucket URLs.
 //
 // Idempotent, and re-pointable: running it again with another base (say a custom domain)
-// replaces the previous bucket URLs.
+// replaces the previous bucket URLs — that works even though the media files are no longer in
+// the repo. Rewriting *new* relative references needs the media file present locally.
 //
 //   node scripts/rewrite-template-media.mjs <mediaBaseUrl>          # dry run
 //   node scripts/rewrite-template-media.mjs <mediaBaseUrl> --apply  # write files
