@@ -259,6 +259,32 @@ export const TEMPLATE_SEO: readonly TemplateSeo[] = [
       'Events with venue maps',
     ],
   },
+  {
+    slotId: 'tpl-ayodhya-royal',
+    slug: 'ayodhya-royal-wedding',
+    label: 'Ayodhya Royal Wedding',
+    communities: ['hindu'],
+    keywords: [
+      'ayodhya wedding invitation',
+      'ram mandir wedding invitation',
+      'hindu wedding invitation website',
+    ],
+    summary:
+      'Ayodhya is a Ram Mandir-inspired Hindu wedding invitation website: starlit temple intro, six event cards with maps, countdown, gallery, RSVP and music.',
+    paragraphs: [
+      'Ayodhya opens under a violet, starlit sky with a glowing mandir at the end of a flower-lined path — your names set above it in elegant capitals. Scroll on and it begins with “Om Shri Ganeshay Namah”, followed by the blessings of your grandparents and parents on a rich, hand-drawn purple canvas.',
+      'Each ceremony gets its own gold-framed illustrated card with the date, venue, time and a one-tap “See the route” map link — Mehendi, Haldi, Cocktail, Pre-Wedding, Shaadi and Reception are set up, and you can rename them. Guests then see your message, a photo wall they can swipe through, practical tips (hashtag, weather, stay, parking), a live countdown and an RSVP that opens WhatsApp.',
+    ],
+    highlights: [
+      'Starlit Ram Mandir-inspired opening',
+      'Blessings of grandparents and parents',
+      'Six illustrated event cards with venue maps',
+      'Swipeable couple photo wall',
+      'Things to know: hashtag, weather, stay, parking',
+      'Live countdown to the wedding',
+      'RSVP on WhatsApp and background music',
+    ],
+  },
 ];
 
 export function templateSeoBySlug(slug: string): TemplateSeo | undefined {

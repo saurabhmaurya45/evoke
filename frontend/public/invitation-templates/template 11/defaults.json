@@ -1,0 +1,124 @@
+{
+  "hero": {
+    "connector": "WEDS"
+  },
+  "family": {
+    "invocation": "ॐ श्री गणेशाय नम",
+    "blessingsLabel": "With the heavenly blessings of",
+    "grandparents": "Smt. Lata Devi & Sm. Kamal Kapoor",
+    "parents": "Mrs. Reena & Mr. Rajiv Kapoor"
+  },
+  "invite": {
+    "invites": "INVITE",
+    "line1": "You to join us in the wedding celebrations of",
+    "brideParentsLabel": "Daughter of",
+    "brideParents": "Mrs. Shalini & Mr. Aakash Mittal,",
+    "line2": "On the following events"
+  },
+  "couple": {
+    "groomName": "Abhishek",
+    "brideName": "Kanika"
+  },
+  "meet": {
+    "label": "MEET THE",
+    "bride": "Bride",
+    "groom": "Groom"
+  },
+  "message": {
+    "title": "A message from the couple",
+    "body": "We are both so delighted that you are able to join us in celebrating what we hope will be one of the happiest days of our lives. The affection shown to us by so many people since our roka has been incredibly moving, and has touched us both deeply. We would like to take this opportunity to thank everyone most sincerely for their kindness.We are looking forward to see you at the wedding."
+  },
+  "rsvp": {
+    "title": "Looking forward to see you",
+    "link": "Click the link to RSVP",
+    "dialogTitle": "We look forward to seeing you",
+    "dialogBody": "Please let the couple know you are coming — they would love to hear from you.",
+    "whatsapp": ""
+  },
+  "guide": {
+    "title": "Things to know",
+    "subtitle": "To help you feel at ease and enjoy every moment of the celebrations, we’ve gathered a few thoughtful details we’d love for you to know before the big day.",
+    "hashtagTitle": "Hashtag",
+    "hashtagBody": "While posting photos on social media please use the hashtag - #abkan",
+    "weatherTitle": "Weather",
+    "weatherBody": "It will be mostly sunny with temperature reaching up to 28 degrees at the venue",
+    "stayTitle": "Staff",
+    "stayBody": "We recommend the nearby hotel called Bhola Bhawan near the venue for the staff members",
+    "parkingTitle": "Parking",
+    "parkingBody": "Valet parking for all our guests will be available at the venue"
+  },
+  "social": {
+    "label": "Click to open our Instagram page",
+    "instagramUrl": ""
+  },
+  "countdown": {
+    "title": "The countdown begins",
+    "date": "2027-01-29"
+  },
+  "events": {
+    "items": [
+      {
+        "name": "Mehendi",
+        "date": "Tuesday, January 26th",
+        "venue": "JW Marriott, Mussoorie",
+        "time": "6pm Onwards",
+        "mapUrl": "https://www.google.com/maps/search/?api=1&query=JW+Marriott+Mussoorie",
+        "photo": ""
+      },
+      {
+        "name": "Haldi",
+        "date": "Wednesday, January 27th",
+        "venue": "JW Marriott, Mussoorie",
+        "time": "11am Onwards",
+        "mapUrl": "https://www.google.com/maps/search/?api=1&query=JW+Marriott+Mussoorie",
+        "photo": ""
+      },
+      {
+        "name": "Cocktail",
+        "date": "Wednesday, January 27th",
+        "venue": "JW Marriott, Mussoorie",
+        "time": "8pm Onwards",
+        "mapUrl": "https://www.google.com/maps/search/?api=1&query=JW+Marriott+Mussoorie",
+        "photo": ""
+      },
+      {
+        "name": "Pre-Wedding",
+        "date": "Thursday, January 28th",
+        "venue": "JW Marriott, Mussoorie",
+        "time": "6pm Onwards",
+        "mapUrl": "https://www.google.com/maps/search/?api=1&query=JW+Marriott+Mussoorie",
+        "photo": ""
+      },
+      {
+        "name": "Shaadi",
+        "date": "Friday, January 29th",
+        "venue": "JW Marriott, Mussoorie",
+        "time": "9am Onwards",
+        "mapUrl": "https://www.google.com/maps/search/?api=1&query=JW+Marriott+Mussoorie",
+        "photo": ""
+      },
+      {
+        "name": "Reception",
+        "date": "Saturday, January 30th",
+        "venue": "JW Marriott, Mussoorie",
+        "time": "8pm Onwards",
+        "mapUrl": "https://www.google.com/maps/search/?api=1&query=JW+Marriott+Mussoorie",
+        "photo": ""
+      }
+    ]
+  },
+  "venue": {
+    "mapLabel": "Click below to open the map",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=JW+Marriott+Mussoorie"
+  },
+  "gallery": {
+    "photo1": "",
+    "photo2": "",
+    "photo3": "",
+    "photo4": "",
+    "photo5": ""
+  },
+  "music": {
+    "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2011/static/media/jvNWZpzIVC6ztmWqc4f1j7AFNC0.mp3"
+  }
+}

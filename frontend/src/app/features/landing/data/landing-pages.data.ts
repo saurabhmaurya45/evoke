@@ -48,6 +48,7 @@ const WEDDING_TEMPLATES = [
   'tpl-royal-gate',
   'tpl-chateau-classic',
   'tpl-temple-bells',
+  'tpl-ayodhya-royal',
 ];
 
 const WHY_WEBSITE: LandingSection = {
@@ -334,6 +335,7 @@ export const LANDING_PAGES: readonly LandingPage[] = [
       'tpl-eternal-bond',
       'tpl-rosewood-punjabi',
       'tpl-temple-bells',
+      'tpl-ayodhya-royal',
     ],
     sections: [
       {

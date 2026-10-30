@@ -48,6 +48,7 @@ const GOLDEN_PROMISE_TEMPLATE = '/invitation-templates/template%207/index.html';
 const ROYAL_GATE_TEMPLATE = '/invitation-templates/template%208/index.html';
 const CHATEAU_TEMPLATE = '/invitation-templates/template%209/index.html';
 const TEMPLE_BELLS_TEMPLATE = '/invitation-templates/template%2010/index.html';
+const AYODHYA_TEMPLATE = '/invitation-templates/template%2011/index.html';
 
 export interface HeroCard {
   readonly slotId: string;
@@ -270,6 +271,18 @@ export class HomeContentService {
       ...cardPreview(10),
       ...COUPLE_CREDIT,
     },
+    {
+      name: 'Ayodhya — Royal Wedding',
+      category: 'Wedding',
+      slotId: 'tpl-ayodhya-royal',
+      wash: WASH_ROSE,
+      accent: '#6b2f7a',
+      monogram: 'A',
+      photo: COUPLE_PHOTO,
+      previewUrl: AYODHYA_TEMPLATE,
+      ...cardPreview(11),
+      ...COUPLE_CREDIT,
+    },
   ];
 
   /**
@@ -447,7 +460,7 @@ export class HomeContentService {
     {
       question: 'Do you have Punjabi, Sikh, Nikah and South Indian designs?',
       answer:
-        'Yes. Our templates include Rosewood (Punjabi), Royal Gate (Sikh Anand Karaj), Beloved (Nikah), Temple Bells (South Indian temple wedding) and royal Hindu designs, alongside modern and classic styles.',
+        'Yes. Our templates include Rosewood (Punjabi), Royal Gate (Sikh Anand Karaj), Beloved (Nikah), Temple Bells (South Indian temple wedding), Ayodhya (a Ram Mandir-inspired royal wedding) and royal Hindu designs, alongside modern and classic styles.',
     },
   ];
 

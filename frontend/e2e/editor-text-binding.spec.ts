@@ -17,6 +17,7 @@ const TEMPLATES = [
   'tpl-royal-gate',
   'tpl-chateau-classic',
   'tpl-temple-bells',
+  'tpl-ayodhya-royal',
 ];
 
 const FIELDS = [

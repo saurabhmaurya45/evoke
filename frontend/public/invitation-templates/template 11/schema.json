@@ -1,0 +1,366 @@
+{
+  "id": "tpl-ayodhya-royal",
+  "name": "Ayodhya — Royal Wedding",
+  "category": "Wedding",
+  "version": 1,
+  "defaultsUrl": "/invitation-templates/template%2011/defaults.json",
+  "sections": [
+    {
+      "key": "couple",
+      "label": "Couple",
+      "fields": [
+        {
+          "key": "groomName",
+          "label": "Groom’s name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Abhishek"
+        },
+        {
+          "key": "brideName",
+          "label": "Bride’s name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Kanika"
+        }
+      ]
+    },
+    {
+      "key": "hero",
+      "label": "Opening",
+      "fields": [
+        {
+          "key": "connector",
+          "label": "Word between the names",
+          "type": "text",
+          "placeholder": "WEDS"
+        }
+      ]
+    },
+    {
+      "key": "family",
+      "label": "Blessings",
+      "fields": [
+        {
+          "key": "invocation",
+          "label": "Invocation (top line)",
+          "type": "text",
+          "placeholder": "ॐ श्री गणेशाय नमः"
+        },
+        {
+          "key": "blessingsLabel",
+          "label": "Blessings label",
+          "type": "text"
+        },
+        {
+          "key": "grandparents",
+          "label": "Grandparents",
+          "type": "text",
+          "placeholder": "Smt. Lata Devi & Sm. Kamal Kapoor"
+        },
+        {
+          "key": "parents",
+          "label": "Groom’s parents",
+          "type": "text",
+          "placeholder": "Mrs. Reena & Mr. Rajiv Kapoor"
+        }
+      ]
+    },
+    {
+      "key": "invite",
+      "label": "Invitation",
+      "fields": [
+        {
+          "key": "invites",
+          "label": "‘Invite’ heading",
+          "type": "text"
+        },
+        {
+          "key": "line1",
+          "label": "Invitation line",
+          "type": "text"
+        },
+        {
+          "key": "brideParentsLabel",
+          "label": "Bride’s parents label",
+          "type": "text"
+        },
+        {
+          "key": "brideParents",
+          "label": "Bride’s parents",
+          "type": "text",
+          "placeholder": "Mrs. Shalini & Mr. Aakash Mittal,"
+        },
+        {
+          "key": "line2",
+          "label": "Line before the events",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "events",
+      "label": "Events",
+      "fields": [
+        {
+          "key": "items",
+          "label": "Events (6 cards)",
+          "type": "list",
+          "itemSchema": [
+            {
+              "key": "name",
+              "label": "Event name",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "date",
+              "label": "Date and day",
+              "type": "text",
+              "placeholder": "Friday, January 29th"
+            },
+            {
+              "key": "venue",
+              "label": "Venue",
+              "type": "text",
+              "placeholder": "JW Marriott, Mussoorie"
+            },
+            {
+              "key": "time",
+              "label": "Time",
+              "type": "text",
+              "placeholder": "6pm Onwards"
+            },
+            {
+              "key": "mapUrl",
+              "label": "Directions link (URL)",
+              "type": "text"
+            },
+            {
+              "key": "photo",
+              "label": "Event illustration",
+              "type": "image"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "venue",
+      "label": "Venue Map",
+      "fields": [
+        {
+          "key": "mapLabel",
+          "label": "Map button text",
+          "type": "text"
+        },
+        {
+          "key": "mapUrl",
+          "label": "Venue map link (URL)",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "gallery",
+      "label": "Photo Gallery",
+      "fields": [
+        {
+          "key": "photo1",
+          "label": "Gallery photo 1",
+          "type": "image"
+        },
+        {
+          "key": "photo2",
+          "label": "Gallery photo 2",
+          "type": "image"
+        },
+        {
+          "key": "photo3",
+          "label": "Gallery photo 3",
+          "type": "image"
+        },
+        {
+          "key": "photo4",
+          "label": "Gallery photo 4",
+          "type": "image"
+        },
+        {
+          "key": "photo5",
+          "label": "Gallery photo 5",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "key": "message",
+      "label": "Message from the Couple",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Title",
+          "type": "text"
+        },
+        {
+          "key": "body",
+          "label": "Message",
+          "type": "textarea"
+        }
+      ]
+    },
+    {
+      "key": "meet",
+      "label": "Meet the Couple",
+      "fields": [
+        {
+          "key": "label",
+          "label": "Small label",
+          "type": "text"
+        },
+        {
+          "key": "bride",
+          "label": "First heading word",
+          "type": "text"
+        },
+        {
+          "key": "groom",
+          "label": "Second heading word",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "guide",
+      "label": "Things to Know",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Title",
+          "type": "text"
+        },
+        {
+          "key": "subtitle",
+          "label": "Subtitle",
+          "type": "textarea"
+        },
+        {
+          "key": "hashtagTitle",
+          "label": "Hashtag title",
+          "type": "text"
+        },
+        {
+          "key": "hashtagBody",
+          "label": "Hashtag text",
+          "type": "textarea"
+        },
+        {
+          "key": "weatherTitle",
+          "label": "Weather title",
+          "type": "text"
+        },
+        {
+          "key": "weatherBody",
+          "label": "Weather text",
+          "type": "textarea"
+        },
+        {
+          "key": "stayTitle",
+          "label": "Stay title",
+          "type": "text"
+        },
+        {
+          "key": "stayBody",
+          "label": "Stay text",
+          "type": "textarea"
+        },
+        {
+          "key": "parkingTitle",
+          "label": "Parking title",
+          "type": "text"
+        },
+        {
+          "key": "parkingBody",
+          "label": "Parking text",
+          "type": "textarea"
+        }
+      ]
+    },
+    {
+      "key": "social",
+      "label": "Instagram",
+      "fields": [
+        {
+          "key": "label",
+          "label": "Button text",
+          "type": "text"
+        },
+        {
+          "key": "instagramUrl",
+          "label": "Instagram page link (URL)",
+          "type": "text",
+          "placeholder": "https://instagram.com/yourhandle"
+        }
+      ]
+    },
+    {
+      "key": "countdown",
+      "label": "Countdown",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Title",
+          "type": "text"
+        },
+        {
+          "key": "date",
+          "label": "Wedding date (countdown)",
+          "type": "date",
+          "required": true
+        }
+      ]
+    },
+    {
+      "key": "rsvp",
+      "label": "RSVP",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Title",
+          "type": "text"
+        },
+        {
+          "key": "link",
+          "label": "Prompt text",
+          "type": "text"
+        },
+        {
+          "key": "whatsapp",
+          "label": "WhatsApp number for RSVPs",
+          "type": "text",
+          "placeholder": "919876543210 (country code, no +)"
+        },
+        {
+          "key": "dialogTitle",
+          "label": "Pop-up title",
+          "type": "text"
+        },
+        {
+          "key": "dialogBody",
+          "label": "Pop-up message",
+          "type": "textarea"
+        }
+      ]
+    },
+    {
+      "key": "music",
+      "label": "Music",
+      "fields": [
+        {
+          "key": "track",
+          "label": "Background music",
+          "type": "audio"
+        }
+      ]
+    }
+  ]
+}

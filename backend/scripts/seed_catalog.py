@@ -114,6 +114,12 @@ TEMPLATES = [
         "category": "wedding",
         "price_minor": None,
     },
+    {
+        "slug": "tpl-ayodhya-royal",
+        "name": "Ayodhya — Royal Wedding",
+        "category": "wedding",
+        "price_minor": None,
+    },
 ]
 PAID_CURRENCY = "INR"
 
