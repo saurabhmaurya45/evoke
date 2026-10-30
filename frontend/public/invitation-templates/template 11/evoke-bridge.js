@@ -201,6 +201,20 @@
     });
   }
 
+  // The page is shown in a sandboxed iframe without `allow-forms`, which silently blocks the
+  // pop-up's native <form method="dialog"> Close button. Close it ourselves.
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+    var btn = t && t.closest ? t.closest('dialog button') : null;
+    if (btn) {
+      e.preventDefault();
+      var d = btn.closest('dialog');
+      if (d && d.close) d.close();
+    } else if (t && t.tagName === 'DIALOG' && t.close) {
+      t.close(); // click on the backdrop
+    }
+  });
+
   function apply() {
     if (!values || !document.body) return;
     applyText();
