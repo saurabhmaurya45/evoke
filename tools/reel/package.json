@@ -1,0 +1,13 @@
+{
+  "name": "evoke-reel",
+  "private": true,
+  "type": "module",
+  "description": "Renders a filled-in invitation template as an Instagram reel.",
+  "scripts": {
+    "reel": "node make-reel.mjs"
+  },
+  "dependencies": {
+    "ffmpeg-static": "^5.2.0",
+    "playwright": "1.63.0"
+  }
+}

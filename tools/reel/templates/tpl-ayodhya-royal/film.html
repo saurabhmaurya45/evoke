@@ -1,0 +1,406 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Ayodhya Film</title>
+<style>
+@font-face{font-family:Corm;src:url("../../../../frontend/public/invitation-templates/template 11/static/fonts/H4clBXOCl9bbnla_nHIq75u9.woff2")}
+@font-face{font-family:Upright;src:url("../../../../frontend/public/invitation-templates/template 11/static/fonts/VuJudM3I2Y35poFONtLdafkUCHw1y1MhpyDrWdQ.woff2")}
+@font-face{font-family:Abo;src:url("../../../../frontend/public/invitation-templates/template 11/static/fonts/5DCXAKLhwDDQ4N8bpKPUAg.woff2")}
+@font-face{font-family:Gotu;src:url("../../../../frontend/public/invitation-templates/template 11/static/fonts/o-0FIpksx3QOpHsBi7h6.woff2");unicode-range:U+0900-097F,U+1CD0-1CF6,U+200C-200D,U+20A8,U+25CC}
+html,body{margin:0;background:#000;overflow:hidden;width:1080px;height:1920px}
+#stage{position:absolute;inset:0;overflow:hidden;background:#12061f}
+.sc{position:absolute;inset:0;overflow:hidden;display:none}
+.a{position:absolute;left:0;top:0;transform-origin:center center}
+.t{white-space:nowrap;text-align:center}
+.t span{display:inline-block;white-space:pre}
+.door{position:absolute;top:0;width:540px;height:1920px;background-size:1080px auto;display:none}
+.door i{position:absolute;top:0;bottom:0;width:12px;background:linear-gradient(180deg,#8a6210,#ffe39a,#b98a22,#ffe39a,#8a6210)}
+canvas{position:absolute;left:0;top:0}
+</style></head><body><div id="stage"></div>
+<script src="../../lib/core.js"></script>
+<script>
+const D = window.__DATA;
+const BASE = 'https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2011/static/images/';
+const IMG = {sky:'hATwib79CnRg9mDgysjB68PceU.png',couple:'tXna2Dh4YtGJ9FfDGqaTr9FknA.png',crowd:'666jIu8GqJkTAxsEQ3cH5muauI.png',neb:'029a9GHX2dVCFCMm9hyBUsUfK8Y.png',neb2:'SAiqx4062cIfrUZAKXHjclFjemk.png',forest:'ETMXcrWF2ZKOfWgem8WdNS7O4o.png',purple:'BnKXx00irgWx5p69VOqKOKTlC8.png',rose:'n1TeM36NsKhaZDeeSh0GRzTTlPU.png',pink:'uZiaiEL4J3lPM2aXG9YlWEMZKY.png',frame:'z5W1OnFP0tsTwdOyKZIKloLXPN4.png',envB:'mMubCJzGVyMYNAhiO2JLkyiGgw.png',envF:'XwSCDVqVhhtF52j1Mhe9pVs31M.png',paper:'0fSxrRtMEUfItl1Bb3JHmmb8E.png',scallop:'mnKDrhmNAfykkUDLPYspcycaPTQ.png',ganesh:'tjsmDC8g305SmMs98B3ABqR5QE.png',wa:'8FJQqkFNbRpmhzcmWTKfUIcre8.png',doll:'uJKgPT7SENQpK20aAFKh15taw.png'};
+const EVENT_ART = ['zUjMeX1Vi81LrP1ei9hBLurabM.png','OAlIzV1uu4EeCKNBuX4cLuLn8Y.png','jxOPDatjtvJcg2C0syqwr1WsHs.png','5Y33OmbtexJusMZ1fuDscjVQE.png','CQsVmcAHAC441rJAPrhg4DpJavM.png','MxqBet0Uv03GGWcbtvsTlDhkVA.png'];
+const src = (k) => BASE + (IMG[k] || k);
+const stage = document.querySelector('#stage');
+const CREAM = '#fff4d6', GOLD = '#ffd98a';
+const glow = 'text-shadow:0 2px 18px rgba(0,0,0,.65),0 0 34px rgba(255,214,140,.45);';
+const up = (s) => str(s).toUpperCase();
+
+// Each event takes two beats, so the number of events sets how long that part runs.
+const T0 = 10, DUR = 1.25;
+const items = (Array.isArray(D.events?.items) ? D.events.items : []).filter((e) => e && str(e.name).trim());
+// With no events at all, the envelope's zoom still needs half a bar to finish.
+const N = items.length, EV_END = N ? T0 + N * DUR : T0 + 0.625;
+const entry = (i) => (i === 0 ? 0 : N > 1 && i === N - 1 ? 5 : [1, 2, 3, 4][(i - 1) % 4]);
+
+// ---- S1 Invocation ----
+const s1 = scene(stage);
+const s1n = im(s1, src('neb'), 3500, 2020);
+const s1dark = mk(s1, 'div', 'width:1080px;height:1920px;background:radial-gradient(circle at 50% 46%,rgba(30,10,50,.1),rgba(10,3,22,.86) 70%)');
+const rays = mk(s1, 'div', 'width:1900px;height:1900px;border-radius:50%;background:repeating-conic-gradient(rgba(255,214,130,.34) 0 7deg,rgba(255,214,130,0) 7deg 22deg);-webkit-mask:radial-gradient(circle,#000 10%,transparent 68%);mask:radial-gradient(circle,#000 10%,transparent 68%)');
+const halo = mk(s1, 'div', 'width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(255,206,120,.62),rgba(255,180,90,.12) 52%,transparent 70%)');
+const gan = im(s1, src('ganesh'), 470, 0, 'height:auto;filter:drop-shadow(0 0 26px rgba(255,214,140,.9))');
+const s1t = text(s1, D.family?.invocation, `font:400 78px Gotu,Corm;color:${GOLD};${glow}`, 940);
+
+// ---- S2 Mandir ----
+const s2 = scene(stage);
+const s2sky = im(s2, src('sky'), 1080, 2926, 'transform-origin:0 0');
+const s2c = im(s2, src('couple'), 1080, 2933);
+const nameCss = `font:400 132px Abo,Gotu;letter-spacing:4px;color:#fffaf0;${glow}`;
+const nA = text(s2, up(D.couple?.groomName), nameCss, 960);
+const nW = text(s2, graphemes(up(D.hero?.connector)).join(' '), `font:400 44px Abo,Gotu;color:${CREAM};${glow}`, 700);
+const nK = text(s2, up(D.couple?.brideName), nameCss, 960);
+
+// ---- S3 Envelope ----
+const s3 = scene(stage);
+im(s3, src('purple'), 1080, 3164);
+const eB = im(s3, src('envB'), 800, 1100);
+const pap = mk(s3, 'div', 'width:660px;height:846px');
+im(pap, src('paper'), 660, 846);
+const line = (str, top, font, color, maxW = 590) => {
+  const wrapEl = mk(pap, 'div', `left:0;top:${top}px;width:660px;display:flex;justify-content:center`);
+  const e = text(wrapEl, str, `position:static;font:${font};color:${color}`, maxW);
+  return e;
+};
+const pLines = [
+  line('You are invited', 190, '500 84px Upright', '#5b1f74'),
+  line('to the wedding of', 310, '400 44px Corm', '#7a4a89'),
+  line(D.couple?.groomName, 390, '500 96px Upright,Gotu', '#a3216f'),
+  line('&', 490, '500 70px Upright', '#a07a22'),
+  line(D.couple?.brideName, 565, '500 96px Upright,Gotu', '#a3216f'),
+];
+const eF = im(s3, src('envF'), 800, 1100);
+
+// ---- S4 Events ----
+const s4 = scene(stage);
+const s4bg = im(s4, src('purple'), 1080, 3164);
+items.forEach((e, i) => {
+  const g = mk(s4, 'div', 'width:780px;height:1040px');
+  const w = mk(g, 'div', 'left:129px;top:261px;width:524px;height:644px;border-radius:50%;overflow:hidden;background:#222');
+  const art = src(EVENT_ART[i % EVENT_ART.length]);
+  e.ill = im(w, safeImage(e.photo) || art, 524, 644, 'object-fit:cover', art);
+  im(g, src('frame'), 780, 1040);
+  e.g = g;
+  e.n = text(s4, e.name, `font:500 118px Upright,Gotu;color:${GOLD};text-shadow:0 3px 14px rgba(0,0,0,.6)`, 940);
+  e.d = text(s4, e.date, `font:400 48px Corm,Gotu;color:${CREAM};text-shadow:0 2px 8px rgba(0,0,0,.6)`, 940);
+});
+
+// ---- S5 Couple figurine ----
+const s5 = scene(stage);
+const s5i = im(s5, src('doll'), 1080, 2545);
+const s5a = text(s5, D.meet?.label, 'font:400 46px Abo,Gotu;letter-spacing:6px;color:#a3216f', 900);
+const s5b = text(s5, [D.meet?.bride, D.meet?.groom].map(str).filter(Boolean).join(' & '), 'font:500 124px Upright,Gotu;color:#c92c8a;text-shadow:0 2px 10px rgba(255,255,255,.7)', 950);
+
+// ---- S6 RSVP ----
+const s6 = scene(stage);
+im(s6, src('rose'), 1080, 2972);
+const sc = im(s6, src('scallop'), 1040, 1040);
+const s6lines = wrap(D.rsvp?.title, 3).map((l) => text(s6, l, `font:500 124px Upright,Gotu;color:#fff4f8;${glow}`, 760));
+const rip = [0, 1, 2].map(() => mk(s6, 'div', 'width:190px;height:190px;border-radius:50%;border:5px solid #fff'));
+const wa = im(s6, src('wa'), 190, 190);
+
+// ---- S7 Countdown ----
+const s7 = scene(stage);
+const s7n = im(s7, src('neb2'), 2720, 2010);
+const s7f = im(s7, src('forest'), 1500, 1107);
+const s7lines = wrap(D.countdown?.title, 2, 4).map((l) => text(s7, l, `font:500 116px Upright,Gotu;color:#fff;${glow}`, 960));
+const tiles = ['DAYS', 'HRS', 'MIN', 'SEC'].map((lab) => {
+  const e = mk(s7, 'div', `width:216px;height:236px;border-radius:22px;background:linear-gradient(160deg,rgba(40,16,70,.82),rgba(90,22,92,.78));border:4px solid ${GOLD};box-shadow:0 12px 40px rgba(0,0,0,.45),0 0 26px rgba(255,214,140,.35)`);
+  e.v = mk(e, 'div', 'left:0;right:0;top:34px;text-align:center;font:400 118px Corm;color:#fff');
+  const l = mk(e, 'div', `left:0;right:0;top:172px;text-align:center;font:400 30px Abo;letter-spacing:3px;color:${GOLD}`);
+  l.textContent = lab;
+  return e;
+});
+const rawDate = str(D.countdown?.date);
+const when = new Date(/^\d{4}-\d{2}-\d{2}$/.test(rawDate) ? `${rawDate}T00:00:00` : rawDate).getTime();
+const left = Number.isNaN(when) ? 0 : Math.max(0, Math.floor((when - window.__NOW) / 1000));
+const FIN = [Math.floor(left / 86400), Math.floor((left % 86400) / 3600), Math.floor((left % 3600) / 60), left % 60];
+
+// ---- S8 End card ----
+const s8 = scene(stage);
+const s8n = im(s8, src('neb'), 3500, 2020);
+const s8d = mk(s8, 'div', 'width:1080px;height:1920px;background:linear-gradient(180deg,rgba(14,4,30,.5),rgba(14,4,30,.1) 55%,rgba(14,4,30,.2))');
+const s8c = im(s8, src('crowd'), 1760, 1192);
+const s8a = text(s8, 'Apni shaadi ka', `font:500 90px Upright;color:#fff;${glow}`);
+const s8b = text(s8, 'aisa invitation banaiye', `font:500 90px Upright;color:#fff;${glow}`);
+const halo8 = mk(s8, 'div', 'width:1100px;height:520px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,210,130,.5),transparent 68%)');
+const logo = mk(s8, 'div', 'font:500 150px Upright;white-space:nowrap;background:linear-gradient(100deg,#ffd27a 0%,#fff0c4 40%,#ffffff 50%,#fff0c4 60%,#ffd27a 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent');
+logo.textContent = 'theinvitely.in';
+const under = mk(s8, 'div', `height:5px;background:linear-gradient(90deg,transparent,${GOLD},transparent)`);
+
+// ---- Royal doors ----
+function door(k) {
+  const mkLeaf = (left, edge) => {
+    const d = mk(stage, 'div', '');
+    d.className = 'door';
+    d.style.left = left;
+    d.style.backgroundImage = `url(${src(k)})`;
+    if (left !== '0') d.style.backgroundPosition = '-540px 0';
+    const i = document.createElement('i');
+    i.style[edge] = 0;
+    d.appendChild(i);
+    return d;
+  };
+  return [mkLeaf('0', 'right'), mkLeaf('540px', 'left')];
+}
+const dP = door('purple'), dK = door('pink');
+function doors(d, t, a, b, c, e) {
+  const on = t >= a && t < e;
+  d.forEach((x) => { x.style.display = on ? 'block' : 'none'; });
+  if (!on) return;
+  const open = t < b ? 1 - ioC(seg(t, a, b)) : t < c ? 0 : ioC(seg(t, c, e));
+  d[0].style.transform = `translateX(${-540 * open}px)`;
+  d[1].style.transform = `translateX(${540 * open}px)`;
+}
+
+// ---- Particles, light leak, flash, vignette ----
+const leak = mk(stage, 'div', 'width:1500px;height:1500px;border-radius:50%;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,160,70,.75),rgba(255,70,120,.32) 42%,transparent 68%)');
+const cv = document.createElement('canvas');
+cv.width = 1080; cv.height = 1920;
+stage.appendChild(cv);
+const c = cv.getContext('2d');
+mk(stage, 'div', 'width:1080px;height:1920px;background:radial-gradient(ellipse at 50% 46%,transparent 58%,rgba(8,0,18,.5) 100%)');
+const flash = mk(stage, 'div', 'width:1080px;height:1920px');
+const R = rng(7);
+const dust = Array.from({ length: 110 }, () => ({ x: R() * 1080, y: R() * 1920, v: 18 + R() * 46, f: 0.4 + R() * 1.2, p: R() * 6.28, r: 1.2 + R() * 3.2 }));
+const stars = Array.from({ length: 150 }, () => ({ x: R() * 1080, y: R() * 1200, p: R() * 6.28, f: 1.5 + R() * 4, r: 1 + R() * 2.6 }));
+const PET = ['#ff5d8f', '#ff8fb1', '#ffb03b', '#ff7a2f', '#ffd76a', '#e8346f'];
+const petals = Array.from({ length: 60 }, () => ({ x: R() * 1080, y: R() * 2200, v: 190 + R() * 220, sw: 30 + R() * 70, f: 0.6 + R() * 1.2, p: R() * 6.28, w: 15 + R() * 17, c: PET[Math.floor(R() * 6)], rs: 1 + R() * 3 }));
+const burstAt = (t, y, seed) => { const r = rng(seed); return { t, y, p: Array.from({ length: 70 }, () => ({ a: r() * 6.28, d: 220 + r() * 640, s: 2 + r() * 5, h: r() })) }; };
+// Bursts on the main timeline, plus one per event on the real clock.
+const BURSTS = [[2.5, 860], [3.75, 800], [7.5, 800], [20, 800], [24.2, 800], [27.5, 760]].map(([t, y], i) => burstAt(t, y, 100 + i));
+const EV_BURSTS = items.map((_, i) => burstAt(T0 + i * DUR + 0.3, 800, 200 + i));
+const SHOOT = [[3.9, 180, 120], [6.1, 760, 170], [23.3, 120, 180], [25.9, 820, 120]];
+const FLASH = [[2.5, '255,236,190', 1], [7.5, '255,226,160', 0.55], [10, '255,244,214', 0.35], [17.5, '255,190,225', 0.75], [20, '255,240,245', 0.45], [22.5, '255,220,240', 0.4], [25, '255,255,255', 0.95], [27.5, '255,226,160', 0.5]];
+
+function drawBurst(b, u) {
+  if (u < 0 || u > 1.1) return;
+  const e = outE(u / 1.1), a = 1 - u / 1.1;
+  for (const p of b.p) {
+    c.fillStyle = p.h > 0.5 ? `rgba(255,226,150,${a})` : `rgba(255,250,235,${a})`;
+    c.beginPath();
+    c.arc(540 + Math.cos(p.a) * p.d * e, b.y + Math.sin(p.a) * p.d * e + u * u * 260, p.s * (1 - u / 2), 0, 6.3);
+    c.fill();
+  }
+}
+
+function fx(T, t) {
+  c.clearRect(0, 0, 1080, 1920);
+  c.globalCompositeOperation = 'lighter';
+  if (inR(t, 0, 7.5) || inR(t, 22.4, 30)) {
+    for (const s of stars) {
+      const a = 0.2 + 0.8 * Math.pow(0.5 + 0.5 * Math.sin(T * s.f + s.p), 3);
+      c.fillStyle = `rgba(255,248,225,${a})`;
+      c.beginPath(); c.arc(s.x, s.y, s.r, 0, 6.3); c.fill();
+      if (a > 0.8) { c.fillRect(s.x - s.r * 5, s.y - 0.6, s.r * 10, 1.2); c.fillRect(s.x - 0.6, s.y - s.r * 5, 1.2, s.r * 10); }
+    }
+  }
+  for (const d of dust) {
+    const y = (d.y - T * d.v + 192000) % 1920, x = d.x + Math.sin(T * d.f + d.p) * 34, a = 0.25 + 0.6 * Math.pow(0.5 + 0.5 * Math.sin(T * d.f * 3 + d.p), 2);
+    c.fillStyle = `rgba(255,214,140,${a})`;
+    c.beginPath(); c.arc(x, y, d.r, 0, 6.3); c.fill();
+  }
+  for (const b of BURSTS) drawBurst(b, t - b.t);
+  for (const b of EV_BURSTS) drawBurst(b, T - b.t);
+  for (const [a, x0, y0] of SHOOT) {
+    const u = (t - a) / 0.7;
+    if (u < 0 || u > 1) continue;
+    const x = x0 + u * 560, y = y0 + u * 300;
+    const g = c.createLinearGradient(x - 210, y - 112, x, y);
+    g.addColorStop(0, 'rgba(255,255,255,0)');
+    g.addColorStop(1, `rgba(255,245,215,${1 - u})`);
+    c.strokeStyle = g; c.lineWidth = 5;
+    c.beginPath(); c.moveTo(x - 210, y - 112); c.lineTo(x, y); c.stroke();
+  }
+  c.globalCompositeOperation = 'source-over';
+  const pa = inR(t, 3, 7.5) ? seg(t, 3, 3.6) : inR(t, 17.8, 20) ? seg(t, 17.8, 18.2) : inR(t, 25.6, 30) ? seg(t, 25.6, 26.2) * 0.9 : inR(t, 10, 17.5) ? 0.55 : 0;
+  if (pa > 0) {
+    c.globalAlpha = pa;
+    for (const p of petals) {
+      const y = (p.y + T * p.v) % 2200 - 140, x = p.x + Math.sin(T * p.f + p.p) * p.sw, sq = 0.28 + 0.72 * Math.abs(Math.sin(T * p.rs + p.p));
+      c.save();
+      c.translate(x, y); c.rotate(T * p.rs * 0.6 + p.p); c.scale(1, sq);
+      c.fillStyle = p.c;
+      c.beginPath(); c.moveTo(-p.w, 0); c.quadraticCurveTo(0, -p.w * 0.95, p.w, 0); c.quadraticCurveTo(0, p.w * 0.95, -p.w, 0); c.fill();
+      c.restore();
+    }
+    c.globalAlpha = 1;
+  }
+}
+
+function renderEvents(T) {
+  const r = outC(seg(T, 9.82, 10.3)) * 1300;
+  s4.style.clipPath = T < 10.3 ? `circle(${r}px at 50% 42%)` : '';
+  // The background is 3164px tall; loop its drift so a long list of events never runs off it.
+  P(s4bg, { y: 1582 - ((T - 10) * 62) % 1244 });
+  items.forEach((e, i) => {
+    const Ti = T0 + i * DUR, Tn = Ti + DUR, on = T >= Ti - 0.15 && T < Tn + 0.32;
+    e.g.style.display = e.n.style.display = e.d.style.display = on ? 'block' : 'none';
+    if (!on) return;
+    const type = entry(i), start = i === 0 ? Ti - 0.05 : Ti;
+    const p = seg(T, start, start + 0.46), q = i < N - 1 ? seg(T, Tn, Tn + 0.3) : 0;
+    const o = { x: 540, y: 800 + 8 * Math.sin((T - Ti) * 3.1), s: 1, r: 2 * Math.sin((T - Ti) * 2.51), a: 1, b: 0, ry: 0 };
+    if (type === 0 || type === 5) {
+      o.y += lerp(-1400, 0, outB(p, 1.25));
+      o.r += (1 - p) * (type ? 22 : -14);
+      if (type === 5) o.r += 7 * Math.exp(-(T - Ti) * 3) * Math.sin((T - Ti) * 11);
+    }
+    if (type === 1) { o.s = lerp(0.15, 1, outB(p, 1.6)); o.a = cl(p * 4); }
+    if (type === 2) { o.x += (1 - outE(p)) * 1500; o.b = (1 - p) * p * 90; }
+    if (type === 3) { o.ry = (1 - outC(p)) * 90; o.a = p > 0 ? 1 : 0; }
+    if (type === 4) { o.r += (1 - outB(p, 1.2)) * -280; o.s = outB(p, 1.3); o.a = cl(p * 5); }
+    if (q > 0) {
+      const qq = inC(q), next = entry(i + 1);
+      if (next === 1) { o.s = 1 + qq * 6; o.a = 1 - q; }
+      if (next === 2) { o.x -= qq * 1500; o.b = q * (1 - q) * 90; }
+      if (next === 3) { o.ry = -qq * 90; o.a = q < 1 ? 1 : 0; }
+      if (next === 4) { o.r += qq * 240; o.s = 1 - qq; }
+      if (next === 5) { o.y += qq * 2100; o.r += qq * 22; }
+    }
+    P(e.g, o);
+    e.ill.style.transform = `scale(${1.04 + (T - Ti) * 0.07}) translateY(${(Ti + 0.6 - T) * 14}px)`;
+    const ta = 1 - seg(T, Tn - 0.03, Tn + 0.14) * (i < N - 1 ? 1 : 0);
+    P(e.n, { y: 1402, a: ta }); reveal(e.n, T, Ti + 0.14, 0.028, 0.34, 50);
+    P(e.d, { y: 1500, a: ta * seg(T, Ti + 0.34, Ti + 0.56) });
+  });
+}
+
+// A section with no data is left out. The sections run on a fixed main timeline, each a whole number of
+// bars with a flash on its first beat, so any of them can follow any other and stay on the beat.
+const hasIntro = !!str(D.family?.invocation).trim();
+const hasMeet = !!(str(D.meet?.bride).trim() || str(D.meet?.groom).trim());
+const hasRsvp = !!str(D.rsvp?.title).trim();
+const hasCountdown = left > 0;
+const START = hasIntro ? 0 : 2.5;
+const AFTER_EVENTS = [hasMeet && [17.5, 20], hasRsvp && [20, 22.5], hasCountdown && [22.5, 25], [25, 30]].filter(Boolean);
+const TOTAL = EV_END + AFTER_EVENTS.reduce((sum, [a, b]) => sum + b - a, 0) - START;
+
+function toMain(T) {
+  if (T < EV_END) {
+    // The doors into the couple scene close over the end of the last event.
+    return hasMeet && T >= EV_END - 0.36 ? 17.5 - (EV_END - T) : Math.min(T, 17.13);
+  }
+  let rest = T - EV_END;
+  for (const [a, b] of AFTER_EVENTS) {
+    if (rest < b - a) return a + rest;
+    rest -= b - a;
+  }
+  return 30;
+}
+
+function render(filmTime) {
+  const T = filmTime + START;
+  const t = toMain(T);
+  const beat = T >= 2.5 ? (T - 2.5) % 0.625 : 9;
+  stage.style.transform = `scale(${1 + 0.012 * Math.exp(-beat * 7)})`;
+
+  if (show(s1, t, 0, hasIntro ? 2.62 : 0)) {
+    P(s1n, { y: 960, s: lerp(1.05, 1.22, t / 2.5) }); P(s1dark);
+    const z = inC(seg(t, 2.15, 2.55));
+    P(rays, { y: 860, r: t * 22, s: lerp(0.5, 1, outC(seg(t, 0.1, 1.6))) + z * 2, a: outC(seg(t, 0.2, 1.1)) });
+    P(halo, { y: 860, s: (1 + 0.08 * Math.sin(t * 4)) * (outC(seg(t, 0, 1)) + z * 3), a: seg(t, 0, 0.8) });
+    const g = outB(seg(t, 0.15, 1.05));
+    P(gan, { y: 860, s: lerp(0.4, 1, g) + z * 7, a: cl(seg(t, 0.15, 0.6) * (1 - seg(t, 2.35, 2.55))) });
+    gan.style.filter = 'drop-shadow(0 0 26px rgba(255,214,140,.9))';
+    P(s1t, { y: 1240, a: 1 - z }); reveal(s1t, t, 0.95, 0.05);
+  }
+
+  if (show(s2, t, 2.45, 7.8)) {
+    const cam = ioC(seg(t, 4.95, 7.5)) * 1633, rise = 1 - outE(seg(t, 2.5, 3.5));
+    s2sky.style.transform = `translate(0,${-cam * 0.33}px) scale(${lerp(1.1, 1, outC(seg(t, 2.5, 5)))})`;
+    P(s2c, { y: 620 + 1466.5 - cam + rise * 620, s: lerp(1.07, 1, outC(seg(t, 2.5, 4.5))) });
+    P(nA, { y: 330 - cam * 1.15 }); reveal(nA, t, 2.5, 0.05);
+    P(nW, { y: 458 - cam * 1.15 }); reveal(nW, t, 3.125, 0.035);
+    P(nK, { y: 590 - cam * 1.15 }); reveal(nK, t, 3.75, 0.06);
+  }
+
+  if (show(s3, t, 7.45, 10.3)) {
+    const rising = outB(seg(t, 7.55, 8.25), 1.1), down = inC(seg(t, 9.0, 9.55)), ey = lerp(2500, 1180, rising) + down * 1600;
+    P(eB, { y: ey, r: lerp(-7, 0, rising) }); P(eF, { y: ey + 30, r: lerp(-7, 0, rising) });
+    const lift = ioC(seg(t, 8.3, 9.1)), zoom = ioC(seg(t, 9.45, 9.98)), py = lerp(ey + 20, 790, lift);
+    P(pap, { y: lerp(py, 960, zoom), s: lerp(0.86, 1, lift) + zoom * 4, a: seg(t, 8.15, 8.3) });
+    pLines.forEach((e, i) => { reveal(e, t, 8.65 + i * 0.12, 0.018, 0.32, 26); e.style.opacity = 1 - seg(t, 9.5, 9.7); });
+  }
+
+  if (show(s4, T, 9.8, EV_END + 0.12)) renderEvents(T);
+  doors(dP, t, 7.14, 7.5, 7.6, 8.1);
+  doors(dK, t, 17.14, 17.5, 17.62, 18.15);
+
+  if (show(s5, t, 17.5, hasMeet ? 20.3 : 17.5)) {
+    const v = seg(t, 17.5, 20.2);
+    P(s5i, { y: lerp(1240, 1070, ioC(v)), s: lerp(1.04, 1.12, v) });
+    P(s5a, { y: lerp(245, 225, v) }); reveal(s5a, t, 18.1, 0.03);
+    P(s5b, { y: lerp(335, 315, v) }); reveal(s5b, t, 18.3, 0.035);
+  }
+
+  if (show(s6, t, 19.62, hasRsvp ? 22.8 : 19.62)) {
+    const g = outB(seg(t, 19.62, 20.06), 1.1), ex = inC(seg(t, 22.15, 22.55));
+    P(sc, { y: 880, s: Math.max(0.001, g) + ex * 5, r: lerp(-140, 0, g) + (t - 20) * 7 });
+    const a = 1 - seg(t, 22.12, 22.3), top = 745 - ((s6lines.length - 1) * 135) / 2;
+    s6lines.forEach((e, i) => { P(e, { y: top + i * 135, a }); reveal(e, t, 20.05 + i * 0.29, 0.03); });
+    const pop = outB(seg(t, 21.2, 21.55), 2.2), bt = (t - 21.25) % 0.625;
+    P(wa, { y: 1115, s: pop * (1 + 0.09 * Math.exp(-Math.max(bt, 0) * 7)), a: a * cl(pop) });
+    rip.forEach((e, i) => {
+      const u = (((t - 21.25 - i * 0.21) % 0.625) + 0.625) % 0.625 / 0.625;
+      P(e, { y: 1115, s: 1 + u * 1.15, a: t > 21.25 ? a * (1 - u) * 0.8 : 0 });
+    });
+  }
+
+  if (show(s7, t, 22.38, hasCountdown ? 25.12 : 22.38)) {
+    const r = outC(seg(t, 22.38, 22.82)) * 1350, ex = inC(seg(t, 24.72, 25.05)), v = seg(t, 22.4, 25.1);
+    s7.style.clipPath = t < 22.82 ? `circle(${r}px at 50% 46%)` : '';
+    s7.style.transform = `scale(${1 + ex * 0.8})`;
+    s7.style.filter = ex > 0.01 ? `blur(${ex * 22}px)` : '';
+    P(s7n, { y: 960, x: lerp(620, 460, v), s: lerp(1, 1.1, v) });
+    P(s7f, { y: lerp(2300, 1500, outE(seg(t, 22.5, 23.6))) });
+    const top = 556 - (s7lines.length - 1) * 126;
+    s7lines.forEach((e, i) => { P(e, { y: top + i * 126 }); reveal(e, t, 22.625 + i * 0.325, 0.025); });
+    const settle = [23.25, 23.55, 23.85, 24.2];
+    tiles.forEach((e, i) => {
+      const p = seg(t, 22.75 + i * 0.08, 23.15 + i * 0.08), done = t >= settle[i];
+      const spin = Math.sin(i * 97.1 + Math.floor(t * 24) * 12.9) * 43758.5;
+      let val = done ? FIN[i] : Math.floor((spin - Math.floor(spin)) * 100);
+      if (i === 3 && done && left) val = (FIN[3] - Math.floor(t - settle[3]) + 60) % 60;
+      e.v.textContent = String(val).padStart(2, '0');
+      e.v.style.fontSize = `${[118, 118, 118, 96, 74, 60][Math.min(e.v.textContent.length, 5)]}px`;
+      e.v.style.lineHeight = '118px';
+      P(e, { x: 171 + 246 * i, y: 800, s: outB(p, 1.5) * (done ? 1 + 0.17 * Math.exp(-(t - settle[i]) * 9) : 1), a: cl(p * 3) });
+    });
+  }
+
+  if (show(s8, t, 24.85, 30.1)) {
+    const z = outE(seg(t, 24.9, 25.7)), v = seg(t, 25, 30);
+    P(s8n, { y: 960, x: lerp(500, 590, v), s: lerp(1.3, 1, z) + v * 0.06 }); P(s8d);
+    P(s8c, { y: lerp(2300, 1395, outE(seg(t, 25, 26.2))), x: lerp(600, 520, v), s: lerp(1, 1.05, v) });
+    P(s8a, { y: 345 }); reveal(s8a, t, 25.625, 0.03);
+    P(s8b, { y: 462 }); reveal(s8b, t, 26.25, 0.025);
+    const l = outB(seg(t, 27.5, 28), 1.9);
+    P(halo8, { y: 660, s: l * (1 + 0.05 * Math.sin(t * 5)), a: cl(l) * 0.9 });
+    P(logo, { y: 655, s: Math.max(l, 0.001), a: cl(l * 2) });
+    logo.style.backgroundPosition = `${lerp(130, -40, seg(t, 27.9, 29.3))}% 0`;
+    logo.style.filter = 'drop-shadow(0 3px 10px rgba(0,0,0,.7))';
+    under.style.width = `${outC(seg(t, 27.85, 28.35)) * 760}px`;
+    P(under, { y: 738 });
+  }
+
+  const bar = T >= 2.5 ? (T - 2.5) % 2.5 : 9, odd = Math.floor(T / 2.5) % 2;
+  P(leak, { x: lerp(-120, 1200, odd ? 1 - bar / 2.5 : bar / 2.5), y: 500 + (Math.floor(T / 2.5) * 730) % 1000, a: 0.5 * Math.exp(-bar * 1.7) });
+  let fa = 0, fc = '255,255,255';
+  for (const [a, col, pk] of FLASH) {
+    if (a === 2.5 && !hasIntro) continue; // the video opens here, and its first frame should be the scene
+    const u = t - a, v = u < 0 ? (u > -0.08 ? pk * (1 + u / 0.08) : 0) : pk * Math.exp(-u * 7);
+    if (v > fa) { fa = v; fc = col; }
+  }
+  const end = seg(t, 29.3, 30);
+  flash.style.background = end > 0 ? `rgba(0,0,0,${end})` : `rgba(${fc},${fa})`;
+  fx(T, t);
+}
+
+window.__render = render;
+window.__firstBar = 2.5 - START;
+window.__ready = (async () => {
+  for (const k of ['purple', 'pink']) { const x = new Image(); x.src = src(k); await x.decode(); }
+  return ready(stage, [['48px Corm', 'A'], ['48px Upright', 'A'], ['48px Abo', 'A'], ['48px Gotu', '॥']], TOTAL);
+})();
+</script></body></html>

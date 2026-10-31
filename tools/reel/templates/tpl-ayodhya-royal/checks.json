@@ -1,0 +1,63 @@
+[
+  {
+    "name": "saved with all the sample text",
+    "data": "$sample",
+    "want": ["ABHISHEK", "KANIKA", "Mehendi", "Reception", "Bride & Groom", "forward to", "countdown"]
+  },
+  {
+    "name": "every section filled",
+    "data": {
+      "couple": { "groomName": "Aarav Malhotra", "brideName": "Ishita Kapoor" },
+      "hero": { "connector": "Weds" },
+      "family": { "invocation": "॥ श्री गणेशाय नमः ॥" },
+      "meet": { "label": "THE HAPPY COUPLE", "bride": "Ishita", "groom": "Aarav" },
+      "rsvp": { "title": "Please join us in celebration" },
+      "countdown": { "title": "Our big day is almost here", "date": "2099-02-14" },
+      "events": { "items": [{ "name": "Sangeet", "date": "Friday, February 12th" }, { "name": "Pheras", "date": "Sunday, February 14th" }] }
+    },
+    "want": ["AARAV MALHOTRA", "ISHITA KAPOOR", "Sangeet", "Friday, February 12th", "Pheras", "Ishita & Aarav", "Please join", "almost here"],
+    "reject": ["Mehendi", "ABHISHEK", "Bride & Groom"]
+  },
+  {
+    "name": "only the names: every optional section is left out",
+    "data": { "couple": { "groomName": "Aarav", "brideName": "Ishita" } },
+    "want": ["AARAV", "ISHITA", "You are invited", "Apni shaadi ka"],
+    "reject": ["Mehendi", "Bride", "forward", "countdown", "ABHISHEK", "Kanika"]
+  },
+  {
+    "name": "blank strings count as empty",
+    "data": {
+      "couple": { "groomName": "Aarav", "brideName": "Ishita" },
+      "rsvp": { "title": "   " },
+      "meet": { "label": "HIDDEN LABEL", "bride": "", "groom": " " },
+      "countdown": { "title": "Hidden title", "date": "" }
+    },
+    "reject": ["HIDDEN LABEL", "Hidden title", "&  "]
+  },
+  {
+    "name": "a past countdown date leaves the countdown out",
+    "data": { "couple": { "groomName": "Aarav", "brideName": "Ishita" }, "countdown": { "title": "Hidden title", "date": "2020-01-01" } },
+    "reject": ["Hidden title"]
+  },
+  {
+    "name": "Hindi text and very long names",
+    "data": {
+      "couple": { "groomName": "Bartholomew Singh Rathore Malhotra Kapoor Sharma Verma", "brideName": "क्षितिज श्रीवास्तव" },
+      "hero": { "connector": "संग" },
+      "events": { "items": [{ "name": "A Farewell Dinner With A Very Very Long Name Indeed For Everyone", "date": "Thursday, December 30th 2027 at the Grand Palace Ballroom Hotel" }] }
+    },
+    "want": ["क्षितिज श्रीवास्तव"]
+  },
+  {
+    "name": "wrong data types and HTML in text",
+    "data": {
+      "couple": { "groomName": "<script>window.__x=1</script>", "brideName": { "a": 1 } },
+      "events": { "items": "nope" },
+      "countdown": { "date": 5 },
+      "rsvp": null,
+      "hero": []
+    },
+    "want": ["<script>window.__x=1</script>"],
+    "reject": ["[object Object]", "[OBJECT OBJECT]"]
+  }
+]
