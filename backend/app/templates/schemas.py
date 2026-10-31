@@ -184,6 +184,23 @@ class TemplateUpdate(CamelModel):
         return self
 
 
+class TemplateOrderUpdate(CamelModel):
+    """ADMIN-only body. The whole catalog in its new order."""
+
+    template_ids: list[uuid.UUID] = Field(
+        description="Every template's id, in gallery order: first is shown first. Must include "
+        "each template exactly once, unlisted and draft ones too."
+    )
+
+    @model_validator(mode="after")
+    def _validate_ids(self) -> "TemplateOrderUpdate":
+        if not self.template_ids:
+            raise ValueError("templateIds must not be empty.")
+        if len(set(self.template_ids)) != len(self.template_ids):
+            raise ValueError("templateIds must not contain the same template twice.")
+        return self
+
+
 class TemplateOut(CamelModel):
     """Full template metadata — catalog entry, not including version content."""
 
@@ -200,6 +217,9 @@ class TemplateOut(CamelModel):
     )
     thumbnail_url: str | None = None
     preview_url: str | None = None
+    display_order: int = Field(
+        description="Position in the gallery, ascending. 0 means never placed by an admin."
+    )
     status: TemplateStatus = Field(
         description="Catalog readiness: DRAFT (no published version yet), ACTIVE, or ARCHIVED. "
         "Distinct from storefrontStatus, which controls commercial visibility."
@@ -224,6 +244,9 @@ class TemplateGalleryOut(CamelModel):
     currency_id: uuid.UUID | None = None
     storefront_status: StorefrontStatus = Field(
         description="Commercial visibility: LISTED (public) or UNLISTED."
+    )
+    display_order: int = Field(
+        description="Position in the gallery, ascending. 0 means never placed by an admin."
     )
     thumbnail_url: str | None = None
     preview_url: str | None = None

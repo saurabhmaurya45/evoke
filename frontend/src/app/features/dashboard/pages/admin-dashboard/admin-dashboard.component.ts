@@ -63,6 +63,25 @@ export class AdminDashboardComponent implements OnInit {
   protected readonly templates = this.catalog.all;
   protected readonly price = formatPrice;
 
+  /** The order being arranged, by slotId; null when nothing has been moved. */
+  protected readonly orderDraft = signal<readonly string[] | null>(null);
+  protected readonly orderSaving = signal(false);
+  protected readonly orderError = signal<string | null>(null);
+  /** Shown after a successful save; cleared by the next move. */
+  protected readonly orderSaved = signal(false);
+  private draggingId: string | null = null;
+
+  /** The rows on screen: the catalogue, in the order being arranged if there is one. */
+  protected readonly orderedTemplates = computed(() => {
+    const order = this.orderDraft();
+    const templates = this.templates();
+    if (!order) return templates;
+    const rank = new Map(order.map((slotId, i) => [slotId, i]));
+    return [...templates].sort(
+      (a, b) => (rank.get(a.slotId) ?? order.length) - (rank.get(b.slotId) ?? order.length),
+    );
+  });
+
   /** slotId of the template open in the edit drawer, or null when closed. */
   protected readonly editingId = signal<string | null>(null);
   protected readonly draft = signal<TemplateDraft | null>(null);
@@ -123,6 +142,65 @@ export class AdminDashboardComponent implements OnInit {
 
   protected date(iso: string): string {
     return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  /** Move a template one place up (-1) or down (+1). */
+  protected moveTemplate(slotId: string, delta: -1 | 1): void {
+    const order = this.orderedTemplates().map((template) => template.slotId);
+    const from = order.indexOf(slotId);
+    this.placeTemplate(order, from, from + delta);
+  }
+
+  protected onDragStart(slotId: string, event: DragEvent): void {
+    this.draggingId = slotId;
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', slotId); // Firefox won't start a drag without data
+    }
+  }
+
+  /** The row being dragged takes the place of the row under the pointer. */
+  protected onDragOver(slotId: string, event: DragEvent): void {
+    if (!this.draggingId) return;
+    event.preventDefault();
+    if (slotId === this.draggingId) return;
+    const order = this.orderedTemplates().map((template) => template.slotId);
+    this.placeTemplate(order, order.indexOf(this.draggingId), order.indexOf(slotId));
+  }
+
+  protected onDragEnd(): void {
+    this.draggingId = null;
+  }
+
+  private placeTemplate(order: string[], from: number, to: number): void {
+    if (from < 0 || to < 0 || to >= order.length || from === to) return;
+    const [moved] = order.splice(from, 1);
+    order.splice(to, 0, moved);
+    this.orderDraft.set(order);
+    this.orderError.set(null);
+    this.orderSaved.set(false);
+  }
+
+  protected async saveOrder(): Promise<void> {
+    const order = this.orderDraft();
+    if (!order || this.orderSaving()) return;
+    this.orderSaving.set(true);
+    this.orderError.set(null);
+    try {
+      await this.catalog.saveOrder(order);
+      this.orderDraft.set(null);
+      this.orderSaved.set(true);
+    } catch (err) {
+      const message = (err as { error?: { error?: { message?: string } } }).error?.error?.message;
+      this.orderError.set(message ?? 'Could not save the order — please try again.');
+    } finally {
+      this.orderSaving.set(false);
+    }
+  }
+
+  protected discardOrder(): void {
+    this.orderDraft.set(null);
+    this.orderError.set(null);
   }
 
   protected togglePublished(template: CatalogTemplate): void {
@@ -217,6 +295,7 @@ export class AdminDashboardComponent implements OnInit {
   /** Restore the seeded catalogue, discarding every admin override. */
   protected resetCatalog(): void {
     this.catalog.reset();
+    this.discardOrder();
     this.closeEditor();
   }
 }

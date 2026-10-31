@@ -214,7 +214,7 @@ async def list_templates(
     stmt = (
         select(Template)
         .where(*filters)
-        .order_by(Template.created_at.desc())
+        .order_by(Template.display_order, Template.created_at.desc())
         .offset((params.page - 1) * params.page_size)
         .limit(params.page_size)
     )
@@ -365,6 +365,35 @@ async def update_template(
     await db.commit()
     await db.refresh(template)
     return template
+
+
+async def reorder_templates(
+    db: AsyncSession, admin_user: User, template_ids: list[uuid.UUID]
+) -> list[Template]:
+    """Set the gallery order. The list must name every template, so a template created
+    after the admin loaded the page is reported instead of being left in an arbitrary
+    position."""
+    templates = list((await db.execute(select(Template))).scalars().all())
+    by_id = {template.id: template for template in templates}
+    unknown = [str(tid) for tid in template_ids if tid not in by_id]
+    given = set(template_ids)
+    missing = [str(tid) for tid in by_id if tid not in given]
+    if unknown or missing:
+        raise ValidationFailedError(
+            "templateIds must list every template exactly once.",
+            details={"unknown": unknown, "missing": missing},
+        )
+
+    for position, template_id in enumerate(template_ids, start=1):
+        by_id[template_id].display_order = position
+    await log_action(
+        db,
+        action="TEMPLATES_REORDERED",
+        resource_type="template",
+        actor_user_id=admin_user.id,
+    )
+    await db.commit()
+    return [by_id[template_id] for template_id in template_ids]
 
 
 async def create_template_version(
