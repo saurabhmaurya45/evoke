@@ -120,6 +120,18 @@ TEMPLATES = [
         "category": "wedding",
         "price_minor": None,
     },
+    {
+        "slug": "tpl-lace-classic",
+        "name": "Lace — Classic Wedding",
+        "category": "wedding",
+        "price_minor": None,
+    },
+    {
+        "slug": "tpl-embroidered-garden",
+        "name": "Embroidered Garden — Wedding",
+        "category": "wedding",
+        "price_minor": None,
+    },
 ]
 PAID_CURRENCY = "INR"
 

@@ -12,7 +12,7 @@ const paths = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
   (m) => m[1].replace(SITE, '') || '/',
 );
 
-const TEMPLATE_COUNT = 11;
+const TEMPLATE_COUNT = 13;
 
 test('sitemap lists every template, hub, community page and post', () => {
   expect(paths.filter((p) => p.startsWith('/templates/'))).toHaveLength(TEMPLATE_COUNT);

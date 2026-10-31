@@ -9,5 +9,7 @@
   { "id": "tpl-royal-gate", "previewUrl": "/invitation-templates/template%208/index.html", "schemaUrl": "/invitation-templates/template%208/schema.json", "bindingMode": "legacy" },
   { "id": "tpl-chateau-classic", "previewUrl": "/invitation-templates/template%209/index.html", "schemaUrl": "/invitation-templates/template%209/schema.json", "bindingMode": "legacy" },
   { "id": "tpl-temple-bells", "previewUrl": "/invitation-templates/template%2010/index.html", "schemaUrl": "/invitation-templates/template%2010/schema.json", "bindingMode": "legacy" },
-  { "id": "tpl-ayodhya-royal", "previewUrl": "/invitation-templates/template%2011/index.html", "schemaUrl": "/invitation-templates/template%2011/schema.json", "bindingMode": "legacy" }
+  { "id": "tpl-ayodhya-royal", "previewUrl": "/invitation-templates/template%2011/index.html", "schemaUrl": "/invitation-templates/template%2011/schema.json", "bindingMode": "legacy" },
+  { "id": "tpl-lace-classic", "previewUrl": "/invitation-templates/template%2012/index.html", "schemaUrl": "/invitation-templates/template%2012/schema.json", "bindingMode": "legacy" },
+  { "id": "tpl-embroidered-garden", "previewUrl": "/invitation-templates/template%2013/index.html", "schemaUrl": "/invitation-templates/template%2013/schema.json", "bindingMode": "legacy" }
 ]

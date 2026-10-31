@@ -1,0 +1,134 @@
+{
+  "couple": {
+    "brideName": "Ananya",
+    "groomName": "Rohan"
+  },
+  "hero": {
+    "line1": "Shubh Vivah",
+    "line2": "with the blessings of our families"
+  },
+  "welcome": {
+    "line1": "With the blessings",
+    "line2": "of our elders",
+    "message": "invite you and your family to grace their wedding with your presence and blessings, as they take the seven sacred vows and begin their new life together."
+  },
+  "countdown": {
+    "title": "Shubh Muhurat",
+    "date": "2027-02-14"
+  },
+  "venue": {
+    "title": "Vivah Sthal",
+    "name": "Jagmandir Palace",
+    "city": "Udaipur, Rajasthan",
+    "text1": "Set on the waters of Lake Pichola, Jagmandir Palace will be the setting for our vivah, with its marble courtyards and views of the old city.",
+    "text2": "We request you to arrive a little early, so you can settle in and join the baraat with the family.",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Jagmandir+Palace+Udaipur",
+    "buttonText": "Get Directions"
+  },
+  "day": {
+    "title": "Vivah Karyakram",
+    "subtitle1": "A day of sacred rituals,",
+    "subtitle2": "from the baraat to the last dance.",
+    "items": [
+      {
+        "time": "4:30 PM",
+        "title": "Baraat",
+        "text": "The groom arrives with music, dhol and dancing, and the families greet each other at the Milni."
+      },
+      {
+        "time": "5:30 PM",
+        "title": "Jaimala & Pheras",
+        "text": "The couple exchange garlands, then take the seven pheras around the sacred fire."
+      },
+      {
+        "time": "7:30 PM",
+        "title": "Swagat",
+        "text": "Refreshments and thandai on the terrace while the family gathers for photographs."
+      },
+      {
+        "time": "8:30 PM",
+        "title": "Shubh Bhoj",
+        "text": "A traditional wedding feast under the stars, shared with family and friends."
+      },
+      {
+        "time": "10:00 PM",
+        "title": "Sangeet",
+        "text": "An evening of music and dancing with the whole family, celebrating until late."
+      }
+    ]
+  },
+  "dress": {
+    "title": "Dress Code",
+    "subtitle": "Traditional Indian Attire",
+    "text": "We'd love to see you in lehengas, sarees, sherwanis and kurtas, in the bright colours of celebration.",
+    "closing1": "Dress beautifully, feel comfortable,",
+    "closing2": "and come ready to dance",
+    "closing3": "in the baraat."
+  },
+  "transport": {
+    "title": "Transportation",
+    "text1": "We want getting to and from the wedding to be as easy as possible for you and your family.",
+    "text2": "A private boat will depart at 4:00 PM from Lal Ghat, taking guests directly to Jagmandir Palace with plenty of time to join the baraat.",
+    "text3": "After the celebrations, return transport to the city will",
+    "text4": "also be arranged.",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Lal+Ghat+Udaipur",
+    "buttonText": "View Pick-Up Point"
+  },
+  "stay": {
+    "title": "Where to Stay",
+    "subtitle": "For our guests travelling from out of town, we've selected two lovely places to stay close to the venue.",
+    "buttonText": "Book Your Stay",
+    "hotels": [
+      {
+        "name": "Lakeside Haveli",
+        "stay": "13 – 15 February 2027",
+        "rate": "Mention our wedding when booking",
+        "parking": "Parking available on site",
+        "text": "A short walk from the jetty, this haveli offers a comfortable stay with views across Lake Pichola.",
+        "url": "https://www.google.com/maps/search/?api=1&query=hotels+near+Lal+Ghat+Udaipur"
+      },
+      {
+        "name": "The Old City Courtyard",
+        "stay": "13 – 15 February 2027",
+        "rate": "Mention our wedding when booking",
+        "parking": "Parking available on site",
+        "text": "A charming heritage hotel in the old city, combining Mewar character with a peaceful atmosphere.",
+        "url": "https://www.google.com/maps/search/?api=1&query=heritage+hotels+Udaipur+old+city"
+      }
+    ]
+  },
+  "gift": {
+    "title": "Shagun",
+    "text": "Your blessings are our greatest gift.",
+    "options": "Should you wish to give shagun, you may do so in person or by UPI.",
+    "details": "UPI yourname@upi"
+  },
+  "gallery": {
+    "title": "Our Moments",
+    "subtitle": "A few memories from our journey so far, with many more to come.",
+    "items": [
+      {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+      },
+      {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+      },
+      {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+      },
+      {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png"
+      }
+    ]
+  },
+  "closing": {
+    "message": "We await your presence and blessings.",
+    "signoff": "With love and regards,"
+  },
+  "music": {
+    "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2012/static/media/until-were-gone-opt.mp3"
+  }
+}

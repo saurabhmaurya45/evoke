@@ -18,6 +18,8 @@ const TEMPLATES = [
   'tpl-chateau-classic',
   'tpl-temple-bells',
   'tpl-ayodhya-royal',
+  'tpl-lace-classic',
+  'tpl-embroidered-garden',
 ];
 
 const FIELDS = [

@@ -1,0 +1,81 @@
+{
+  "id": "tpl-embroidered-garden",
+  "name": "Embroidered Garden — Wedding",
+  "category": "Wedding",
+  "version": 1,
+  "defaultsUrl": "/invitation-templates/template%2013/defaults.json",
+  "sections": [
+    { "key": "couple", "label": "Couple", "fields": [
+      { "key": "brideName", "label": "Bride’s name", "type": "text", "required": true, "placeholder": "Meera" },
+      { "key": "brideSurname", "label": "Bride’s surname", "type": "text", "placeholder": "Sharma" },
+      { "key": "groomName", "label": "Groom’s name", "type": "text", "required": true, "placeholder": "Arjun" },
+      { "key": "groomSurname", "label": "Groom’s surname", "type": "text", "placeholder": "Mehta" }
+    ] },
+    { "key": "greeting", "label": "Greeting", "fields": [
+      { "key": "line1", "label": "Heading", "type": "text" },
+      { "key": "line2", "label": "Heading, second line", "type": "text" },
+      { "key": "message", "label": "Message", "type": "textarea" }
+    ] },
+    { "key": "countdown", "label": "Countdown", "fields": [
+      { "key": "title", "label": "Title", "type": "text" },
+      { "key": "date", "label": "Wedding date", "type": "date", "required": true }
+    ] },
+    { "key": "welcome", "label": "Invitation", "fields": [
+      { "key": "parents", "label": "Line above the names", "type": "text" },
+      { "key": "joiner", "label": "Word between the names", "type": "text" },
+      { "key": "invite", "label": "Line below the names", "type": "text" },
+      { "key": "dateText", "label": "Date as written", "type": "text", "placeholder": "Saturday, 20 February 2027" }
+    ] },
+    { "key": "venue", "label": "Venue", "fields": [
+      { "key": "title", "label": "Section title", "type": "text" },
+      { "key": "subtitle", "label": "Subtitle", "type": "text" },
+      { "key": "name", "label": "Venue name", "type": "text" },
+      { "key": "place1", "label": "Town", "type": "text" },
+      { "key": "place2", "label": "State", "type": "text" },
+      { "key": "dateText", "label": "Date as written", "type": "text" },
+      { "key": "line1", "label": "First event", "type": "text" },
+      { "key": "line2", "label": "Second event", "type": "text" },
+      { "key": "mapAddress", "label": "Full address for maps and calendar", "type": "text" }
+    ] },
+    { "key": "dress", "label": "Dress Code", "fields": [
+      { "key": "title", "label": "Section title", "type": "text" },
+      { "key": "main", "label": "Attire", "type": "text" },
+      { "key": "note", "label": "Note", "type": "textarea" }
+    ] },
+    { "key": "story", "label": "Our Story", "fields": [
+      { "key": "title", "label": "Section title", "type": "text" },
+      { "key": "text", "label": "Story", "type": "textarea" }
+    ] },
+    { "key": "program", "label": "Programme", "fields": [
+      { "key": "title", "label": "Section title", "type": "text" },
+      { "key": "items", "label": "Programme (5 moments)", "type": "list", "itemSchema": [
+        { "key": "time", "label": "Time", "type": "text", "placeholder": "5:00 PM" },
+        { "key": "title", "label": "Moment", "type": "text" }
+      ] },
+      { "key": "note", "label": "Note", "type": "textarea" }
+    ] },
+    { "key": "after", "label": "Day After", "fields": [
+      { "key": "title", "label": "Section title", "type": "text" },
+      { "key": "subtitle", "label": "Subtitle", "type": "text" },
+      { "key": "name", "label": "Place name", "type": "text" },
+      { "key": "place", "label": "Place detail", "type": "text" },
+      { "key": "date", "label": "Date as written", "type": "text" },
+      { "key": "time", "label": "Time", "type": "text" },
+      { "key": "address1", "label": "Address", "type": "text" },
+      { "key": "address2", "label": "Address, second line", "type": "text" },
+      { "key": "text", "label": "Description", "type": "textarea" },
+      { "key": "mapAddress", "label": "Full address for maps and calendar", "type": "text" }
+    ] },
+    { "key": "gifts", "label": "Shagun", "fields": [
+      { "key": "title", "label": "Section title", "type": "text" },
+      { "key": "text", "label": "Message", "type": "textarea" }
+    ] },
+    { "key": "gallery", "label": "Gallery", "fields": [
+      { "key": "title", "label": "Section title", "type": "text" },
+      { "key": "subtitle", "label": "Subtitle", "type": "textarea" },
+      { "key": "items", "label": "Photos", "type": "list", "itemSchema": [
+        { "key": "image", "label": "Photo", "type": "image" }
+      ] }
+    ] }
+  ]
+}

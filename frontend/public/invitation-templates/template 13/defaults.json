@@ -1,0 +1,73 @@
+{
+  "couple": { "brideName": "Meera", "brideSurname": "Sharma", "groomName": "Arjun", "groomSurname": "Mehta" },
+  "greeting": {
+    "line1": "Swagatam",
+    "line2": "to our wedding",
+    "message": "We can't wait to celebrate this auspicious day with you, surrounded by the family and friends we love."
+  },
+  "countdown": { "title": "Shubh Muhurat", "date": "2027-02-20" },
+  "welcome": {
+    "parents": "With the blessings of our families",
+    "joiner": "and",
+    "invite": "invite you to their shubh vivah",
+    "dateText": "Saturday, 20 February 2027"
+  },
+  "venue": {
+    "title": "Vivah & Reception",
+    "subtitle": "Where we celebrate",
+    "name": "Samode Bagh",
+    "place1": "Samode",
+    "place2": "Rajasthan",
+    "dateText": "Saturday, 20 February 2027",
+    "line1": "Pheras · The Mandap Lawn · 5:00 PM",
+    "line2": "Reception · The Durbar Hall · 8:00 PM",
+    "mapAddress": "Samode Bagh, Samode, Jaipur, Rajasthan, India"
+  },
+  "dress": {
+    "title": "Dress Code",
+    "main": "Traditional Indian",
+    "note": "We'd love to see you in lehengas, sarees, sherwanis and kurtas. Part of the evening is on the lawn, so please choose comfortable footwear."
+  },
+  "story": {
+    "title": "Our Story",
+    "text": "We met at a family friend's wedding and fell in love over long conversations and even longer walks. With the blessings of our elders, we now begin the rest of our lives together."
+  },
+  "program": {
+    "title": "Vivah Karyakram",
+    "items": [
+      { "time": "4:00 PM", "title": "Baraat arrives at the venue" },
+      { "time": "5:00 PM", "title": "Jaimala and pheras" },
+      { "time": "7:00 PM", "title": "Swagat and refreshments" },
+      { "time": "8:00 PM", "title": "Shubh bhoj and sangeet" },
+      { "time": "11:00 PM", "title": "Vidaai" }
+    ],
+    "note": "The pheras will take place at the mandap on the lawn, followed by refreshments in the rose garden, before dinner and dancing in the durbar hall."
+  },
+  "after": {
+    "title": "Griha Pravesh Lunch",
+    "subtitle": "Join us the day after",
+    "name": "The Garden Courtyard",
+    "place": "Family home",
+    "date": "Sunday | 21 February 2027",
+    "time": "From 12 PM",
+    "address1": "C-Scheme, Jaipur",
+    "address2": "Rajasthan, India",
+    "text": "Please join the family for a relaxed lunch the day after the wedding, as we welcome the bride home. Come as you are, and stay for food, music and memories of the night before. Children are welcome.",
+    "mapAddress": "C-Scheme, Jaipur, Rajasthan, India"
+  },
+  "gifts": {
+    "title": "Shagun",
+    "text": "Your blessings are the greatest gift of all. Should you wish to give shagun, a box will be available at the reception."
+  },
+  "gallery": {
+    "title": "Our Moments",
+    "subtitle": "A few memories from our journey so far, with many more to come.",
+    "items": [
+      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png" },
+      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png" },
+      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png" },
+      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png" },
+      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png" }
+    ]
+  }
+}

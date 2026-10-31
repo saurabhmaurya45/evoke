@@ -49,6 +49,8 @@ const ROYAL_GATE_TEMPLATE = '/invitation-templates/template%208/index.html';
 const CHATEAU_TEMPLATE = '/invitation-templates/template%209/index.html';
 const TEMPLE_BELLS_TEMPLATE = '/invitation-templates/template%2010/index.html';
 const AYODHYA_TEMPLATE = '/invitation-templates/template%2011/index.html';
+const LACE_TEMPLATE = '/invitation-templates/template%2012/index.html';
+const GARDEN_TEMPLATE = '/invitation-templates/template%2013/index.html';
 
 export interface HeroCard {
   readonly slotId: string;
@@ -281,6 +283,30 @@ export class HomeContentService {
       photo: COUPLE_PHOTO,
       previewUrl: AYODHYA_TEMPLATE,
       ...cardPreview(11),
+      ...COUPLE_CREDIT,
+    },
+    {
+      name: 'Lace — Classic Wedding',
+      category: 'Wedding',
+      slotId: 'tpl-lace-classic',
+      wash: WASH_ROSE,
+      accent: '#6f2a3b',
+      monogram: 'L',
+      photo: COUPLE_PHOTO,
+      previewUrl: LACE_TEMPLATE,
+      ...cardPreview(12),
+      ...COUPLE_CREDIT,
+    },
+    {
+      name: 'Embroidered Garden — Wedding',
+      category: 'Wedding',
+      slotId: 'tpl-embroidered-garden',
+      wash: WASH_ROSE,
+      accent: '#6f8a62',
+      monogram: 'G',
+      photo: COUPLE_PHOTO,
+      previewUrl: GARDEN_TEMPLATE,
+      ...cardPreview(13),
       ...COUPLE_CREDIT,
     },
   ];
