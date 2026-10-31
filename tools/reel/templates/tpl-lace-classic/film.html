@@ -1,0 +1,356 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Lace Film</title>
+<style>
+@font-face{font-family:Serif;src:url("../../../../frontend/public/invitation-templates/template 12/static/fonts/font-1.woff2")}
+@font-face{font-family:Serif;font-style:italic;src:url("../../../../frontend/public/invitation-templates/template 12/static/fonts/font-2.woff2")}
+@font-face{font-family:Script;src:url("../../../../frontend/public/invitation-templates/template 12/static/fonts/ballet-clean.woff2")}
+@font-face{font-family:Sans;src:url("../../../../frontend/public/invitation-templates/template 12/static/fonts/font-5.woff2")}
+@font-face{font-family:Gotu;src:url("../../../../frontend/public/invitation-templates/template 11/static/fonts/o-0FIpksx3QOpHsBi7h6.woff2");unicode-range:U+0900-097F,U+1CD0-1CF6,U+200C-200D,U+20A8,U+25CC}
+html,body{margin:0;background:#000;overflow:hidden;width:1080px;height:1920px}
+#stage{position:absolute;inset:0;overflow:hidden;background:#f7f2ea}
+.sc{position:absolute;inset:0;overflow:hidden;display:none}
+.a{position:absolute;left:0;top:0;transform-origin:center center}
+.t{white-space:nowrap;text-align:center}
+.t span{display:inline-block;white-space:pre}
+canvas{position:absolute;left:0;top:0}
+</style></head><body><div id="stage"></div>
+<script src="../../lib/core.js"></script>
+<script>
+const D = window.__DATA;
+const BASE = 'https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2012/static/images/';
+const IMG = { poster: 'bellagio-2-poster.jpg', tulle: 'tulle-texture-burgundy.webp', border: 'lace-border-white.webp', bow: 'lace-bow.webp', swag: 'lace-corner-swag.webp', frame: 'dress-code-frame-balanced-DkYhbsnD.png', garland: 'pearl-garland-2.webp', pearls: 'pearl-strip.png', oval: 'transport-lace-oval.webp', bows: 'countdown-bows-ivory.png', villa: 'villa-illustration.png', ornament: 'hotel-ornament.png', square: 'lace-square-white-2.webp' };
+const MOMENT_ART = ['event-welcome.png', 'event-ceremony.png', 'hotel-ornament.png', 'event-dinner.png', 'lace-bow.webp'];
+const src = (k) => BASE + (IMG[k] || k);
+const stage = document.querySelector('#stage');
+const WINE = '#5a1f2c', ROSE = '#a3505f', GOLD = '#e8c98a', IVORY = '#f7f2ea', INK = '#4c2430';
+const SERIF = 'Serif,Gotu,serif', SCRIPT = 'Script,Gotu,serif';
+const BEAT = 60 / 80, BAR = BEAT * 4;
+const has = (v) => !!str(v).trim();
+
+// ---- data: a section with nothing in it is left out ----
+const items = (Array.isArray(D.day?.items) ? D.day.items : []).filter((e) => e && has(e.title));
+const photos = (Array.isArray(D.gallery?.items) ? D.gallery.items : []).map((e) => safeImage(e?.image)).filter(Boolean);
+const rawDate = str(D.countdown?.date);
+const when = new Date(/^\d{4}-\d{2}-\d{2}$/.test(rawDate) ? `${rawDate}T00:00:00` : rawDate).getTime();
+const left = Number.isNaN(when) ? 0 : Math.max(0, Math.floor((when - window.__NOW) / 1000));
+const FIN = [Math.floor(left / 86400), Math.floor((left % 86400) / 3600), Math.floor((left % 3600) / 60), left % 60];
+const prettyDate = !Number.isNaN(when) ? new Date(when).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+const names = [D.couple?.brideName, D.couple?.groomName].map(str);
+
+const PLAN = [
+  { id: 'open', beats: 4 },
+  { id: 'names', beats: 8 },
+  left > 0 && { id: 'countdown', beats: 6 },
+  items.length && { id: 'day', beats: items.length * 3 },
+  has(D.venue?.name) && { id: 'venue', beats: 4 },
+  photos.length && { id: 'gallery', beats: photos.length * 2 },
+  { id: 'end', beats: 8 },
+].filter(Boolean);
+let clock = 0;
+for (const s of PLAN) { s.at = clock; s.dur = s.beats * BEAT; clock += s.dur; }
+const TOTAL = clock;
+const FADE = 0.5;
+const CUTS = PLAN.slice(1).map((s) => s.at);
+const SECTION = Object.fromEntries(PLAN.map((s) => [s.id, s]));
+
+// ---- names (under the envelope, so the flaps reveal it) ----
+const sN = scene(stage);
+mk(sN, 'div', 'width:1080px;height:1920px;background:radial-gradient(circle at 50% 42%,#fbf1ea,#f0dcd3 58%,#dcbcb2)');
+const nSwag = im(sN, src('swag'), 1200, 600);
+const nGar = im(sN, src('garland'), 1180, 590);
+const nL1 = text(sN, D.hero?.line1, `font:400 74px ${SERIF};color:${ROSE}`, 900);
+const nL2 = text(sN, D.hero?.line2, `font:italic 400 40px ${SERIF};color:${INK}`, 900);
+const nA = text(sN, names[0], `font:400 216px ${SCRIPT};color:${WINE}`, 960);
+const nAmp = text(sN, '&', `font:italic 400 84px ${SERIF};color:${ROSE}`);
+const nB = text(sN, names[1], `font:400 216px ${SCRIPT};color:${WINE}`, 960);
+const nDate = text(sN, prettyDate, `font:400 44px ${SERIF};letter-spacing:3px;color:${INK}`);
+const nVilla = im(sN, src('villa'), 700, 538);
+const nLace = im(sN, src('border'), 1240, 526);
+
+// ---- envelope: the poster cut into four flaps, with the seal staying on the top one ----
+const sO = scene(stage);
+const flap = (poly) => {
+  const e = mk(sO, 'div', `width:1080px;height:1920px;background:url(${src('poster')}) 0 0/1080px 1920px;clip-path:polygon(${poly})`);
+  return e;
+};
+const fL = flap('0 0,50% 50%,0 100%'), fR = flap('100% 0,50% 50%,100% 100%'), fB = flap('0 100%,50% 50%,100% 100%'), fT = flap('0 0,100% 0,50% 50%');
+const fSeal = mk(sO, 'div', `width:1080px;height:1920px;background:url(${src('poster')}) 0 0/1080px 1920px;clip-path:ellipse(164px 214px at 539px 973px)`);
+const oShine = mk(sO, 'div', 'width:520px;height:2800px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent)');
+const oLine = text(sO, D.hero?.line1, `font:400 92px ${SERIF};color:${WINE};text-shadow:0 2px 16px rgba(255,255,255,.95)`, 900);
+
+// ---- countdown ----
+const sC = scene(stage);
+const cBg = mk(sC, 'div', `width:1320px;height:2160px;background:url(${src('tulle')}) 0 0/640px`);
+const cBows = im(sC, src('bows'), 1040, 967);
+const cTop = im(sC, src('border'), 1240, 526, 'transform-origin:center');
+const cBot = im(sC, src('border'), 1240, 526);
+const cTitle = text(sC, D.countdown?.title, `font:400 112px ${SERIF};color:#fff6ec`, 800);
+const cTiles = ['Days', 'Hours', 'Minutes', 'Seconds'].map((lab) => {
+  const e = mk(sC, 'div', 'width:200px;height:210px');
+  e.v = mk(e, 'div', `left:0;right:0;top:24px;text-align:center;font:400 112px ${SERIF};color:#fff`);
+  const l = mk(e, 'div', `left:0;right:0;top:160px;text-align:center;font:400 25px Sans;letter-spacing:2px;color:${GOLD}`);
+  l.textContent = lab;
+  return e;
+});
+
+// ---- programme ----
+const sD = scene(stage);
+mk(sD, 'div', `width:1320px;height:2160px;left:-120px;top:-120px;background:url(${src('tulle')}) 0 0/640px`);
+mk(sD, 'div', 'width:1080px;height:1920px;background:radial-gradient(circle at 50% 42%,rgba(150,60,80,.25),rgba(40,10,18,.5) 100%)');
+const dPL = im(sD, src('pearls'), 218, 1577), dPR = im(sD, src('pearls'), 218, 1577);
+const dHead = text(sD, D.day?.title, `font:400 84px ${SERIF};color:#fff6ec`, 900);
+items.forEach((e, i) => {
+  e.g = mk(sD, 'div', 'width:660px;height:984px');
+  const art = MOMENT_ART[i % MOMENT_ART.length];
+  e.art = im(e.g, src(art), 440, 0, 'height:auto;left:110px;top:310px');
+  im(e.g, src('frame'), 660, 984);
+  e.tm = text(sD, e.time, `font:italic 400 64px ${SERIF};color:${GOLD}`, 900);
+  e.ti = text(sD, e.title, `font:400 104px ${SERIF};color:#fff6ec`, 960);
+});
+
+// ---- venue ----
+const sV = scene(stage);
+mk(sV, 'div', `width:1320px;height:2160px;left:-120px;top:-120px;background:url(${src('tulle')}) 0 0/640px`);
+mk(sV, 'div', 'width:1080px;height:1920px;background:radial-gradient(circle at 50% 42%,rgba(150,60,80,.2),rgba(40,10,18,.55) 100%)');
+const vBow = im(sV, src('bow'), 1180, 484);
+const vOval = im(sV, src('oval'), 620, 918);
+const vTitle = text(sV, D.venue?.title, `font:italic 400 58px ${SERIF};color:${GOLD}`, 900);
+const vName = text(sV, D.venue?.name, `font:400 108px ${SERIF};color:#fff6ec`, 960);
+const vCity = text(sV, D.venue?.city, `font:400 36px Sans;letter-spacing:5px;color:#f3dfd0`, 900);
+
+// ---- gallery ----
+const sG = scene(stage);
+mk(sG, 'div', `width:1080px;height:1920px;background:${WINE}`);
+const gPics = photos.map((p) => {
+  const w = mk(sG, 'div', 'width:1080px;height:1920px;overflow:hidden');
+  w.img = im(w, p, 1080, 1920, 'object-fit:cover;object-position:center 25%', src('poster'));
+  return w;
+});
+const gShade = mk(sG, 'div', 'width:1080px;height:1920px;background:linear-gradient(180deg,rgba(40,10,18,.42),transparent 26%,transparent 62%,rgba(40,10,18,.72))');
+const gTop = im(sG, src('border'), 1240, 526);
+const gBot = im(sG, src('border'), 1240, 526);
+const gTitle = text(sG, D.gallery?.title, `font:400 104px ${SERIF};color:#fff;text-shadow:0 3px 18px rgba(0,0,0,.65)`, 940);
+
+// ---- end card ----
+const sE = scene(stage);
+const eBg = mk(sE, 'div', `width:1320px;height:2160px;background:url(${src('tulle')}) 0 0/640px`);
+const eGlow = mk(sE, 'div', 'width:1200px;height:1000px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,214,160,.32),transparent 68%)');
+const eBow = im(sE, src('bow'), 1180, 484);
+const eLace = im(sE, src('border'), 1240, 526);
+const eNames = text(sE, `${names[0]} & ${names[1]}`, `font:400 150px ${SCRIPT};color:#ffe9c8`, 960);
+const eMsg = text(sE, D.closing?.message, `font:italic 400 44px ${SERIF};color:#f3dfd0`, 940);
+const eA = text(sE, 'Apni shaadi ka', `font:400 80px ${SERIF};color:#fff`);
+const eB = text(sE, 'aisa invitation banaiye', `font:400 80px ${SERIF};color:#fff`);
+const eLogo = mk(sE, 'div', `font:400 138px ${SERIF};white-space:nowrap;background:linear-gradient(100deg,${GOLD} 0%,#fff2d0 40%,#fff 50%,#fff2d0 60%,${GOLD} 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent`);
+eLogo.textContent = 'theinvitely.in';
+const eRule = mk(sE, 'div', `height:4px;background:linear-gradient(90deg,transparent,${GOLD},transparent)`);
+
+// ---- particles, flash, vignette ----
+const cv = document.createElement('canvas');
+cv.width = 1080; cv.height = 1920;
+stage.appendChild(cv);
+const c = cv.getContext('2d');
+mk(stage, 'div', 'width:1080px;height:1920px;background:radial-gradient(ellipse at 50% 46%,transparent 62%,rgba(50,20,28,.26) 100%)');
+const flash = mk(stage, 'div', 'width:1080px;height:1920px');
+const R = rng(11);
+const PET = ['#e9b9c0', '#d98f9c', '#f4d9d4', '#c96f80', '#efc9a9'];
+const petals = Array.from({ length: 46 }, () => ({ x: R() * 1080, y: R() * 2200, v: 110 + R() * 150, sw: 30 + R() * 70, f: 0.5 + R(), p: R() * 6.28, w: 13 + R() * 15, c: PET[Math.floor(R() * 5)], rs: 0.8 + R() * 2.4 }));
+const pearls = Array.from({ length: 13 }, () => ({ x: R() * 1080, y: R() * 2200, v: 150 + R() * 170, r: 7 + R() * 11, p: R() * 6.28 }));
+const dust = Array.from({ length: 70 }, () => ({ x: R() * 1080, y: R() * 1920, v: 12 + R() * 34, f: 0.4 + R(), p: R() * 6.28, r: 1.2 + R() * 2.6 }));
+const bursts = PLAN.slice(1).map((s, i) => { const r = rng(40 + i); return { t: s.at, p: Array.from({ length: 60 }, () => ({ a: r() * 6.28, d: 220 + r() * 620, s: 2 + r() * 5 })) }; });
+
+function fx(T, id) {
+  c.clearRect(0, 0, 1080, 1920);
+  const dark = id !== 'open' && id !== 'names';
+  for (const d of dust) {
+    const y = (d.y - T * d.v + 192000) % 1920, x = d.x + Math.sin(T * d.f + d.p) * 30;
+    const a = 0.2 + 0.6 * Math.pow(0.5 + 0.5 * Math.sin(T * d.f * 3 + d.p), 2);
+    c.fillStyle = dark ? `rgba(255,226,170,${a})` : `rgba(190,140,90,${a * 0.6})`;
+    c.beginPath(); c.arc(x, y, d.r, 0, 6.3); c.fill();
+  }
+  if (id !== 'open') {
+    for (const p of pearls) {
+      const y = (p.y + T * p.v) % 2200 - 140, x = p.x + Math.sin(T * 0.7 + p.p) * 16;
+      const g = c.createRadialGradient(x - p.r * 0.35, y - p.r * 0.35, p.r * 0.1, x, y, p.r);
+      g.addColorStop(0, '#ffffff'); g.addColorStop(0.55, '#f4ece2'); g.addColorStop(1, '#b9a892');
+      c.fillStyle = g; c.beginPath(); c.arc(x, y, p.r, 0, 6.3); c.fill();
+    }
+    c.globalAlpha = 0.9;
+    for (const p of petals) {
+      const y = (p.y + T * p.v) % 2200 - 140, x = p.x + Math.sin(T * p.f + p.p) * p.sw, sq = 0.28 + 0.72 * Math.abs(Math.sin(T * p.rs + p.p));
+      c.save();
+      c.translate(x, y); c.rotate(T * p.rs * 0.6 + p.p); c.scale(1, sq);
+      c.fillStyle = p.c;
+      c.beginPath(); c.moveTo(-p.w, 0); c.quadraticCurveTo(0, -p.w, p.w, 0); c.quadraticCurveTo(0, p.w, -p.w, 0); c.fill();
+      c.restore();
+    }
+    c.globalAlpha = 1;
+  }
+  for (const b of bursts) {
+    const u = T - b.t;
+    if (u < 0 || u > 1.1) continue;
+    const e = outE(u / 1.1), a = 1 - u / 1.1;
+    for (const p of b.p) {
+      c.fillStyle = `rgba(232,196,128,${a})`;
+      c.beginPath(); c.arc(540 + Math.cos(p.a) * p.d * e, 800 + Math.sin(p.a) * p.d * e + u * u * 240, p.s * (1 - u / 2), 0, 6.3); c.fill();
+    }
+  }
+}
+
+// ---- scenes ----
+function renderOpen(u, d) {
+  const z = lerp(1, 1.07, ioC(cl(u / (d - 0.7))));
+  sO.style.transform = `scale(${z})`;
+  // The flaps open across the song's drop.
+  const o = ioC(seg(u, d - 1.25, d + 0.3));
+  fT.style.transform = fSeal.style.transform = `translateY(${-o * 1100}px)`;
+  fB.style.transform = `translateY(${o * 1100}px)`;
+  fL.style.transform = `translateX(${-o * 620}px)`;
+  fR.style.transform = `translateX(${o * 620}px)`;
+  P(oShine, { x: lerp(-300, 1380, seg(u, 0.5, 2.4)), y: 960, r: 18 });
+  P(oLine, { y: 1570, a: 1 - seg(u, d - 1.3, d - 0.8) });
+  reveal(oLine, u, 0.7, 0.05);
+}
+
+const LACE_SHADOW = 'drop-shadow(0 8px 14px rgba(80,30,40,.38))';
+function renderNames(u, d) {
+  const v = seg(u, 0, d);
+  P(nSwag, { y: lerp(-330, 270, outE(seg(u, -0.6, 0.2))) });
+  nSwag.style.filter = LACE_SHADOW;
+  P(nGar, { y: lerp(-300, 200, outE(seg(u, -0.5, 0.3))), r: Math.sin(u * 2.2) * 1.1 });
+  nGar.style.filter = LACE_SHADOW;
+  P(nL1, { y: 420 }); reveal(nL1, u, -0.45, 0.04);
+  P(nL2, { y: 505 }); reveal(nL2, u, -0.15, 0.018);
+  P(nA, { y: 735 }); reveal(nA, u, BEAT, 0.06);
+  P(nAmp, { y: 905 }); reveal(nAmp, u, BEAT * 2, 0.04);
+  P(nB, { y: 1065 }); reveal(nB, u, BEAT * 2.25, 0.06);
+  P(nDate, { y: 1245 }); reveal(nDate, u, BEAT * 3.25, 0.018);
+  P(nVilla, { y: lerp(2300, 1530, outE(seg(u, BEAT * 3, BEAT * 4.2))), s: lerp(1.05, 0.98, v) });
+  P(nLace, { y: lerp(2200, 1800, outE(seg(u, BEAT * 2.8, BEAT * 3.8))) });
+  nLace.style.filter = LACE_SHADOW;
+}
+
+function renderCountdown(u, d) {
+  const v = seg(u, 0, d);
+  P(cBg, { y: 960, s: lerp(1.08, 1, v) });
+  P(cBows, { y: 800, s: outB(seg(u, 0.05, 0.7), 1.3), r: Math.sin(u * 2) * 0.8 });
+  P(cTop, { y: lerp(-300, 60, outE(seg(u, 0, 0.6))), r: 180 });
+  P(cBot, { y: lerp(2200, 1720, outE(seg(u, 0, 0.6))) });
+  P(cTitle, { y: 610 }); reveal(cTitle, u, 0.2, 0.04);
+  const settle = [BEAT * 1.25, BEAT * 1.75, BEAT * 2.25, BEAT * 2.75];
+  cTiles.forEach((e, i) => {
+    const p = seg(u, 0.35 + i * 0.08, 0.75 + i * 0.08), done = u >= settle[i];
+    const spin = Math.sin(i * 77.3 + Math.floor(u * 24) * 13.7) * 43758.5;
+    const val = done ? (i === 3 ? (FIN[3] - Math.floor(u - settle[3]) + 60) % 60 : FIN[i]) : Math.floor((spin - Math.floor(spin)) * 100);
+    e.v.textContent = String(val).padStart(2, '0');
+    e.v.style.fontSize = `${[112, 112, 112, 92, 72, 58][Math.min(e.v.textContent.length, 5)]}px`;
+    e.v.style.lineHeight = '112px';
+    P(e, { x: 165 + 250 * i, y: 850, s: outB(p, 1.5) * (done ? 1 + 0.16 * Math.exp(-(u - settle[i]) * 8) : 1), a: cl(p * 3) });
+  });
+}
+
+function renderDay(u, d) {
+  P(dPL, { x: 70, y: 700 + (u * 26) % 200, a: 0.9 });
+  P(dPR, { x: 1010, y: 800 - (u * 26) % 200, a: 0.9 });
+  P(dHead, { y: 270, a: seg(u, 0, 0.3) }); reveal(dHead, u, 0.05, 0.03);
+  const span = BEAT * 3;
+  items.forEach((e, i) => {
+    const a = i * span, z = a + span, on = u >= a - 0.25 && u < z + 0.3;
+    e.g.style.display = e.tm.style.display = e.ti.style.display = on ? 'block' : 'none';
+    if (!on) return;
+    const type = i % 4, p = ioC(seg(u, a - 0.25, a + 0.45)), q = i < items.length - 1 ? ioC(seg(u, z - 0.25, z + 0.3)) : 0;
+    const o = { x: 540, y: 810 + 7 * Math.sin((u - a) * 3), s: 0.92, r: 1.4 * Math.sin((u - a) * 2.4), a: 1, b: 0, ry: 0 };
+    o.a = p * (1 - q);
+    if (type === 0) o.s *= lerp(0.86, 1, p);
+    if (type === 1) o.x += (1 - p) * 150;
+    if (type === 2) o.ry = (1 - p) * 34;
+    if (type === 3) o.y -= (1 - p) * 130;
+    o.s *= 1 + q * 0.05;
+    P(e.g, o);
+    e.art.style.transform = `scale(${1.02 + (u - a) * 0.05})`;
+    const ta = 1 - q;
+    P(e.tm, { y: 1345, a: ta * seg(u, a - 0.05, a + 0.35) });
+    P(e.ti, { y: 1450, a: ta }); reveal(e.ti, u, a, 0.025, 0.5, 26);
+  });
+}
+
+function renderVenue(u, d) {
+  const v = seg(u, 0, d);
+  P(vBow, { y: lerp(-260, 230, outE(seg(u, 0.05, 0.7))) });
+  P(vOval, { y: lerp(2400, 790, outE(seg(u, 0.08, 1))), s: lerp(0.96, 1.02, v), r: Math.sin(u * 1.8) * 0.7 });
+  P(vTitle, { y: 1335 }); reveal(vTitle, u, BEAT * 1.2, 0.03);
+  P(vName, { y: 1432 }); reveal(vName, u, BEAT * 1.6, 0.035);
+  P(vCity, { y: 1525 }); reveal(vCity, u, BEAT * 2.3, 0.02);
+}
+
+function renderGallery(u, d) {
+  const i = Math.min(photos.length - 1, Math.floor(u / (BEAT * 2)));
+  gPics.forEach((w, n) => {
+    w.style.display = n === i || n === i - 1 ? 'block' : 'none';
+    w.style.zIndex = 0;
+    if (n > i || n < i - 1) return;
+    const l = u - n * BEAT * 2;
+    w.style.opacity = n === i && n > 0 ? ioC(seg(l, 0, 0.5)) : 1;
+    w.img.style.transform = `scale(${1.03 + l * 0.035})`;
+  });
+  // Later photos must sit over earlier ones and under the lace.
+  gPics.forEach((w) => sG.insertBefore(w, gShade));
+  P(gTop, { y: lerp(-300, 30, outE(seg(u, 0, 0.5))), r: 180 });
+  P(gBot, { y: lerp(2200, 1760, outE(seg(u, 0, 0.5))) });
+  P(gTitle, { y: 1440, a: 1 - seg(u, d - 0.3, d - 0.05) }); reveal(gTitle, u, 0.1, 0.035);
+}
+
+function renderEnd(u, d) {
+  const v = seg(u, 0, d);
+  P(eBg, { y: 960, s: lerp(1.08, 1, v) });
+  P(eGlow, { y: 760, s: 1 + 0.05 * Math.sin(u * 3) });
+  P(eBow, { y: lerp(-260, 240, outE(seg(u, 0, 0.7))) });
+  P(eLace, { y: lerp(2200, 1760, outE(seg(u, 0, 0.7))) });
+  P(eNames, { y: 585 }); reveal(eNames, u, 0.1, 0.03);
+  P(eMsg, { y: 715 }); reveal(eMsg, u, 0.5, 0.012);
+  P(eA, { y: 880 }); reveal(eA, u, BEAT, 0.025);
+  P(eB, { y: 985 }); reveal(eB, u, BEAT * 1.4, 0.02);
+  const l = outB(seg(u, BEAT * 2.5, BEAT * 3), 1.8);
+  P(eLogo, { y: 1165, s: Math.max(l, 0.001), a: cl(l * 2) });
+  eLogo.style.backgroundPosition = `${lerp(130, -40, seg(u, BEAT * 3, BEAT * 4.6))}% 0`;
+  eLogo.style.filter = 'drop-shadow(0 3px 10px rgba(0,0,0,.5))';
+  eRule.style.width = `${outC(seg(u, BEAT * 3, BEAT * 3.6)) * 720}px`;
+  P(eRule, { y: 1255 });
+}
+
+const SCENES = { names: [sN, renderNames], countdown: [sC, renderCountdown], day: [sD, renderDay], venue: [sV, renderVenue], gallery: [sG, renderGallery], end: [sE, renderEnd] };
+
+function render(T) {
+  const cur = [...PLAN].reverse().find((s) => T >= s.at) ?? PLAN[0];
+  const beat = T >= BAR ? (T - BAR) % BEAT : 9;
+  stage.style.transform = `scale(${1 + 0.004 * Math.exp(-beat * 5)})`;
+  // Names sit under the opening envelope, so they are on screen while the flaps part.
+  const open = SECTION.open;
+  for (const [id, [el, fn]] of Object.entries(SCENES)) {
+    const s = SECTION[id];
+    if (!s) continue;
+    // Each section dissolves in over the one before it, centred on its first beat.
+    const first = id === 'names';
+    const on = T >= s.at - (first ? 1.3 : FADE) && T < s.at + s.dur + FADE;
+    el.style.display = on ? 'block' : 'none';
+    if (!on) continue;
+    const p = first ? 1 : ioC(seg(T, s.at - FADE, s.at + FADE));
+    el.style.opacity = p;
+    el.style.transform = `scale(${lerp(1.04, 1, p)})`;
+    fn(T - s.at, s.dur);
+  }
+  sO.style.display = T < open.dur + 0.3 ? 'block' : 'none';
+  if (T < open.dur + 0.3) renderOpen(T, open.dur);
+  let fa = 0;
+  for (const s of PLAN.slice(1)) { const w = T - s.at; if (w >= 0) fa = Math.max(fa, 0.1 * Math.exp(-w * 4)); }
+  const end = seg(T, TOTAL - 0.8, TOTAL - 0.05);
+  flash.style.background = end > 0 ? `rgba(0,0,0,${end})` : `rgba(255,246,228,${fa})`;
+  fx(T, cur.id);
+}
+
+window.__render = render;
+window.__ready = (async () => {
+  for (const k of ['poster', 'tulle']) { const x = new Image(); x.src = src(k); await x.decode(); }
+  return ready(stage, [['48px Serif', 'A'], ['italic 48px Serif', 'A'], ['48px Script', 'A'], ['48px Sans', 'A'], ['48px Gotu', 'ॐ']], TOTAL);
+})();
+</script></body></html>

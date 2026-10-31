@@ -1,0 +1,75 @@
+[
+  {
+    "name": "saved with all the sample text",
+    "data": "$sample",
+    "want": ["Ananya", "Rohan", "Shubh Vivah", "Shubh Muhurat", "Baraat", "Sangeet", "Jagmandir Palace", "Our Moments", "Apni shaadi ka"]
+  },
+  {
+    "name": "every section filled with new data",
+    "data": {
+      "couple": { "brideName": "Kavya", "groomName": "Vihaan" },
+      "hero": { "line1": "Shubh Lagan", "line2": "with the blessings of our elders" },
+      "countdown": { "title": "Bas kuch din", "date": "2099-02-14" },
+      "day": { "title": "Karyakram", "items": [{ "time": "6 PM", "title": "Mehndi" }, { "time": "8 PM", "title": "Haldi" }] },
+      "venue": { "title": "Sthal", "name": "Taj Lake Palace", "city": "Udaipur" },
+      "gallery": { "title": "Yaadein", "items": [{ "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png" }] },
+      "closing": { "message": "Aapka intezaar rahega" }
+    },
+    "want": ["Kavya", "Vihaan", "Shubh Lagan", "Bas kuch din", "Mehndi", "6 PM", "Haldi", "Taj Lake Palace", "Yaadein", "Aapka intezaar rahega"],
+    "reject": ["Ananya", "Rohan", "Baraat", "Jagmandir"]
+  },
+  {
+    "name": "only the names: every optional section is left out",
+    "data": { "couple": { "brideName": "Kavya", "groomName": "Vihaan" } },
+    "want": ["Kavya", "Vihaan", "Apni shaadi ka"],
+    "reject": ["Ananya", "Baraat", "Jagmandir", "Our Moments", "Shubh Muhurat"]
+  },
+  {
+    "name": "no programme",
+    "data": { "couple": { "brideName": "Kavya", "groomName": "Vihaan" }, "day": { "title": "Hidden programme", "items": [{ "time": "6 PM", "title": "  " }] }, "venue": { "name": "Taj Lake Palace" } },
+    "want": ["Taj Lake Palace"],
+    "reject": ["Hidden programme"]
+  },
+  {
+    "name": "no venue",
+    "data": { "couple": { "brideName": "Kavya", "groomName": "Vihaan" }, "venue": { "title": "Hidden venue", "name": "" }, "day": { "items": [{ "title": "Mehndi" }] } },
+    "want": ["Mehndi"],
+    "reject": ["Hidden venue"]
+  },
+  {
+    "name": "no gallery",
+    "data": { "couple": { "brideName": "Kavya", "groomName": "Vihaan" }, "gallery": { "title": "Hidden gallery", "items": [{ "image": "" }, { "image": "javascript:alert(1)" }] } },
+    "reject": ["Hidden gallery"]
+  },
+  {
+    "name": "a past countdown date leaves the countdown out",
+    "data": { "couple": { "brideName": "Kavya", "groomName": "Vihaan" }, "countdown": { "title": "Hidden title", "date": "2020-01-01" } },
+    "reject": ["Hidden title"]
+  },
+  {
+    "name": "blank strings count as empty",
+    "data": { "couple": { "brideName": "Kavya", "groomName": "Vihaan" }, "venue": { "title": "Hidden blank", "name": "   " } },
+    "reject": ["Hidden blank"]
+  },
+  {
+    "name": "Hindi text and very long names",
+    "data": {
+      "couple": { "brideName": "Wilhelmina-Fitzgerald Raghavendran Iyer", "groomName": "क्षितिज श्रीवास्तव" },
+      "hero": { "line1": "शुभ विवाह", "line2": "With the blessings of our most respected elders and all our dear family and friends" },
+      "venue": { "name": "A Very Long Venue Name Indeed For The Whole Family To Remember", "city": "Somewhere Very Far Away From Everywhere Else In The Whole Country" },
+      "day": { "title": "कार्यक्रम", "items": [{ "time": "6 PM on the evening of the very first day of the wedding", "title": "A Very Very Long Moment Name For The Whole Family" }] }
+    },
+    "want": ["क्षितिज श्रीवास्तव", "शुभ विवाह"]
+  },
+  {
+    "name": "more moments than the sample",
+    "data": { "couple": { "brideName": "Kavya", "groomName": "Vihaan" }, "day": { "items": [{ "title": "M1" }, { "title": "M2" }, { "title": "M3" }, { "title": "M4" }, { "title": "M5" }, { "title": "M6" }, { "title": "M7" }] } },
+    "want": ["M1", "M7"]
+  },
+  {
+    "name": "wrong data types and HTML in text",
+    "data": { "couple": { "brideName": "<script>window.__x=1</script>", "groomName": 7 }, "hero": { "line1": { "a": 1 } }, "day": { "items": "nope" }, "gallery": { "items": [5, null] }, "countdown": { "date": 5 }, "venue": [] },
+    "want": ["<script>window.__x=1</script>"],
+    "reject": ["[object Object]"]
+  }
+]
