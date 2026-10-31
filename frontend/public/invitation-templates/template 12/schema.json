@@ -1,0 +1,384 @@
+{
+  "id": "tpl-lace-classic",
+  "name": "Lace — Classic Wedding",
+  "category": "Wedding",
+  "version": 1,
+  "defaultsUrl": "/invitation-templates/template%2012/defaults.json",
+  "sections": [
+    {
+      "key": "couple",
+      "label": "Couple",
+      "fields": [
+        {
+          "key": "brideName",
+          "label": "Bride’s name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Ananya"
+        },
+        {
+          "key": "groomName",
+          "label": "Groom’s name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Rohan"
+        }
+      ]
+    },
+    {
+      "key": "hero",
+      "label": "Opening",
+      "fields": [
+        {
+          "key": "line1",
+          "label": "Line above the names",
+          "type": "text"
+        },
+        {
+          "key": "line2",
+          "label": "Second line above the names",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "welcome",
+      "label": "Welcome",
+      "fields": [
+        {
+          "key": "line1",
+          "label": "Heading",
+          "type": "text"
+        },
+        {
+          "key": "line2",
+          "label": "Heading, second line",
+          "type": "text"
+        },
+        {
+          "key": "message",
+          "label": "Message, after the couple's names",
+          "type": "textarea"
+        }
+      ]
+    },
+    {
+      "key": "countdown",
+      "label": "Countdown",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Title",
+          "type": "text"
+        },
+        {
+          "key": "date",
+          "label": "Wedding date",
+          "type": "date",
+          "required": true
+        }
+      ]
+    },
+    {
+      "key": "venue",
+      "label": "Venue",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Section title",
+          "type": "text"
+        },
+        {
+          "key": "name",
+          "label": "Venue name",
+          "type": "text"
+        },
+        {
+          "key": "city",
+          "label": "City",
+          "type": "text"
+        },
+        {
+          "key": "text1",
+          "label": "About the venue",
+          "type": "textarea"
+        },
+        {
+          "key": "text2",
+          "label": "Arrival note",
+          "type": "textarea"
+        },
+        {
+          "key": "mapUrl",
+          "label": "Directions link (URL)",
+          "type": "text"
+        },
+        {
+          "key": "buttonText",
+          "label": "Button text",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "day",
+      "label": "The Day",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Section title",
+          "type": "text"
+        },
+        {
+          "key": "subtitle1",
+          "label": "Subtitle",
+          "type": "text"
+        },
+        {
+          "key": "subtitle2",
+          "label": "Subtitle, second line",
+          "type": "text"
+        },
+        {
+          "key": "items",
+          "label": "Programme (5 moments)",
+          "type": "list",
+          "itemSchema": [
+            {
+              "key": "time",
+              "label": "Time",
+              "type": "text",
+              "placeholder": "5:30 PM"
+            },
+            {
+              "key": "title",
+              "label": "Moment",
+              "type": "text"
+            },
+            {
+              "key": "text",
+              "label": "Description",
+              "type": "textarea"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "dress",
+      "label": "Dress Code",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Section title",
+          "type": "text"
+        },
+        {
+          "key": "subtitle",
+          "label": "Attire",
+          "type": "text"
+        },
+        {
+          "key": "text",
+          "label": "Description",
+          "type": "textarea"
+        },
+        {
+          "key": "closing1",
+          "label": "Closing line 1",
+          "type": "text"
+        },
+        {
+          "key": "closing2",
+          "label": "Closing line 2",
+          "type": "text"
+        },
+        {
+          "key": "closing3",
+          "label": "Closing line 3",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "transport",
+      "label": "Transportation",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Section title",
+          "type": "text"
+        },
+        {
+          "key": "text1",
+          "label": "Introduction",
+          "type": "textarea"
+        },
+        {
+          "key": "text2",
+          "label": "Getting there",
+          "type": "textarea"
+        },
+        {
+          "key": "text3",
+          "label": "Getting back",
+          "type": "text"
+        },
+        {
+          "key": "text4",
+          "label": "Getting back, second line",
+          "type": "text"
+        },
+        {
+          "key": "mapUrl",
+          "label": "Pick-up point link (URL)",
+          "type": "text"
+        },
+        {
+          "key": "buttonText",
+          "label": "Button text",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "stay",
+      "label": "Where to Stay",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Section title",
+          "type": "text"
+        },
+        {
+          "key": "subtitle",
+          "label": "Introduction",
+          "type": "textarea"
+        },
+        {
+          "key": "buttonText",
+          "label": "Button text",
+          "type": "text"
+        },
+        {
+          "key": "hotels",
+          "label": "Hotels (2 cards)",
+          "type": "list",
+          "itemSchema": [
+            {
+              "key": "name",
+              "label": "Hotel name",
+              "type": "text"
+            },
+            {
+              "key": "stay",
+              "label": "Recommended dates",
+              "type": "text"
+            },
+            {
+              "key": "rate",
+              "label": "Guest rate",
+              "type": "text"
+            },
+            {
+              "key": "parking",
+              "label": "Parking",
+              "type": "text"
+            },
+            {
+              "key": "text",
+              "label": "Description",
+              "type": "textarea"
+            },
+            {
+              "key": "url",
+              "label": "Booking link (URL)",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gift",
+      "label": "Wedding Gift",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Section title",
+          "type": "text"
+        },
+        {
+          "key": "text",
+          "label": "Headline",
+          "type": "text"
+        },
+        {
+          "key": "options",
+          "label": "Description",
+          "type": "textarea"
+        },
+        {
+          "key": "details",
+          "label": "Payment details",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "gallery",
+      "label": "Gallery",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Section title",
+          "type": "text"
+        },
+        {
+          "key": "subtitle",
+          "label": "Subtitle",
+          "type": "textarea"
+        },
+        {
+          "key": "items",
+          "label": "Photos",
+          "type": "list",
+          "itemSchema": [
+            {
+              "key": "image",
+              "label": "Photo",
+              "type": "image"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "closing",
+      "label": "Closing",
+      "fields": [
+        {
+          "key": "message",
+          "label": "Closing message",
+          "type": "text"
+        },
+        {
+          "key": "signoff",
+          "label": "Sign-off",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "music",
+      "label": "Music",
+      "fields": [
+        {
+          "key": "track",
+          "label": "Background music",
+          "type": "audio"
+        }
+      ]
+    }
+  ]
+}

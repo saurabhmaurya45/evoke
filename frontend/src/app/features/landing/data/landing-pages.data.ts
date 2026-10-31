@@ -49,6 +49,8 @@ const WEDDING_TEMPLATES = [
   'tpl-chateau-classic',
   'tpl-temple-bells',
   'tpl-ayodhya-royal',
+  'tpl-lace-classic',
+  'tpl-embroidered-garden',
 ];
 
 const WHY_WEBSITE: LandingSection = {
@@ -336,6 +338,8 @@ export const LANDING_PAGES: readonly LandingPage[] = [
       'tpl-rosewood-punjabi',
       'tpl-temple-bells',
       'tpl-ayodhya-royal',
+      'tpl-lace-classic',
+      'tpl-embroidered-garden',
     ],
     sections: [
       {

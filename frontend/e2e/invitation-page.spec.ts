@@ -35,7 +35,7 @@ test('the pill fades in, links to the site in a new tab, and can be closed', asy
   await expect(pill(page)).toHaveCount(0);
 });
 
-for (const slot of ['tpl-eternal-bond', 'tpl-maroon-gold-royal', 'tpl-royal-gate', 'tpl-temple-bells', 'tpl-doorway-modern', 'tpl-ayodhya-royal']) {
+for (const slot of ['tpl-eternal-bond', 'tpl-maroon-gold-royal', 'tpl-royal-gate', 'tpl-temple-bells', 'tpl-doorway-modern', 'tpl-ayodhya-royal', 'tpl-lace-classic', 'tpl-embroidered-garden']) {
   test(`pill over ${slot}`, async ({ page }, info) => {
     await openInvitation(page, slot);
     await expect(pill(page)).toHaveClass(/made-with--in/, { timeout: 15_000 });

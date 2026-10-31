@@ -285,6 +285,58 @@ export const TEMPLATE_SEO: readonly TemplateSeo[] = [
       'RSVP on WhatsApp and background music',
     ],
   },
+  {
+    slotId: 'tpl-lace-classic',
+    slug: 'lace-classic-wedding',
+    label: 'Lace Classic Wedding',
+    communities: ['hindu'],
+    keywords: [
+      'lace wedding invitation',
+      'elegant wedding invitation website',
+      'ivory and burgundy wedding invitation',
+    ],
+    summary:
+      'Lace is an elegant ivory and burgundy wedding invitation website: a wax-seal envelope, countdown, programme, dress code, hotels and photo gallery.',
+    paragraphs: [
+      'Lace opens as a pearl-trimmed envelope closed with a wax seal. One tap lifts the flaps and reveals your names framed in ivory lace, with a hand-drawn illustration of your venue beneath them.',
+      'From there it walks guests through everything they need: a live countdown on deep burgundy, the location with one-tap directions, an illustrated programme from the baraat to the sangeet, dress code, transport, two hotel cards, shagun details and a photo gallery.',
+    ],
+    highlights: [
+      'Lace envelope that opens with a wax seal',
+      'Live countdown to the wedding',
+      'Illustrated programme, from baraat to sangeet',
+      'Dress code and transport details',
+      'Two hotel cards with booking links',
+      'Shagun details and a photo gallery',
+      'Background music',
+    ],
+  },
+  {
+    slotId: 'tpl-embroidered-garden',
+    slug: 'embroidered-garden-wedding',
+    label: 'Embroidered Garden',
+    communities: ['hindu'],
+    keywords: [
+      'floral wedding invitation website',
+      'embroidered wedding invitation',
+      'garden wedding invitation',
+    ],
+    summary:
+      'Embroidered Garden is a floral Hindu wedding invitation website: doors that open onto an embroidered garden, countdown, programme, story and photo gallery.',
+    paragraphs: [
+      'Embroidered Garden opens on a pair of sage-green doors. One tap swings them apart, the curtains draw back, and your names appear above a stitched garden of wisteria, roses and swans.',
+      'From there it walks guests through the day: a live countdown, the invitation with both names, venue details with maps and calendar links, dress code, your story, a programme from the baraat to the vidaai, the day after, shagun and a photo gallery.',
+    ],
+    highlights: [
+      'Doors that open onto an embroidered garden',
+      'Live countdown to the wedding',
+      'Venue with map and calendar links',
+      'Programme, from baraat to vidaai',
+      'Your love story in a floral frame',
+      'Day-after celebration details',
+      'Shagun note and a photo gallery',
+    ],
+  },
 ];
 
 export function templateSeoBySlug(slug: string): TemplateSeo | undefined {
