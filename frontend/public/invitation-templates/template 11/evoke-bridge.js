@@ -8,7 +8,7 @@
  *   data-ev-href="events.items.0.mapUrl"  link target of an <a>
  *   data-ev-img="gallery.photo1"          <img src>
  *   data-ev-link="social.instagramUrl"    a whole block that opens a link on click
- *   data-ev-countdown="countdown.date"    live DD:HH:MM:SS clock
+ *   data-ev-countdown="countdown.date"    live clock: boxes for days, hours, minutes and seconds
  *   data-ev-audio="music.track"           the background-music <audio>
  *   data-ev-rsvp="rsvp.whatsapp"          the RSVP dialog (adds a WhatsApp button when a number is set)
  *
@@ -153,6 +153,29 @@
     return n < 10 ? '0' + n : String(n);
   }
 
+  // One box per unit. Built once, then only the numbers change, so the clock doesn't flicker.
+  function renderClock(el, parts) {
+    if (!el.__evBoxes) {
+      el.textContent = '';
+      el.__evBoxes = ['Days', 'Hours', 'Minutes', 'Seconds'].map(function (label) {
+        var box = document.createElement('span');
+        box.className = 'ev-clock-box';
+        var num = document.createElement('span');
+        num.className = 'ev-clock-num';
+        var lab = document.createElement('span');
+        lab.className = 'ev-clock-label';
+        lab.textContent = label;
+        box.appendChild(num);
+        box.appendChild(lab);
+        el.appendChild(box);
+        return num;
+      });
+    }
+    el.__evBoxes.forEach(function (num, i) {
+      if (num.textContent !== parts[i]) num.textContent = parts[i];
+    });
+  }
+
   function tickClock() {
     each('[data-ev-countdown]', function (el) {
       var raw = getPath(values, el.getAttribute('data-ev-countdown'));
@@ -163,12 +186,29 @@
       var h = Math.floor((total % 86400) / 3600);
       var m = Math.floor((total % 3600) / 60);
       var s = total % 60;
-      el.textContent = pad(d) + ':' + pad(h) + ':' + pad(m) + ':' + pad(s);
+      renderClock(el, [pad(d), pad(h), pad(m), pad(s)]);
       el.style.visibility = 'visible'; // Framer ships the clock hidden until its (absent) script runs
     });
   }
 
+  // The countdown sits over busy artwork, so its text needs its own contrast.
+  function styleClock() {
+    if (document.getElementById('ev-clock-style')) return;
+    var style = document.createElement('style');
+    style.id = 'ev-clock-style';
+    style.textContent =
+      '[data-ev="countdown.title"]{text-shadow:0 2px 4px rgba(20,10,35,.95),0 0 18px rgba(20,10,35,.85)}' +
+      '[data-ev-countdown]{display:flex!important;justify-content:center;gap:clamp(6px,1.4vw,14px);width:auto!important;white-space:normal!important}' +
+      '.ev-clock-box{display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'width:clamp(66px,8vw,104px);padding:clamp(8px,1vw,14px) 2px;box-sizing:border-box;border-radius:10px;' +
+      'background:rgba(25,12,45,.72);border:1px solid rgba(255,226,170,.65);box-shadow:0 6px 18px rgba(0,0,0,.35)}' +
+      '.ev-clock-num{font-size:clamp(26px,3.2vw,44px);line-height:1.1;font-weight:600;color:#fff;font-variant-numeric:tabular-nums}' +
+      '.ev-clock-label{margin-top:4px;font-size:clamp(10px,1vw,13px);line-height:1.2;letter-spacing:.06em;text-transform:uppercase;color:#ffe2aa}';
+    document.head.appendChild(style);
+  }
+
   function startClock() {
+    styleClock();
     tickClock();
     if (!clockTimer) clockTimer = window.setInterval(tickClock, 1000);
   }
