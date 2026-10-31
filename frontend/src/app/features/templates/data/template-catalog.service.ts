@@ -14,6 +14,8 @@ interface BackendTemplateApiOut {
   priceAmountMinor: number | null;
   /** Signed, short-lived (15 min) URL of an uploaded thumbnail, or null. */
   thumbnailUrl: string | null;
+  /** Ascending position set by an admin; 0 until placed. */
+  displayOrder: number;
 }
 interface ApiPage<T> { data: T[]; }
 /** Minimal backend record cached in memory for UUID lookups. */
@@ -82,12 +84,21 @@ export class TemplateCatalogService {
    */
   private readonly _thumbnails = signal<Record<string, string>>({});
 
-  /** The catalogue with any uploaded thumbnail standing in for the card image. */
+  /**
+   * slug → position from the backend. Templates with equal positions (all of them,
+   * until an admin first saves an order) keep the order they are defined in.
+   */
+  private readonly _orders = signal<Record<string, number>>({});
+
+  /** The catalogue in display order, with any uploaded thumbnail standing in for the card image. */
   private readonly _withThumbnails = computed(() => {
     const thumbs = this._thumbnails();
-    return this._templates().map((template) =>
-      thumbs[template.slotId] ? { ...template, photo: thumbs[template.slotId] } : template,
-    );
+    const orders = this._orders();
+    return this._templates()
+      .map((template) =>
+        thumbs[template.slotId] ? { ...template, photo: thumbs[template.slotId] } : template,
+      )
+      .sort((a, b) => (orders[a.slotId] ?? 0) - (orders[b.slotId] ?? 0));
   });
 
   /**
@@ -219,6 +230,23 @@ export class TemplateCatalogService {
     if (Object.keys(payload).length) this.sendPatch(slotId, payload);
   }
 
+  /**
+   * Save the display order. The API needs the whole catalogue, so templates the
+   * backend has but this build doesn't know go last, keeping their current order.
+   * Rejects if the save fails, leaving the current order as it was.
+   */
+  async saveOrder(slotIds: readonly string[]): Promise<void> {
+    const backend = this._backendMap();
+    const known = slotIds.filter((slotId) => backend[slotId]);
+    const rest = Object.keys(backend).filter((slug) => !slotIds.includes(slug));
+    const ordered = [...known, ...rest];
+    if (!ordered.length) throw new Error('The template list has not loaded yet.');
+    await firstValueFrom(
+      this.http.put('v1/templates/order', { templateIds: ordered.map((slug) => backend[slug].id) }),
+    );
+    this._orders.set(Object.fromEntries(ordered.map((slug, i) => [slug, i + 1])));
+  }
+
   /** Discard every admin change and return to the seeded catalogue. */
   reset(): void {
     this._templates.set(this.seed(true));
@@ -317,6 +345,7 @@ export class TemplateCatalogService {
             page.data.filter((t) => t.thumbnailUrl).map((t) => [t.slug, t.thumbnailUrl!]),
           ),
         );
+        this._orders.set(Object.fromEntries(page.data.map((t) => [t.slug, t.displayOrder ?? 0])));
         if (admin) {
           const map: Record<string, BackendEntry> = {};
           for (const t of page.data) {

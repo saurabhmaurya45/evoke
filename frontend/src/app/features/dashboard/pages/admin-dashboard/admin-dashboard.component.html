@@ -46,6 +46,24 @@
       </p>
       <button type="button" class="btn-ghost" (click)="resetCatalog()">Reset to defaults</button>
     </div>
+    <div class="order-bar" aria-live="polite">
+      @if (orderDraft()) {
+        <p class="order-bar__note">Order changed. Save it to update the site.</p>
+        <div>
+          <button type="button" class="btn-ghost" [disabled]="orderSaving()" (click)="discardOrder()">Discard</button>
+          <button type="button" class="btn-solid" [disabled]="orderSaving()" (click)="saveOrder()">
+            {{ orderSaving() ? 'Saving…' : 'Save order' }}
+          </button>
+        </div>
+      } @else if (orderSaved()) {
+        <p class="order-bar__note order-bar__note--done">Order saved. The site now shows templates in this order.</p>
+      } @else {
+        <p class="order-bar__note">Drag a row, or use the arrows, to set the order templates appear in on the site.</p>
+      }
+      @if (orderError()) {
+        <p class="admin__error order-bar__error">{{ orderError() }}</p>
+      }
+    </div>
   }
 
   <div class="table-wrap">
@@ -53,11 +71,37 @@
       @case ('templates') {
         <table class="table">
           <thead>
-            <tr><th>Template</th><th>Category</th><th>Pricing</th><th>Status</th><th class="num">Actions</th></tr>
+            <tr><th>Order</th><th>Template</th><th>Category</th><th>Pricing</th><th>Status</th><th class="num">Actions</th></tr>
           </thead>
           <tbody>
-            @for (tpl of templates(); track tpl.slotId) {
-              <tr [class.row--muted]="!tpl.published">
+            @for (tpl of orderedTemplates(); track tpl.slotId; let i = $index, first = $first, last = $last) {
+              <tr
+                class="row--draggable"
+                [class.row--muted]="!tpl.published"
+                draggable="true"
+                (dragstart)="onDragStart(tpl.slotId, $event)"
+                (dragover)="onDragOver(tpl.slotId, $event)"
+                (dragend)="onDragEnd()"
+              >
+                <td>
+                  <div class="order-cell">
+                    <span class="order-cell__num">{{ i + 1 }}</span>
+                    <button
+                      type="button"
+                      class="order-cell__btn"
+                      [disabled]="first || orderSaving()"
+                      [attr.aria-label]="'Move ' + tpl.name + ' up'"
+                      (click)="moveTemplate(tpl.slotId, -1)"
+                    >↑</button>
+                    <button
+                      type="button"
+                      class="order-cell__btn"
+                      [disabled]="last || orderSaving()"
+                      [attr.aria-label]="'Move ' + tpl.name + ' down'"
+                      (click)="moveTemplate(tpl.slotId, 1)"
+                    >↓</button>
+                  </div>
+                </td>
                 <td>
                   <div class="tpl-cell">
                     <img class="tpl-thumb" [src]="tpl.photo" [alt]="" loading="lazy" />

@@ -27,6 +27,7 @@ from app.templates.schemas import (
     CurrencyUpdate,
     TemplateCreate,
     TemplateGalleryOut,
+    TemplateOrderUpdate,
     TemplateOut,
     TemplateUpdate,
     TemplateVersionCreate,
@@ -46,6 +47,7 @@ from app.templates.service import (
     list_template_versions,
     list_templates,
     publish_template_version,
+    reorder_templates,
     update_category,
     update_currency,
     update_template,
@@ -313,6 +315,39 @@ async def list_templates_route(
         for template in page.data
     ]
     return Page[TemplateGalleryOut](data=data, pagination=page.pagination)
+
+
+@router.put(
+    "/order",
+    response_model=Envelope[list[TemplateOut]],
+    tags=["templates"],
+    summary="Set the gallery order of all templates",
+    responses=merge(
+        UNAUTHORIZED,
+        FORBIDDEN,
+        validation_failed(
+            "templateIds is empty, repeats a template, or doesn't list every template."
+        ),
+    ),
+)
+async def reorder_templates_route(
+    data: TemplateOrderUpdate,
+    admin_user: User = Depends(require_role(UserRole.ADMIN)),
+    db: AsyncSession = Depends(get_db),
+) -> Envelope[list[TemplateOut]]:
+    """Replace the order templates are listed in.
+
+    **ADMIN role required.** Send every template's id, drafts and unlisted ones
+    included, in the order they should appear; each one's `displayOrder` becomes its
+    1-based position. Returns the templates in that order. Returns `422` if the list
+    is empty, repeats a template, or doesn't match the catalog — for instance when a
+    template was added since the list was loaded, so reload and retry.
+
+    Safe to repeat. A template created afterwards has `displayOrder` 0, so it is listed
+    first until it is placed.
+    """
+    templates = await reorder_templates(db, admin_user, data.template_ids)
+    return Envelope(data=[TemplateOut.model_validate(template) for template in templates])
 
 
 @router.get(

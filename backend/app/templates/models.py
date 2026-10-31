@@ -89,6 +89,11 @@ class Template(Base):
     storefront_status: Mapped[str] = mapped_column(String(20), nullable=False, default="UNLISTED")
     thumbnail_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
     preview_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    # Ascending position in the gallery; a template never placed by an admin stays 0,
+    # so it sorts ahead of the ones that have been.
+    display_order: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
     # Content/catalog readiness only (is this template visible in the public catalog?),
     # not commercial visibility — storefront_status handles commercial visibility.
     status: Mapped[TemplateStatus] = mapped_column(
