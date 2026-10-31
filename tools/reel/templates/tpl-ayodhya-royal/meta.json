@@ -2,10 +2,13 @@
   "folder": "template 11",
   "bpm": 96,
   "firstBar": 2.5,
-  "required": ["couple.groomName", "couple.brideName"],
+  "required": [
+    "couple.groomName",
+    "couple.brideName"
+  ],
   "song": {
-    "url": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2011/static/media/jvNWZpzIVC6ztmWqc4f1j7AFNC0.mp3",
-    "bpm": 96,
-    "firstBeat": 45.22
+    "url": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2011/static/media/aaj-se-teri.mp3",
+    "bpm": 80,
+    "firstBeat": 59.95
   }
 }
