@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { WINDOW } from '../../../core/tokens/window.token';
 import type { TemplateSchema } from '../models/template-schema.model';
+import { SHARE_SECTION } from './share-section';
 import { validateTemplateSchema } from './template-contract';
 
 /** A registered template: where its rendered HTML and field manifest live. */
@@ -55,7 +56,8 @@ export class TemplateSchemaLoader {
         return null;
       }
       // The template owns its fields; the loader binds the rendered HTML url.
-      const schema = validateTemplateSchema({ ...manifest, previewUrl: entry.previewUrl, bindingMode: entry.bindingMode }, id);
+      const validated = validateTemplateSchema({ ...manifest, previewUrl: entry.previewUrl, bindingMode: entry.bindingMode }, id);
+      const schema = { ...validated, sections: [...validated.sections, SHARE_SECTION] };
       this.cache.set(id, schema);
       return schema;
     } catch (error) {

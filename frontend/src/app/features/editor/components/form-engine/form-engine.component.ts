@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FieldControlComponent } from '../field-control/field-control.component';
+import { SharePreviewComponent } from '../share-preview/share-preview.component';
+import { SHARE_SECTION_KEY } from '../../data/share-section';
 import { TemplateEditorStore } from '../../data/template-editor.store';
 import type { FieldSchema, FieldValue } from '../../models/template-schema.model';
 
@@ -13,7 +15,7 @@ import type { FieldSchema, FieldValue } from '../../models/template-schema.model
 @Component({
   selector: 'app-form-engine',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FieldControlComponent],
+  imports: [FieldControlComponent, SharePreviewComponent],
   template: `
     @if (store.schema(); as schema) {
       <form class="form" (submit)="$event.preventDefault()">
@@ -63,6 +65,10 @@ import type { FieldSchema, FieldValue } from '../../models/template-schema.model
                 />
               }
             }
+
+            @if (section.key === shareSectionKey) {
+              <app-share-preview />
+            }
           </fieldset>
         }
       </form>
@@ -72,6 +78,7 @@ import type { FieldSchema, FieldValue } from '../../models/template-schema.model
 })
 export class FormEngineComponent {
   protected readonly store = inject(TemplateEditorStore);
+  protected readonly shareSectionKey = SHARE_SECTION_KEY;
 
   /** Current scalar value for a field (empty when unset). */
   protected scalar(sectionKey: string, field: FieldSchema): FieldValue {

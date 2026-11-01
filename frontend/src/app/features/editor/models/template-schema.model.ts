@@ -33,6 +33,10 @@ export interface FieldSchema {
   readonly required?: boolean;
   /** Placeholder / helper hint shown in the control. */
   readonly placeholder?: string;
+  /** Longest text the control accepts. */
+  readonly maxLength?: number;
+  /** For `image` fields: offer the upload only, not the box for pasting a URL. */
+  readonly uploadOnly?: boolean;
   /** Default applied when a template is first loaded. */
   readonly default?: FieldValue;
   /**

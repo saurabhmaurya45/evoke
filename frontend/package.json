@@ -14,6 +14,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:ci": "ng test --watch=false --browsers=ChromeHeadless",
+    "test:api": "node --test api/_lib/share-meta.test.mjs",
     "test:e2e": "playwright test",
     "lint": "ng lint",
     "lint:styles": "stylelint \"src/**/*.scss\"",
@@ -32,8 +33,10 @@
     "@angular/router": "^20.0.0",
     "@angular/ssr": "^20.0.0",
     "@supabase/supabase-js": "^2.112.3",
+    "@vercel/og": "0.11.1",
     "express": "^4.21.2",
     "rxjs": "~7.8.0",
+    "sharp": "0.34.5",
     "three": "^0.170.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
