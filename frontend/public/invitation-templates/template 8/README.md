@@ -8,5 +8,4 @@ Unbundled from a single-file React build (every module and asset inlined as base
   `evoke-bridge.js` feeds it the `evoke:preview-update` message and components re-render.
 - All content is sample data: the couple, family, phone numbers and addresses are fictional; event and story
   artwork is the illustrated sample set shared with template 4.
-- RSVP opens WhatsApp with the guest's response when `rsvp.whatsapp` is set (the source form was a demo that
   sent nothing).

@@ -13,13 +13,24 @@
   },
   "events": {
     "items": [
-      { "name": "Haldi", "date": "2027-01-24", "venue": "Palace Courtyard", "mapUrl": "" },
-      { "name": "Sangeet", "date": "2027-01-24", "venue": "The Grand Hall", "mapUrl": "" },
-      { "name": "Reception", "date": "2027-01-25", "venue": "Lakeside Lawn", "mapUrl": "" }
+      {
+        "name": "Haldi",
+        "date": "2027-01-24",
+        "venue": "Palace Courtyard",
+        "mapUrl": ""
+      },
+      {
+        "name": "Sangeet",
+        "date": "2027-01-24",
+        "venue": "The Grand Hall",
+        "mapUrl": ""
+      },
+      {
+        "name": "Reception",
+        "date": "2027-01-25",
+        "venue": "Lakeside Lawn",
+        "mapUrl": ""
+      }
     ]
-  },
-  "rsvp": {
-    "enabled": true,
-    "deadline": "2027-01-01"
   }
 }

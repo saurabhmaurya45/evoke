@@ -95,13 +95,18 @@
     for (var i = 0; i < nodes.length; i++) apply(nodes[i]);
   }
 
+  function hideSection(grid, hide) {
+    var section = grid.closest('section');
+    if (section) section.style.display = hide ? 'none' : '';
+  }
+
   function rebuildEvents(items) {
     var grid = document.getElementById('eventsGrid');
     if (!grid || !Array.isArray(items)) return;
     var visible = items.filter(function (it) {
       return it && (it.title || it.when || it.time);
     });
-    if (!visible.length) return;
+    hideSection(grid, !visible.length);
     var icon =
       '<svg class="icon" viewBox="0 0 24 24" fill="#c9a227" aria-hidden="true">' +
       '<path d="M12 21s-7.5-4.9-9.7-9A5.6 5.6 0 0 1 12 6.4 5.6 5.6 0 0 1 21.7 12c-2.2 4.1-9.7 9-9.7 9z"/></svg>';
@@ -126,7 +131,7 @@
     var visible = items.filter(function (it) {
       return it && (it.caption || it.image);
     });
-    if (!visible.length) return;
+    hideSection(grid, !visible.length);
     grid.innerHTML = visible
       .map(function (g, i) {
         var bg = GALLERY_BG[i % GALLERY_BG.length];

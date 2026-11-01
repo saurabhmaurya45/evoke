@@ -91,6 +91,7 @@ function isTransient(err: unknown): boolean {
             [src]="safeSrc()!"
             title="Invitation"
             referrerpolicy="no-referrer"
+            allow="autoplay"
             sandbox="allow-scripts allow-same-origin"
           ></iframe>
         }

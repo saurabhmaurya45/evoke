@@ -392,3 +392,6 @@ html body { background: rgb(255, 255, 255); } html { font-size: 100%; }
     /* line-height: 1.18 !important; */
   }
 }
+
+/* The RSVP block: rendered by the Framer bundle, not used by this template. */
+.framer-zolm2c-container { display: none !important; }

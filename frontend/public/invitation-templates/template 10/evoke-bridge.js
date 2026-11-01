@@ -64,8 +64,8 @@
       groom: { name: couple.groomName || '', short: couple.groomShort || couple.groomName || '', parents: couple.groomParents || '' },
       bride: { name: couple.brideName || '', short: couple.brideShort || couple.brideName || '', parents: couple.brideParents || '' },
       images: {
-        groom: media(couple.groomPhoto, (d.couple || {}).groomPhoto),
-        bride: media(couple.bridePhoto, (d.couple || {}).bridePhoto)
+        groom: media(couple.groomPhoto),
+        bride: media(couple.bridePhoto)
       },
       weddingDate: weddingIso(wed.date, wed.time),
       weddingDateLabel: wed.dateLabel || '',
@@ -80,9 +80,8 @@
         heading: gift.heading || '', message: gift.message || '', title: gift.title || '',
         name: gift.name || '', details: gift.details || '', note: gift.note || ''
       },
-      gallery: list((c.gallery || {}).photos).map(function (p, i) {
-        var fallback = list((d.gallery || {}).photos)[i] || {};
-        return media(p.image, fallback.image);
+      gallery: list((c.gallery || {}).photos).map(function (p) {
+        return media(p.image);
       }).filter(Boolean)
     };
     window.__evMusic = media((c.music || {}).track, (d.music || {}).track);

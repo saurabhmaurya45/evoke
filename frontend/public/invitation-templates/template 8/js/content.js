@@ -126,21 +126,3 @@ export function countdownTarget() {
   return isNaN(when.getTime()) ? 0 : when.getTime();
 }
 
-/** RSVP: when the couple set a WhatsApp number, open WhatsApp with the guest's response filled in. */
-export function sendRsvp(payload) {
-  const r = current.rsvp || {};
-  const digits = String(r.whatsapp || '').replace(/[^\d]/g, '');
-  if (!digits) return false;
-  const names = [current.couple && current.couple.groomName, current.couple && current.couple.brideName].filter(Boolean).join(' & ');
-  const text = [
-    'RSVP' + (names ? ' — ' + names : ''),
-    'Name: ' + payload.fullName,
-    'Events: ' + (payload.events || []).join(', '),
-    payload.guests ? 'Guests: ' + payload.guests : '',
-    payload.message ? 'Message: ' + payload.message : '',
-  ].filter(Boolean).join('\n');
-  try {
-    window.open('https://wa.me/' + digits + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
-  } catch (_) {}
-  return true;
-}
