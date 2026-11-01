@@ -37,6 +37,7 @@ import { MediaUploadError } from '../../../../core/services/media-upload.service
             class="field__input field__input--area"
             rows="4"
             [attr.aria-label]="field().label"
+            [attr.maxlength]="field().maxLength ?? null"
             [placeholder]="field().placeholder ?? ''"
             [value]="text()"
             (input)="emitText($event)"
@@ -92,14 +93,16 @@ import { MediaUploadError } from '../../../../core/services/media-upload.service
             @if (uploadError(); as error) {
               <p class="field__error" role="alert">{{ error }}</p>
             }
-            <input
-              class="field__input"
-              type="url"
-              [attr.aria-label]="field().label + ' — URL'"
-              [placeholder]="field().placeholder ?? '…or paste an image URL'"
-              [value]="isDataUrl() ? '' : text()"
-              (input)="emitText($event)"
-            />
+            @if (!field().uploadOnly) {
+              <input
+                class="field__input"
+                type="url"
+                [attr.aria-label]="field().label + ' — URL'"
+                [placeholder]="field().placeholder ?? '…or paste an image URL'"
+                [value]="isDataUrl() ? '' : text()"
+                (input)="emitText($event)"
+              />
+            }
           </div>
         }
         @case ('audio') {
@@ -140,6 +143,7 @@ import { MediaUploadError } from '../../../../core/services/media-upload.service
             class="field__input"
             type="text"
             [attr.aria-label]="field().label"
+            [attr.maxlength]="field().maxLength ?? null"
             [placeholder]="field().placeholder ?? ''"
             [value]="text()"
             (input)="emitText($event)"

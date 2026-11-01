@@ -14,6 +14,10 @@
   ],
   "rewrites": [
     {
+      "source": "/i/:slug",
+      "destination": "/api/invitation-page?slug=:slug"
+    },
+    {
       "source": "/:path((?!.*\\.).*)",
       "destination": "/index.csr.html"
     }
