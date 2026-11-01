@@ -79,14 +79,6 @@
             ]
           },
           {
-            "key": "rsvp",
-            "label": "RSVP",
-            "fields": [
-              { "key": "enabled", "label": "Enable RSVP", "type": "toggle" },
-              { "key": "deadline", "label": "RSVP by", "type": "date" }
-            ]
-          },
-          {
             "key": "music",
             "label": "Background music",
             "fields": [{ "key": "track", "label": "Music track", "type": "audio" }]
@@ -935,81 +927,6 @@
         padding: 0 12px;
       }
 
-      /* ---------- rsvp ---------- */
-      .rsvp .panel {
-        max-width: 720px;
-        margin: 60px auto 0;
-        padding: 60px 46px;
-        border: 1px solid rgba(212, 175, 55, 0.45);
-        background: rgba(255, 255, 255, 0.035);
-        backdrop-filter: blur(10px);
-        position: relative;
-      }
-      .rsvp .panel::before {
-        content: '';
-        position: absolute;
-        inset: 10px;
-        border: 1px solid rgba(212, 175, 55, 0.25);
-        pointer-events: none;
-      }
-      .rsvp .fields {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 30px;
-        margin-bottom: 36px;
-      }
-      .rsvp input,
-      .rsvp select {
-        width: 100%;
-        background: transparent;
-        border: 0;
-        border-bottom: 1px solid rgba(212, 175, 55, 0.4);
-        padding: 12px 4px;
-        color: var(--ivory);
-        font-family: 'Jost', sans-serif;
-        font-size: 0.95rem;
-        outline: none;
-        transition: border-color 0.3s;
-      }
-      .rsvp input::placeholder {
-        color: rgba(239, 227, 200, 0.5);
-      }
-      .rsvp input:focus,
-      .rsvp select:focus {
-        border-color: var(--gold-bright);
-      }
-      .rsvp select {
-        color: rgba(239, 227, 200, 0.85);
-      }
-      .rsvp select option {
-        background: var(--night-2);
-        color: var(--ivory);
-      }
-      .rsvp .btn {
-        width: 100%;
-        text-align: center;
-        border: none;
-      }
-      .rsvp .note {
-        text-align: center;
-        margin-top: 18px;
-        font-size: 0.8rem;
-        color: var(--rose);
-        opacity: 0;
-        transition: opacity 0.5s;
-      }
-      .rsvp .note.show {
-        opacity: 0.9;
-      }
-      @media (max-width: 620px) {
-        .rsvp .fields {
-          grid-template-columns: 1fr;
-        }
-        .rsvp .panel {
-          padding: 44px 24px;
-        }
-      }
-
       /* ---------- footer ---------- */
       footer {
         text-align: center;
@@ -1130,7 +1047,7 @@
         <a href="#story">Our Story</a>
         <a href="#events">Events</a>
         <a href="#gallery">Gallery</a>
-        <a href="#rsvp">RSVP</a>
+        
       </div>
     </nav>
 
@@ -1163,8 +1080,8 @@
           Sunday, 24th January 2027 · Udaipur, Rajasthan
         </p>
         <div class="hero-btns load-seq ls-5">
-          <a class="btn btn-solid" href="#rsvp">RSVP Now</a>
-          <a class="btn btn-ghost" href="#story">View Invitation</a>
+          
+          <a class="btn btn-solid" href="#story">View Invitation</a>
         </div>
       </div>
 
@@ -1457,37 +1374,7 @@
       </div>
     </section>
 
-    <!-- ============ RSVP ============ -->
-    <section class="rsvp" id="rsvp">
-      <div class="wrap">
-        <p class="eyebrow reveal" style="text-align: center; display: block">Kindly respond</p>
-        <div class="sec-head reveal"><h2>RSVP</h2></div>
-        <div class="divider reveal">
-          <span class="line"></span><span class="gem"></span><span class="line r"></span>
-        </div>
-
-        <div class="panel reveal d1">
-          <div class="fields">
-            <input id="rsvp-name" type="text" placeholder="Full Name" autocomplete="name" />
-            <input id="rsvp-email" type="email" placeholder="Email Address" autocomplete="email" />
-            <select id="rsvp-attend" aria-label="Will you attend?">
-              <option value="">Will you attend?</option>
-              <option>Joyfully accepts</option>
-              <option>Regretfully declines</option>
-            </select>
-            <select id="rsvp-guests" aria-label="Number of guests">
-              <option value="">Number of guests</option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4+</option>
-            </select>
-          </div>
-          <button class="btn btn-solid" id="rsvp-btn" type="button">Send My Wishes</button>
-          <p class="note" id="rsvp-note"></p>
-        </div>
-      </div>
-    </section>
+    
 
     <!-- ============ FOOTER ============ -->
     <footer>
@@ -2304,22 +2191,9 @@
         });
       })();
 
-      /* ---------- RSVP (front-end only) ---------- */
-      (function () {
-        var btn = document.getElementById('rsvp-btn'),
-          note = document.getElementById('rsvp-note');
-        btn.addEventListener('click', function () {
-          var name = document.getElementById('rsvp-name').value.trim();
-          if (!name) {
-            note.textContent = 'Please share your name so we know who to thank.';
-            note.classList.add('show');
-            return;
-          }
-          note.textContent = 'Thank you, ' + name + '! Your wishes have been noted with love. ✦';
-          note.classList.add('show');
-        });
-      })();
-    </script>
+      </script>
+
+    <script src="../evoke-music.js"></script>
 
     <!-- ============ EVOKE EDITOR LIVE-BIND ============ -->
     <!--
@@ -2356,7 +2230,7 @@
           data = data || {};
           var hero = data.hero || {};
           var story = data.story || {};
-          var rsvp = data.rsvp || {};
+          
           var bride = hero.brideName || '';
           var groom = hero.groomName || '';
 
@@ -2365,7 +2239,7 @@
             namesEl.innerHTML =
               esc(bride) + ' <span class="amp">&amp;</span> ' + esc(groom);
           }
-          if (hero.tagline != null && hero.tagline !== '') setAll('tagline', hero.tagline);
+          if (hero.tagline != null) setAll('tagline', hero.tagline);
 
           var when = fmtDate(hero.date);
           if (when) {
@@ -2392,6 +2266,7 @@
           var musicBtn = document.getElementById('evoke-music-btn');
           if (audioEl && music.track && audioEl.getAttribute('src') !== music.track) {
             audioEl.setAttribute('src', music.track);
+            if (window.__evokeStartMusic) window.__evokeStartMusic();
             if (musicBtn) musicBtn.hidden = false;
           }
           if (audioEl && !music.track) {
@@ -2401,7 +2276,8 @@
 
           var events = (data.events && data.events.items) || [];
           var grid = document.querySelector('[data-ev-events]');
-          if (grid && Array.isArray(events) && events.length) {
+          if (grid && Array.isArray(data.events && data.events.items)) {
+            toggleSection('events', events.length);
             grid.innerHTML = events
               .map(function (ev) {
                 var meta = [fmtDate(ev.date), ev.venue].filter(Boolean).join(' · ');
@@ -2427,7 +2303,8 @@
           // Gallery — a list of uploaded photos rebuilds the grid.
           var photos = (data.gallery && data.gallery.items) || [];
           var gal = document.querySelector('[data-ev-gallery]');
-          if (gal && Array.isArray(photos) && photos.length) {
+          if (gal && Array.isArray(data.gallery && data.gallery.items)) {
+            toggleSection('gallery', photos.filter(function (p) { return p && p.src; }).length);
             gal.innerHTML = photos
               .filter(function (p) {
                 return p && p.src;
@@ -2441,6 +2318,15 @@
               })
               .join('');
           }
+        }
+
+        // An emptied list takes its section and its menu link off the page.
+        function toggleSection(id, show) {
+          var section = document.getElementById(id);
+          if (section) section.style.display = show ? '' : 'none';
+          document.querySelectorAll('a[href="#' + id + '"]').forEach(function (a) {
+            a.style.display = show ? '' : 'none';
+          });
         }
 
         function setImage(key, src) {
@@ -2471,6 +2357,16 @@
             }
           });
         }
+
+        var startMusic = window.evokeAutoMusic({
+          audio: function () { return musicAudio; },
+          toggle: function () { return musicToggle; },
+          onPlaying: function () {
+            musicToggle.textContent = '❚❚';
+            musicToggle.setAttribute('aria-label', 'Pause music');
+          },
+        });
+        window.__evokeStartMusic = startMusic;
 
         // Announce readiness so the editor pushes the current data immediately.
         try {

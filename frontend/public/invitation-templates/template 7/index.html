@@ -620,142 +620,6 @@
         .event-sep-dot  { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
 
         /* ============================================================
-           RSVP SECTION
-        ============================================================ */
-        #rsvp-section { padding: 5rem 1.5rem; background: var(--cream); }
-        .rsvp-form { max-width: 520px; margin: 0 auto; }
-        .form-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 1.5rem;
-            padding: 2rem;
-            margin-bottom: 1.25rem;
-            box-shadow: 0 4px 24px rgba(92,34,51,0.05);
-            transition: opacity 0.3s ease;
-        }
-        .form-card-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--terracotta);
-            margin-bottom: 0.35rem;
-        }
-        .form-card-subtitle { font-size: 0.9rem; color: var(--text-light); margin-bottom: 1.25rem; }
-        .field-label {
-            font-family: 'Tenor Sans', sans-serif;
-            font-size: 0.6rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--text-light);
-            display: block;
-            margin-bottom: 0.4rem;
-        }
-        .field-input {
-            width: 100%;
-            background: var(--cream);
-            border: 0;
-            border-bottom: 1.5px solid var(--border);
-            padding: 0.6rem 0.25rem;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.05rem;
-            color: var(--text-dark);
-            outline: none;
-            transition: border-color 0.2s ease;
-        }
-        .field-input:focus { border-color: var(--terracotta); }
-
-        .field-group { margin-bottom: 1.25rem; }
-
-        .circle-select { display: flex; gap: 1.5rem; justify-content: center; }
-        .circle-opt { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; cursor: pointer; }
-        .circle-opt input { display: none; }
-        .circle-face {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 1.5px solid var(--border);
-            background: var(--cream);
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Great Vibes', cursive;
-            font-size: 1.5rem;
-            color: var(--terracotta);
-            transition: all 0.25s ease;
-        }
-        .circle-opt:has(input:checked) .circle-face {
-            background: var(--terracotta);
-            border-color: var(--terracotta); color: white;
-            box-shadow: 0 4px 16px rgba(184,89,64,0.35);
-        }
-        .circle-opt-label {
-            font-family: 'Tenor Sans', sans-serif;
-            font-size: 0.58rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--text-light);
-        }
-
-        .mood-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-        .mood-opt {
-            cursor: pointer;
-            border: 1.5px solid var(--border);
-            border-radius: 0.75rem;
-            padding: 1rem 0.75rem;
-            text-align: center;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.95rem;
-            color: var(--text-mid);
-            transition: all 0.25s ease;
-        }
-        .mood-opt input { display: none; }
-        .mood-opt:has(input:checked) { background: var(--terracotta); border-color: var(--terracotta); color: white; }
-
-        .text-area {
-            width: 100%;
-            background: var(--cream);
-            border: 1px solid var(--border);
-            border-radius: 0.75rem;
-            padding: 0.85rem 1rem;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem;
-            color: var(--text-dark);
-            outline: none;
-            resize: none;
-            transition: border-color 0.2s ease;
-            line-height: 1.5;
-        }
-        .text-area:focus { border-color: var(--terracotta); }
-
-        .submit-btn {
-            width: 100%;
-            background: var(--terracotta);
-            color: white;
-            border: none;
-            border-radius: 9999px;
-            padding: 1.1rem;
-            font-family: 'Tenor Sans', sans-serif;
-            font-size: 0.72rem;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 24px rgba(184,89,64,0.35);
-            position: relative;
-            overflow: hidden;
-        }
-        .submit-btn::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.5s ease;
-        }
-        .submit-btn:hover::after { transform: translateX(100%); }
-        .submit-btn:hover { background: var(--terra-dark); transform: translateY(-2px); box-shadow: 0 10px 32px rgba(184,89,64,0.45); }
-        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
-
-        /* ============================================================
            FOOTER
         ============================================================ */
         #footer-section { background: var(--burgundy); padding: 5rem 1.5rem 2rem; color: white; }
@@ -767,7 +631,7 @@
             gap: 3rem;
             text-align: center;
         }
-        @media (min-width: 640px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+        
 
         .footer-heading {
             font-family: 'Great Vibes', cursive;
@@ -831,63 +695,6 @@
         @media (prefers-reduced-motion: reduce) {
             .invite-vibes-credit { animation: none; }
         }
-
-        /* ============================================================
-           MODAL
-        ============================================================ */
-        #rsvp-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(30,10,5,0.65);
-            backdrop-filter: blur(10px);
-            z-index: 9000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-        }
-        #rsvp-modal.open { display: flex; }
-        .modal-card {
-            background: var(--white);
-            border-radius: 1.5rem;
-            max-width: 360px;
-            width: 100%;
-            padding: 2.5rem 2rem 2rem;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.25);
-            animation: modalIn 0.4s cubic-bezier(0.16,1,0.3,1) both;
-        }
-        @keyframes modalIn {
-            from { opacity:0; transform: scale(0.9) translateY(20px); }
-            to   { opacity:1; transform: scale(1) translateY(0); }
-        }
-        .modal-icon-ring {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background: rgba(184,89,64,0.1);
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 1.25rem;
-        }
-        .modal-icon-ring svg { width: 32px; color: var(--terracotta); }
-        .modal-title { font-family: 'Great Vibes', cursive; font-size: 3rem; color: var(--terracotta); margin-bottom: 0.5rem; }
-        .modal-msg { font-style: italic; color: var(--text-light); font-size: 1rem; line-height: 1.6; margin-bottom: 1.75rem; }
-        .modal-close-btn {
-            background: var(--terracotta);
-            color: white;
-            border: none;
-            border-radius: 9999px;
-            padding: 0.85rem 2.5rem;
-            font-family: 'Tenor Sans', sans-serif;
-            font-size: 0.65rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 100%;
-        }
-        .modal-close-btn:hover { background: var(--terra-dark); }
 
         /* UTILITIES */
         .text-center { text-align: center; }
@@ -1244,80 +1051,7 @@
         </p>
     </section>
 
-    <section id="rsvp-section">
-        <div class="text-center reveal">
-            <span class="section-label">Join the Celebration</span>
-            <h2 class="section-heading" style="color:var(--terracotta)">Celebrate<br>With Us</h2>
-            <p class="reveal reveal-delay-2 mt-4" style="font-style:italic;color:var(--text-light);font-size:1.1rem;margin-bottom:2.5rem;">
-                A few fun questions before the big day!
-            </p>
-        </div>
-
-        <form id="rsvp-form" class="rsvp-form">
-
-            <div class="form-card reveal">
-                <p class="form-card-title">1. Guest Details</p>
-                <div class="field-group">
-                    <label class="field-label" for="f-name">Your Name</label>
-                    <input class="field-input" type="text" id="f-name" name="name" required placeholder="Full name" autocomplete="name">
-                </div>
-                <div class="field-group" style="margin-bottom:0;">
-                    <label class="field-label" for="f-phone">Phone Number</label>
-                    <input class="field-input" type="tel" id="f-phone" name="phone" required placeholder="+91 00000 00000" autocomplete="tel">
-                </div>
-            </div>
-
-            <div class="form-card reveal reveal-delay-1">
-                <p class="form-card-title">2. Make a Guess</p>
-                <p class="form-card-subtitle">Who will get emotional first?</p>
-                <div class="circle-select">
-                    <label class="circle-opt" data-ev-guess="groomName">
-                        <input type="radio" name="guess_emotional_first" value="Aryan">
-                        <div class="circle-face">A</div>
-                        <span class="circle-opt-label" data-ev="groomName">Aryan</span>
-                    </label>
-                    <label class="circle-opt" data-ev-guess="brideName">
-                        <input type="radio" name="guess_emotional_first" value="Ishita">
-                        <div class="circle-face">I</div>
-                        <span class="circle-opt-label" data-ev="brideName">Ishita</span>
-                    </label>
-                    <label class="circle-opt">
-                        <input type="radio" name="guess_emotional_first" value="Both">
-                        <div class="circle-face">B</div>
-                        <span class="circle-opt-label">Both</span>
-                    </label>
-                </div>
-                <p style="text-align:center;font-size:0.85rem;color:var(--text-light);font-style:italic;margin-top:1rem;">Reveal after the wedding 😉</p>
-            </div>
-
-            <div class="form-card reveal reveal-delay-2">
-                <p class="form-card-title">3. Your Wedding Mood</p>
-                <p class="form-card-subtitle">I'm coming for...</p>
-                <div class="mood-grid">
-                    <label class="mood-opt"><input type="radio" name="wedding_mood" value="The Food"> The Food 🍛</label>
-                    <label class="mood-opt"><input type="radio" name="wedding_mood" value="The Dance Floor"> Dance Floor 💃</label>
-                    <label class="mood-opt"><input type="radio" name="wedding_mood" value="The Love"> The Love ❤️</label>
-                    <label class="mood-opt"><input type="radio" name="wedding_mood" value="All of It"> All of It ✨</label>
-                </div>
-            </div>
-
-            <div class="form-card reveal reveal-delay-3">
-                <p class="form-card-title">4. Words for Forever</p>
-                <p class="form-card-subtitle">Advice for married life.</p>
-                <textarea class="text-area" name="advice_for_forever" rows="3" placeholder="One piece of advice..."></textarea>
-            </div>
-
-            <div class="reveal reveal-delay-3" style="margin-top:2rem;">
-                <button type="submit" class="submit-btn" id="submit-btn">
-                    <span id="btn-text">Send Love</span>
-                    <svg id="btn-spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;vertical-align:middle;margin-left:8px;" class="spin">
-                        <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
-                        <path d="M12 2a10 10 0 0110 10" stroke-opacity="0.75"/>
-                    </svg>
-                </button>
-            </div>
-        </form>
-    </section>
+    
 
     <section id="footer-section">
         <div style="text-align:center;margin-bottom:3rem;" class="reveal">
@@ -1333,17 +1067,7 @@
 
         <div class="footer-grid">
 
-            <div class="footer-block reveal">
-                <span class="footer-heading" data-ev="rsvpContactsHeading">RSVP</span>
-                <ul class="footer-list" data-ev-list="rsvpContacts">
-                    <li>Sunita - Rajesh Malhotra</li>
-                    <li>Kiran - Deepak Malhotra</li>
-                    <li>Neelam - Sanjeev Malhotra</li>
-                    <li>Priyanka - Amit Malhotra</li>
-                </ul>
-            </div>
-
-            <div class="footer-block reveal reveal-delay-2">
+                        <div class="footer-block reveal reveal-delay-2">
                 <span class="footer-heading" data-ev="wishesHeading">Heartfelt Wishes From</span>
                 <ul class="footer-list" data-ev-list="wishesFrom">
                     <li>Sonakshi - Prateek Mehra</li>
@@ -1359,21 +1083,7 @@
     
 </div>
 
-<div id="rsvp-modal">
-    <div class="modal-card">
-        <div class="modal-icon-ring" id="modal-icon">
-            <svg id="modal-success-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-            </svg>
-             <svg id="modal-error-svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none;color:#dc2626">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-        </div>
-        <h3 class="modal-title" id="modal-title">Thank You!</h3>
-        <p class="modal-msg" id="modal-msg">We can't wait to celebrate with you!</p>
-        <button class="modal-close-btn" id="modal-close">Close</button>
-    </div>
-</div>
+
 
 <script>
 /* ================================================================
@@ -1782,110 +1492,6 @@ function initReveal() {
     }, { threshold: 0.10, rootMargin: '0px 0px -40px 0px' });
     els.forEach(el => io.observe(el));
 }
-
-/* ================================================================
-   RSVP FORM
-================================================================ */
-const rsvpForm  = document.getElementById('rsvp-form');
-const submitBtn = document.getElementById('submit-btn');
-const btnText   = document.getElementById('btn-text');
-const btnSpinner= document.getElementById('btn-spinner');
-
-function collectRsvpPayload(form) {
-    const get = (name) => {
-        const el = form.querySelector(`[name="${name}"]`);
-        return el ? el.value.trim() : '';
-    };
-    const getRadio = (name) => {
-        const el = form.querySelector(`input[name="${name}"]:checked`);
-        return el ? el.value : '';
-    };
-    
-    return {
-        name:                  get('name'),
-        phone:                 get('phone'),
-        guess_emotional_first: getRadio('guess_emotional_first'),
-        wedding_mood:          getRadio('wedding_mood'),
-        advice_for_forever:    get('advice_for_forever'),
-        clientId:              window.EVOKE_RSVP_CLIENT_ID || 'golden-promise',
-        submitted_at:          new Date().toISOString(),
-    };
-}
-
-rsvpForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (submitBtn.disabled) return;
-    submitBtn.disabled = true;
-    btnText.textContent = 'Sending...';
-    btnSpinner.style.display = 'inline';
-
-    const data = collectRsvpPayload(e.target);
-
-    // No RSVP endpoint is bundled with this template. Set window.EVOKE_RSVP_ENDPOINT
-    // to your own API to have submissions posted; otherwise the form just
-    // acknowledges locally and nothing leaves the page.
-    const endpoint = window.EVOKE_RSVP_ENDPOINT || '';
-
-    try {
-        if (!endpoint) {
-            showModal('success');
-            e.target.reset();
-            return;
-        }
-
-        const res = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });
-
-        let result = {};
-        try { result = await res.json(); } catch (_) { }
-
-        const ok = res.ok && result.success !== false;
-        showModal(ok ? 'success' : 'error');
-
-        if (ok) e.target.reset();
-    } catch(err) {
-        showModal('error');
-    } finally {
-        submitBtn.disabled = false;
-        btnText.textContent = 'Send Love';
-        btnSpinner.style.display = 'none';
-    }
-});
-
-/* ================================================================
-   MODAL
-================================================================ */
-const modal       = document.getElementById('rsvp-modal');
-const modalTitle  = document.getElementById('modal-title');
-const modalMsg    = document.getElementById('modal-msg');
-const modalSucc   = document.getElementById('modal-success-svg');
-const modalErr    = document.getElementById('modal-error-svg');
-const modalIcon   = document.getElementById('modal-icon');
-const modalClose  = document.getElementById('modal-close');
-
-function showModal(type) {
-    if (type === 'success') {
-        modalTitle.textContent = 'Thank You!';
-        modalMsg.textContent   = "We can't wait to celebrate with you on our special day!";
-        modalSucc.style.display = '';
-        modalErr.style.display  = 'none';
-        modalIcon.style.background = 'rgba(184,89,64,0.1)';
-    } else {
-        modalTitle.textContent = 'Oops!';
-        modalMsg.textContent   = 'There was an error submitting your RSVP. Please try again.';
-        modalSucc.style.display = 'none';
-        modalErr.style.display  = '';
-        modalIcon.style.background = 'rgba(220,38,38,0.08)';
-    }
-    modal.classList.add('open');
-}
-
-function closeModal() { modal.classList.remove('open'); }
-modalClose.addEventListener('click', closeModal);
-modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
 
 // Handle dynamic resizing for scratch cards natively
 window.addEventListener('resize', () => {

@@ -38,15 +38,29 @@
   "story": {
     "title": "Our Story",
     "paragraphs": [
-      { "text": "Our story did not begin with years of knowing each other. It began with two hearts finding each other at exactly the right time." },
-      { "text": "From the very beginning, we found comfort in the quiet moments, joy in the unexpected ones, and a shared love for mountains and beaches alike." },
-      { "text": "As we begin this new chapter, we feel incredibly grateful to have found in each other a partner, a best friend and an adventure companion." },
-      { "text": "We cannot wait to celebrate the beginning of our forever with the people who mean the most to us!" }
+      {
+        "text": "Our story did not begin with years of knowing each other. It began with two hearts finding each other at exactly the right time."
+      },
+      {
+        "text": "From the very beginning, we found comfort in the quiet moments, joy in the unexpected ones, and a shared love for mountains and beaches alike."
+      },
+      {
+        "text": "As we begin this new chapter, we feel incredibly grateful to have found in each other a partner, a best friend and an adventure companion."
+      },
+      {
+        "text": "We cannot wait to celebrate the beginning of our forever with the people who mean the most to us!"
+      }
     ],
     "photos": [
-      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/story-1.webp" },
-      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/story-2.webp" },
-      { "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/story-3.webp" }
+      {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/story-1.webp"
+      },
+      {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/story-2.webp"
+      },
+      {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/story-3.webp"
+      }
     ]
   },
   "events": {
@@ -104,27 +118,35 @@
   "family": {
     "title": "With Blessings From",
     "groups": [
-      { "relation": "Grand Parents", "names": "Sdn. Jaswant Kaur & S. Kartar Singh" },
-      { "relation": "Bhabhi & Brother", "names": "Navneet Kaur & Gurdeep Singh" },
-      { "relation": "Sister & Jiju", "names": "Harleen Kaur & Manjot Singh" },
-      { "relation": "Nieces & Nephews", "names": "Jasleen, Rehmat & Fateh" }
+      {
+        "relation": "Grand Parents",
+        "names": "Sdn. Jaswant Kaur & S. Kartar Singh"
+      },
+      {
+        "relation": "Bhabhi & Brother",
+        "names": "Navneet Kaur & Gurdeep Singh"
+      },
+      {
+        "relation": "Sister & Jiju",
+        "names": "Harleen Kaur & Manjot Singh"
+      },
+      {
+        "relation": "Nieces & Nephews",
+        "names": "Jasleen, Rehmat & Fateh"
+      }
     ]
-  },
-  "rsvp": {
-    "title": "RSVP",
-    "subtitle": "Kindly let us know which celebrations you will join.",
-    "whatsapp": "",
-    "messageLabel": "Leave a personal message for the couple",
-    "buttonText": "Send RSVP",
-    "thankYouTitle": "Thank You!",
-    "thankYou": "We have noted your response.\nWe can't wait to celebrate with you!",
-    "whatsappThanks": "Your RSVP is ready in WhatsApp.\nJust tap Send to confirm."
   },
   "footer": {
     "thankYou": "Thank You",
     "contacts": [
-      { "name": "S. Harjit Singh", "phone": "+91 90000 00000" },
-      { "name": "Gurdeep Singh", "phone": "+1 555 010 0000" }
+      {
+        "name": "S. Harjit Singh",
+        "phone": "+91 90000 00000"
+      },
+      {
+        "name": "Gurdeep Singh",
+        "phone": "+1 555 010 0000"
+      }
     ]
   }
 }

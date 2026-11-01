@@ -94,6 +94,7 @@ const DEVICES: readonly DevicePreset[] = [
               [src]="src"
               title="Live invitation preview"
               referrerpolicy="no-referrer"
+              allow="autoplay"
               sandbox="allow-scripts allow-same-origin"
             ></iframe>
           </div>

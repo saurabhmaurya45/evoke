@@ -45,10 +45,9 @@
   // Defaults overlaid with the editor's data; list items merge by index.
   function merge(base, data) {
     if (Array.isArray(base) || Array.isArray(data)) {
-      var out = [];
-      var len = Math.max((base || []).length, (data || []).length);
-      for (var i = 0; i < len; i++) out.push(merge((base || [])[i], (data || [])[i]));
-      return out;
+      // A saved list is the whole list: items the user removed must not come back from the defaults.
+      var items = Array.isArray(data) ? data : base;
+      return items.map(function (item, i) { return merge((base || [])[i], item); });
     }
     if (isObject(base) || isObject(data)) {
       var res = {};
@@ -104,6 +103,12 @@
 
   window.__evMusic = function () {
     return safeUrl(getPath(values, 'music.track'), true);
+  };
+
+  // How many items a list has, so the app shows only those and leaves an empty section out.
+  window.__evCount = function (path) {
+    var v = getPath(values, path);
+    return Array.isArray(v) ? v.length : 0;
   };
 
   // Gallery photos that are set and safe to show; with none, the section is left out.

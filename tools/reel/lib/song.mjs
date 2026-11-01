@@ -2,6 +2,7 @@
 export const SAMPLE_RATE = 22050;
 const WIN = 1024;
 const HOP = 512;
+const MIN_RISE_DB = 3;
 
 // In-place radix-2 FFT.
 function fft(re, im) {
@@ -51,14 +52,33 @@ function onsets(samples) {
   return { flux, energy };
 }
 
+// The place where the music lifts the most with a strong enough stretch after it. Starting a song at any
+// other loud moment drops the listener into the middle of a line.
+function sectionStart(energy, running, enough, rate) {
+  const side = Math.round(2 * rate);
+  const riseAt = (i) => {
+    let before = 0, after = 0;
+    for (let k = 0; k < side; k++) { before += energy[i - 1 - k]; after += energy[i + k]; }
+    return 10 * Math.log10((after + 1e-9) / (before + 1e-9));
+  };
+  let best = null, bestRise = MIN_RISE_DB;
+  for (let i = side; i < running.length; i++) {
+    if (running[i] < enough) continue;
+    const rise = riseAt(i);
+    if (rise > bestRise) { bestRise = rise; best = i; }
+  }
+  return best;
+}
+
 /**
  * @param samples     mono audio at SAMPLE_RATE
  * @param seconds     how long the film runs
  * @param targetBpm   the tempo the film was choreographed at; a song is read at the multiple of its
  *                    beat closest to this, so the film is never sped up or slowed down by more than 25%
+ * @param firstBar    the film time of its first strong beat
  * @returns {{bpm: number, firstBeat: number}}
  */
-export function findBeat(samples, seconds, targetBpm) {
+export function findBeat(samples, seconds, targetBpm, firstBar = 0) {
   const { flux, energy } = onsets(samples);
   const frames = flux.length;
   if (frames < 2) throw new Error('The song is too short to analyse.');
@@ -75,7 +95,8 @@ export function findBeat(samples, seconds, targetBpm) {
     if (i >= span - 1) running.push(sum);
   }
   const loudest = running.reduce((a, b) => Math.max(a, b), 0);
-  const start = Math.max(0, running.findIndex((v) => v >= loudest * 0.6));
+  const earliest = Math.max(0, running.findIndex((v) => v >= loudest * 0.6));
+  const start = earliest === 0 ? 0 : sectionStart(energy, running, loudest * 0.6, rate) ?? earliest;
 
   // Tempo comes from the part the film will actually play: songs drift, and intros often differ.
   const end = Math.min(frames, start + span);
@@ -102,5 +123,9 @@ export function findBeat(samples, seconds, targetBpm) {
       if (score > fitScore) { fitScore = score; fitted = p; phase = ph; }
     }
   }
-  return { bpm: (rate * 60) / fitted, firstBeat: (start + phase) / rate };
+  // The film's first strong beat comes firstBar into the film, so that beat is chosen for the song to
+  // start at the section itself.
+  const leadIn = (firstBar * fitted * targetBpm) / 60;
+  const beats = Math.max(0, Math.floor((leadIn - phase) / fitted));
+  return { bpm: (rate * 60) / fitted, firstBeat: (start + phase + beats * fitted) / rate };
 }

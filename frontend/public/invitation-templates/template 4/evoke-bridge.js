@@ -53,10 +53,6 @@
     'MEET THE': { key: 'thanks.title', ml: true },
     'Bride Groom': { key: 'thanks.body', ml: true },
 
-    // RSVP
-    'Looking forward to seeing you': { key: 'rsvp.title', ml: true },
-    'Click the link to RSVP': { key: 'rsvp.link' },
-
     // Introducing the couple
     'Intro': { key: 'intro.small' },
     'Couple': { key: 'intro.heading' },
@@ -216,6 +212,84 @@
     photo6: ['palace-couple-wide'],
     photo7: ['sunset-couple-frame', 'bOW1f3pjThAQpndqrhEN5obZKg'],
   };
+  // The cards are placed at fixed heights, so removing one also closes its gap: the saved events take
+  // the top slots and everything below them moves up.
+  function applyEventLayout(items) {
+    var saved = Array.isArray(items) ? items.length : EVENT_ATTRS.length;
+    var moved = document.querySelectorAll('[data-ev-moved]');
+    for (var m = 0; m < moved.length; m++) {
+      moved[m].setAttribute('style', moved[m].getAttribute('data-ev-moved'));
+      moved[m].removeAttribute('data-ev-moved');
+    }
+    var sections = document.querySelectorAll('[data-framer-name="One"]');
+    for (var s = 0; s < sections.length; s++) {
+      var section = sections[s];
+      if (!section.getBoundingClientRect().height) continue;
+      var cards = [];
+      EVENT_ATTRS.forEach(function (names, index) {
+        var kids = section.querySelectorAll('[data-framer-name]');
+        for (var k = 0; k < kids.length; k++) {
+          if (names.indexOf(norm(kids[k].getAttribute('data-framer-name'))) === -1) continue;
+          var el = kids[k];
+          while (el && el.parentElement !== section) el = el.parentElement;
+          if (el) cards.push({ el: el, index: index, top: parseFloat(getComputedStyle(el).top) });
+          break;
+        }
+      });
+      if (cards.length !== EVENT_ATTRS.length || saved >= cards.length) continue;
+      cards.sort(function (a, b) { return a.top - b.top; });
+      var slots = cards.map(function (c) { return c.top; });
+      var heading = section.querySelector('[data-framer-name="On the following events"]');
+      var next = 0;
+      cards.forEach(function (c) {
+        if (c.index < saved) move(c.el, slots[next++]);
+        else hide(c.el);
+      });
+      if (!saved && heading) hide(heading);
+      // Without any events the space above the first slot goes too.
+      var freed = saved ? slots[slots.length - 1] - slots[saved - 1] : slots[slots.length - 1] - parseFloat(getComputedStyle(heading || cards[0].el).top);
+      var lastTop = slots[slots.length - 1];
+      for (var i = 0; i < section.children.length; i++) {
+        var kid = section.children[i];
+        var top = parseFloat(getComputedStyle(kid).top);
+        if (top > lastTop) move(kid, top - freed);
+      }
+      // The background is one tall painting: it gets cut shorter, not squeezed.
+      var painting = section.firstElementChild;
+      var image = painting && !painting.getAttribute('data-framer-name') ? painting.querySelector('img') : null;
+      if (image) {
+        var size = image.getBoundingClientRect();
+        var fullHeight = painting.getBoundingClientRect().height;
+        mark(image);
+        image.style.position = 'absolute';
+        image.style.inset = '0 auto auto 0';
+        image.style.width = size.width + 'px';
+        image.style.height = size.height + 'px';
+        mark(painting);
+        painting.style.height = fullHeight - freed + 'px';
+        painting.style.bottom = 'auto';
+        painting.style.overflow = 'hidden';
+      }
+      shrink(section, freed);
+      var page = section.parentElement.parentElement;
+      for (var w = 0; w < page.children.length; w++) {
+        var group = page.children[w];
+        if (getComputedStyle(group).display === 'contents') group = group.firstElementChild;
+        if (!group || group === section || !group.getBoundingClientRect().height) continue;
+        var groupTop = parseFloat(getComputedStyle(group).top);
+        if (groupTop > lastTop) move(group, groupTop - freed);
+      }
+      shrink(page, freed);
+    }
+    // Keeps the element's own style, so the next run starts from the original layout.
+    function mark(el) {
+      if (!el.hasAttribute('data-ev-moved')) el.setAttribute('data-ev-moved', el.getAttribute('style') || '');
+    }
+    function hide(el) { mark(el); el.style.display = 'none'; }
+    function move(el, top) { mark(el); el.style.top = top + 'px'; }
+    function shrink(el, by) { mark(el); el.style.height = el.getBoundingClientRect().height - by + 'px'; }
+  }
+
   function applyGallery(g) {
     if (!g || typeof g !== 'object') return;
     Object.keys(GALLERY_MAP).forEach(function (key) {
@@ -231,6 +305,8 @@
     });
   }
 
+  window.addEventListener('resize', function () { applyValues(); });
+
   function applyValues() {
     if (!values || !document.body) return;
     if (observer) observer.disconnect();
@@ -245,6 +321,7 @@
         write(el, v, !!entry.ml);
       }
       applyEvents(getPath(values, 'events.items'));
+      applyEventLayout(getPath(values, 'events.items'));
       applyGallery(getPath(values, 'gallery'));
       swapMantra();
       swapMonogram();

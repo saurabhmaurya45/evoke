@@ -16,12 +16,42 @@
   },
   "events": {
     "items": [
-      { "name": "Haldi", "schedule": "Saturday, April 18th 2026\nJoin Us at 11 am\nThe Leela Palace, Udaipur", "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur", "photo": "" },
-      { "name": "Cocktail", "schedule": "Saturday, April 18th 2026\nJoin Us at 8 pm\nThe Leela Palace, Udaipur", "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur", "photo": "" },
-      { "name": "Engagement", "schedule": "Saturday, April 18th 2026\nJoin Us at 6 pm\nThe Leela Palace, Udaipur", "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur", "photo": "" },
-      { "name": "Vivah (Pheras)", "schedule": "Sunday, April 19th 2026\nJoin Us at 9 am\nThe Leela Palace, Udaipur", "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur", "photo": "" },
-      { "name": "Reception", "schedule": "Sunday, April 19th 2026\nJoin Us at 7 pm\nThe Leela Palace, Udaipur", "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur", "photo": "" },
-      { "name": "Mehendi", "schedule": "Friday, April 17th 2026\nJoin Us at 4 pm\nThe Leela Palace, Udaipur", "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur", "photo": "" }
+      {
+        "name": "Haldi",
+        "schedule": "Saturday, April 18th 2026\nJoin Us at 11 am\nThe Leela Palace, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur",
+        "photo": ""
+      },
+      {
+        "name": "Cocktail",
+        "schedule": "Saturday, April 18th 2026\nJoin Us at 8 pm\nThe Leela Palace, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur",
+        "photo": ""
+      },
+      {
+        "name": "Engagement",
+        "schedule": "Saturday, April 18th 2026\nJoin Us at 6 pm\nThe Leela Palace, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur",
+        "photo": ""
+      },
+      {
+        "name": "Vivah (Pheras)",
+        "schedule": "Sunday, April 19th 2026\nJoin Us at 9 am\nThe Leela Palace, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur",
+        "photo": ""
+      },
+      {
+        "name": "Reception",
+        "schedule": "Sunday, April 19th 2026\nJoin Us at 7 pm\nThe Leela Palace, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur",
+        "photo": ""
+      },
+      {
+        "name": "Mehendi",
+        "schedule": "Friday, April 17th 2026\nJoin Us at 4 pm\nThe Leela Palace, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=The+Leela+Palace+Udaipur",
+        "photo": ""
+      }
     ]
   },
   "gallery": {
@@ -40,10 +70,6 @@
   "thanks": {
     "title": "With\nLove From Us",
     "body": "Thank you for being part of our journey.\n\nYour presence makes this celebration truly meaningful, and we look forward to sharing these cherished moments with you."
-  },
-  "rsvp": {
-    "title": "Awaiting the Pleasure\nof Your Company",
-    "link": "Share Your RSVP"
   },
   "intro": {
     "small": "INTRODUCING",

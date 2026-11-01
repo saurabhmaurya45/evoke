@@ -76,17 +76,14 @@
   },
   "footer": {
     "coupleName": "Aryan & Ishita",
-    "rsvpHeading": "RSVP",
-    "rsvpContacts": [
-      { "text": "Sunita - Rajesh Malhotra" },
-      { "text": "Kiran - Deepak Malhotra" },
-      { "text": "Neelam - Sanjeev Malhotra" },
-      { "text": "Priyanka - Amit Malhotra" }
-    ],
     "wishesHeading": "Heartfelt Wishes From",
     "wishesFrom": [
-      { "text": "Sonakshi - Prateek Mehra" },
-      { "text": "Gopal, Shivam, Prakhar, Aarav, Surbhi, Shweta & Shrestha" }
+      {
+        "text": "Sonakshi - Prateek Mehra"
+      },
+      {
+        "text": "Gopal, Shivam, Prakhar, Aarav, Surbhi, Shweta & Shrestha"
+      }
     ]
   }
 }

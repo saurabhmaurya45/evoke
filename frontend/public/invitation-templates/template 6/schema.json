@@ -9,36 +9,116 @@
       "key": "couple",
       "label": "Couple",
       "fields": [
-        { "key": "groomName", "label": "Groom’s name", "type": "text", "required": true, "placeholder": "Vikram" },
-        { "key": "brideName", "label": "Bride’s name", "type": "text", "required": true, "placeholder": "Ananya" },
-        { "key": "groomParentPrefix", "label": "Groom parents prefix", "type": "text", "placeholder": "Son of" },
-        { "key": "groomParentsName", "label": "Groom’s parents", "type": "text" },
-        { "key": "brideParentPrefix", "label": "Bride parents prefix", "type": "text", "placeholder": "Daughter of" },
-        { "key": "brideParentsName", "label": "Bride’s parents", "type": "text" },
-        { "key": "groomPlace", "label": "Groom’s place", "type": "text" },
-        { "key": "bridePlace", "label": "Bride’s place", "type": "text" }
+        {
+          "key": "groomName",
+          "label": "Groom’s name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Vikram"
+        },
+        {
+          "key": "brideName",
+          "label": "Bride’s name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Ananya"
+        },
+        {
+          "key": "groomParentPrefix",
+          "label": "Groom parents prefix",
+          "type": "text",
+          "placeholder": "Son of"
+        },
+        {
+          "key": "groomParentsName",
+          "label": "Groom’s parents",
+          "type": "text"
+        },
+        {
+          "key": "brideParentPrefix",
+          "label": "Bride parents prefix",
+          "type": "text",
+          "placeholder": "Daughter of"
+        },
+        {
+          "key": "brideParentsName",
+          "label": "Bride’s parents",
+          "type": "text"
+        },
+        {
+          "key": "groomPlace",
+          "label": "Groom’s place",
+          "type": "text"
+        },
+        {
+          "key": "bridePlace",
+          "label": "Bride’s place",
+          "type": "text"
+        }
       ]
     },
     {
       "key": "ceremony",
       "label": "Ceremony",
       "fields": [
-        { "key": "date", "label": "Wedding date", "type": "date", "required": true },
-        { "key": "time", "label": "Time", "type": "text", "placeholder": "11:00 AM - 2:00 PM" },
-        { "key": "address", "label": "Venue address", "type": "text" },
-        { "key": "mapLink", "label": "Google Maps link", "type": "text" },
-        { "key": "mapEmbed", "label": "Map embed URL", "type": "textarea" }
+        {
+          "key": "date",
+          "label": "Wedding date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "key": "time",
+          "label": "Time",
+          "type": "text",
+          "placeholder": "11:00 AM - 2:00 PM"
+        },
+        {
+          "key": "address",
+          "label": "Venue address",
+          "type": "text"
+        },
+        {
+          "key": "mapLink",
+          "label": "Google Maps link",
+          "type": "text"
+        },
+        {
+          "key": "mapEmbed",
+          "label": "Map embed URL",
+          "type": "textarea"
+        }
       ]
     },
     {
       "key": "messages",
       "label": "Messages",
       "fields": [
-        { "key": "quote", "label": "Quote", "type": "textarea" },
-        { "key": "togetherQuote", "label": "Together quote", "type": "text" },
-        { "key": "invitationMessage", "label": "Invitation message", "type": "textarea" },
-        { "key": "welcomeMessage", "label": "Welcome message", "type": "textarea" },
-        { "key": "blessingsFrom", "label": "Blessings from", "type": "text" }
+        {
+          "key": "quote",
+          "label": "Quote",
+          "type": "textarea"
+        },
+        {
+          "key": "togetherQuote",
+          "label": "Together quote",
+          "type": "text"
+        },
+        {
+          "key": "invitationMessage",
+          "label": "Invitation message",
+          "type": "textarea"
+        },
+        {
+          "key": "welcomeMessage",
+          "label": "Welcome message",
+          "type": "textarea"
+        },
+        {
+          "key": "blessingsFrom",
+          "label": "Blessings from",
+          "type": "text"
+        }
       ]
     },
     {
@@ -50,9 +130,22 @@
           "label": "Events (max 5)",
           "type": "list",
           "itemSchema": [
-            { "key": "title", "label": "Event", "type": "text", "required": true },
-            { "key": "date", "label": "Date", "type": "date" },
-            { "key": "time", "label": "Time", "type": "text" }
+            {
+              "key": "title",
+              "label": "Event",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "date",
+              "label": "Date",
+              "type": "date"
+            },
+            {
+              "key": "time",
+              "label": "Time",
+              "type": "text"
+            }
           ]
         }
       ]
@@ -66,10 +159,27 @@
           "label": "Venues",
           "type": "list",
           "itemSchema": [
-            { "key": "label", "label": "Label", "type": "text", "required": true },
-            { "key": "address", "label": "Address", "type": "text" },
-            { "key": "mapEmbed", "label": "Map embed URL", "type": "textarea" },
-            { "key": "mapLink", "label": "Map link", "type": "text" }
+            {
+              "key": "label",
+              "label": "Label",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "address",
+              "label": "Address",
+              "type": "text"
+            },
+            {
+              "key": "mapEmbed",
+              "label": "Map embed URL",
+              "type": "textarea"
+            },
+            {
+              "key": "mapLink",
+              "label": "Map link",
+              "type": "text"
+            }
           ]
         }
       ]
@@ -78,12 +188,22 @@
       "key": "gallery",
       "label": "Gallery",
       "fields": [
-        { "key": "title", "label": "Gallery title", "type": "text" },
+        {
+          "key": "title",
+          "label": "Gallery title",
+          "type": "text"
+        },
         {
           "key": "items",
           "label": "Photos (max 5)",
           "type": "list",
-          "itemSchema": [{ "key": "image", "label": "Photo", "type": "image" }]
+          "itemSchema": [
+            {
+              "key": "image",
+              "label": "Photo",
+              "type": "image"
+            }
+          ]
         }
       ]
     },
@@ -91,15 +211,16 @@
       "key": "contact",
       "label": "Contact",
       "fields": [
-        { "key": "phone", "label": "Phone 1", "type": "text" },
-        { "key": "phone2", "label": "Phone 2", "type": "text" }
-      ]
-    },
-    {
-      "key": "rsvp",
-      "label": "RSVP",
-      "fields": [
-        { "key": "thankYou", "label": "Thank-you message", "type": "text" }
+        {
+          "key": "phone",
+          "label": "Phone 1",
+          "type": "text"
+        },
+        {
+          "key": "phone2",
+          "label": "Phone 2",
+          "type": "text"
+        }
       ]
     }
   ]

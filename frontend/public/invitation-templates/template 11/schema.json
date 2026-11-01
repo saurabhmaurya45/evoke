@@ -320,38 +320,6 @@
       ]
     },
     {
-      "key": "rsvp",
-      "label": "RSVP",
-      "fields": [
-        {
-          "key": "title",
-          "label": "Title",
-          "type": "text"
-        },
-        {
-          "key": "link",
-          "label": "Prompt text",
-          "type": "text"
-        },
-        {
-          "key": "whatsapp",
-          "label": "WhatsApp number for RSVPs",
-          "type": "text",
-          "placeholder": "919876543210 (country code, no +)"
-        },
-        {
-          "key": "dialogTitle",
-          "label": "Pop-up title",
-          "type": "text"
-        },
-        {
-          "key": "dialogBody",
-          "label": "Pop-up message",
-          "type": "textarea"
-        }
-      ]
-    },
-    {
       "key": "music",
       "label": "Music",
       "fields": [
