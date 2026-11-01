@@ -1,0 +1,56 @@
+@if (reel(); as r) {
+  @if (r.available) {
+    <section class="reel" aria-label="Your invitation video">
+      <h2 class="reel__title">Your invitation video</h2>
+
+      @if (preview() && r.downloadUrl && !isWorking()) {
+        <video class="reel__video" [src]="r.downloadUrl" controls playsinline preload="metadata"></video>
+      }
+
+      @if (isWorking()) {
+        <p class="reel__text">
+          Creating your video. This takes a few minutes. You can leave this page and download it
+          from your dashboard.
+        </p>
+        <div
+          class="reel__bar"
+          role="progressbar"
+          aria-label="Video progress"
+          [attr.aria-valuenow]="r.progress"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <span class="reel__fill" [style.width.%]="r.progress"></span>
+        </div>
+      } @else if (r.status === 'FAILED') {
+        <p class="reel__text reel__text--error">We couldn't create your video. Please try again.</p>
+      } @else if (r.downloadUrl && r.isStale) {
+        <p class="reel__text">You edited your invitation after this video was made.</p>
+      } @else if (!r.downloadUrl) {
+        <p class="reel__text">Turn your invitation into a video to share on WhatsApp and Instagram.</p>
+      }
+
+      @if (error()) {
+        <p class="reel__text reel__text--error" role="alert">{{ error() }}</p>
+      }
+
+      <div class="reel__actions">
+        @if (r.downloadUrl) {
+          <a class="reel__btn" [href]="r.downloadUrl" download>
+            Download video{{ sizeLabel() ? ' (' + sizeLabel() + ')' : '' }}
+          </a>
+        }
+        @if (!isWorking() && (!r.downloadUrl || r.isStale || r.status === 'FAILED')) {
+          <button
+            type="button"
+            class="reel__btn"
+            [class.reel__btn--ghost]="r.downloadUrl"
+            (click)="create()"
+          >
+            {{ r.status === 'FAILED' ? 'Try again' : r.downloadUrl ? 'Create new video' : 'Create my video' }}
+          </button>
+        }
+      </div>
+    </section>
+  }
+}

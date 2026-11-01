@@ -25,9 +25,21 @@
   },
   "timeline": {
     "items": [
-      { "title": "Wedding Ceremony", "date": "2027-01-27", "time": "11:00 AM" },
-      { "title": "Lunch Gathering", "date": "2027-01-27", "time": "1:00 PM" },
-      { "title": "Reception", "date": "2027-01-27", "time": "4:00 PM" }
+      {
+        "title": "Wedding Ceremony",
+        "date": "2027-01-27",
+        "time": "11:00 AM"
+      },
+      {
+        "title": "Lunch Gathering",
+        "date": "2027-01-27",
+        "time": "1:00 PM"
+      },
+      {
+        "title": "Reception",
+        "date": "2027-01-27",
+        "time": "4:00 PM"
+      }
     ]
   },
   "venues": {
@@ -49,18 +61,25 @@
   "gallery": {
     "title": "A Glimpse of Us",
     "items": [
-      { "image": "https://images.unsplash.com/photo-1587271407850-8d438ca9fdf2?auto=format&fit=crop&w=800&q=70" },
-      { "image": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?auto=format&fit=crop&w=800&q=70" },
-      { "image": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=70" },
-      { "image": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=70" },
-      { "image": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=70" }
+      {
+        "image": "https://images.unsplash.com/photo-1587271407850-8d438ca9fdf2?auto=format&fit=crop&w=800&q=70"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?auto=format&fit=crop&w=800&q=70"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=70"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=70"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=70"
+      }
     ]
   },
   "contact": {
     "phone": "+919000000000",
     "phone2": "+919111111111"
-  },
-  "rsvp": {
-    "thankYou": "Thank you for your beautiful wish!"
   }
 }

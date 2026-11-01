@@ -16,6 +16,7 @@ import { EMPTY, catchError, switchMap, take, takeWhile, timer } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { AnalyticsService } from '../../../../core/services/analytics.service';
 import { SeoService } from '../../../../core/services/seo.service';
+import { ReelDownloadComponent } from '../../../reel/reel-download.component';
 import {
   PaymentApiService,
   type Payment,
@@ -37,7 +38,7 @@ const POLL_ATTEMPTS = 10;
 @Component({
   selector: 'app-payment-result-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, LoaderComponent],
+  imports: [RouterLink, LoaderComponent, ReelDownloadComponent],
   templateUrl: './payment-result-page.component.html',
   styleUrl: '../payment-page.scss',
 })

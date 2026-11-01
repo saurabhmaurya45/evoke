@@ -1298,8 +1298,6 @@
       blessingsEl.hidden = true;
     }
 
-    setText('wed6-rsvp-thanks-text', getAttr('data-rsvp-thank-you', 'Thank you for your response!'));
-
     document.title = groomName && brideName
       ? groomName + ' & ' + brideName + ' — Wedding Invitation'
       : document.title;
@@ -1398,13 +1396,6 @@
         'wed6-venues': [
           '.wed6-section-title',
           '.wed6-venues-carousel'
-        ],
-        'wed6-rsvp': [
-          '.wed6-section-title',
-          '.wed6-rsvp-sub',
-          '.wed6-rsvp-form .wed6-field:nth-of-type(1)',
-          '.wed6-rsvp-form .wed6-field:nth-of-type(2)',
-          '#wed6-rsvp-submit'
         ],
         'wed6-countdown': [
           '.wed6-countdown-content .wed6-section-title',
@@ -1664,84 +1655,6 @@
     observer.observe(section);
   }
 
-  function initRsvp() {
-    if (getAttr('data-rsvp-enabled', 'true') === 'false') {
-      var rsvpSection = document.getElementById('wed6-rsvp');
-      if (rsvpSection) rsvpSection.hidden = true;
-      return;
-    }
-
-    var form = document.getElementById('wed6-rsvp-form');
-    var heartsLayer = document.getElementById('wed6-rsvp-hearts');
-    if (!form) return;
-
-    if (heartsLayer && heartsLayer.parentNode !== document.body) {
-      document.body.appendChild(heartsLayer);
-    }
-
-    function playRsvpHearts() {
-      if (!heartsLayer) return;
-      heartsLayer.innerHTML = '';
-      var shades = ['#c99a72', '#b0765a', '#a07d5c', '#d4b08a', '#8a6650'];
-
-      for (var i = 0; i < 18; i++) {
-        var heart = document.createElement('span');
-        heart.className = 'wed6-rsvp-heart';
-        heart.textContent = i % 3 === 0 ? '♡' : '♥';
-        heart.style.left = (6 + Math.random() * 88).toFixed(2) + '%';
-        heart.style.animationDuration = (3.6 + Math.random() * 1.8).toFixed(2) + 's';
-        heart.style.animationDelay = (Math.random() * 0.55).toFixed(2) + 's';
-        heart.style.fontSize = (0.95 + Math.random() * 0.8).toFixed(2) + 'rem';
-        heart.style.color = shades[i % shades.length];
-        heart.style.setProperty('--wed6-heart-drift', ((Math.random() - 0.5) * 120).toFixed(0) + 'px');
-        heart.style.setProperty('--wed6-heart-spin', ((Math.random() - 0.5) * 260).toFixed(0) + 'deg');
-        heartsLayer.appendChild(heart);
-      }
-
-      window.setTimeout(function () {
-        if (heartsLayer) heartsLayer.innerHTML = '';
-      }, 6500);
-    }
-
-    if (window.RsvpForm && window.RsvpStore) {
-      var rsvpMode = getAttr('data-rsvp-mode', '');
-      var rsvpConfig = {
-        formId: 'wed6-rsvp-form',
-        nameInputId: 'wed6-rsvp-name',
-        reasonWrapId: 'wed6-rsvp-reason-wrap',
-        reasonInputId: 'wed6-rsvp-reason',
-        submitButtonId: 'wed6-rsvp-submit',
-        thanksId: 'wed6-rsvp-thanks',
-        thanksTextId: 'wed6-rsvp-thanks-text',
-        getInviteMeta: function () {
-          return {
-            slug: getAttr('data-rsvp-slug', ''),
-            groomName: getAttr('data-groom-name', ''),
-            brideName: getAttr('data-bride-name', ''),
-            displayName: getAttr('data-groom-name', '') + ' & ' + getAttr('data-bride-name', ''),
-            templateId: getAttr('data-template-id', 'wedding-t6')
-          };
-        },
-        getSuccessMessage: function () {
-          return getAttr('data-rsvp-thank-you', 'Thank you for your response!');
-        },
-        onAttendYes: playRsvpHearts
-      };
-
-      if (rsvpMode === 'wishes') {
-        rsvpConfig.mode = 'wishes';
-      } else {
-        rsvpConfig.guestsWrapId = 'wed6-rsvp-guests-wrap';
-        rsvpConfig.guestsInputId = 'wed6-rsvp-guests';
-        rsvpConfig.decreaseBtnId = 'wed6-rsvp-guests-decrease';
-        rsvpConfig.increaseBtnId = 'wed6-rsvp-guests-increase';
-        rsvpConfig.attendanceSelector = 'input[name="attendance"]';
-      }
-
-      window.RsvpForm.init(rsvpConfig);
-    }
-  }
-
   /* ---- Evoke editor live-preview bridge -----------------------------------
    * The editor embeds this template and streams the user's form data in via
    * postMessage. We map the section-keyed data onto the body's data-* attributes
@@ -1770,8 +1683,7 @@
       'messages.blessingsFrom': 'data-blessings-from',
       'contact.phone': 'data-contact-phone',
       'contact.phone2': 'data-contact-phone-2',
-      'gallery.title': 'data-gallery-title',
-      'rsvp.thankYou': 'data-rsvp-thank-you'
+      'gallery.title': 'data-gallery-title'
     };
 
     var revealed = false;
@@ -1846,8 +1758,14 @@
           if (src) {
             ph.src = src;
             if (item) item.classList.remove('is-empty');
+          } else {
+            ph.removeAttribute('src');
+            if (item) item.classList.add('is-empty');
           }
         }
+        var photosSection = document.getElementById('wed6-together');
+        var hasPhoto = gl.some(function (g) { return g && g.image; });
+        if (photosSection) photosSection.style.display = hasPhoto ? '' : 'none';
       }
 
       revealForEditor();
@@ -1880,6 +1798,5 @@
   initGalleryReveal();
   initGalleryZoom();
   startCountdown();
-  // RSVP submission is intentionally left for the host application's API.
   initEvokeBridge();
 })();

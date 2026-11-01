@@ -888,7 +888,6 @@ body {
 .wed6-section:nth-child(even) .wed6-details-message,
 .wed6-section:nth-child(even) .wed6-details-prefix,
 .wed6-section:nth-child(even) .wed6-details-parents,
-.wed6-section:nth-child(even) .wed6-rsvp-sub,
 .wed6-section:nth-child(even) .wed6-countdown-date,
 .wed6-section:nth-child(even) .wed6-contact-text,
 .wed6-section:nth-child(even) .wed6-welcome-text,
@@ -940,19 +939,8 @@ body {
     inset 0 -1px 0 rgba(176, 118, 90, 0.08);
 }
 
-.wed6-section:nth-child(even) .wed6-rsvp-form {
-  background:
-    linear-gradient(155deg, rgba(255, 255, 255, 0.58) 0%, rgba(255, 248, 238, 0.36) 48%, rgba(255, 255, 255, 0.24) 100%);
-  border-color: rgba(255, 255, 255, 0.58);
-  box-shadow:
-    0 18px 40px rgba(90, 62, 42, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.72),
-    inset 0 -1px 0 rgba(176, 118, 90, 0.08);
-}
-
 .wed6-section:nth-child(even) .wed6-field input[type='text'],
-.wed6-section:nth-child(even) .wed6-stepper input,
-.wed6-section:nth-child(even) #wed6-rsvp-reason {
+.wed6-section:nth-child(even) .wed6-stepper input{
   background: rgba(253, 248, 240, 0.78);
   color: #4a3626;
   border-color: rgba(176, 118, 90, 0.28);
@@ -987,8 +975,7 @@ body {
   color: rgba(255, 255, 255, 0.88);
 }
 
-.wed6-section:nth-child(even) .wed6-field input::placeholder,
-.wed6-section:nth-child(even) #wed6-rsvp-reason::placeholder {
+.wed6-section:nth-child(even) .wed6-field input::placeholder{
   color: rgba(123, 99, 80, 0.5);
 }
 
@@ -1010,13 +997,6 @@ body {
 .wed6-section:nth-child(even) .wed6-btn-contact {
   background: linear-gradient(135deg, #c99a72, #a97c58);
   box-shadow: 0 8px 22px rgba(150, 110, 80, 0.3);
-}
-
-.wed6-section:nth-child(even) .wed6-rsvp-thanks {
-  background:
-    linear-gradient(155deg, rgba(255, 255, 255, 0.58) 0%, rgba(255, 248, 238, 0.36) 48%, rgba(255, 255, 255, 0.24) 100%);
-  border-color: rgba(255, 255, 255, 0.58);
-  color: #432e1e;
 }
 
 .wed6-section:nth-child(even) .wed6-venue-nav {
@@ -2337,89 +2317,7 @@ body {
   color: rgba(253, 246, 236, 0.85);
 }
 
-/* RSVP / Wishes */
-
-.wed6-section.wed6-rsvp {
-  overflow: visible;
-}
-
-.wed6-rsvp-side-decor {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 0;
-  height: 100%;
-  width: auto;
-  max-width: 52%;
-  object-fit: cover;
-  object-position: right center;
-  pointer-events: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.wed6-rsvp .wed6-section-title,
-.wed6-rsvp-sub,
-.wed6-rsvp-panel {
-  position: relative;
-  z-index: 1;
-}
-
-.wed6-rsvp-sub {
-  margin: -0.4rem auto 1.25rem;
-  max-width: 400px;
-  color: var(--wed6-text-soft);
-  font-family: var(--wed6-font-serif);
-  font-size: 1.05rem;
-  font-style: italic;
-  line-height: 1.45;
-}
-
-.wed6-section.wed6-rsvp:has(.wed6-rsvp-thanks:not([hidden])) .wed6-rsvp-sub {
-  visibility: hidden;
-}
-
-.wed6-rsvp-panel {
-  display: grid;
-  grid-template-areas: 'stack';
-  width: 100%;
-  max-width: 440px;
-  margin: 0 auto;
-}
-
-.wed6-rsvp-form,
-.wed6-rsvp-thanks {
-  grid-area: stack;
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-.wed6-rsvp-form {
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 1.15rem;
-  padding: 1.45rem 1.35rem 1.5rem;
-  border-radius: 22px;
-  background:
-    linear-gradient(155deg, rgba(255, 255, 255, 0.58) 0%, rgba(255, 248, 238, 0.34) 48%, rgba(255, 255, 255, 0.22) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  box-shadow:
-    0 18px 40px rgba(90, 62, 42, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.72),
-    inset 0 -1px 0 rgba(176, 118, 90, 0.08);
-  -webkit-backdrop-filter: blur(18px) saturate(1.35);
-  backdrop-filter: blur(18px) saturate(1.35);
-}
-
 /* Keep form footprint after submit so the session does not shrink. */
-.wed6-rsvp-form.is-hidden {
-  visibility: hidden;
-  pointer-events: none;
-}
 
 .wed6-field {
   display: flex;
@@ -2465,56 +2363,6 @@ body {
 
 .wed6-field-reason.is-visible {
   max-height: none;
-}
-
-.wed6-field-reason #wed6-rsvp-reason,
-#wed6-rsvp-reason {
-  width: 100%;
-  min-height: 5.5rem;
-  resize: vertical;
-  padding: 0.85rem 0.95rem;
-  border-radius: 14px;
-  border: 1px solid rgba(176, 118, 90, 0.28);
-  background: rgba(253, 248, 240, 0.72);
-  font-family: var(--wed6-font-serif);
-  font-size: 1.08rem;
-  line-height: 1.45;
-  color: var(--wed6-text);
-  box-sizing: border-box;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-}
-
-#wed6-rsvp-reason:focus {
-  outline: none;
-  border-color: rgba(176, 118, 90, 0.55);
-  background: rgba(255, 252, 247, 0.9);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    0 0 0 3px rgba(193, 154, 107, 0.22);
-}
-
-#wed6-rsvp-reason::placeholder {
-  color: rgba(123, 99, 80, 0.5);
-  font-style: italic;
-}
-
-.wed6-rsvp-form .wed6-btn-primary {
-  margin-top: 0.15rem;
-  width: 100%;
-  background: linear-gradient(145deg, #d4a57a 0%, #b07a52 55%, #956343 100%);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  color: #fff8ef;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 0.82rem;
-  box-shadow: 0 10px 24px rgba(120, 85, 55, 0.28);
-}
-
-.wed6-rsvp-form .wed6-btn-primary:hover,
-.wed6-rsvp-form .wed6-btn-primary:focus-visible {
-  filter: brightness(1.05);
-  box-shadow: 0 12px 28px rgba(120, 85, 55, 0.34);
 }
 
 .wed6-field-radio {
@@ -2620,73 +2468,6 @@ body {
       0 0 0 10px rgba(176, 118, 90, 0),
       0 0 18px rgba(255, 196, 120, 0.35);
   }
-}
-
-.wed6-rsvp-thanks {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 100%;
-  min-height: 100%;
-  padding: 1.45rem 1.35rem;
-  border-radius: 22px;
-  background:
-    linear-gradient(155deg, rgba(255, 255, 255, 0.58) 0%, rgba(255, 248, 238, 0.34) 48%, rgba(255, 255, 255, 0.22) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  box-shadow:
-    0 18px 40px rgba(90, 62, 42, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.72);
-  color: var(--wed6-text);
-  font-family: var(--wed6-font-serif);
-  font-size: 1.08rem;
-  font-style: italic;
-  -webkit-backdrop-filter: blur(18px) saturate(1.35);
-  backdrop-filter: blur(18px) saturate(1.35);
-  z-index: 2;
-}
-
-.wed6-rsvp-thanks[hidden] {
-  display: none;
-}
-
-.wed6-rsvp-thanks.is-animating-in {
-  animation: wed6-rsvp-thanks-fade-in 0.75s cubic-bezier(0.2, 0.75, 0.2, 1) both;
-}
-
-@keyframes wed6-rsvp-thanks-fade-in {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 18px, 0);
-  }
-  100% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-.wed6-rsvp-thanks-icon {
-  display: block;
-  font-size: 1.4rem;
-  margin-bottom: 0.4rem;
-  color: var(--wed6-accent);
-}
-
-.wed6-rsvp-hearts {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 50;
-  overflow: hidden;
-}
-
-.wed6-rsvp-heart {
-  position: absolute;
-  bottom: -10%;
-  animation-name: wed6-heart-rise;
-  animation-timing-function: ease-out;
-  animation-fill-mode: forwards;
 }
 
 @keyframes wed6-heart-rise {
@@ -3758,7 +3539,6 @@ body {
   .wed6-blessings-sep,
   .wed6-welcome-bird,
   .wed6-welcome-lights,
-  .wed6-rsvp-thanks.is-animating-in,
   .wed6-together.is-gallery-visible .wed6-gallery-item:not(.is-empty),
   .wed6-quote-text.is-typing::after,
   .wed6-timeline-fall-leaf,

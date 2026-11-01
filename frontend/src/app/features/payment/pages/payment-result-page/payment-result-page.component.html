@@ -26,6 +26,10 @@
         </div>
       }
 
+      @if (quote(); as q) {
+        <app-reel-download class="pay__reel" [eventId]="q.eventId" [autoStart]="true" [preview]="true" />
+      }
+
       <div class="pay__actions">
         <a class="pay__btn pay__btn--ghost" routerLink="/dashboard">Go to dashboard</a>
         @if (quote(); as q) {

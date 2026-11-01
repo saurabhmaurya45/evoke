@@ -270,7 +270,7 @@ function renderEvents(T) {
 // bars with a flash on its first beat, so any of them can follow any other and stay on the beat.
 const hasIntro = !!str(D.family?.invocation).trim();
 const hasMeet = !!(str(D.meet?.bride).trim() || str(D.meet?.groom).trim());
-const hasRsvp = !!str(D.rsvp?.title).trim();
+const hasRsvp = false; // this template no longer has an RSVP section
 const hasCountdown = left > 0;
 const START = hasIntro ? 0 : 2.5;
 const AFTER_EVENTS = [hasMeet && [17.5, 20], hasRsvp && [20, 22.5], hasCountdown && [22.5, 25], [25, 30]].filter(Boolean);

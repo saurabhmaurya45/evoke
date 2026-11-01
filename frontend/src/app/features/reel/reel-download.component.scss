@@ -1,0 +1,75 @@
+@use 'abstracts' as *;
+
+.reel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: $radius-sm;
+  background: rgba(var(--glass-rgb), 0.04);
+  border: 1px solid rgba(var(--glass-rgb), 0.1);
+  text-align: left;
+}
+
+.reel__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: $fw-semibold;
+}
+
+.reel__text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(var(--text-rgb), 0.65);
+}
+
+.reel__text--error { color: #d9534f; }
+
+.reel__video {
+  display: block;
+  width: 100%;
+  max-width: 260px;
+  aspect-ratio: 9 / 16;
+  margin-inline: auto;
+  border-radius: $radius-sm;
+  background: #000;
+}
+
+.reel__bar {
+  height: 6px;
+  border-radius: $radius-pill;
+  background: rgba(var(--glass-rgb), 0.12);
+  overflow: hidden;
+}
+
+.reel__fill {
+  display: block;
+  height: 100%;
+  background: $color-gold;
+  transition: width $transition-base;
+}
+
+.reel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.reel__btn {
+  padding: 9px 18px;
+  border: 0;
+  border-radius: $radius-pill;
+  background: $gradient-brand-strong;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: $fw-semibold;
+  cursor: pointer;
+}
+
+.reel__btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(var(--glass-rgb), 0.2);
+  color: rgba(var(--text-rgb), 0.85);
+}

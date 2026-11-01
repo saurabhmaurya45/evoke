@@ -1,4 +1,5 @@
 from functools import lru_cache
+from pathlib import Path
 from urllib.parse import quote, unquote, urlsplit
 
 import boto3
@@ -148,6 +149,25 @@ class B2Client:
             if error_code in ("404", "NoSuchKey"):
                 return None
             raise
+
+    def upload_file(
+        self, key: str, path: Path, content_type: str, download_name: str
+    ) -> None:
+        """Stores a file the server produced itself. `download_name` is sent back as an
+        attachment filename, because a browser ignores the `download` attribute on a
+        cross-origin link; a <video> tag can still play the same URL."""
+        self._producer.upload_file(
+            str(path),
+            self.bucket,
+            key,
+            ExtraArgs={
+                "ContentType": content_type,
+                "ContentDisposition": f'attachment; filename="{download_name}"',
+            },
+        )
+
+    def delete_object(self, key: str) -> None:
+        self._producer.delete_object(Bucket=self.bucket, Key=key)
 
 
 @lru_cache

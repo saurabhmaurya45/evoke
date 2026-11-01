@@ -44,6 +44,10 @@
             @if (site.expiresAt) { <span>expires {{ date(site.expiresAt) }}</span> }
           </div>
 
+          @if (site.status === 'published') {
+            <app-reel-download [eventId]="site.id" />
+          }
+
           <div class="site__actions">
             <a class="btn btn--ghost" [routerLink]="['/editor', site.templateId]" [queryParams]="{eventId: site.id}">Edit</a>
             <a class="btn btn--ghost" [href]="site.url" target="_blank" rel="noopener noreferrer">Open page</a>

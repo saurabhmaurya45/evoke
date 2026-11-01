@@ -161,6 +161,28 @@ mobile numbers (`9999999999`).
   Postgres connectivity (`SELECT 1`). Neither checks Supabase Auth, B2, or Razorpay
   reachability.
 
+## Invitation videos
+
+The owner of a published invitation with a completed payment can download a video made from its saved details, photos
+and song. The API (`app/reels`) only queues a row in `event_reels`; a separate long-lived
+worker renders it with `tools/reel/make-reel.mjs` and uploads it to the media bucket. It
+can't run on Vercel: a render needs Chromium and ffmpeg and takes minutes of CPU.
+
+```bash
+# From the repository root
+docker build -f backend/reel-worker.Dockerfile -t evoke-reel-worker .
+docker run --env-file backend/.env evoke-reel-worker
+```
+
+The worker needs `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` and the
+`B2_*` / `PUBLIC_MEDIA_BASE_URL` settings, the same values as the API. Run more containers
+to render more videos at once; each renders one at a time.
+
+To launch: apply the migration, start a worker, then set `REELS_ENABLED=true` on the API.
+
+A template gets videos once it has a film in `tools/reel/templates/` and an entry in
+`REEL_FILMS` (`app/reels/service.py`).
+
 ## Tests
 
 Tests never touch a real Supabase project or issue real JWTs — auth is exercised

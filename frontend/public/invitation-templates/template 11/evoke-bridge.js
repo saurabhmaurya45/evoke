@@ -10,7 +10,6 @@
  *   data-ev-link="social.instagramUrl"    a whole block that opens a link on click
  *   data-ev-countdown="countdown.date"    live clock: boxes for days, hours, minutes and seconds
  *   data-ev-audio="music.track"           the background-music <audio>
- *   data-ev-rsvp="rsvp.whatsapp"          the RSVP dialog (adds a WhatsApp button when a number is set)
  *
  * All default content lives in defaults.json (the single source of truth): the standalone preview
  * fetches it, the editor pushes live TemplateData over `evoke:preview-update`, and the editor's
@@ -49,10 +48,9 @@
   // item the editor leaves half-filled keeps the template's own text for the rest.
   function merge(base, data) {
     if (Array.isArray(base) || Array.isArray(data)) {
-      var out = [];
-      var len = Math.max((base || []).length, (data || []).length);
-      for (var i = 0; i < len; i++) out.push(merge((base || [])[i], (data || [])[i]));
-      return out;
+      // A saved list is the whole list: items the user removed must not come back from the defaults.
+      var items = Array.isArray(data) ? data : base;
+      return items.map(function (item, i) { return merge((base || [])[i], item); });
     }
     if (isObject(base) || isObject(data)) {
       var res = {};
@@ -213,55 +211,40 @@
     if (!clockTimer) clockTimer = window.setInterval(tickClock, 1000);
   }
 
-  // ---- RSVP dialog -------------------------------------------------------------------------
-  function applyRsvp() {
-    each('dialog[data-ev-rsvp]', function (dialog) {
-      var digits = String(getPath(values, dialog.getAttribute('data-ev-rsvp')) || '').replace(/\D/g, '');
-      var existing = dialog.querySelector('a.ev-wa');
-      if (digits.length < 7 || digits.length > 15) {
-        if (existing) existing.remove();
-        return;
-      }
-      var groom = getPath(values, 'couple.groomName') || '';
-      var bride = getPath(values, 'couple.brideName') || '';
-      var message = 'Hello! I would like to RSVP for the wedding of ' + groom + ' & ' + bride + '.';
-      var href = 'https://wa.me/' + digits + '?text=' + encodeURIComponent(message);
-      if (!existing) {
-        existing = document.createElement('a');
-        existing.className = 'ev-wa';
-        existing.target = '_blank';
-        existing.rel = 'noopener noreferrer';
-        existing.textContent = 'Chat on WhatsApp';
-        existing.style.cssText =
-          'display:inline-block;margin-top:20px;padding:10px 25px;border-radius:24px;background:#25d366;color:#fff;text-decoration:none;font:600 16px Georgia,serif';
-        var form = dialog.querySelector('form');
-        dialog.insertBefore(existing, form || null);
-      }
-      existing.href = href;
+  // Only the saved events get a card; with none, the events part of the page goes too.
+  function applyEventCards() {
+    var items = getPath(values, 'events.items');
+    var count = Array.isArray(items) ? items.length : 0;
+    var cards = [];
+    each('[data-ev$=".name"][data-ev^="events.items."]', function (el) {
+      var card = el.closest('[data-framer-name^="Card "]');
+      if (card) cards.push({ el: card, show: Number(el.getAttribute('data-ev').split('.')[2]) < count });
+    });
+    // The block around the cards has a fixed height, so it shrinks by whatever the cards gave up.
+    each('[data-framer-name="Events"]', function (el) {
+      var block = el.closest('[data-framer-name="Content"]');
+      el.style.display = '';
+      if (block) block.style.height = '';
+      cards.forEach(function (c) { c.el.style.display = ''; });
+      var full = el.getBoundingClientRect().height;
+      cards.forEach(function (c) { c.el.style.display = c.show ? '' : 'none'; });
+      el.style.display = count ? '' : 'none';
+      var freed = full - el.getBoundingClientRect().height;
+      if (block && freed > 0) block.style.height = block.getBoundingClientRect().height - freed + 'px';
+    });
+    each('[data-ev="invite.line2"]', function (el) {
+      var line = el.closest('[data-framer-name]') || el;
+      line.style.display = count ? '' : 'none';
     });
   }
-
-  // The page is shown in a sandboxed iframe without `allow-forms`, which silently blocks the
-  // pop-up's native <form method="dialog"> Close button. Close it ourselves.
-  document.addEventListener('click', function (e) {
-    var t = e.target;
-    var btn = t && t.closest ? t.closest('dialog button') : null;
-    if (btn) {
-      e.preventDefault();
-      var d = btn.closest('dialog');
-      if (d && d.close) d.close();
-    } else if (t && t.tagName === 'DIALOG' && t.close) {
-      t.close(); // click on the backdrop
-    }
-  });
 
   function apply() {
     if (!values || !document.body) return;
     applyText();
+    applyEventCards();
     applyLinks();
     applyImages();
     applyAudio();
-    applyRsvp();
     startClock();
   }
 
@@ -286,6 +269,8 @@
       render();
     }
   });
+
+  window.addEventListener('resize', function () { if (values) applyEventCards(); });
 
   function announceReady() {
     if (!(window.parent && window.parent !== window)) return;

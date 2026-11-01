@@ -12,6 +12,9 @@
  *   --bpm <n>            song tempo; detected automatically if left out
  *   --song-start <sec>   where in the song to start; detected automatically if left out
  *   --stills <t1,t2,..>  skip the video, write JPEGs at these film times next to --out (for checking)
+ *   --allow-hosts <a,b>  only fetch from these hosts (and the film's own song's), over https. For
+ *                        rendering data that users control: anything else falls back to the film's own
+ *                        image or song. The render worker always sets this.
  *
  * The data is used exactly as saved: a section with nothing in it is left out of the video, and sample
  * text the user saved is shown like any other text. With neither --data nor --slug it renders the
@@ -29,6 +32,9 @@ import { findBeat, SAMPLE_RATE } from './lib/song.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const TEMPLATES_ROOT = path.resolve(HERE, '../../frontend/public/invitation-templates');
 const FPS = 30;
+// A song is only ever decoded as audio. Without this, ffmpeg also accepts playlist formats (HLS, concat)
+// that make it open other URLs and local files named inside an uploaded "song".
+const SONG_INPUT_OPTIONS = ['-format_whitelist', 'mp3,mov,mp4,m4a,ogg,wav,aac,flac,matroska,webm', '-protocol_whitelist', 'file,http,https,tls,tcp,crypto'];
 
 function fail(message) {
   console.error(`Error: ${message}`);
@@ -44,7 +50,7 @@ function parseArgs(argv) {
       continue;
     }
     const key = argv[i].slice(2);
-    if (!['data', 'slug', 'api', 'out', 'song', 'bpm', 'song-start', 'stills'].includes(key)) fail(`Unknown option --${key}.`);
+    if (!['data', 'slug', 'api', 'out', 'song', 'bpm', 'song-start', 'stills', 'allow-hosts'].includes(key)) fail(`Unknown option --${key}.`);
     if (argv[i + 1] === undefined) fail(`--${key} needs a value.`);
     opts[key] = argv[++i];
   }
@@ -79,32 +85,49 @@ function getPath(obj, dotted) {
   return dotted.split('.').reduce((cur, key) => cur?.[key], obj);
 }
 
+// Null means no restriction, for someone rendering their own data from the command line.
+function allowedHosts(opts, meta) {
+  if (!opts['allow-hosts']) return null;
+  return new Set([...opts['allow-hosts'].split(',').map((h) => h.trim()).filter(Boolean), new URL(meta.song.url).hostname]);
+}
+
+function isAllowedUrl(url, hosts) {
+  if (!hosts) return true;
+  try {
+    const u = new URL(url);
+    return u.protocol === 'https:' && hosts.has(u.hostname);
+  } catch {
+    return false;
+  }
+}
+
 function run(args, { stdin = false, capture = false } = {}) {
-  const child = spawn(ffmpegPath, args, { stdio: [stdin ? 'pipe' : 'ignore', capture ? 'pipe' : 'ignore', 'pipe'] });
+  // The worker's container sets FFMPEG_PATH: ffmpeg-static's binary crashes on https URLs there.
+  const child = spawn(process.env.FFMPEG_PATH || ffmpegPath, args, { stdio: [stdin ? 'pipe' : 'ignore', capture ? 'pipe' : 'ignore', 'pipe'] });
   const chunks = [];
   let stderr = '';
   if (capture) child.stdout.on('data', (c) => chunks.push(c));
   child.stderr.on('data', (c) => { stderr += c; });
   const done = new Promise((resolve, reject) => {
     child.on('error', reject);
-    child.on('close', (code) => (code === 0 ? resolve(Buffer.concat(chunks)) : reject(new Error(stderr.slice(-800)))));
+    child.on('close', (code, sig) => (code === 0 ? resolve(Buffer.concat(chunks)) : reject(new Error(stderr.trim().slice(-800) || `ffmpeg stopped (${sig ?? `exit code ${code}`})`))));
   });
   return { child, done };
 }
 
-async function analyseSong(song, filmSeconds, targetBpm) {
-  const pcm = await run(['-loglevel', 'error', '-i', song, '-ac', '1', '-ar', String(SAMPLE_RATE), '-f', 'f32le', '-'], { capture: true }).done;
+async function analyseSong(song, filmSeconds, targetBpm, firstBar) {
+  const pcm = await run(['-loglevel', 'error', ...SONG_INPUT_OPTIONS, '-i', song, '-ac', '1', '-ar', String(SAMPLE_RATE), '-f', 'f32le', '-'], { capture: true }).done;
   const copy = pcm.buffer.slice(pcm.byteOffset, pcm.byteOffset + pcm.length - (pcm.length % 4));
-  return findBeat(new Float32Array(copy), filmSeconds, targetBpm);
+  return findBeat(new Float32Array(copy), filmSeconds, targetBpm, firstBar);
 }
 
 function isDefaultSong(url, sample) {
   return !url || url === sample;
 }
 
-async function resolveSong(opts, meta, data, defaults, filmSeconds) {
+async function resolveSong(opts, meta, data, defaults, filmSeconds, firstBar, hosts) {
   const fromData = data.music?.track;
-  const usable = typeof fromData === 'string' && /^https?:\/\//i.test(fromData);
+  const usable = typeof fromData === 'string' && /^https?:\/\//i.test(fromData) && isAllowedUrl(fromData, hosts);
   const song = opts.song || (usable && !isDefaultSong(fromData, defaults.music?.track) ? fromData : meta.song.url);
   if (opts.song && !/^https?:\/\//i.test(opts.song) && !fs.existsSync(opts.song)) fail(`Song file not found: ${opts.song}`);
 
@@ -119,7 +142,7 @@ async function resolveSong(opts, meta, data, defaults, filmSeconds) {
   }
   if (bpm === undefined || firstBeat === undefined) {
     console.log('Analysing the song for its beat...');
-    const found = await analyseSong(song, filmSeconds, meta.bpm);
+    const found = await analyseSong(song, filmSeconds, meta.bpm, firstBar);
     bpm ??= found.bpm;
     firstBeat ??= found.firstBeat;
     console.log(`  ${bpm.toFixed(1)} BPM, starting from ${firstBeat.toFixed(2)}s`);
@@ -152,6 +175,10 @@ async function main() {
     const pageErrors = [];
     page.on('pageerror', (e) => pageErrors.push(String(e)));
     page.on('console', (m) => { if (m.type() === 'warning') console.warn(`  ${m.text()}`); });
+    const hosts = allowedHosts(opts, meta);
+    if (hosts) {
+      await page.route(/^https?:/i, (route) => (isAllowedUrl(route.request().url(), hosts) ? route.continue() : route.abort()));
+    }
     await page.addInitScript(([d, now]) => { window.__DATA = d; window.__NOW = now; }, [data, Date.now()]);
     await page.goto(pathToFileURL(path.join(dir, 'film.html')).href);
     const filmSeconds = await page.evaluate(() => window.__ready);
@@ -177,7 +204,7 @@ async function main() {
       return;
     }
 
-    const { song, bpm, firstBeat } = await resolveSong(opts, meta, data, defaults, filmSeconds);
+    const { song, bpm, firstBeat } = await resolveSong(opts, meta, data, defaults, filmSeconds, firstBar, hosts);
     // The film is choreographed at meta.bpm; playing it faster or slower puts its cuts on this song's beat.
     const speed = bpm / meta.bpm;
     const seconds = filmSeconds / speed;
@@ -187,7 +214,7 @@ async function main() {
     const { child, done } = run([
       '-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
       // A song shorter than the film loops instead of leaving the end silent.
-      '-stream_loop', '-1', '-ss', songStart.toFixed(3), '-t', seconds.toFixed(3), '-i', song,
+      ...SONG_INPUT_OPTIONS, '-stream_loop', '-1', '-ss', songStart.toFixed(3), '-t', seconds.toFixed(3), '-i', song,
       '-filter_complex',
       `[0:v]scale=in_range=pc:out_range=tv,format=yuv420p[v];[1:a]afade=t=in:d=0.5,afade=t=out:st=${Math.max(0, seconds - 2).toFixed(3)}:d=2[a]`,
       '-map', '[v]', '-map', '[a]', '-t', seconds.toFixed(3),
@@ -203,7 +230,7 @@ async function main() {
       if (ffmpegFailed) break;
       const jpeg = await shoot((i / FPS) * speed);
       if (!child.stdin.write(jpeg)) await Promise.race([new Promise((resolve) => child.stdin.once('drain', resolve)), done.catch(() => {})]);
-      if (i % 150 === 0) console.log(`  ${Math.round((i / frames) * 100)}%`);
+      if (i % 30 === 0) console.log(`  ${Math.round((i / frames) * 100)}%`);
     }
     child.stdin.end();
     await done.catch((e) => { throw new Error(`Could not make the video (is the song reachable and the output path writable?): ${e.message.trim().split('\n').pop()}`); });

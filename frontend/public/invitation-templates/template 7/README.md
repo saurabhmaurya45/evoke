@@ -8,4 +8,4 @@ Changes:
 - There were no local JavaScript files in the supplied ZIP to remove.
 - The wedding page's inline JavaScript was kept intact.
 - The external `canvas-confetti` library was kept because the page actively uses it.
-- External fonts, video, audio, images, RSVP API, and Google Maps references were kept unchanged.
+- External fonts, video, audio, images and Google Maps references were kept unchanged.

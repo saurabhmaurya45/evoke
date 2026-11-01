@@ -37,7 +37,6 @@
     'memories.label': 'memoriesLabel',
     'memories.caption': 'memoriesCaption',
     'footer.coupleName': 'footerCoupleName',
-    'footer.rsvpHeading': 'rsvpContactsHeading',
     'footer.wishesHeading': 'wishesHeading'
   };
   var HTML = {
@@ -62,7 +61,6 @@
     'memories.video': 'memoriesVideo'
   };
   var LIST = {
-    'footer.rsvpContacts': 'rsvpContacts',
     'footer.wishesFrom': 'wishesFrom'
   };
 

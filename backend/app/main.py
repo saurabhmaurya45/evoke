@@ -21,6 +21,7 @@ from app.events.router import router as events_router  # noqa: E402
 from app.invitation.router import router as invitation_router  # noqa: E402
 from app.media.router import router as media_router  # noqa: E402
 from app.payments.router import router as payments_router  # noqa: E402
+from app.reels.router import router as reels_router  # noqa: E402
 from app.shared.database import get_db  # noqa: E402
 from app.shared.errors import RequestIdMiddleware, register_error_handlers  # noqa: E402
 from app.templates.router import router as templates_router  # noqa: E402
@@ -54,6 +55,10 @@ app = FastAPI(
                 "Presigned upload/retrieval of template and draft media via Backblaze B2."
             ),
         },
+        {
+            "name": "reels",
+            "description": "Downloadable videos made from a published invitation's details.",
+        },
     ],
 )
 
@@ -77,6 +82,7 @@ app.include_router(admin_router)
 app.include_router(invitation_router)
 app.include_router(payments_router)
 app.include_router(media_router)
+app.include_router(reels_router)
 
 
 @app.get("/health")

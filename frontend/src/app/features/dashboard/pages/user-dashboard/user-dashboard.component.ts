@@ -3,6 +3,7 @@ import { catchError, of } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { SeoService } from '../../../../core/services/seo.service';
+import { ReelDownloadComponent } from '../../../reel/reel-download.component';
 import { DashboardContentService, formatCurrency } from '../../data/dashboard-content.service';
 import type { InvitationSite, PaymentRecord } from '../../models/dashboard.model';
 
@@ -14,7 +15,7 @@ import type { InvitationSite, PaymentRecord } from '../../models/dashboard.model
 @Component({
   selector: 'app-user-dashboard',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
+  imports: [RouterLink, ReelDownloadComponent],
   templateUrl: './user-dashboard.component.html',
   styleUrl: './user-dashboard.component.scss',
 })

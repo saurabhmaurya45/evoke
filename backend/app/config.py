@@ -64,6 +64,15 @@ class Settings(BaseSettings):
     # Consumer key is not needed. Unset -> signed GET URLs, as before.
     public_media_base_url: str | None = None
 
+    # Invitation videos. Off until a worker (app.reels.worker) is running, because
+    # without one a requested video would stay queued forever.
+    reels_enabled: bool = False
+    # Videos one user may request in 24 hours; each ties up a worker for minutes.
+    reel_daily_limit: int = 5
+    reel_render_timeout_seconds: int = 30 * 60
+    # Worker only: the tools/reel folder. Unset -> its place in this repository.
+    reel_tool_dir: str | None = None
+
     # Sentry (error tracking). Unset -> init_observability() skips Sentry entirely,
     # same "optional, no-op if unset" pattern as Razorpay/B2 above.
     sentry_dsn: str | None = None

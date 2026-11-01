@@ -5,6 +5,7 @@ from app.drafts.models import Draft  # noqa: F401
 from app.events.models import Event  # noqa: F401
 from app.media.models import MediaAsset  # noqa: F401
 from app.payments.models import Payment  # noqa: F401
+from app.reels.models import EventReel  # noqa: F401
 from app.shared.audit import AuditLog  # noqa: F401
 from app.templates.models import Category, Currency, Template, TemplateVersion  # noqa: F401
 from app.users.models import User  # noqa: F401
