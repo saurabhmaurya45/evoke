@@ -35,7 +35,7 @@ Videos go to `out/` unless `--out` says otherwise. `--stills 3,8.5,12` writes JP
 instead of a video, for checking a change quickly. A full render takes a few minutes.
 
 `--preview` makes the version shown before the video is bought: 540x960, lower quality, with a
-"PREVIEW · theinvitely.in" watermark burned into every frame. The worker uses it for preview renders,
+company logo burned into the middle of every frame as a watermark. The worker uses it for preview renders,
 so the preview file is useless without paying even if someone digs its URL out of the page.
 
 ## How it works

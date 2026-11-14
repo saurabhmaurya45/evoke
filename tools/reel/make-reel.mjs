@@ -15,8 +15,8 @@
  *   --allow-hosts <a,b>  only fetch from these hosts (and the film's own song's), over https. For
  *                        rendering data that users control: anything else falls back to the film's own
  *                        image or song. The render worker always sets this.
- *   --preview            a preview to show before the video is bought: 540x960, lower quality, with a
- *                        watermark burned into every frame so it is no use without paying.
+ *   --preview            a preview to show before the video is bought: 540x960, lower quality, with the
+ *                        company logo burned into the middle of every frame.
  *
  * The data is used exactly as saved: a section with nothing in it is left out of the video, and sample
  * text the user saved is shown like any other text. With neither --data nor --slug it renders the
@@ -155,23 +155,18 @@ async function resolveSong(opts, meta, data, defaults, filmSeconds, firstBar, ho
   return { song, bpm, firstBeat };
 }
 
-/** A transparent 1080x1920 PNG of the preview watermark: diagonal rows of text across the whole
- * frame (so no crop escapes it) and a large PREVIEW in the middle, light with a dark edge so it shows on
- * any background. */
+// The preview's watermark: the company logo, once, in the middle of the frame. It marks the
+// video as a preview without hiding the invitation; the paid video has none.
 async function makeWatermark(browser, out) {
   const file = out.replace(/.mp4$/i, '') + '-watermark.png';
+  const logo = fs.readFileSync(path.join(HERE, 'lib', 'watermark-logo.png')).toString('base64');
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
   try {
-    const row = Array(6).fill('PREVIEW · theinvitely.in').join('   ');
-    const rows = Array.from({ length: 22 }, (_, i) => `<div style="margin-left:${(i % 2) * -260}px">${row}</div>`).join('');
     await page.setContent(`<!doctype html><html><body style="margin:0;width:1080px;height:1920px;overflow:hidden;background:transparent">
-      <div style="position:absolute;left:-900px;top:-700px;width:2900px;transform:rotate(-30deg);transform-origin:center;
-        font:600 46px/150px Arial,sans-serif;white-space:nowrap;color:rgba(255,255,255,.42);
-        -webkit-text-stroke:1.5px rgba(0,0,0,.35);letter-spacing:2px">${rows}</div>
-      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
-        <div style="transform:rotate(-30deg);font:800 200px/1 Arial,sans-serif;letter-spacing:12px;color:rgba(255,255,255,.5);
-          -webkit-text-stroke:4px rgba(0,0,0,.4)">PREVIEW</div></div>
+      <img src="data:image/png;base64,${logo}" style="position:absolute;left:50%;top:50%;width:760px;transform:translate(-50%,-50%);
+        opacity:.55;filter:drop-shadow(0 2px 6px rgba(0,0,0,.45))">
     </body></html>`);
+    await page.waitForFunction(() => document.images[0]?.complete);
     await page.screenshot({ path: file, omitBackground: true });
   } finally {
     await page.close();
