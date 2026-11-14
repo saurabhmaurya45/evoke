@@ -520,6 +520,7 @@ async def test_publish_makes_no_video_that_was_not_bought(client, db_session, au
     assert (await db_session.execute(select(EventReel))).scalars().all() == []
 
 
-def test_videos_are_on_unless_switched_off():
-    """REELS_ENABLED defaults to true, so a deployment that never sets it offers videos."""
-    assert Settings.model_fields["reels_enabled"].default is True
+def test_videos_are_off_unless_switched_on():
+    """REELS_ENABLED defaults to false: videos need a running worker, so a deployment
+    offers them only once it sets REELS_ENABLED=true."""
+    assert Settings.model_fields["reels_enabled"].default is False

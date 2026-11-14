@@ -64,10 +64,9 @@ class Settings(BaseSettings):
     # Consumer key is not needed. Unset -> signed GET URLs, as before.
     public_media_base_url: str | None = None
 
-    # Invitation videos. On unless REELS_ENABLED=false. A reel worker (app.reels.worker)
-    # must be running: without one, a requested video stays queued forever. Set it to
-    # false to switch videos off, e.g. while the worker is down.
-    reels_enabled: bool = True
+    # Invitation videos. Off unless REELS_ENABLED=true: they need a reel worker
+    # (app.reels.worker) running, and without one a requested video stays queued forever.
+    reels_enabled: bool = False
     # Videos one user may request in 24 hours; each ties up a worker for minutes.
     reel_daily_limit: int = 5
     # Previews one user may request in 24 hours. A preview is made before anything is paid.
