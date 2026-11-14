@@ -23,7 +23,8 @@ def user_template_media_path(
     return f"public/{user_id}/{event_id}/{media_type.value.lower()}/{name}"
 
 
-def event_reel_path(user_id: uuid.UUID, event_id: uuid.UUID) -> str:
+def event_reel_path(user_id: uuid.UUID, event_id: uuid.UUID, preview: bool = False) -> str:
     """Where an invitation's rendered video goes, beside its uploads. The random name
     keeps it unguessable on a public bucket, like every other user-owned object."""
-    return f"public/{user_id}/{event_id}/reel/{uuid.uuid4()}.mp4"
+    prefix = "preview-" if preview else ""
+    return f"public/{user_id}/{event_id}/reel/{prefix}{uuid.uuid4()}.mp4"

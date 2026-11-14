@@ -1,0 +1,1471 @@
+[
+  {
+    "name": "saved with all the sample text",
+    "data": "$sample",
+    "want": [
+      "Knock on the door",
+      "Knock again",
+      "One more knock",
+      "We cordially invite you to the",
+      "wedding of",
+      "Vikram",
+      "with",
+      "Ananya",
+      "27 January 2027",
+      "Every love story is",
+      "JANUARY",
+      "2027",
+      "Wednesday",
+      "✦ cherished ✦",
+      "A Glimpse of Us",
+      "॥ श्री गणेशाय नमः ॥",
+      "With warm hearts,",
+      "Groom",
+      "Son of",
+      "Mr Mahesh & Mrs Kavita Sharma",
+      "Jaipur, Rajasthan",
+      "Bride",
+      "Daughter of",
+      "Udaipur, Rajasthan",
+      "WEDNESDAY",
+      "27",
+      "AT 11:00 AM",
+      "Miami Convention Centre, Calicut",
+      "Event Timeline",
+      "Wedding Ceremony",
+      "Lunch Gathering",
+      "Reception",
+      "27 JAN",
+      "1:00 PM",
+      "Venues",
+      "Auditorium, Ananghadi",
+      "With love,",
+      "Vikram & Ananya",
+      "Best wishes from",
+      "Rahul, Neha & Rohan",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "+91",
+      "Call",
+      "Have Questions",
+      "Counting Down",
+      "Get Directions",
+      "Forever"
+    ]
+  },
+  {
+    "name": "every section filled with new details",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "groomParentPrefix": "S/O",
+        "groomParentsName": "Shri Rakesh & Smt. Neeta Malhotra",
+        "brideParentPrefix": "D/O",
+        "brideParentsName": "Shri Anil Kapoor|& Smt. Ritu Kapoor",
+        "groomPlace": "Udaipur, Rajasthan",
+        "bridePlace": "Jaipur, Rajasthan"
+      },
+      "ceremony": {
+        "date": "2099-11-20",
+        "time": "7:30 PM - 11:00 PM",
+        "address": "The Oberoi Udaivilas, Udaipur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": "https://www.google.com/maps/embed?x"
+      },
+      "messages": {
+        "quote": "Two souls, one journey, and the blessings of both our families.",
+        "togetherQuote": "Forever",
+        "invitationMessage": "With the blessings of our elders, we invite you to our wedding.",
+        "welcomeMessage": "Your presence and blessings will make our day complete.",
+        "blessingsFrom": "Dadaji & Dadiji|Cousins: Riya, Kabir, Meher"
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "2099-11-19",
+            "time": "4:00 PM"
+          },
+          {
+            "title": "Sangeet",
+            "date": "2099-11-19",
+            "time": "8:00 PM"
+          },
+          {
+            "title": "Phere",
+            "date": "2099-11-20",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Vidaai",
+            "date": "",
+            "time": "6:00 AM"
+          }
+        ]
+      },
+      "venues": {
+        "items": [
+          {
+            "label": "Phere",
+            "address": "The Oberoi Udaivilas, Udaipur",
+            "mapEmbed": "",
+            "mapLink": ""
+          },
+          {
+            "label": "Sangeet",
+            "address": "Lakeside Lawns, Pichola",
+            "mapEmbed": "",
+            "mapLink": ""
+          }
+        ]
+      },
+      "gallery": {
+        "title": "Our Story",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      },
+      "contact": {
+        "phone": "+919800000000",
+        "phone2": "+919811111111"
+      }
+    },
+    "want": [
+      "Vihaan",
+      "Ananya",
+      "19 November 2099",
+      "Two souls, one",
+      "NOVEMBER",
+      "Thursday",
+      "Our Story",
+      "With the blessings of our",
+      "S/O",
+      "Shri Rakesh & Smt. Neeta Malhotra",
+      "Shri Anil Kapoor",
+      "& Smt. Ritu Kapoor",
+      "THURSDAY",
+      "19",
+      "AT 7:30 PM",
+      "The Oberoi Udaivilas, Udaipur",
+      "Mehendi",
+      "Sangeet",
+      "Phere",
+      "Vidaai",
+      "19 NOV",
+      "20 NOV",
+      "6:00 AM",
+      "Lakeside Lawns, Pichola",
+      "Your presence and blessings",
+      "Vihaan & Ananya",
+      "Dadaji & Dadiji",
+      "Cousins",
+      "Riya, Kabir, Meher",
+      "aisa invitation banaiye"
+    ],
+    "reject": [
+      "Vikram",
+      "Mahesh",
+      "Miami Convention",
+      "Lunch Gathering",
+      "Every love story",
+      "A Glimpse of Us",
+      "Rahul",
+      "Dazzle Avenue",
+      "+91",
+      "Call",
+      "Have Questions",
+      "Counting Down",
+      "Get Directions",
+      "Forever"
+    ]
+  },
+  {
+    "name": "only the two names",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      }
+    },
+    "want": [
+      "Vihaan",
+      "Ananya",
+      "Vihaan & Ananya",
+      "Groom",
+      "Bride",
+      "With love,",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "Event Timeline",
+      "Venues",
+      "A Glimpse of Us",
+      "Best wishes from",
+      "WEDNESDAY",
+      "Son of",
+      "+91",
+      "Call",
+      "Have Questions",
+      "Counting Down",
+      "Get Directions",
+      "Forever"
+    ]
+  },
+  {
+    "name": "the ceremony date is used when the timeline has none",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "groomParentPrefix": "S/O",
+        "groomParentsName": "Shri Rakesh & Smt. Neeta Malhotra",
+        "brideParentPrefix": "D/O",
+        "brideParentsName": "Shri Anil Kapoor|& Smt. Ritu Kapoor",
+        "groomPlace": "Udaipur, Rajasthan",
+        "bridePlace": "Jaipur, Rajasthan"
+      },
+      "ceremony": {
+        "date": "2099-11-20",
+        "time": "7:30 PM - 11:00 PM",
+        "address": "The Oberoi Udaivilas, Udaipur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": "https://www.google.com/maps/embed?x"
+      },
+      "messages": {
+        "quote": "Two souls, one journey, and the blessings of both our families.",
+        "togetherQuote": "Forever",
+        "invitationMessage": "With the blessings of our elders, we invite you to our wedding.",
+        "welcomeMessage": "Your presence and blessings will make our day complete.",
+        "blessingsFrom": "Dadaji & Dadiji|Cousins: Riya, Kabir, Meher"
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "",
+            "time": "4:00 PM"
+          },
+          {
+            "title": "Sangeet",
+            "date": "2099-11-19",
+            "time": "8:00 PM"
+          },
+          {
+            "title": "Phere",
+            "date": "2099-11-20",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Vidaai",
+            "date": "",
+            "time": "6:00 AM"
+          }
+        ]
+      },
+      "venues": {
+        "items": [
+          {
+            "label": "Phere",
+            "address": "The Oberoi Udaivilas, Udaipur",
+            "mapEmbed": "",
+            "mapLink": ""
+          },
+          {
+            "label": "Sangeet",
+            "address": "Lakeside Lawns, Pichola",
+            "mapEmbed": "",
+            "mapLink": ""
+          }
+        ]
+      },
+      "gallery": {
+        "title": "Our Story",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      },
+      "contact": {
+        "phone": "+919800000000",
+        "phone2": "+919811111111"
+      }
+    },
+    "want": [
+      "20 November 2099",
+      "Friday",
+      "20 NOV"
+    ]
+  },
+  {
+    "name": "a date that is not a date",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "groomParentPrefix": "S/O",
+        "groomParentsName": "Shri Rakesh & Smt. Neeta Malhotra",
+        "brideParentPrefix": "D/O",
+        "brideParentsName": "Shri Anil Kapoor|& Smt. Ritu Kapoor",
+        "groomPlace": "Udaipur, Rajasthan",
+        "bridePlace": "Jaipur, Rajasthan"
+      },
+      "ceremony": {
+        "date": "Next spring",
+        "time": "7:30 PM - 11:00 PM",
+        "address": "The Oberoi Udaivilas, Udaipur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": "https://www.google.com/maps/embed?x"
+      },
+      "messages": {
+        "quote": "Two souls, one journey, and the blessings of both our families.",
+        "togetherQuote": "Forever",
+        "invitationMessage": "With the blessings of our elders, we invite you to our wedding.",
+        "welcomeMessage": "Your presence and blessings will make our day complete.",
+        "blessingsFrom": "Dadaji & Dadiji|Cousins: Riya, Kabir, Meher"
+      },
+      "timeline": {
+        "items": []
+      },
+      "venues": {
+        "items": [
+          {
+            "label": "Phere",
+            "address": "The Oberoi Udaivilas, Udaipur",
+            "mapEmbed": "",
+            "mapLink": ""
+          },
+          {
+            "label": "Sangeet",
+            "address": "Lakeside Lawns, Pichola",
+            "mapEmbed": "",
+            "mapLink": ""
+          }
+        ]
+      },
+      "gallery": {
+        "title": "Our Story",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      },
+      "contact": {
+        "phone": "+919800000000",
+        "phone2": "+919811111111"
+      }
+    },
+    "want": [
+      "Next spring",
+      "Groom"
+    ],
+    "reject": [
+      "Event Timeline",
+      "FRIDAY"
+    ]
+  },
+  {
+    "name": "no quote",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "groomParentPrefix": "S/O",
+        "groomParentsName": "Shri Rakesh & Smt. Neeta Malhotra",
+        "brideParentPrefix": "D/O",
+        "brideParentsName": "Shri Anil Kapoor|& Smt. Ritu Kapoor",
+        "groomPlace": "Udaipur, Rajasthan",
+        "bridePlace": "Jaipur, Rajasthan"
+      },
+      "ceremony": {
+        "date": "2099-11-20",
+        "time": "7:30 PM - 11:00 PM",
+        "address": "The Oberoi Udaivilas, Udaipur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": "https://www.google.com/maps/embed?x"
+      },
+      "messages": {
+        "quote": "  ",
+        "togetherQuote": "Forever",
+        "invitationMessage": "With the blessings of our elders, we invite you to our wedding.",
+        "welcomeMessage": "Your presence and blessings will make our day complete.",
+        "blessingsFrom": "Dadaji & Dadiji|Cousins: Riya, Kabir, Meher"
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "2099-11-19",
+            "time": "4:00 PM"
+          },
+          {
+            "title": "Sangeet",
+            "date": "2099-11-19",
+            "time": "8:00 PM"
+          },
+          {
+            "title": "Phere",
+            "date": "2099-11-20",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Vidaai",
+            "date": "",
+            "time": "6:00 AM"
+          }
+        ]
+      },
+      "venues": {
+        "items": [
+          {
+            "label": "Phere",
+            "address": "The Oberoi Udaivilas, Udaipur",
+            "mapEmbed": "",
+            "mapLink": ""
+          },
+          {
+            "label": "Sangeet",
+            "address": "Lakeside Lawns, Pichola",
+            "mapEmbed": "",
+            "mapLink": ""
+          }
+        ]
+      },
+      "gallery": {
+        "title": "Our Story",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      },
+      "contact": {
+        "phone": "+919800000000",
+        "phone2": "+919811111111"
+      }
+    },
+    "want": [
+      "19 November 2099"
+    ],
+    "reject": [
+      "Two souls"
+    ]
+  },
+  {
+    "name": "no photos",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "groomParentPrefix": "S/O",
+        "groomParentsName": "Shri Rakesh & Smt. Neeta Malhotra",
+        "brideParentPrefix": "D/O",
+        "brideParentsName": "Shri Anil Kapoor|& Smt. Ritu Kapoor",
+        "groomPlace": "Udaipur, Rajasthan",
+        "bridePlace": "Jaipur, Rajasthan"
+      },
+      "ceremony": {
+        "date": "2099-11-20",
+        "time": "7:30 PM - 11:00 PM",
+        "address": "The Oberoi Udaivilas, Udaipur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": "https://www.google.com/maps/embed?x"
+      },
+      "messages": {
+        "quote": "Two souls, one journey, and the blessings of both our families.",
+        "togetherQuote": "Forever",
+        "invitationMessage": "With the blessings of our elders, we invite you to our wedding.",
+        "welcomeMessage": "Your presence and blessings will make our day complete.",
+        "blessingsFrom": "Dadaji & Dadiji|Cousins: Riya, Kabir, Meher"
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "2099-11-19",
+            "time": "4:00 PM"
+          },
+          {
+            "title": "Sangeet",
+            "date": "2099-11-19",
+            "time": "8:00 PM"
+          },
+          {
+            "title": "Phere",
+            "date": "2099-11-20",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Vidaai",
+            "date": "",
+            "time": "6:00 AM"
+          }
+        ]
+      },
+      "venues": {
+        "items": [
+          {
+            "label": "Phere",
+            "address": "The Oberoi Udaivilas, Udaipur",
+            "mapEmbed": "",
+            "mapLink": ""
+          },
+          {
+            "label": "Sangeet",
+            "address": "Lakeside Lawns, Pichola",
+            "mapEmbed": "",
+            "mapLink": ""
+          }
+        ]
+      },
+      "gallery": {
+        "title": "Our Story",
+        "items": [
+          {
+            "image": ""
+          },
+          {
+            "image": "javascript:alert(1)"
+          }
+        ]
+      },
+      "contact": {
+        "phone": "+919800000000",
+        "phone2": "+919811111111"
+      }
+    },
+    "want": [
+      "Groom"
+    ],
+    "reject": [
+      "Our Story",
+      "✦ cherished ✦"
+    ]
+  },
+  {
+    "name": "only the sixth photo (the template shows five)",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "groomParentPrefix": "S/O",
+        "groomParentsName": "Shri Rakesh & Smt. Neeta Malhotra",
+        "brideParentPrefix": "D/O",
+        "brideParentsName": "Shri Anil Kapoor|& Smt. Ritu Kapoor",
+        "groomPlace": "Udaipur, Rajasthan",
+        "bridePlace": "Jaipur, Rajasthan"
+      },
+      "ceremony": {
+        "date": "2099-11-20",
+        "time": "7:30 PM - 11:00 PM",
+        "address": "The Oberoi Udaivilas, Udaipur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": "https://www.google.com/maps/embed?x"
+      },
+      "messages": {
+        "quote": "Two souls, one journey, and the blessings of both our families.",
+        "togetherQuote": "Forever",
+        "invitationMessage": "With the blessings of our elders, we invite you to our wedding.",
+        "welcomeMessage": "Your presence and blessings will make our day complete.",
+        "blessingsFrom": "Dadaji & Dadiji|Cousins: Riya, Kabir, Meher"
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "2099-11-19",
+            "time": "4:00 PM"
+          },
+          {
+            "title": "Sangeet",
+            "date": "2099-11-19",
+            "time": "8:00 PM"
+          },
+          {
+            "title": "Phere",
+            "date": "2099-11-20",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Vidaai",
+            "date": "",
+            "time": "6:00 AM"
+          }
+        ]
+      },
+      "venues": {
+        "items": [
+          {
+            "label": "Phere",
+            "address": "The Oberoi Udaivilas, Udaipur",
+            "mapEmbed": "",
+            "mapLink": ""
+          },
+          {
+            "label": "Sangeet",
+            "address": "Lakeside Lawns, Pichola",
+            "mapEmbed": "",
+            "mapLink": ""
+          }
+        ]
+      },
+      "gallery": {
+        "title": "Our Story",
+        "items": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+          }
+        ]
+      },
+      "contact": {
+        "phone": "+919800000000",
+        "phone2": "+919811111111"
+      }
+    },
+    "want": [
+      "Groom"
+    ],
+    "reject": [
+      "Our Story"
+    ]
+  },
+  {
+    "name": "no timeline titles",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "groomParentPrefix": "S/O",
+        "groomParentsName": "Shri Rakesh & Smt. Neeta Malhotra",
+        "brideParentPrefix": "D/O",
+        "brideParentsName": "Shri Anil Kapoor|& Smt. Ritu Kapoor",
+        "groomPlace": "Udaipur, Rajasthan",
+        "bridePlace": "Jaipur, Rajasthan"
+      },
+      "ceremony": {
+        "date": "2099-11-20",
+        "time": "7:30 PM - 11:00 PM",
+        "address": "The Oberoi Udaivilas, Udaipur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": "https://www.google.com/maps/embed?x"
+      },
+      "messages": {
+        "quote": "Two souls, one journey, and the blessings of both our families.",
+        "togetherQuote": "Forever",
+        "invitationMessage": "With the blessings of our elders, we invite you to our wedding.",
+        "welcomeMessage": "Your presence and blessings will make our day complete.",
+        "blessingsFrom": "Dadaji & Dadiji|Cousins: Riya, Kabir, Meher"
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "",
+            "date": "2099-11-19",
+            "time": "4 PM"
+          }
+        ]
+      },
+      "venues": {
+        "items": [
+          {
+            "label": "Phere",
+            "address": "The Oberoi Udaivilas, Udaipur",
+            "mapEmbed": "",
+            "mapLink": ""
+          },
+          {
+            "label": "Sangeet",
+            "address": "Lakeside Lawns, Pichola",
+            "mapEmbed": "",
+            "mapLink": ""
+          }
+        ]
+      },
+      "gallery": {
+        "title": "Our Story",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      },
+      "contact": {
+        "phone": "+919800000000",
+        "phone2": "+919811111111"
+      }
+    },
+    "want": [
+      "19 November 2099"
+    ],
+    "reject": [
+      "Event Timeline",
+      "4 PM"
+    ]
+  },
+  {
+    "name": "six timeline entries: the template shows five",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "groomParentPrefix": "S/O",
+        "groomParentsName": "Shri Rakesh & Smt. Neeta Malhotra",
+        "brideParentPrefix": "D/O",
+        "brideParentsName": "Shri Anil Kapoor|& Smt. Ritu Kapoor",
+        "groomPlace": "Udaipur, Rajasthan",
+        "bridePlace": "Jaipur, Rajasthan"
+      },
+      "ceremony": {
+        "date": "2099-11-20",
+        "time": "7:30 PM - 11:00 PM",
+        "address": "The Oberoi Udaivilas, Udaipur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": "https://www.google.com/maps/embed?x"
+      },
+      "messages": {
+        "quote": "Two souls, one journey, and the blessings of both our families.",
+        "togetherQuote": "Forever",
+        "invitationMessage": "With the blessings of our elders, we invite you to our wedding.",
+        "welcomeMessage": "Your presence and blessings will make our day complete.",
+        "blessingsFrom": "Dadaji & Dadiji|Cousins: Riya, Kabir, Meher"
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Roka",
+            "date": "2099-11-10",
+            "time": "4 PM"
+          },
+          {
+            "title": "Haldi",
+            "date": "2099-11-11",
+            "time": "5 PM"
+          },
+          {
+            "title": "Mehendi",
+            "date": "2099-11-12",
+            "time": "6 PM"
+          },
+          {
+            "title": "Sangeet",
+            "date": "2099-11-13",
+            "time": "7 PM"
+          },
+          {
+            "title": "Phere",
+            "date": "2099-11-14",
+            "time": "8 PM"
+          },
+          {
+            "title": "Vidaai",
+            "date": "2099-11-15",
+            "time": "9 PM"
+          }
+        ]
+      },
+      "venues": {
+        "items": [
+          {
+            "label": "Phere",
+            "address": "The Oberoi Udaivilas, Udaipur",
+            "mapEmbed": "",
+            "mapLink": ""
+          },
+          {
+            "label": "Sangeet",
+            "address": "Lakeside Lawns, Pichola",
+            "mapEmbed": "",
+            "mapLink": ""
+          }
+        ]
+      },
+      "gallery": {
+        "title": "Our Story",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      },
+      "contact": {
+        "phone": "+919800000000",
+        "phone2": "+919811111111"
+      }
+    },
+    "want": [
+      "Roka",
+      "Phere",
+      "14 NOV",
+      "8 PM"
+    ],
+    "reject": [
+      "Vidaai"
+    ]
+  },
+  {
+    "name": "venues without labels use the template names and the ceremony address",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "groomParentPrefix": "S/O",
+        "groomParentsName": "Shri Rakesh & Smt. Neeta Malhotra",
+        "brideParentPrefix": "D/O",
+        "brideParentsName": "Shri Anil Kapoor|& Smt. Ritu Kapoor",
+        "groomPlace": "Udaipur, Rajasthan",
+        "bridePlace": "Jaipur, Rajasthan"
+      },
+      "ceremony": {
+        "date": "2099-11-20",
+        "time": "7:30 PM - 11:00 PM",
+        "address": "The Oberoi Udaivilas, Udaipur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": "https://www.google.com/maps/embed?x"
+      },
+      "messages": {
+        "quote": "Two souls, one journey, and the blessings of both our families.",
+        "togetherQuote": "Forever",
+        "invitationMessage": "With the blessings of our elders, we invite you to our wedding.",
+        "welcomeMessage": "Your presence and blessings will make our day complete.",
+        "blessingsFrom": "Dadaji & Dadiji|Cousins: Riya, Kabir, Meher"
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "2099-11-19",
+            "time": "4:00 PM"
+          },
+          {
+            "title": "Sangeet",
+            "date": "2099-11-19",
+            "time": "8:00 PM"
+          },
+          {
+            "title": "Phere",
+            "date": "2099-11-20",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Vidaai",
+            "date": "",
+            "time": "6:00 AM"
+          }
+        ]
+      },
+      "venues": {
+        "items": [
+          {
+            "label": "",
+            "address": "Lakeside Lawns"
+          },
+          {
+            "label": "Reception",
+            "address": ""
+          },
+          {
+            "label": " ",
+            "address": " "
+          }
+        ]
+      },
+      "gallery": {
+        "title": "Our Story",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      },
+      "contact": {
+        "phone": "+919800000000",
+        "phone2": "+919811111111"
+      }
+    },
+    "want": [
+      "Venue 1",
+      "Lakeside Lawns",
+      "Reception",
+      "The Oberoi Udaivilas, Udaipur"
+    ],
+    "reject": [
+      "Venue 3"
+    ]
+  },
+  {
+    "name": "no venues",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "groomParentPrefix": "S/O",
+        "groomParentsName": "Shri Rakesh & Smt. Neeta Malhotra",
+        "brideParentPrefix": "D/O",
+        "brideParentsName": "Shri Anil Kapoor|& Smt. Ritu Kapoor",
+        "groomPlace": "Udaipur, Rajasthan",
+        "bridePlace": "Jaipur, Rajasthan"
+      },
+      "ceremony": {
+        "date": "2099-11-20",
+        "time": "7:30 PM - 11:00 PM",
+        "address": "The Oberoi Udaivilas, Udaipur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": "https://www.google.com/maps/embed?x"
+      },
+      "messages": {
+        "quote": "Two souls, one journey, and the blessings of both our families.",
+        "togetherQuote": "Forever",
+        "invitationMessage": "With the blessings of our elders, we invite you to our wedding.",
+        "welcomeMessage": "Your presence and blessings will make our day complete.",
+        "blessingsFrom": "Dadaji & Dadiji|Cousins: Riya, Kabir, Meher"
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "2099-11-19",
+            "time": "4:00 PM"
+          },
+          {
+            "title": "Sangeet",
+            "date": "2099-11-19",
+            "time": "8:00 PM"
+          },
+          {
+            "title": "Phere",
+            "date": "2099-11-20",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Vidaai",
+            "date": "",
+            "time": "6:00 AM"
+          }
+        ]
+      },
+      "venues": {
+        "items": []
+      },
+      "gallery": {
+        "title": "Our Story",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      },
+      "contact": {
+        "phone": "+919800000000",
+        "phone2": "+919811111111"
+      }
+    },
+    "want": [
+      "Event Timeline"
+    ],
+    "reject": [
+      "Venues"
+    ]
+  },
+  {
+    "name": "no parents, places, messages or blessings",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "groomParentPrefix": "",
+        "groomParentsName": "",
+        "brideParentPrefix": "",
+        "brideParentsName": "",
+        "groomPlace": "",
+        "bridePlace": ""
+      },
+      "ceremony": {
+        "date": "2099-11-20",
+        "time": "",
+        "address": "",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": "https://www.google.com/maps/embed?x"
+      },
+      "messages": {},
+      "timeline": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "2099-11-19",
+            "time": "4:00 PM"
+          },
+          {
+            "title": "Sangeet",
+            "date": "2099-11-19",
+            "time": "8:00 PM"
+          },
+          {
+            "title": "Phere",
+            "date": "2099-11-20",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Vidaai",
+            "date": "",
+            "time": "6:00 AM"
+          }
+        ]
+      },
+      "venues": {
+        "items": [
+          {
+            "label": "Phere",
+            "address": "The Oberoi Udaivilas, Udaipur",
+            "mapEmbed": "",
+            "mapLink": ""
+          },
+          {
+            "label": "Sangeet",
+            "address": "Lakeside Lawns, Pichola",
+            "mapEmbed": "",
+            "mapLink": ""
+          }
+        ]
+      },
+      "gallery": {
+        "title": "Our Story",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      },
+      "contact": {
+        "phone": "+919800000000",
+        "phone2": "+919811111111"
+      }
+    },
+    "want": [
+      "Groom",
+      "Vihaan & Ananya",
+      "THURSDAY"
+    ],
+    "reject": [
+      "S/O",
+      "Rajasthan",
+      "Best wishes from",
+      "AT 7",
+      "With the blessings",
+      "Two souls"
+    ]
+  },
+  {
+    "name": "Hindi text and very long names",
+    "data": {
+      "couple": {
+        "groomName": "विहान मल्होत्रा",
+        "brideName": "Ananya Ritu Kapoor-Venkataraman",
+        "groomParentPrefix": "S/O",
+        "groomParentsName": "Shri Rakesh & Smt. Neeta Malhotra",
+        "brideParentPrefix": "D/O",
+        "brideParentsName": "Shri Anil Kapoor|& Smt. Ritu Kapoor",
+        "groomPlace": "Udaipur, Rajasthan",
+        "bridePlace": "Jaipur, Rajasthan"
+      },
+      "ceremony": {
+        "date": "2099-11-20",
+        "time": "7:30 PM - 11:00 PM",
+        "address": "The Oberoi Udaivilas, Udaipur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": "https://www.google.com/maps/embed?x"
+      },
+      "messages": {
+        "quote": "Two souls, one journey, and the blessings of both our families.",
+        "togetherQuote": "Forever",
+        "invitationMessage": "With the blessings of our elders, we invite you to our wedding.",
+        "welcomeMessage": "Your presence and blessings will make our day complete.",
+        "blessingsFrom": "समस्त मल्होत्रा परिवार"
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "मेहंदी",
+            "date": "2099-11-19",
+            "time": "4:00 PM"
+          },
+          {
+            "title": "Sangeet & Cocktail Night by the Lake",
+            "date": "2099-11-19",
+            "time": "8:00 PM"
+          },
+          {
+            "title": "Phere",
+            "date": "2099-11-20",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Vidaai",
+            "date": "",
+            "time": "6:00 AM"
+          }
+        ]
+      },
+      "venues": {
+        "items": [
+          {
+            "label": "Phere",
+            "address": "The Oberoi Udaivilas, Udaipur",
+            "mapEmbed": "",
+            "mapLink": ""
+          },
+          {
+            "label": "Sangeet",
+            "address": "Lakeside Lawns, Pichola",
+            "mapEmbed": "",
+            "mapLink": ""
+          }
+        ]
+      },
+      "gallery": {
+        "title": "Our Story",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      },
+      "contact": {
+        "phone": "+919800000000",
+        "phone2": "+919811111111"
+      }
+    },
+    "want": [
+      "विहान मल्होत्रा",
+      "Ananya Ritu Kapoor-Venkataraman",
+      "मेहंदी",
+      "Sangeet & Cocktail",
+      "Night by the Lake",
+      "समस्त मल्होत्रा परिवार"
+    ]
+  },
+  {
+    "name": "wrong types, HTML and bad photo links",
+    "data": {
+      "couple": {
+        "groomName": "<b>Vihaan</b>",
+        "brideName": 42,
+        "groomParentsName": {
+          "a": 1
+        },
+        "groomPlace": [
+          "x"
+        ]
+      },
+      "ceremony": {
+        "date": 20991120,
+        "address": "<img src=x onerror=alert(1)>"
+      },
+      "messages": {
+        "quote": 7,
+        "blessingsFrom": null
+      },
+      "timeline": {
+        "items": [
+          "oops",
+          null,
+          {
+            "title": "Phere",
+            "date": {
+              "x": 1
+            },
+            "time": 5
+          }
+        ]
+      },
+      "venues": {
+        "items": [
+          null,
+          "x",
+          {
+            "label": "Lawns"
+          }
+        ]
+      },
+      "gallery": {
+        "title": {
+          "a": 1
+        },
+        "items": [
+          {
+            "image": "javascript:alert(1)"
+          },
+          {
+            "image": "https://example.invalid/missing.jpg"
+          }
+        ]
+      }
+    },
+    "want": [
+      "<b>Vihaan</b>",
+      "42",
+      "7",
+      "Phere",
+      "5",
+      "Lawns",
+      "<img src=x onerror=alert(1)>",
+      "A Glimpse of Us"
+    ],
+    "reject": [
+      "[object Object]",
+      "undefined",
+      "null",
+      "NaN",
+      "Best wishes from"
+    ]
+  },
+  {
+    "name": "one photo",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "groomParentPrefix": "S/O",
+        "groomParentsName": "Shri Rakesh & Smt. Neeta Malhotra",
+        "brideParentPrefix": "D/O",
+        "brideParentsName": "Shri Anil Kapoor|& Smt. Ritu Kapoor",
+        "groomPlace": "Udaipur, Rajasthan",
+        "bridePlace": "Jaipur, Rajasthan"
+      },
+      "ceremony": {
+        "date": "2099-11-20",
+        "time": "7:30 PM - 11:00 PM",
+        "address": "The Oberoi Udaivilas, Udaipur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": "https://www.google.com/maps/embed?x"
+      },
+      "messages": {
+        "quote": "Two souls, one journey, and the blessings of both our families.",
+        "togetherQuote": "Forever",
+        "invitationMessage": "With the blessings of our elders, we invite you to our wedding.",
+        "welcomeMessage": "Your presence and blessings will make our day complete.",
+        "blessingsFrom": "Dadaji & Dadiji|Cousins: Riya, Kabir, Meher"
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "2099-11-19",
+            "time": "4:00 PM"
+          },
+          {
+            "title": "Sangeet",
+            "date": "2099-11-19",
+            "time": "8:00 PM"
+          },
+          {
+            "title": "Phere",
+            "date": "2099-11-20",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Vidaai",
+            "date": "",
+            "time": "6:00 AM"
+          }
+        ]
+      },
+      "venues": {
+        "items": [
+          {
+            "label": "Phere",
+            "address": "The Oberoi Udaivilas, Udaipur",
+            "mapEmbed": "",
+            "mapLink": ""
+          },
+          {
+            "label": "Sangeet",
+            "address": "Lakeside Lawns, Pichola",
+            "mapEmbed": "",
+            "mapLink": ""
+          }
+        ]
+      },
+      "gallery": {
+        "title": "Our Story",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          }
+        ]
+      },
+      "contact": {
+        "phone": "+919800000000",
+        "phone2": "+919811111111"
+      }
+    },
+    "want": [
+      "Our Story"
+    ]
+  },
+  {
+    "name": "five photos",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "groomParentPrefix": "S/O",
+        "groomParentsName": "Shri Rakesh & Smt. Neeta Malhotra",
+        "brideParentPrefix": "D/O",
+        "brideParentsName": "Shri Anil Kapoor|& Smt. Ritu Kapoor",
+        "groomPlace": "Udaipur, Rajasthan",
+        "bridePlace": "Jaipur, Rajasthan"
+      },
+      "ceremony": {
+        "date": "2099-11-20",
+        "time": "7:30 PM - 11:00 PM",
+        "address": "The Oberoi Udaivilas, Udaipur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": "https://www.google.com/maps/embed?x"
+      },
+      "messages": {
+        "quote": "Two souls, one journey, and the blessings of both our families.",
+        "togetherQuote": "Forever",
+        "invitationMessage": "With the blessings of our elders, we invite you to our wedding.",
+        "welcomeMessage": "Your presence and blessings will make our day complete.",
+        "blessingsFrom": "Dadaji & Dadiji|Cousins: Riya, Kabir, Meher"
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "2099-11-19",
+            "time": "4:00 PM"
+          },
+          {
+            "title": "Sangeet",
+            "date": "2099-11-19",
+            "time": "8:00 PM"
+          },
+          {
+            "title": "Phere",
+            "date": "2099-11-20",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Vidaai",
+            "date": "",
+            "time": "6:00 AM"
+          }
+        ]
+      },
+      "venues": {
+        "items": [
+          {
+            "label": "Phere",
+            "address": "The Oberoi Udaivilas, Udaipur",
+            "mapEmbed": "",
+            "mapLink": ""
+          },
+          {
+            "label": "Sangeet",
+            "address": "Lakeside Lawns, Pichola",
+            "mapEmbed": "",
+            "mapLink": ""
+          }
+        ]
+      },
+      "gallery": {
+        "title": "Our Story",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png"
+          }
+        ]
+      },
+      "contact": {
+        "phone": "+919800000000",
+        "phone2": "+919811111111"
+      }
+    },
+    "want": [
+      "Our Story"
+    ]
+  }
+]

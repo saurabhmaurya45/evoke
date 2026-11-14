@@ -37,7 +37,7 @@ async def quote_route(
 @router.post(
     "/checkout",
     response_model=Envelope[CheckoutOut],
-    summary="Publish a free invitation or start payment for a paid one",
+    summary="Publish an invitation, or start payment for it and/or its video",
     responses=conflict(
         "FREE_INVITATION_LIMIT",
         "You already have the maximum number of published invitations on free templates"
@@ -53,9 +53,19 @@ async def checkout_route(
     """Free template (or already paid): publishes and returns `paymentRequired=false`.
     Paid template: returns a Razorpay `checkoutUrl` the frontend should redirect to.
 
+    With `includeVideo=true` the invitation's video is added to the same payment. If the
+    invitation itself needs no payment it is published first and the link is for the video
+    alone. A video already bought is never charged again.
+
+    Calling this on a live invitation publishes its latest changes: if its video was
+    bought, a new video is made from them (the old file is replaced; no versions are kept).
+
     Publishing a free template counts toward the per-user free limit (default 2);
-    past it, `409 FREE_INVITATION_LIMIT`."""
-    return Envelope(data=await start_checkout(db, client, current_user, data.event_id))
+    past it, `409 FREE_INVITATION_LIMIT`. `409 REEL_NOT_AVAILABLE` if the video is asked
+    for but the template has none."""
+    return Envelope(
+        data=await start_checkout(db, client, current_user, data.event_id, data.include_video)
+    )
 
 
 @router.get("/razorpay/callback", include_in_schema=False)

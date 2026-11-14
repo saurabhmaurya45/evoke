@@ -15,6 +15,8 @@
  *   --allow-hosts <a,b>  only fetch from these hosts (and the film's own song's), over https. For
  *                        rendering data that users control: anything else falls back to the film's own
  *                        image or song. The render worker always sets this.
+ *   --preview            a preview to show before the video is bought: 540x960, lower quality, with a
+ *                        watermark burned into every frame so it is no use without paying.
  *
  * The data is used exactly as saved: a section with nothing in it is left out of the video, and sample
  * text the user saved is shown like any other text. With neither --data nor --slug it renders the
@@ -41,6 +43,8 @@ function fail(message) {
   process.exit(1);
 }
 
+const FLAGS = ['preview'];
+
 function parseArgs(argv) {
   const opts = { template: null };
   for (let i = 0; i < argv.length; i++) {
@@ -50,6 +54,7 @@ function parseArgs(argv) {
       continue;
     }
     const key = argv[i].slice(2);
+    if (FLAGS.includes(key)) { opts[key] = true; continue; }
     if (!['data', 'slug', 'api', 'out', 'song', 'bpm', 'song-start', 'stills', 'allow-hosts'].includes(key)) fail(`Unknown option --${key}.`);
     if (argv[i + 1] === undefined) fail(`--${key} needs a value.`);
     opts[key] = argv[++i];
@@ -150,6 +155,30 @@ async function resolveSong(opts, meta, data, defaults, filmSeconds, firstBar, ho
   return { song, bpm, firstBeat };
 }
 
+/** A transparent 1080x1920 PNG of the preview watermark: diagonal rows of text across the whole
+ * frame (so no crop escapes it) and a large PREVIEW in the middle, light with a dark edge so it shows on
+ * any background. */
+async function makeWatermark(browser, out) {
+  const file = out.replace(/.mp4$/i, '') + '-watermark.png';
+  const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
+  try {
+    const row = Array(6).fill('PREVIEW · theinvitely.in').join('   ');
+    const rows = Array.from({ length: 22 }, (_, i) => `<div style="margin-left:${(i % 2) * -260}px">${row}</div>`).join('');
+    await page.setContent(`<!doctype html><html><body style="margin:0;width:1080px;height:1920px;overflow:hidden;background:transparent">
+      <div style="position:absolute;left:-900px;top:-700px;width:2900px;transform:rotate(-30deg);transform-origin:center;
+        font:600 46px/150px Arial,sans-serif;white-space:nowrap;color:rgba(255,255,255,.42);
+        -webkit-text-stroke:1.5px rgba(0,0,0,.35);letter-spacing:2px">${rows}</div>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+        <div style="transform:rotate(-30deg);font:800 200px/1 Arial,sans-serif;letter-spacing:12px;color:rgba(255,255,255,.5);
+          -webkit-text-stroke:4px rgba(0,0,0,.4)">PREVIEW</div></div>
+    </body></html>`);
+    await page.screenshot({ path: file, omitBackground: true });
+  } finally {
+    await page.close();
+  }
+  return file;
+}
+
 async function main() {
   const opts = parseArgs(process.argv.slice(2));
   const templates = availableTemplates();
@@ -204,6 +233,7 @@ async function main() {
       return;
     }
 
+    const watermark = opts.preview ? await makeWatermark(browser, out) : null;
     const { song, bpm, firstBeat } = await resolveSong(opts, meta, data, defaults, filmSeconds, firstBar, hosts);
     // The film is choreographed at meta.bpm; playing it faster or slower puts its cuts on this song's beat.
     const speed = bpm / meta.bpm;
@@ -215,11 +245,16 @@ async function main() {
       '-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
       // A song shorter than the film loops instead of leaving the end silent.
       ...SONG_INPUT_OPTIONS, '-stream_loop', '-1', '-ss', songStart.toFixed(3), '-t', seconds.toFixed(3), '-i', song,
+      ...(watermark ? ['-i', watermark] : []),
       '-filter_complex',
-      `[0:v]scale=in_range=pc:out_range=tv,format=yuv420p[v];[1:a]afade=t=in:d=0.5,afade=t=out:st=${Math.max(0, seconds - 2).toFixed(3)}:d=2[a]`,
+      // The watermark goes on before scaling down, so it is part of every pixel that is kept.
+      `[0:v]${watermark ? '[2:v]overlay=0:0,scale=540:960,' : ''}scale=in_range=pc:out_range=tv,format=yuv420p[v];` +
+        `[1:a]afade=t=in:d=0.5,afade=t=out:st=${Math.max(0, seconds - 2).toFixed(3)}:d=2[a]`,
       '-map', '[v]', '-map', '[a]', '-t', seconds.toFixed(3),
-      '-c:v', 'libx264', '-preset', 'slow', '-crf', '20', '-maxrate', '16M', '-bufsize', '32M', '-color_range', 'tv',
-      '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', out,
+      ...(watermark
+        ? ['-c:v', 'libx264', '-preset', 'medium', '-crf', '30', '-maxrate', '2M', '-bufsize', '4M', '-color_range', 'tv', '-c:a', 'aac', '-b:a', '96k']
+        : ['-c:v', 'libx264', '-preset', 'slow', '-crf', '20', '-maxrate', '16M', '-bufsize', '32M', '-color_range', 'tv', '-c:a', 'aac', '-b:a', '192k']),
+      '-movflags', '+faststart', out,
     ], { stdin: true });
     child.stdin.on('error', () => {}); // a dead ffmpeg is reported through `done`
     let ffmpegFailed = null;
@@ -234,6 +269,7 @@ async function main() {
     }
     child.stdin.end();
     await done.catch((e) => { throw new Error(`Could not make the video (is the song reachable and the output path writable?): ${e.message.trim().split('\n').pop()}`); });
+    if (watermark) fs.rmSync(watermark, { force: true });
     if (pageErrors.length) throw new Error(`The film hit an error while rendering: ${pageErrors[0]}`);
     console.log(`Done: ${out} (${seconds.toFixed(1)}s, ${(fs.statSync(out).size / 1e6).toFixed(1)} MB)`);
   } finally {

@@ -177,3 +177,25 @@ app-loader {
 .pay__icon--success { background: rgba(80, 170, 110, 0.15); color: #4caf73; }
 .pay__icon--failed { background: rgba(200, 60, 60, 0.12); color: #d9534f; }
 .pay__icon--pending { background: rgba(201, 162, 39, 0.15); color: $color-gold; }
+
+.pay__video {
+  max-width: 460px;
+  margin: 0 auto 24px;
+}
+
+.pay__row--option {
+  cursor: pointer;
+
+  .pay__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(var(--text-rgb), 0.85);
+  }
+
+  input {
+    width: 18px;
+    height: 18px;
+    accent-color: $color-gold;
+  }
+}

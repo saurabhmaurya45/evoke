@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { type Observable, map } from 'rxjs';
 
 export type BackendPaymentStatus = 'CREATED' | 'PAID' | 'FAILED' | 'EXPIRED' | 'CANCELLED';
 export type BackendEventStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
@@ -17,6 +17,11 @@ export interface PriceQuote {
   readonly currency: string;
   readonly paymentRequired: boolean;
   readonly alreadyPaid: boolean;
+  /** The template has a video film, so the video can be added to the order. */
+  readonly videoAvailable: boolean;
+  readonly videoPriceMinor: number;
+  readonly videoCurrency: string;
+  readonly videoAlreadyPaid: boolean;
 }
 
 export interface CheckoutResult {
@@ -33,6 +38,8 @@ export interface Payment {
   readonly eventId: string;
   readonly templateName: string | null;
   readonly status: BackendPaymentStatus;
+  readonly includesTemplate: boolean;
+  readonly includesVideo: boolean;
   readonly amountMinor: number;
   readonly currency: string;
   readonly checkoutUrl: string | null;
@@ -60,10 +67,14 @@ export class PaymentApiService {
       .pipe(map((res) => res.data));
   }
 
-  /** Publishes free templates immediately; for paid ones returns a Razorpay checkout URL. */
-  checkout(eventId: string): Observable<CheckoutResult> {
+  /**
+   * Publishes when nothing is due (also publishing a live invitation's latest changes);
+   * otherwise returns a Razorpay checkout URL for the invitation and/or, with
+   * `includeVideo`, its video.
+   */
+  checkout(eventId: string, includeVideo = false): Observable<CheckoutResult> {
     return this.http
-      .post<Envelope<CheckoutResult>>('v1/payments/checkout', { eventId })
+      .post<Envelope<CheckoutResult>>('v1/payments/checkout', { eventId, includeVideo })
       .pipe(map((res) => res.data));
   }
 

@@ -1,0 +1,1268 @@
+[
+  {
+    "name": "saved with all the sample text",
+    "data": "$sample",
+    "want": [
+      "Arjun",
+      "Priya",
+      "ॐ मंगलं भगवान् विष्णुः",
+      "मंगलं गरुडध्वजः",
+      "WEDS",
+      "With the heavenly blessings of",
+      "Smt. Savitri Sharma",
+      "The Sharma Family",
+      "INVITES",
+      "you to join us in the wedding celebrations of",
+      "S/O",
+      "Rajesh Sharma and Sunita Sharma",
+      "D/O",
+      "On the following events",
+      "Haldi",
+      "Cocktail",
+      "Vivah (Pheras)",
+      "Mehendi",
+      "Join Us at 4 pm",
+      "The Leela Palace, Udaipur",
+      "The Journey Begins",
+      "Love From Us",
+      "Thank you for being",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "INTRODUCING",
+      "A Guide for Guests",
+      "Weather",
+      "Parking"
+    ]
+  },
+  {
+    "name": "every section filled with new details",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      },
+      "invite": {
+        "line1": "request the pleasure of your company at the wedding of",
+        "line2": "Please join us for",
+        "invites": "INVITE"
+      },
+      "family": {
+        "name": "The Malhotra Family",
+        "blessings": "With the blessings of\nSmt. Kamla Devi and Shri Ram Prakash Malhotra",
+        "groomParents": "S/O\nRakesh Malhotra and Neeta Malhotra",
+        "brideParents": "D/O\nAnil Kapoor and Ritu Kapoor"
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Mehendi",
+            "schedule": "Friday, 19 November 2099\n4 pm onwards\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "https://maps.google.com/?q=Udaivilas",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "name": "Sangeet",
+            "schedule": "Friday, 19 November 2099\n8 pm\nLakeside Lawns",
+            "directionsUrl": "",
+            "photo": ""
+          },
+          {
+            "name": "Phere",
+            "schedule": "Saturday, 20 November 2099\n7 pm\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "gallery": {
+        "photo1": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "photo2": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+        "photo3": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+        "photo4": "",
+        "photo5": "",
+        "photo6": "",
+        "photo7": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "journey": {
+        "title": "Two Families, One Celebration",
+        "subtitle": "We would be honoured to have you with us as we take our seven pheras."
+      },
+      "thanks": {
+        "title": "With\nGratitude",
+        "body": "Thank you for blessing us with your love."
+      },
+      "intro": {
+        "small": "MEET",
+        "heading": "Bride & Groom"
+      },
+      "info": {
+        "weatherTitle": "Weather",
+        "weatherBody": "Sunny",
+        "staffTitle": "Stay",
+        "staffBody": "Hotel",
+        "parkingTitle": "Parking",
+        "parkingBody": "Valet"
+      },
+      "guide": {
+        "title": "A Guide for Guests",
+        "subtitle": "Details below."
+      }
+    },
+    "want": [
+      "Vihaan",
+      "Ananya",
+      "ॐ मंगलं भगवान् विष्णुः",
+      "With the blessings of",
+      "Smt. Kamla Devi",
+      "The Malhotra Family",
+      "INVITE",
+      "request the pleasure of your company",
+      "Rakesh Malhotra and Neeta Malhotra",
+      "Anil Kapoor and Ritu Kapoor",
+      "Please join us for",
+      "Mehendi",
+      "Friday, 19 November 2099",
+      "Lakeside Lawns",
+      "Phere",
+      "MEET",
+      "Bride & Groom",
+      "Two Families, One Celebration",
+      "seven pheras",
+      "Gratitude",
+      "Thank you for",
+      "aisa invitation banaiye"
+    ],
+    "reject": [
+      "Arjun",
+      "Priya",
+      "The Sharma Family",
+      "Savitri",
+      "The Leela Palace",
+      "Cocktail",
+      "The Journey Begins",
+      "Love From Us",
+      "INVITES",
+      "INTRODUCING",
+      "A Guide for Guests",
+      "Weather",
+      "Parking"
+    ]
+  },
+  {
+    "name": "only the two names",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      }
+    },
+    "want": [
+      "Vihaan",
+      "Ananya",
+      "WEDS",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "The Malhotra Family",
+      "INVITE",
+      "Mehendi",
+      "Bride & Groom",
+      "Two Families",
+      "Gratitude"
+    ]
+  },
+  {
+    "name": "no blessings or family",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      },
+      "invite": {
+        "line1": "request the pleasure of your company at the wedding of",
+        "line2": "Please join us for",
+        "invites": "INVITE"
+      },
+      "family": {
+        "name": "",
+        "blessings": "",
+        "groomParents": "S/O\nRakesh Malhotra and Neeta Malhotra",
+        "brideParents": "D/O\nAnil Kapoor and Ritu Kapoor"
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Mehendi",
+            "schedule": "Friday, 19 November 2099\n4 pm onwards\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "https://maps.google.com/?q=Udaivilas",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "name": "Sangeet",
+            "schedule": "Friday, 19 November 2099\n8 pm\nLakeside Lawns",
+            "directionsUrl": "",
+            "photo": ""
+          },
+          {
+            "name": "Phere",
+            "schedule": "Saturday, 20 November 2099\n7 pm\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "gallery": {
+        "photo1": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "photo2": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+        "photo3": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+        "photo4": "",
+        "photo5": "",
+        "photo6": "",
+        "photo7": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "journey": {
+        "title": "Two Families, One Celebration",
+        "subtitle": "We would be honoured to have you with us as we take our seven pheras."
+      },
+      "thanks": {
+        "title": "With\nGratitude",
+        "body": "Thank you for blessing us with your love."
+      },
+      "intro": {
+        "small": "MEET",
+        "heading": "Bride & Groom"
+      },
+      "info": {
+        "weatherTitle": "Weather",
+        "weatherBody": "Sunny",
+        "staffTitle": "Stay",
+        "staffBody": "Hotel",
+        "parkingTitle": "Parking",
+        "parkingBody": "Valet"
+      },
+      "guide": {
+        "title": "A Guide for Guests",
+        "subtitle": "Details below."
+      }
+    },
+    "want": [
+      "INVITE",
+      "Rakesh Malhotra"
+    ],
+    "reject": [
+      "The Malhotra Family",
+      "Kamla Devi"
+    ]
+  },
+  {
+    "name": "no invite lines or parents",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      },
+      "invite": {
+        "line1": "",
+        "line2": "Please join us for",
+        "invites": "INVITE"
+      },
+      "family": {
+        "name": "The Malhotra Family",
+        "blessings": "With the blessings of\nSmt. Kamla Devi and Shri Ram Prakash Malhotra",
+        "groomParents": "",
+        "brideParents": "  "
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Mehendi",
+            "schedule": "Friday, 19 November 2099\n4 pm onwards\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "https://maps.google.com/?q=Udaivilas",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "name": "Sangeet",
+            "schedule": "Friday, 19 November 2099\n8 pm\nLakeside Lawns",
+            "directionsUrl": "",
+            "photo": ""
+          },
+          {
+            "name": "Phere",
+            "schedule": "Saturday, 20 November 2099\n7 pm\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "gallery": {
+        "photo1": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "photo2": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+        "photo3": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+        "photo4": "",
+        "photo5": "",
+        "photo6": "",
+        "photo7": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "journey": {
+        "title": "Two Families, One Celebration",
+        "subtitle": "We would be honoured to have you with us as we take our seven pheras."
+      },
+      "thanks": {
+        "title": "With\nGratitude",
+        "body": "Thank you for blessing us with your love."
+      },
+      "intro": {
+        "small": "MEET",
+        "heading": "Bride & Groom"
+      },
+      "info": {
+        "weatherTitle": "Weather",
+        "weatherBody": "Sunny",
+        "staffTitle": "Stay",
+        "staffBody": "Hotel",
+        "parkingTitle": "Parking",
+        "parkingBody": "Valet"
+      },
+      "guide": {
+        "title": "A Guide for Guests",
+        "subtitle": "Details below."
+      }
+    },
+    "want": [
+      "The Malhotra Family",
+      "Mehendi"
+    ],
+    "reject": [
+      "INVITE",
+      "Rakesh",
+      "request the pleasure"
+    ]
+  },
+  {
+    "name": "only the groom side parents",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      },
+      "invite": {
+        "line1": "request the pleasure of your company at the wedding of",
+        "line2": "Please join us for",
+        "invites": "INVITE"
+      },
+      "family": {
+        "name": "The Malhotra Family",
+        "blessings": "With the blessings of\nSmt. Kamla Devi and Shri Ram Prakash Malhotra",
+        "groomParents": "S/O\nRakesh Malhotra and Neeta Malhotra",
+        "brideParents": ""
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Mehendi",
+            "schedule": "Friday, 19 November 2099\n4 pm onwards\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "https://maps.google.com/?q=Udaivilas",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "name": "Sangeet",
+            "schedule": "Friday, 19 November 2099\n8 pm\nLakeside Lawns",
+            "directionsUrl": "",
+            "photo": ""
+          },
+          {
+            "name": "Phere",
+            "schedule": "Saturday, 20 November 2099\n7 pm\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "gallery": {
+        "photo1": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "photo2": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+        "photo3": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+        "photo4": "",
+        "photo5": "",
+        "photo6": "",
+        "photo7": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "journey": {
+        "title": "Two Families, One Celebration",
+        "subtitle": "We would be honoured to have you with us as we take our seven pheras."
+      },
+      "thanks": {
+        "title": "With\nGratitude",
+        "body": "Thank you for blessing us with your love."
+      },
+      "intro": {
+        "small": "MEET",
+        "heading": "Bride & Groom"
+      },
+      "info": {
+        "weatherTitle": "Weather",
+        "weatherBody": "Sunny",
+        "staffTitle": "Stay",
+        "staffBody": "Hotel",
+        "parkingTitle": "Parking",
+        "parkingBody": "Valet"
+      },
+      "guide": {
+        "title": "A Guide for Guests",
+        "subtitle": "Details below."
+      }
+    },
+    "want": [
+      "Rakesh Malhotra and Neeta Malhotra",
+      "INVITE"
+    ],
+    "reject": [
+      "Anil Kapoor",
+      "D/O"
+    ]
+  },
+  {
+    "name": "no events",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      },
+      "invite": {
+        "line1": "request the pleasure of your company at the wedding of",
+        "line2": "Please join us for",
+        "invites": "INVITE"
+      },
+      "family": {
+        "name": "The Malhotra Family",
+        "blessings": "With the blessings of\nSmt. Kamla Devi and Shri Ram Prakash Malhotra",
+        "groomParents": "S/O\nRakesh Malhotra and Neeta Malhotra",
+        "brideParents": "D/O\nAnil Kapoor and Ritu Kapoor"
+      },
+      "events": {
+        "items": []
+      },
+      "gallery": {
+        "photo1": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "photo2": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+        "photo3": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+        "photo4": "",
+        "photo5": "",
+        "photo6": "",
+        "photo7": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "journey": {
+        "title": "Two Families, One Celebration",
+        "subtitle": "We would be honoured to have you with us as we take our seven pheras."
+      },
+      "thanks": {
+        "title": "With\nGratitude",
+        "body": "Thank you for blessing us with your love."
+      },
+      "intro": {
+        "small": "MEET",
+        "heading": "Bride & Groom"
+      },
+      "info": {
+        "weatherTitle": "Weather",
+        "weatherBody": "Sunny",
+        "staffTitle": "Stay",
+        "staffBody": "Hotel",
+        "parkingTitle": "Parking",
+        "parkingBody": "Valet"
+      },
+      "guide": {
+        "title": "A Guide for Guests",
+        "subtitle": "Details below."
+      }
+    },
+    "want": [
+      "Bride & Groom"
+    ],
+    "reject": [
+      "Mehendi",
+      "Please join us for"
+    ]
+  },
+  {
+    "name": "no photos",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      },
+      "invite": {
+        "line1": "request the pleasure of your company at the wedding of",
+        "line2": "Please join us for",
+        "invites": "INVITE"
+      },
+      "family": {
+        "name": "The Malhotra Family",
+        "blessings": "With the blessings of\nSmt. Kamla Devi and Shri Ram Prakash Malhotra",
+        "groomParents": "S/O\nRakesh Malhotra and Neeta Malhotra",
+        "brideParents": "D/O\nAnil Kapoor and Ritu Kapoor"
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Mehendi",
+            "schedule": "Friday, 19 November 2099\n4 pm onwards\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "https://maps.google.com/?q=Udaivilas",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "name": "Sangeet",
+            "schedule": "Friday, 19 November 2099\n8 pm\nLakeside Lawns",
+            "directionsUrl": "",
+            "photo": ""
+          },
+          {
+            "name": "Phere",
+            "schedule": "Saturday, 20 November 2099\n7 pm\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "gallery": {},
+      "journey": {
+        "title": "Two Families, One Celebration",
+        "subtitle": "We would be honoured to have you with us as we take our seven pheras."
+      },
+      "thanks": {
+        "title": "With\nGratitude",
+        "body": "Thank you for blessing us with your love."
+      },
+      "intro": {
+        "small": "MEET",
+        "heading": "Bride & Groom"
+      },
+      "info": {
+        "weatherTitle": "Weather",
+        "weatherBody": "Sunny",
+        "staffTitle": "Stay",
+        "staffBody": "Hotel",
+        "parkingTitle": "Parking",
+        "parkingBody": "Valet"
+      },
+      "guide": {
+        "title": "A Guide for Guests",
+        "subtitle": "Details below."
+      }
+    },
+    "want": [
+      "Two Families"
+    ],
+    "reject": [
+      "Bride & Groom",
+      "MEET"
+    ]
+  },
+  {
+    "name": "no journey",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      },
+      "invite": {
+        "line1": "request the pleasure of your company at the wedding of",
+        "line2": "Please join us for",
+        "invites": "INVITE"
+      },
+      "family": {
+        "name": "The Malhotra Family",
+        "blessings": "With the blessings of\nSmt. Kamla Devi and Shri Ram Prakash Malhotra",
+        "groomParents": "S/O\nRakesh Malhotra and Neeta Malhotra",
+        "brideParents": "D/O\nAnil Kapoor and Ritu Kapoor"
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Mehendi",
+            "schedule": "Friday, 19 November 2099\n4 pm onwards\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "https://maps.google.com/?q=Udaivilas",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "name": "Sangeet",
+            "schedule": "Friday, 19 November 2099\n8 pm\nLakeside Lawns",
+            "directionsUrl": "",
+            "photo": ""
+          },
+          {
+            "name": "Phere",
+            "schedule": "Saturday, 20 November 2099\n7 pm\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "gallery": {
+        "photo1": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "photo2": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+        "photo3": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+        "photo4": "",
+        "photo5": "",
+        "photo6": "",
+        "photo7": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "journey": {
+        "title": " ",
+        "subtitle": ""
+      },
+      "thanks": {
+        "title": "With\nGratitude",
+        "body": "Thank you for blessing us with your love."
+      },
+      "intro": {
+        "small": "MEET",
+        "heading": "Bride & Groom"
+      },
+      "info": {
+        "weatherTitle": "Weather",
+        "weatherBody": "Sunny",
+        "staffTitle": "Stay",
+        "staffBody": "Hotel",
+        "parkingTitle": "Parking",
+        "parkingBody": "Valet"
+      },
+      "guide": {
+        "title": "A Guide for Guests",
+        "subtitle": "Details below."
+      }
+    },
+    "want": [
+      "Gratitude"
+    ],
+    "reject": [
+      "Two Families",
+      "seven pheras"
+    ]
+  },
+  {
+    "name": "no thank-you",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      },
+      "invite": {
+        "line1": "request the pleasure of your company at the wedding of",
+        "line2": "Please join us for",
+        "invites": "INVITE"
+      },
+      "family": {
+        "name": "The Malhotra Family",
+        "blessings": "With the blessings of\nSmt. Kamla Devi and Shri Ram Prakash Malhotra",
+        "groomParents": "S/O\nRakesh Malhotra and Neeta Malhotra",
+        "brideParents": "D/O\nAnil Kapoor and Ritu Kapoor"
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Mehendi",
+            "schedule": "Friday, 19 November 2099\n4 pm onwards\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "https://maps.google.com/?q=Udaivilas",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "name": "Sangeet",
+            "schedule": "Friday, 19 November 2099\n8 pm\nLakeside Lawns",
+            "directionsUrl": "",
+            "photo": ""
+          },
+          {
+            "name": "Phere",
+            "schedule": "Saturday, 20 November 2099\n7 pm\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "gallery": {
+        "photo1": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "photo2": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+        "photo3": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+        "photo4": "",
+        "photo5": "",
+        "photo6": "",
+        "photo7": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "journey": {
+        "title": "Two Families, One Celebration",
+        "subtitle": "We would be honoured to have you with us as we take our seven pheras."
+      },
+      "thanks": {},
+      "intro": {
+        "small": "MEET",
+        "heading": "Bride & Groom"
+      },
+      "info": {
+        "weatherTitle": "Weather",
+        "weatherBody": "Sunny",
+        "staffTitle": "Stay",
+        "staffBody": "Hotel",
+        "parkingTitle": "Parking",
+        "parkingBody": "Valet"
+      },
+      "guide": {
+        "title": "A Guide for Guests",
+        "subtitle": "Details below."
+      }
+    },
+    "want": [
+      "Two Families"
+    ],
+    "reject": [
+      "Gratitude",
+      "Thank you for blessing"
+    ]
+  },
+  {
+    "name": "journey with only a subtitle",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      },
+      "invite": {
+        "line1": "request the pleasure of your company at the wedding of",
+        "line2": "Please join us for",
+        "invites": "INVITE"
+      },
+      "family": {
+        "name": "The Malhotra Family",
+        "blessings": "With the blessings of\nSmt. Kamla Devi and Shri Ram Prakash Malhotra",
+        "groomParents": "S/O\nRakesh Malhotra and Neeta Malhotra",
+        "brideParents": "D/O\nAnil Kapoor and Ritu Kapoor"
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Mehendi",
+            "schedule": "Friday, 19 November 2099\n4 pm onwards\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "https://maps.google.com/?q=Udaivilas",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "name": "Sangeet",
+            "schedule": "Friday, 19 November 2099\n8 pm\nLakeside Lawns",
+            "directionsUrl": "",
+            "photo": ""
+          },
+          {
+            "name": "Phere",
+            "schedule": "Saturday, 20 November 2099\n7 pm\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "gallery": {
+        "photo1": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "photo2": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+        "photo3": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+        "photo4": "",
+        "photo5": "",
+        "photo6": "",
+        "photo7": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "journey": {
+        "title": "",
+        "subtitle": "We would be honoured to have you with us as we take our seven pheras."
+      },
+      "thanks": {
+        "title": "With\nGratitude",
+        "body": "Thank you for blessing us with your love."
+      },
+      "intro": {
+        "small": "MEET",
+        "heading": "Bride & Groom"
+      },
+      "info": {
+        "weatherTitle": "Weather",
+        "weatherBody": "Sunny",
+        "staffTitle": "Stay",
+        "staffBody": "Hotel",
+        "parkingTitle": "Parking",
+        "parkingBody": "Valet"
+      },
+      "guide": {
+        "title": "A Guide for Guests",
+        "subtitle": "Details below."
+      }
+    },
+    "want": [
+      "seven pheras"
+    ],
+    "reject": [
+      "Two Families"
+    ]
+  },
+  {
+    "name": "blank strings everywhere but the names",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      },
+      "invite": {
+        "line1": " ",
+        "line2": " ",
+        "invites": " "
+      },
+      "family": {
+        "name": "  ",
+        "blessings": "\n \n",
+        "groomParents": " ",
+        "brideParents": ""
+      },
+      "events": {
+        "items": [
+          {
+            "name": "  ",
+            "schedule": "Friday",
+            "photo": ""
+          }
+        ]
+      },
+      "gallery": {
+        "photo1": "  ",
+        "photo7": " "
+      },
+      "journey": {
+        "title": " ",
+        "subtitle": " "
+      },
+      "thanks": {
+        "title": "\n",
+        "body": "  "
+      },
+      "intro": {
+        "small": " ",
+        "heading": " "
+      }
+    },
+    "want": [
+      "Vihaan",
+      "Ananya"
+    ],
+    "reject": [
+      "The Malhotra Family",
+      "INVITE",
+      "Mehendi",
+      "Bride & Groom",
+      "Two Families",
+      "Gratitude",
+      "Friday"
+    ]
+  },
+  {
+    "name": "Hindi text and very long names",
+    "data": {
+      "couple": {
+        "groomName": "विहान मल्होत्रा",
+        "brideName": "Ananya Ritu Kapoor-Venkataraman"
+      },
+      "invite": {
+        "line1": "request the pleasure of your company at the wedding of",
+        "line2": "Please join us for",
+        "invites": "INVITE"
+      },
+      "family": {
+        "name": "The Malhotra Family",
+        "blessings": "स्वर्गीय दादाजी श्री राम प्रकाश मल्होत्रा के आशीर्वाद से",
+        "groomParents": "S/O\nRakesh Malhotra and Neeta Malhotra",
+        "brideParents": "D/O\nAnil Kapoor and Ritu Kapoor"
+      },
+      "events": {
+        "items": [
+          {
+            "name": "मेहंदी",
+            "schedule": "Friday, 19 November 2099\n4 pm onwards\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "https://maps.google.com/?q=Udaivilas",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "name": "Sangeet & Cocktail Night by the Lake Pichola Ghats",
+            "schedule": "Friday, 19 November 2099\n8 pm\nLakeside Lawns",
+            "directionsUrl": "",
+            "photo": ""
+          },
+          {
+            "name": "Phere",
+            "schedule": "Saturday, 20 November 2099\n7 pm\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "gallery": {
+        "photo1": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "photo2": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+        "photo3": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+        "photo4": "",
+        "photo5": "",
+        "photo6": "",
+        "photo7": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "journey": {
+        "title": "Two Families, One Celebration",
+        "subtitle": "We would be honoured to have you with us as we take our seven pheras."
+      },
+      "thanks": {
+        "title": "With\nGratitude",
+        "body": "Thank you for blessing us with your love."
+      },
+      "intro": {
+        "small": "MEET",
+        "heading": "Bride & Groom"
+      },
+      "info": {
+        "weatherTitle": "Weather",
+        "weatherBody": "Sunny",
+        "staffTitle": "Stay",
+        "staffBody": "Hotel",
+        "parkingTitle": "Parking",
+        "parkingBody": "Valet"
+      },
+      "guide": {
+        "title": "A Guide for Guests",
+        "subtitle": "Details below."
+      }
+    },
+    "want": [
+      "विहान मल्होत्रा",
+      "Ananya Ritu Kapoor-Venkataraman",
+      "स्वर्गीय दादाजी",
+      "मेहंदी",
+      "Sangeet & Cocktail Night by the Lake Pichola Ghats"
+    ]
+  },
+  {
+    "name": "wrong types, HTML and bad photo links",
+    "data": {
+      "couple": {
+        "groomName": "<b>Vihaan</b>",
+        "brideName": 42
+      },
+      "invite": {
+        "line1": {
+          "a": 1
+        },
+        "invites": [
+          "x"
+        ]
+      },
+      "family": {
+        "name": "<img src=x onerror=alert(1)>",
+        "blessings": 7,
+        "groomParents": null
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Phere",
+            "schedule": {
+              "s": 1
+            },
+            "photo": "javascript:alert(1)"
+          },
+          {
+            "name": "Sangeet",
+            "schedule": "Lawns",
+            "photo": "https://example.invalid/missing.jpg"
+          },
+          "oops",
+          null
+        ]
+      },
+      "gallery": {
+        "photo1": "javascript:alert(1)",
+        "photo2": 5
+      },
+      "journey": "x",
+      "thanks": {
+        "title": [
+          "a"
+        ],
+        "body": "Thanks"
+      }
+    },
+    "want": [
+      "<b>Vihaan</b>",
+      "42",
+      "<img src=x onerror=alert(1)>",
+      "7",
+      "Phere",
+      "Sangeet",
+      "Lawns",
+      "Thanks"
+    ],
+    "reject": [
+      "[object Object]",
+      "undefined",
+      "null",
+      "MEET"
+    ]
+  },
+  {
+    "name": "one event with a photo",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      },
+      "invite": {
+        "line1": "request the pleasure of your company at the wedding of",
+        "line2": "Please join us for",
+        "invites": "INVITE"
+      },
+      "family": {
+        "name": "The Malhotra Family",
+        "blessings": "With the blessings of\nSmt. Kamla Devi and Shri Ram Prakash Malhotra",
+        "groomParents": "S/O\nRakesh Malhotra and Neeta Malhotra",
+        "brideParents": "D/O\nAnil Kapoor and Ritu Kapoor"
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Mehendi",
+            "schedule": "Friday, 19 November 2099\n4 pm onwards\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "https://maps.google.com/?q=Udaivilas",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          }
+        ]
+      },
+      "gallery": {
+        "photo1": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "photo2": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+        "photo3": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+        "photo4": "",
+        "photo5": "",
+        "photo6": "",
+        "photo7": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "journey": {
+        "title": "Two Families, One Celebration",
+        "subtitle": "We would be honoured to have you with us as we take our seven pheras."
+      },
+      "thanks": {
+        "title": "With\nGratitude",
+        "body": "Thank you for blessing us with your love."
+      },
+      "intro": {
+        "small": "MEET",
+        "heading": "Bride & Groom"
+      },
+      "info": {
+        "weatherTitle": "Weather",
+        "weatherBody": "Sunny",
+        "staffTitle": "Stay",
+        "staffBody": "Hotel",
+        "parkingTitle": "Parking",
+        "parkingBody": "Valet"
+      },
+      "guide": {
+        "title": "A Guide for Guests",
+        "subtitle": "Details below."
+      }
+    },
+    "want": [
+      "Mehendi",
+      "The Oberoi Udaivilas, Udaipur"
+    ],
+    "reject": [
+      "Sangeet",
+      "Phere"
+    ]
+  },
+  {
+    "name": "eight events: the template shows six",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      },
+      "invite": {
+        "line1": "request the pleasure of your company at the wedding of",
+        "line2": "Please join us for",
+        "invites": "INVITE"
+      },
+      "family": {
+        "name": "The Malhotra Family",
+        "blessings": "With the blessings of\nSmt. Kamla Devi and Shri Ram Prakash Malhotra",
+        "groomParents": "S/O\nRakesh Malhotra and Neeta Malhotra",
+        "brideParents": "D/O\nAnil Kapoor and Ritu Kapoor"
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Roka",
+            "schedule": "Day 1\n4 pm",
+            "photo": ""
+          },
+          {
+            "name": "Haldi",
+            "schedule": "Day 2\n5 pm",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "name": "Mehendi",
+            "schedule": "Day 3\n6 pm",
+            "photo": ""
+          },
+          {
+            "name": "Sangeet",
+            "schedule": "Day 4\n7 pm",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+          },
+          {
+            "name": "Baraat",
+            "schedule": "Day 5\n8 pm",
+            "photo": ""
+          },
+          {
+            "name": "Phere",
+            "schedule": "Day 6\n9 pm",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "name": "Vidaai",
+            "schedule": "Day 7\n10 pm",
+            "photo": ""
+          },
+          {
+            "name": "Reception",
+            "schedule": "Day 8\n11 pm",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      },
+      "gallery": {
+        "photo1": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "photo2": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+        "photo3": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+        "photo4": "",
+        "photo5": "",
+        "photo6": "",
+        "photo7": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "journey": {
+        "title": "Two Families, One Celebration",
+        "subtitle": "We would be honoured to have you with us as we take our seven pheras."
+      },
+      "thanks": {
+        "title": "With\nGratitude",
+        "body": "Thank you for blessing us with your love."
+      },
+      "intro": {
+        "small": "MEET",
+        "heading": "Bride & Groom"
+      },
+      "info": {
+        "weatherTitle": "Weather",
+        "weatherBody": "Sunny",
+        "staffTitle": "Stay",
+        "staffBody": "Hotel",
+        "parkingTitle": "Parking",
+        "parkingBody": "Valet"
+      },
+      "guide": {
+        "title": "A Guide for Guests",
+        "subtitle": "Details below."
+      }
+    },
+    "want": [
+      "Roka",
+      "Phere",
+      "Day 6"
+    ],
+    "reject": [
+      "Vidaai",
+      "Reception"
+    ]
+  },
+  {
+    "name": "all six collage photos and a long thank-you",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      },
+      "invite": {
+        "line1": "request the pleasure of your company at the wedding of",
+        "line2": "Please join us for",
+        "invites": "INVITE"
+      },
+      "family": {
+        "name": "The Malhotra Family",
+        "blessings": "With the blessings of\nSmt. Kamla Devi and Shri Ram Prakash Malhotra",
+        "groomParents": "S/O\nRakesh Malhotra and Neeta Malhotra",
+        "brideParents": "D/O\nAnil Kapoor and Ritu Kapoor"
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Mehendi",
+            "schedule": "Friday, 19 November 2099\n4 pm onwards\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "https://maps.google.com/?q=Udaivilas",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "name": "Sangeet",
+            "schedule": "Friday, 19 November 2099\n8 pm\nLakeside Lawns",
+            "directionsUrl": "",
+            "photo": ""
+          },
+          {
+            "name": "Phere",
+            "schedule": "Saturday, 20 November 2099\n7 pm\nThe Oberoi Udaivilas, Udaipur",
+            "directionsUrl": "",
+            "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "gallery": {
+        "photo1": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "photo2": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+        "photo3": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+        "photo4": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "photo5": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+        "photo6": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+        "photo7": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "journey": {
+        "title": "Two Families, One Celebration",
+        "subtitle": "We would be honoured to have you with us as we take our seven pheras."
+      },
+      "thanks": {
+        "title": "With\nGratitude",
+        "body": "Thank you for being part of our journey.\n\nYour presence makes this celebration truly meaningful, and we look forward to sharing these cherished moments with you and your family."
+      },
+      "intro": {
+        "small": "MEET",
+        "heading": "Bride & Groom"
+      },
+      "info": {
+        "weatherTitle": "Weather",
+        "weatherBody": "Sunny",
+        "staffTitle": "Stay",
+        "staffBody": "Hotel",
+        "parkingTitle": "Parking",
+        "parkingBody": "Valet"
+      },
+      "guide": {
+        "title": "A Guide for Guests",
+        "subtitle": "Details below."
+      }
+    },
+    "want": [
+      "Bride & Groom",
+      "cherished moments",
+      "part of our journey."
+    ]
+  }
+]

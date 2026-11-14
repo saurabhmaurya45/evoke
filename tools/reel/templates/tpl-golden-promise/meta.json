@@ -1,0 +1,14 @@
+{
+  "folder": "template 7",
+  "bpm": 138,
+  "firstBar": 3.4783,
+  "required": [
+    "family.brideName",
+    "family.groomName"
+  ],
+  "song": {
+    "url": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/background-music.mp3",
+    "bpm": 138,
+    "firstBeat": 24.458
+  }
+}

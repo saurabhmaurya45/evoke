@@ -10,6 +10,12 @@ with the repo, under the `asset/` prefix:
     -> <bucket>/asset/invitation-templates/template 4/card.mp4
     -> <PUBLIC_MEDIA_BASE_URL>/asset/invitation-templates/template%204/card.mp4
 
+The invitation-video films' media (frames cut from the templates' videos, which the
+renderer can't play) goes the same way, under `asset/reel-films/`:
+
+  tools/reel/templates/tpl-royal-gate/media/gate/001.webp
+    -> <bucket>/asset/reel-films/tpl-royal-gate/media/gate/001.webp
+
 (`asset/` is the same prefix the media API uses for base template media, see
 app.media.paths; the `invitation-templates/` sub-tree never collides with its
 `asset/<template-id>/…` keys.)
@@ -48,6 +54,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 MEDIA_ROOT = Path(__file__).resolve().parents[2] / "frontend" / "public"
 TEMPLATES_DIR = MEDIA_ROOT / "invitation-templates"
+REEL_ROOT = Path(__file__).resolve().parents[2] / "tools" / "reel" / "templates"
+REEL_PREFIX = "reel-films/"
 KEY_PREFIX = "asset/"
 
 # Must match the redirect in frontend/vercel.json and the ignore glob in angular.json.
@@ -70,13 +78,21 @@ class _Settings(BaseSettings):
 
 
 def media_files() -> list[Path]:
-    return sorted(
-        p for p in TEMPLATES_DIR.rglob("*") if p.is_file() and p.suffix.lower() in MEDIA_EXTENSIONS
-    )
+    is_media = lambda p: p.is_file() and p.suffix.lower() in MEDIA_EXTENSIONS  # noqa: E731
+    template_media = [p for p in TEMPLATES_DIR.rglob("*") if is_media(p)]
+    film_media = [p for p in REEL_ROOT.glob("*/media/**/*") if is_media(p)]
+    return sorted(template_media + film_media)
 
 
 def object_key(path: Path) -> str:
+    if path.is_relative_to(REEL_ROOT):
+        return KEY_PREFIX + REEL_PREFIX + path.relative_to(REEL_ROOT).as_posix()
     return KEY_PREFIX + path.relative_to(MEDIA_ROOT).as_posix()
+
+
+# Windows' MIME table may not know these; without them a file goes up as octet-stream.
+mimetypes.add_type("image/webp", ".webp")
+mimetypes.add_type("audio/mp4", ".m4a")
 
 
 def content_type(path: Path) -> str:

@@ -1,0 +1,662 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Doorway Film</title>
+<style>
+@font-face{font-family:Vibes;src:url("fonts/great-vibes-400-latin.woff2")}
+@font-face{font-family:Allura;src:url("fonts/allura-400-latin.woff2")}
+@font-face{font-family:Corm;src:url("fonts/cormorant-garamond-latin.woff2");font-weight:300 700}
+@font-face{font-family:Corm;font-style:italic;src:url("fonts/cormorant-garamond-italic-latin.woff2");font-weight:300 700}
+@font-face{font-family:Nun;src:url("fonts/nunito-latin.woff2");font-weight:200 1000}
+@font-face{font-family:Mukta;src:url("fonts/mukta-400-latin.woff2");font-weight:400}
+@font-face{font-family:Mukta;src:url("fonts/mukta-400-devanagari.woff2");font-weight:400;unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF}
+@font-face{font-family:Mukta;src:url("fonts/mukta-600-latin.woff2");font-weight:600}
+@font-face{font-family:Mukta;src:url("fonts/mukta-600-devanagari.woff2");font-weight:600;unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF}
+@font-face{font-family:Rozha;src:url("fonts/rozha-one-latin.woff2")}
+@font-face{font-family:Rozha;src:url("fonts/rozha-one-devanagari.woff2");unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF}
+html,body{margin:0;background:#000;overflow:hidden;width:1080px;height:1920px}
+#stage{position:absolute;inset:0;overflow:hidden;background:#f3e9db}
+.sc{position:absolute;inset:0;overflow:hidden;display:none}
+.a{position:absolute;left:0;top:0;transform-origin:center center}
+.t{white-space:nowrap;text-align:center}
+.t span{display:inline-block;white-space:pre}
+canvas{position:absolute;left:0;top:0}
+</style></head><body><div id="stage"></div>
+<script src="../../lib/core.js"></script>
+<script>
+const D = window.__DATA;
+const stage = document.querySelector('#stage');
+// The film's own media (frames cut from the template's videos) lives in the public media bucket.
+const MEDIA = 'https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/reel-films/tpl-doorway-modern/media/';
+// The template's own song: a slow pulse at 51 BPM, felt in beats of 102.
+const BEAT = 60 / 102, BAR = 4 * BEAT;
+
+// ---- The template's palette and type: warm paper, brown ink, copper accents ----
+const INK = '#4a3728', SOFT = '#7b6350', ACCENT = '#b0765a', GOLD = '#c19a6b', TITLE = '#4f3a2b', DARK = '#2f2118', PAPER = '#f3e9db';
+const DISPLAY = 'Vibes,Mukta', HEAD = 'Allura,Vibes,Mukta', SERIF = 'Corm,Mukta', BODY = 'Nun,Mukta', DEV = 'Rozha,Mukta';
+const ART = 'https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%206/static/assets/';
+const IMG = {
+  saveDate: `${ART}save%20the%20date.png`,
+  ring: `${ART}circle%20brown%20pencil%20colored.png`,
+  flower2: `${ART}brown%20flower%202.png`,
+  flower5: `${ART}brown%20flower%205.png`,
+  flowerStrip: `${ART}brown%20flower%20bottom.png`,
+  frame: `${ART}frame%202.png`,
+  curtainL: `${ART}curtain%20brown%20left.png`,
+  curtainR: `${ART}curtain%20brown%20right.png`,
+  lights: `${ART}hanging%20brown%20lights.png`,
+  cage: `${ART}hanging%20single%20bird.png`,
+};
+// The template's two videos, cut into frames at 15 per second (the renderer can't play H.264):
+// the door opening from 0.8s, and the doves flying out of the courtyard from the start.
+const VIDEO = { door: { dir: `${MEDIA}door`, n: 63 }, intro: { dir: `${MEDIA}intro`, n: 114 } };
+const VFPS = 15;
+
+// ---- Data, used exactly as saved. A section with nothing in it is left out. ----
+const val = (v) => str(v).trim().replace(/[ \t]+/g, ' ');
+const raw = (v) => (Array.isArray(v) ? v : []);
+const obj = (it) => (it && typeof it === 'object' ? it : {});
+function lines(value, max, count) {
+  const out = [];
+  for (const w of str(value).trim().split(/\s+/).filter(Boolean)) {
+    const last = out[out.length - 1];
+    if (last !== undefined && (last + ' ' + w).length <= max) out[out.length - 1] = `${last} ${w}`;
+    else out.push(w);
+  }
+  if (out.length > count) { out.length = count; out[count - 1] = out[count - 1].replace(/[,.;:!?]*$/, '') + '…'; }
+  return out;
+}
+// A paragraph in even lines, so no word is left alone on the last one.
+function para(value, max, count) {
+  const s = str(value).trim();
+  if (!s) return [];
+  const n = Math.ceil(s.length / max);
+  return n > count ? lines(s, max, count) : wrap(s, Math.max(1, n), 1);
+}
+// "YYYY-MM-DD" as a local date, or null: like the template, which reads it at midnight.
+function isoDate(s) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+  if (!m) return null;
+  const d = new Date(+m[1], +m[2] - 1, +m[3]);
+  return d.getMonth() === +m[2] - 1 ? d : null;
+}
+const fmt = (d, o) => d.toLocaleDateString('en-GB', o);
+const groom = val(D?.couple?.groomName), bride = val(D?.couple?.brideName);
+// Parents may be written on several lines with "|", as in the template.
+const pipes = (v) => str(v).split('|').map((l) => l.trim().replace(/[ \t]+/g, ' ')).filter(Boolean).slice(0, 3);
+const people = [
+  { role: 'Groom', name: groom, prefix: val(D?.couple?.groomParentPrefix), parents: pipes(D?.couple?.groomParentsName), place: val(D?.couple?.groomPlace) },
+  { role: 'Bride', name: bride, prefix: val(D?.couple?.brideParentPrefix), parents: pipes(D?.couple?.brideParentsName), place: val(D?.couple?.bridePlace) },
+];
+const tlRaw = raw(D?.timeline?.items);
+const cDate = val(D?.ceremony?.date), cTime = val(D?.ceremony?.time), cAddr = val(D?.ceremony?.address);
+// The template's calendar date: the first timeline entry's date, else the ceremony's.
+const calRaw = val(obj(tlRaw[0]).date) || cDate, cal = isoDate(calRaw);
+const heroDate = cal ? fmt(cal, { day: 'numeric', month: 'long', year: 'numeric' }) : calRaw;
+const timeAt = cTime.split('-')[0].trim() ? `AT ${cTime.split('-')[0].trim().toUpperCase()}` : '';
+const quote = para(val(D?.messages?.quote), 22, 7);
+const inviteMsg = para(val(D?.messages?.invitationMessage), 34, 3);
+const welcome = para(val(D?.messages?.welcomeMessage), 32, 5);
+// "Best wishes from": lines split by "|", each optionally "Label: names".
+const blessings = str(D?.messages?.blessingsFrom).split('|').map((l) => l.trim().replace(/[ \t]+/g, ' ')).filter(Boolean).slice(0, 4).map((l) => {
+  if (l === '&') return { amp: true };
+  const m = /^([^:,]+):\s*(.+)$/.exec(l);
+  const names = (m ? m[2] : l).split(',').map((p) => p.trim()).filter(Boolean).join(', ');
+  return { label: m ? m[1].trim() : '', names };
+});
+const timeline = tlRaw.slice(0, 5).map(obj).map((it) => ({ title: val(it.title), date: val(it.date) || cDate, time: val(it.time) }))
+  .filter((e) => e.title).map((e) => { const d = isoDate(e.date); return { ...e, date: d ? `${d.getDate()} ${fmt(d, { month: 'short' }).toUpperCase()}` : e.date }; });
+const venues = raw(D?.venues?.items).map(obj).filter((v) => val(v.label) || val(v.address)).slice(0, 4)
+  .map((v, i) => ({ label: val(v.label) || `Venue ${i + 1}`, address: para(val(v.address) || cAddr, 30, 2) }));
+const galleryTitle = val(D?.gallery?.title) || 'A Glimpse of Us';
+const photos = raw(D?.gallery?.items).slice(0, 5).map((it) => safeImage(obj(it).image)).filter(Boolean);
+
+// ---- The cut list: whole bars, so any section may follow any and stay on the beat. ----
+const SEGS = [];
+const add = (key, dur, enter) => SEGS.push({ key, dur, enter });
+add('door', 3 * BAR, null);
+add('hero', 3 * BAR, 'light');
+if (quote.length) add('quote', quote.join(' ').length > 60 ? 2 * BAR : BAR, 'wave');
+if (cal) add('savedate', 2 * BAR, 'ring');
+if (photos.length) add('gallery', 2 * BAR, 'frame');
+add('details', 2 * BAR, 'vine');
+if (timeline.length) add('timeline', timeline.length > 3 ? 2 * BAR : BAR, 'stem');
+if (venues.length) add('venues', venues.length * BAR, 'postcard');
+add('welcome', 2 * BAR, 'curtains');
+add('end', 6 * BEAT, 'bloom');
+let acc = 0;
+SEGS.forEach((s) => { s.start = acc; acc += s.dur; });
+const TOTAL = acc;
+const TR = { light: 0.9, wave: 0.65, ring: 0.65, frame: 0.65, vine: 0.75, stem: 0.75, postcard: 0.65, curtains: 1.15, bloom: 0.35 };
+
+// ---- Helpers ----
+const R = {};
+const fade = (u, a, d = 0.5) => outC(seg(u, a, a + d));
+const rise = (el, u, at, y, x = 540, d = 0.55) => { const p = fade(u, at, d); P(el, { x, y: y + (1 - p) * 30, a: p, b: (1 - p) * 6 }); };
+const wipe = (el, u, at, y, d = 0.7, x = 540) => {
+  P(el, { x, y, a: cl(seg(u, at, at + 0.15) * 3) });
+  el.style.clipPath = `inset(-40% ${(1 - ioC(seg(u, at, at + d))) * 100}% -40% -8%)`;
+};
+// The template's letters zoom down into place one by one.
+function zoom(el, u, at, stag = 0.07) {
+  el._l.forEach((c, i) => {
+    const p = seg(u, at + i * stag, at + i * stag + 0.9);
+    c.style.opacity = cl(p * 1.6);
+    c.style.transform = `scale(${lerp(4.2, 1, 1 - Math.pow(1 - p, 4))})`;
+  });
+}
+function full(sc, css) { return mk(sc, 'div', `width:1080px;height:1920px;${css}`); }
+// The template's paper: warm grain with faint ruled script lines.
+const NOISE = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23g)' opacity='0.5'/%3E%3C/svg%3E")`;
+function paper(sc) {
+  full(sc, `background-color:${PAPER};background-image:${NOISE},repeating-linear-gradient(168deg,rgba(120,85,55,.03) 0 2px,transparent 2px 11px),radial-gradient(ellipse at 50% 40%,#f7f0e5,${PAPER} 75%);background-size:440px 440px,auto,auto;background-blend-mode:soft-light,normal,normal`);
+  full(sc, 'background:radial-gradient(ellipse at 50% 50%,transparent 60%,rgba(120,85,55,.16) 100%)');
+}
+const PHOTO_FALLBACK = (() => {
+  const c = document.createElement('canvas'); c.width = 90; c.height = 120;
+  const x = c.getContext('2d'), g = x.createLinearGradient(0, 0, 90, 120);
+  g.addColorStop(0, '#d4b896'); g.addColorStop(1, '#6b4f3a');
+  x.fillStyle = g; x.fillRect(0, 0, 90, 120);
+  return c.toDataURL('image/png');
+})();
+const photo = (parent, url, w, h, extra = '') => im(parent, url, w, h, `object-fit:cover;${extra}`, PHOTO_FALLBACK);
+// A video as its frames; show(t) shows the frame for t seconds, blended into the next.
+function footage(parent, { dir, n }) {
+  const W = 1920 * 720 / 1082;
+  const box = mk(parent, 'div', 'width:1080px;height:1920px;overflow:hidden');
+  const inner = mk(box, 'div', 'width:1080px;height:1920px');
+  const fr = Array.from({ length: n }, (_, i) => {
+    const e = im(inner, `${dir}/${String(i + 1).padStart(3, '0')}.webp`, W, 1920, `left:${(1080 - W) / 2}px;display:none`);
+    return e;
+  });
+  let shown = [];
+  return { box, inner, show(t) {
+    const x = cl(t * VFPS, 0, n - 1), i = Math.floor(x), f = x - i;
+    shown.forEach((e) => { e.style.display = 'none'; });
+    shown = [fr[i]];
+    fr[i].style.display = 'block'; fr[i].style.opacity = 1;
+    if (f > 0.01 && i + 1 < n) { const e = fr[i + 1]; e.style.display = 'block'; e.style.opacity = f; shown.push(e); }
+  } };
+}
+// The template's little five-petal flower.
+const FLOWER = `<svg viewBox="0 0 24 24" width="100%" height="100%">${[0, 72, 144, 216, 288].map((r) => `<ellipse cx="12" cy="6.9" rx="2" ry="3.15" fill="#a07d5c" opacity=".85" transform="rotate(${r} 12 12)"/>`).join('')}<circle cx="12" cy="12" r="2.2" fill="#f3e9db"/></svg>`;
+function flower(parent, size) { const e = mk(parent, 'div', `width:${size}px;height:${size}px`); e.innerHTML = FLOWER; return e; }
+// The floral divider: dot, line, ❦, line, dot.
+function divider(parent) {
+  const w = mk(parent, 'div', 'width:460px;height:50px');
+  const c = '#c79b78';
+  w.parts = [
+    mk(w, 'div', `left:0;top:21px;width:8px;height:8px;border-radius:50%;background:${c}`),
+    mk(w, 'div', `left:26px;top:24px;width:160px;height:2px;background:linear-gradient(90deg,transparent,${c});transform-origin:100% 50%`),
+    mk(w, 'div', `left:205px;top:-6px;width:50px;text-align:center;font:400 52px/1 ${SERIF};color:${c}`),
+    mk(w, 'div', `left:274px;top:24px;width:160px;height:2px;background:linear-gradient(90deg,${c},transparent);transform-origin:0 50%`),
+    mk(w, 'div', `left:452px;top:21px;width:8px;height:8px;border-radius:50%;background:${c}`),
+  ];
+  w.parts[2].textContent = '❦';
+  return w;
+}
+function drawDivider(d, u, at, y) {
+  P(d, { y });
+  const p = outC(seg(u, at, at + 0.6));
+  d.parts[1].style.transform = d.parts[3].style.transform = `scaleX(${p})`;
+  d.parts[2].style.transform = `scale(${Math.max(0.001, outB(seg(u, at, at + 0.45), 2))})`;
+  d.parts[0].style.opacity = d.parts[4].style.opacity = seg(u, at + 0.3, at + 0.6);
+}
+
+// ================= Scenes (in cut order, so a later scene draws over an earlier one) =================
+
+// ---- The door: three knocks, then it swings open onto the light ----
+const DOOR_AT = { x: 540, y: 1000 };
+{
+  const sc = scene(stage);
+  const v = footage(sc, VIDEO.door);
+  const ring = mk(sc, 'div', 'width:150px;height:150px;border-radius:50%;box-sizing:border-box;border:3px solid rgba(247,239,228,.75)');
+  const pulse = mk(sc, 'div', 'width:150px;height:150px;border-radius:50%;box-sizing:border-box;border:3px solid rgba(193,154,107,.7)');
+  const shadow = 'text-shadow:0 2px 16px rgba(0,0,0,.65);';
+  const labels = ['Knock on the door', 'Knock again', 'One more knock'].map((s) => text(sc, s, `font:600 38px ${SERIF};letter-spacing:7px;text-transform:uppercase;color:#f7efe4;${shadow}`, 900));
+  const glow = full(sc, 'background:radial-gradient(ellipse at 50% 52%,rgba(255,250,235,.95),rgba(255,244,220,.5) 30%,transparent 62%)');
+  R.door = { sc, f(u) {
+    // Each knock lands on a beat: the ring flashes and the door jolts.
+    const knocks = [1, 2, 3].map((k) => k * BEAT), last = knocks.filter((k) => u >= k).pop();
+    const since = last === undefined ? 9 : u - last, hit = Math.exp(-since * 9);
+    const opening = seg(u, BAR, 3 * BAR + 0.6);
+    v.show(Math.max(0, u - BAR));
+    const push = u < BAR ? lerp(1, 1.04, u / BAR) : lerp(1.04, 1.4, ioC(opening));
+    v.inner.style.transformOrigin = '540px 1000px';
+    v.inner.style.transform = `translateX(${Math.sin(since * 60) * 8 * hit}px) scale(${push})`;
+    const on = 1 - seg(u, 3 * BEAT + 0.15, BAR);
+    P(ring, { ...DOOR_AT, s: 1 + 0.25 * hit, a: on * cl(u * 4) });
+    ring.style.boxShadow = `0 0 ${50 * hit}px rgba(255,236,200,${0.8 * hit})`;
+    const pp = (u % (BEAT)) / BEAT;
+    P(pulse, { ...DOOR_AT, s: 1 + pp * 0.9, a: on * (1 - pp) * 0.8 });
+    const n = knocks.filter((k) => u >= k).length;
+    labels.forEach((l, i) => P(l, { x: 540, y: DOOR_AT.y + 150, a: on * (i === Math.min(n, 2) ? cl(since * 6) || cl(u * 4) : 0) }));
+    // Light pours out through the opening doors.
+    P(glow, { a: seg(u, 2 * BAR, 3 * BAR + 0.5) * 0.95 });
+  } };
+}
+
+// ---- The couple: doves fly out of the courtyard as the names zoom into place ----
+{
+  const sc = scene(stage);
+  const v = footage(sc, VIDEO.intro);
+  full(sc, 'background:linear-gradient(180deg,rgba(42,31,23,.18) 0%,rgba(42,31,23,.34) 45%,rgba(42,31,23,.6) 100%)');
+  const shadow = 'text-shadow:0 4px 28px rgba(0,0,0,.55);';
+  const inv1 = text(sc, 'We cordially invite you to the', `font:italic 500 54px ${SERIF};letter-spacing:3px;color:rgba(238,244,250,.92);${shadow}`, 900);
+  const inv2 = text(sc, 'wedding of', `font:italic 500 54px ${SERIF};letter-spacing:3px;color:rgba(238,244,250,.92);${shadow}`, 900);
+  const nG = text(sc, groom, `font:400 200px ${DISPLAY};color:#fff;${shadow}`, 940);
+  const amp = text(sc, 'with', `font:italic 400 60px ${SERIF};letter-spacing:7px;color:#f3e6c4;text-shadow:0 2px 14px rgba(0,0,0,.55),0 0 18px rgba(201,168,108,.35)`);
+  const nB = text(sc, bride, `font:400 200px ${DISPLAY};color:#fff;${shadow}`, 940);
+  const dl = [0, 1].map(() => mk(sc, 'div', 'width:340px;height:2px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent)'));
+  const date = heroDate ? text(sc, heroDate, `font:600 40px ${BODY};letter-spacing:8px;text-transform:uppercase;color:rgba(238,244,250,.95);${shadow}`, 940) : null;
+  R.hero = { sc, f(u) {
+    v.show(u);
+    v.inner.style.transform = `scale(${1.08 - seg(u, 0, 3 * BAR) * 0.08})`;
+    rise(inv1, u, 0.35, 560); rise(inv2, u, 0.5, 630);
+    P(nG, { y: 850 }); zoom(nG, u, 2 * BEAT);
+    P(amp, { y: 1010, a: cl(seg(u, BAR, BAR + 0.5) * 1.5), s: lerp(3.2, 1, outC(seg(u, BAR, BAR + 0.9))) });
+    P(nB, { y: 1170 }); zoom(nB, u, BAR + 2 * BEAT);
+    if (date) {
+      const p = seg(u, 2 * BAR, 2 * BAR + 0.8);
+      dl.forEach((l, i) => { P(l, { y: 1500 + i * 110, a: outC(p) }); l.style.transform += ` scaleX(${outC(p)})`; });
+      rise(date, u, 2 * BAR + 0.15, 1555);
+    }
+  } };
+}
+
+// ---- The quote, typed out between four little flowers ----
+{
+  const sc = scene(stage);
+  paper(sc);
+  const fl = [[110, 330], [970, 330], [110, 1590], [970, 1590]].map(([x, y]) => ({ e: flower(sc, 70), x, y }));
+  const ql = quote.map((l) => text(sc, l, `font:italic 500 76px ${SERIF};color:${SOFT}`, 900));
+  const chars = ql.reduce((a, e) => a + e._l.length, 0);
+  const top = 960 - (ql.length - 1) * 56;
+  R.quote = { sc, f(u, s) {
+    fl.forEach((f, i) => P(f.e, { x: f.x, y: f.y, r: u * 30 + i * 40, s: Math.max(0.001, outB(seg(u, 0.1 + i * 0.08, 0.6 + i * 0.08), 2)) }));
+    // Typed letter by letter, as in the template.
+    const per = Math.min(0.06, (s.dur - 0.9) / Math.max(1, chars));
+    let k = 0;
+    ql.forEach((e, i) => {
+      P(e, { y: top + i * 112 });
+      e._l.forEach((c) => { c.style.opacity = cl((u - 0.35 - k * per) / 0.08); k++; });
+    });
+  } };
+}
+
+// ---- Save the date: the wooden ring swings in with the date inside ----
+const RING_AT = { x: 540, y: 1250 };
+{
+  const sc = scene(stage);
+  paper(sc);
+  const head = im(sc, IMG.saveDate, 640, 640 * 338 / 405);
+  const ring = im(sc, IMG.ring, 880, 880);
+  const day = text(sc, String(cal ? cal.getDate() : ''), `font:600 180px ${SERIF};color:#432e1e`);
+  const month = text(sc, cal ? fmt(cal, { month: 'long' }).toUpperCase() : '', `font:600 62px ${SERIF};letter-spacing:12px;color:${TITLE}`, 560);
+  const year = text(sc, String(cal ? cal.getFullYear() : ''), `font:600 56px ${SERIF};letter-spacing:10px;color:${TITLE}`);
+  const wd = text(sc, cal ? fmt(cal, { weekday: 'long' }) : '', `font:italic 500 54px ${SERIF};color:${SOFT}`);
+  R.savedate = { sc, f(u) {
+    P(head, { y: 520, s: lerp(0.9, 1, outC(seg(u, 0.1, 0.9))), a: cl(seg(u, 0.1, 0.3) * 3) });
+    head.style.clipPath = `inset(-5% ${(1 - ioC(seg(u, 0.1, 1.0))) * 100}% -5% -5%)`;
+    const r = seg(u, 0.25, 1.05);
+    P(ring, { ...RING_AT, s: lerp(0.7, 1, outB(r, 1.4)), r: (1 - outC(r)) * -30 + Math.sin(u * 1.4) * 0.8, a: cl(r * 3) });
+    const at = 2 * BEAT;
+    P(day, { x: 540, y: 1150, s: Math.max(0.001, outB(seg(u, at, at + 0.5), 1.8)), a: cl(seg(u, at, at + 0.2) * 3) });
+    rise(month, u, at + BEAT, 1275);
+    rise(year, u, at + 1.5 * BEAT, 1355);
+    rise(wd, u, at + 2 * BEAT, 1440);
+  } };
+}
+
+// ---- A glimpse of us: framed photos land, one on each beat ----
+{
+  const sc = scene(stage);
+  paper(sc);
+  const dTR = im(sc, IMG.flower2, 330, 330 * 1226 / 736, 'opacity:.9');
+  const dBL = im(sc, IMG.flower2, 380, 380 * 1226 / 736, 'opacity:.85');
+  const eyebrow = text(sc, '✦ cherished ✦', `font:italic 500 34px ${SERIF};letter-spacing:6px;color:${ACCENT}`);
+  const title = text(sc, galleryTitle, `font:400 150px ${HEAD};color:${TITLE};text-shadow:0 1px 0 rgba(255,250,242,.9),0 10px 28px rgba(120,85,55,.16)`, 900);
+  const SPOTS = {
+    1: [[540, 1120, 660, 880, -3]],
+    2: [[380, 980, 480, 640, -6], [700, 1330, 480, 640, 5]],
+    3: [[330, 900, 430, 570, -7], [750, 1010, 430, 570, 6], [520, 1440, 470, 610, -2]],
+    4: [[320, 870, 410, 545, -7], [760, 910, 410, 545, 6], [320, 1410, 410, 545, 5], [750, 1450, 430, 570, -4]],
+    5: [[300, 830, 390, 520, -8], [780, 870, 390, 520, 7], [540, 1160, 450, 600, -1], [300, 1510, 390, 520, 5], [780, 1530, 390, 520, -6]],
+  }[photos.length];
+  const cards = photos.map((url, i) => {
+    const [, , w, h] = SPOTS[i];
+    const c = mk(sc, 'div', `width:${w}px;height:${h}px;border-radius:18px;background:linear-gradient(160deg,#d4b896 0%,#a07d5c 38%,#6b4f3a 72%,#4f3a2b 100%);box-shadow:0 26px 50px rgba(60,40,25,.35),inset 0 0 0 2px rgba(70,45,28,.55)`);
+    c.img = photo(c, url, w - 32, h - 32, 'left:16px;top:16px;border-radius:8px');
+    return c;
+  });
+  R.gallery = { sc, f(u) {
+    P(dTR, { x: 975, y: 640, r: 8 + Math.sin(u * 1.2) * 2, a: fade(u, 0, 0.8) });
+    P(dBL, { x: 130, y: 1700, r: 188 + Math.sin(u * 1.1) * 2, a: fade(u, 0.2, 0.8) });
+    rise(eyebrow, u, 0.1, 230);
+    wipe(title, u, 0.2, 340, 0.9);
+    cards.forEach((c, i) => {
+      // Each frame falls into place from out of focus.
+      const [x, y, , , r] = SPOTS[i], at = 0.5 + i * BEAT, p = seg(u, at, at + 0.6);
+      const drift = Math.sin(u * 0.9 + i) * 6;
+      P(c, { x, y: y - (1 - outC(p)) * 220 + drift, r: r + (1 - outB(p, 1.5)) * (i % 2 ? 25 : -25), s: lerp(1.35, 1, outC(p)), a: cl(p * 3), b: (1 - p) * 12 });
+      c.img.style.transform = `scale(${1.12 - seg(u, at, 2 * BAR + 0.6) * 0.1})`;
+    });
+  } };
+}
+
+// ---- The couple and their families, inside the gold oval; then the day, the time and the venue ----
+{
+  const sc = scene(stage);
+  paper(sc);
+  const strip = im(sc, IMG.flowerStrip, 1180, 1180 * 335 / 736, 'transform-origin:50% 0');
+  const gan = text(sc, '॥ श्री गणेशाय नमः ॥', `font:400 44px ${DEV};color:${ACCENT}`);
+  const msg = inviteMsg.map((l) => text(sc, l, `font:italic 500 46px ${SERIF};color:${SOFT}`, 900));
+  const FH = 1100, FW = FH * 730 / 1126;
+  const frame = im(sc, IMG.frame, FW, FH);
+  const blocks = people.map((p) => {
+    const rows = [{ el: text(sc, p.role, `font:800 26px ${BODY};letter-spacing:5px;text-transform:uppercase;color:${ACCENT}`), h: 36 }];
+    rows.push({ el: text(sc, p.name, `font:400 100px ${DISPLAY};color:${INK}`, 520), h: 112, name: true });
+    if (p.prefix) rows.push({ el: text(sc, p.prefix, `font:400 30px ${BODY};color:${SOFT}`, 500), h: 42 });
+    p.parents.forEach((l) => rows.push({ el: text(sc, l, `font:400 30px ${BODY};color:${SOFT}`, 500), h: 42 }));
+    if (p.place) rows.push({ el: text(sc, p.place, `font:italic 500 36px ${SERIF};color:${SOFT}`, 500), h: 46 });
+    return rows;
+  });
+  const amp = text(sc, '&', `font:400 84px ${DISPLAY};color:${ACCENT}`);
+  // The two blocks and the "&" stacked in the oval's middle.
+  const all = [...blocks[0], { el: amp, h: 100, gap: 10 }, ...blocks[1].map((r, i) => (i ? r : { ...r, gap: 10 }))];
+  let y = 0; all.forEach((r, i) => { if (i) y += r.gap || 0; r.y = y + r.h / 2; y += r.h; });
+  const FY = 1010; all.forEach((r) => { r.y += FY - y / 2; });
+  const month = cal ? text(sc, fmt(cal, { month: 'long' }).toUpperCase(), `font:600 50px ${SERIF};letter-spacing:12px;color:${TITLE}`) : null;
+  const wday = cal ? text(sc, fmt(cal, { weekday: 'long' }).toUpperCase(), `font:700 28px ${BODY};letter-spacing:4px;color:${SOFT}`, 330) : null;
+  const num = cal ? text(sc, String(cal.getDate()), `font:400 120px ${HEAD};color:${ACCENT}`) : null;
+  const tm = timeAt ? text(sc, timeAt, `font:700 28px ${BODY};letter-spacing:4px;color:${SOFT}`, 330) : null;
+  const rules = [0, 1, 2, 3].map(() => mk(sc, 'div', `width:300px;height:2px;background:rgba(123,99,80,.45)`));
+  const venue = cAddr ? text(sc, cAddr, `font:italic 600 40px ${SERIF};color:${ACCENT}`, 960) : null;
+  R.details = { sc, f(u) {
+    // The hanging flowers sway a little, so the page never stands still.
+    P(strip, { x: 540 + Math.sin(u * 1.6) * 10, y: 110 - (1 - outC(seg(u, 0, 0.9))) * 260, r: 180 + Math.sin(u * 1.3) * 0.8 });
+    rise(gan, u, 0.2, 300);
+    msg.forEach((e, i) => rise(e, u, 0.35 + i * 0.1, 375 + i * 58));
+    const fp = seg(u, 0.3, 1.1);
+    P(frame, { y: FY, s: lerp(0.92, 1, outC(fp)) * (1 + 0.006 * Math.sin(u * 2.2)), a: outC(fp) });
+    all.forEach((r, i) => {
+      const at = 0.6 + i * 0.09;
+      if (r.name) wipe(r.el, u, at, r.y, 0.6);
+      else if (r.el === amp) P(amp, { y: r.y, s: Math.max(0.001, outB(seg(u, at, at + 0.45), 2)) });
+      else rise(r.el, u, at, r.y, 540, 0.45);
+    });
+    // The day, the time and the venue, on the second bar.
+    const b = BAR;
+    if (month) rise(month, u, b, 1640);
+    const lp = outC(seg(u, b + 0.15, b + 0.75));
+    [[220, 1695], [220, 1795], [860, 1695], [860, 1795]].forEach(([x, yy], i) => {
+      const on = (i < 2 ? wday : tm) ? 1 : 0;
+      P(rules[i], { x, y: yy, a: lp * on }); rules[i].style.transform += ` scaleX(${lp})`;
+    });
+    if (wday) rise(wday, u, b + 0.25, 1745, 220);
+    if (num) P(num, { x: 540, y: 1735, s: Math.max(0.001, outB(seg(u, b + 2 * BEAT - 0.3, b + 2 * BEAT + 0.2), 1.8)) });
+    if (tm) rise(tm, u, b + 0.35, 1745, 860);
+    if (venue) rise(venue, u, b + 3 * BEAT - 0.3, 1860);
+  } };
+}
+
+// ---- The event timeline: the stem grows and a leaf opens at each event ----
+{
+  const sc = scene(stage);
+  paper(sc);
+  const title = text(sc, 'Event Timeline', `font:400 140px ${HEAD};color:${TITLE}`, 940);
+  const n = timeline.length, step = Math.min(380, 1100 / n), L = (n - 1) * step + 200, top = 1110 - L / 2;
+  const stem = mk(sc, 'div', 'left:537px;width:6px;border-radius:3px;background:linear-gradient(180deg,#b39a80,#a07d5c)');
+  const tip = mk(sc, 'div', 'width:28px;height:28px;border-radius:50%;background:#a07d5c');
+  const items = timeline.map((ev, i) => {
+    const left = i % 2 === 0, tx = left ? 290 : 790;
+    const tl = ev.title.length > 16 ? wrap(ev.title, 2) : [ev.title];
+    const leaf = mk(sc, 'div', `width:110px;height:44px;border-radius:50% 0 50% 0;background:linear-gradient(135deg,#d2bfa3,#a8896b);box-shadow:inset 0 0 0 1px rgba(107,79,58,.35)`);
+    const titles = tl.map((l) => text(sc, l, `font:600 ${tl.length > 1 ? 60 : 68}px ${SERIF};color:${INK}`, 440));
+    const meta = [ev.date, ev.time].filter(Boolean).map((l) => text(sc, l, `font:400 40px ${BODY};color:${SOFT}`, 440));
+    return { left, tx, leaf, titles, meta, y: top + 100 + i * step };
+  });
+  R.timeline = { sc, f(u, s) {
+    rise(title, u, 0.05, 330);
+    const grow = ioC(seg(u, 0.2, s.dur - 0.4));
+    stem.style.top = `${top}px`; stem.style.height = `${grow * L}px`;
+    P(tip, { y: top + grow * L, a: grow > 0 ? 1 : 0 });
+    const per = (s.dur - 0.9) / Math.max(1, n);
+    items.forEach((it, i) => {
+      const at = 0.3 + i * per, p = seg(u, at, at + 0.5);
+      P(it.leaf, { x: 540 + (it.left ? -62 : 62), y: it.y, r: it.left ? 20 : -20, s: Math.max(0.001, outB(p, 2)) });
+      const rows = [...it.titles.map((e) => ({ e, h: it.titles.length > 1 ? 68 : 80 })), ...it.meta.map((e) => ({ e, h: 54 }))];
+      let yy = it.y - rows.reduce((a, r) => a + r.h, 0) / 2;
+      rows.forEach((r, j) => { rise(r.e, u, at + 0.1 + j * 0.06, yy + r.h / 2, it.tx, 0.45); yy += r.h; });
+    });
+  } };
+}
+
+// ---- Venues: a glass postcard, one venue a bar, sliding like the template's carousel ----
+{
+  const sc = scene(stage);
+  paper(sc);
+  const corner = im(sc, IMG.flower5, 560, 560);
+  const title = text(sc, 'Venues', `font:400 150px ${HEAD};color:${TITLE}`);
+  const card = mk(sc, 'div', 'width:860px;height:960px;border-radius:40px;box-sizing:border-box;border:2px solid rgba(255,255,255,.6);background:linear-gradient(155deg,rgba(255,255,255,.55),rgba(255,250,243,.3) 48%,rgba(255,255,255,.2));box-shadow:0 18px 40px rgba(90,62,42,.12),inset 0 1px 0 rgba(255,255,255,.72)');
+  const win = mk(card, 'div', 'left:0;top:0;width:856px;height:956px;overflow:hidden;border-radius:38px');
+  const slides = venues.map((v, i) => {
+    const sl = mk(win, 'div', 'width:856px;height:956px');
+    sl.label = text(sl, v.label, `font:italic 500 66px ${SERIF};color:${INK}`, 760);
+    // A hand-drawn map: paper, a river, roads, and the pin.
+    const map = mk(sl, 'div', `left:78px;top:200px;width:700px;height:440px;border-radius:24px;overflow:hidden;background:#ece2d1;box-shadow:inset 0 0 0 2px rgba(123,99,80,.25)`);
+    const r = rng(11 + i * 7);
+    mk(map, 'div', `left:${-80 + r() * 60}px;top:-40px;width:260px;height:560px;border-radius:50%;background:#bcd3d6;transform:rotate(${10 + r() * 15}deg)`);
+    for (let k = 0; k < 6; k++) mk(map, 'div', `left:${r() * 500}px;top:${r() * 440}px;width:${300 + r() * 300}px;height:${k % 2 ? 6 : 10}px;border-radius:5px;background:${k % 2 ? '#f8f2e8' : '#e3c9a4'};transform:rotate(${(r() - 0.5) * 150}deg)`);
+    sl.pin = mk(map, 'div', 'left:322px;top:120px;width:56px;height:80px');
+    sl.pin.innerHTML = `<svg viewBox="0 0 24 34" width="56" height="80"><path d="M12 33C5 23 1 17 1 11.5a11 11 0 0 1 22 0C23 17 19 23 12 33z" fill="${ACCENT}"/><circle cx="12" cy="11.5" r="4.2" fill="#fbf4ea"/></svg>`;
+    sl.addr = v.address.map((l) => text(sl, l, `font:italic 500 46px ${SERIF};color:${SOFT}`, 760));
+    return sl;
+  });
+  const dots = venues.map(() => mk(sc, 'div', 'width:18px;height:18px;border-radius:50%'));
+  R.venues = { sc, f(u) {
+    P(corner, { x: 150, y: 170, r: Math.sin(u * 1.1) * 2, a: fade(u, 0, 0.7) });
+    wipe(title, u, 0.1, 330, 0.8);
+    const cp = seg(u, 0.2, 0.8);
+    P(card, { y: 1060 + (1 - outC(cp)) * 120, a: cl(cp * 3) });
+    const cur = Math.min(venues.length - 1, Math.floor(u / BAR));
+    slides.forEach((sl, i) => {
+      // Each venue slides in from the right on its bar and out to the left.
+      const inP = i ? ioC(seg(u, i * BAR - 0.45, i * BAR + 0.1)) : 1, outP = i < venues.length - 1 ? ioC(seg(u, (i + 1) * BAR - 0.45, (i + 1) * BAR + 0.1)) : 0;
+      sl.style.transform = `translateX(${(1 - inP) * 900 - outP * 900}px)`;
+      sl.style.display = inP > 0 && outP < 1 ? 'block' : 'none';
+      const t0 = i * BAR;
+      rise(sl.label, u, t0 + (i ? 0.1 : 0.5), 120, 428);
+      const pd = seg(u, t0 + (i ? 0.25 : 0.7), t0 + (i ? 0.75 : 1.2));
+      sl.pin.style.transform = `translateY(${-(1 - outB(pd, 1.6)) * 180}px)`;
+      sl.pin.style.opacity = cl(pd * 4);
+      sl.addr.forEach((e, j) => rise(e, u, t0 + (i ? 0.4 : 0.9) + j * 0.1, 730 + j * 62, 428));
+    });
+    dots.forEach((d, i) => {
+      P(d, { x: 540 + (i - (venues.length - 1) / 2) * 40, y: 1590, a: venues.length > 1 ? cl(cp * 3) : 0 });
+      d.style.background = i === cur ? ACCENT : 'rgba(176,118,90,.3)';
+    });
+  } };
+}
+
+// ---- With love: hanging lights and the birdcage, the welcome, the couple and the family's wishes ----
+{
+  const sc = scene(stage);
+  paper(sc);
+  const lights = [0, 1].map(() => im(sc, IMG.lights, 560, 560));
+  const cage = im(sc, IMG.cage, 420, 420, 'transform-origin:50% 0');
+  const d1 = divider(sc), d2 = divider(sc);
+  const wl = welcome.map((l) => text(sc, l, `font:italic 500 52px ${SERIF};color:${SOFT}`, 900));
+  const withLove = text(sc, 'With love,', `font:800 30px ${BODY};letter-spacing:7px;text-transform:uppercase;color:${ACCENT}`);
+  const names = text(sc, `${groom} & ${bride}`, `font:400 120px ${DISPLAY};color:${INK}`, 940);
+  const bLabel = blessings.length ? text(sc, 'Best wishes from', `font:800 28px ${BODY};letter-spacing:7px;text-transform:uppercase;color:${ACCENT}`) : null;
+  const bl = blessings.flatMap((b) => (b.amp ? [text(sc, '&', `font:400 60px ${DISPLAY};color:${ACCENT}`)] : [
+    ...(b.label ? [text(sc, b.label, `font:700 26px ${BODY};letter-spacing:4px;text-transform:uppercase;color:${SOFT}`, 900)] : []),
+    ...para(b.names, 36, 2).map((l) => text(sc, l, `font:500 48px ${SERIF};color:${INK}`, 940)),
+  ]));
+  const rows = [{ el: d1, h: 50 }];
+  wl.forEach((el, i) => rows.push({ el, h: 70, gap: i ? 0 : 50 }));
+  rows.push({ el: withLove, h: 40, gap: 60 }, { el: names, h: 140, gap: 10 });
+  if (bLabel) rows.push({ el: bLabel, h: 40, gap: 50 });
+  bl.forEach((el) => rows.push({ el, h: 62 }));
+  rows.push({ el: d2, h: 50, gap: 50 });
+  let y = 0; rows.forEach((r, i) => { if (i) y += r.gap || 0; r.y = y + r.h / 2; y += r.h; });
+  rows.forEach((r) => { r.y += 1160 - y / 2; });
+  R.welcome = { sc, f(u) {
+    lights.forEach((l, i) => { P(l, { x: i ? 870 : 210, y: 150 - (1 - outC(seg(u, 0.05 + i * 0.1, 0.9 + i * 0.1))) * 400 }); l.style.transform += ` scaleX(${i ? -1 : 1})`; l.style.filter = `brightness(${1 + 0.12 * Math.sin(u * 7 + i * 2)})`; });
+    P(cage, { x: 540, y: 250 - (1 - outC(seg(u, 0.15, 1.0))) * 450, r: Math.sin(u * 2.2) * 4 });
+    rows.forEach((r, i) => {
+      const at = 0.4 + i * 0.13;
+      if (r.el === d1 || r.el === d2) drawDivider(r.el, u, at, r.y);
+      else if (r.el === names) wipe(names, u, BAR, r.y, 0.9);
+      else rise(r.el, u, r.el === withLove ? BAR - 0.3 : at + (i > rows.indexOf(rows.find((x) => x.el === names)) ? BAR * 0.6 : 0), r.y);
+    });
+  } };
+}
+
+// ---- End card ----
+{
+  const sc = scene(stage);
+  full(sc, `background:radial-gradient(ellipse at 50% 40%,#6b4f3a 0%,${TITLE} 40%,${DARK} 100%)`);
+  full(sc, `background-image:${NOISE};background-size:440px 440px;opacity:.25;mix-blend-mode:soft-light`);
+  const shadow = 'text-shadow:0 2px 14px rgba(20,10,0,.6);';
+  const a1 = text(sc, 'Apni shaadi ka', `font:700 86px ${BODY};color:#fff;${shadow}`);
+  const a2 = text(sc, 'aisa invitation banaiye', `font:700 78px ${BODY};color:#fff;${shadow}`, 980);
+  const halo = mk(sc, 'div', 'width:1100px;height:520px;border-radius:50%;background:radial-gradient(ellipse,rgba(212,184,150,.32),transparent 68%)');
+  const logo = mk(sc, 'div', `font:400 170px ${DISPLAY};white-space:nowrap;background:linear-gradient(100deg,${GOLD} 0%,#fff1d8 40%,#ffffff 50%,#fff1d8 60%,${GOLD} 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 30px`);
+  logo.textContent = 'theinvitely.in';
+  const under = mk(sc, 'div', 'height:4px;background:linear-gradient(90deg,transparent,#e3c9a4,transparent)');
+  R.end = { sc, f(u) {
+    P(a1, { y: 760 }); reveal(a1, u, 0.5 * BEAT, 0.03);
+    P(a2, { y: 870 }); reveal(a2, u, 1.5 * BEAT, 0.025);
+    const l = outB(seg(u, 3 * BEAT, 3 * BEAT + 0.5), 1.9);
+    P(halo, { y: 1090, s: l * (1 + 0.05 * Math.sin(u * 5)), a: cl(l) * 0.9 });
+    P(logo, { y: 1080, s: Math.max(l, 0.001), a: cl(l * 2) });
+    logo.style.backgroundPosition = `${lerp(130, -40, seg(u, 3 * BEAT + 0.3, 3 * BEAT + 1.6))}% 0`;
+    logo.style.filter = 'drop-shadow(0 3px 10px rgba(0,0,0,.6))';
+    under.style.width = `${outC(seg(u, 3 * BEAT + 0.3, 3 * BEAT + 0.8)) * 700}px`;
+    P(under, { y: 1190 });
+  } };
+}
+
+// ================= Transitions, each taken from the design =================
+const deco = {
+  light: full(stage, 'background:radial-gradient(ellipse at 50% 52%,#fffaf0 0%,rgba(255,246,228,.95) 35%,rgba(255,240,215,0) 75%)'),
+  ring: mk(stage, 'div', 'border-radius:50%;box-sizing:border-box;border:34px solid #6b4f3a;box-shadow:inset 0 0 0 8px #a07d5c,0 0 0 6px #4f3a2b,0 20px 50px rgba(60,40,25,.45)'),
+  frame: mk(stage, 'div', 'border-radius:26px;box-sizing:border-box;border:30px solid #8a6a4c;box-shadow:inset 0 0 0 4px #d4b896,0 0 0 3px #4f3a2b,0 30px 60px rgba(60,40,25,.4)'),
+  strip: im(stage, IMG.flowerStrip, 1180, 1180 * 335 / 736),
+  stem: mk(stage, 'div', 'width:5px;background:#a07d5c;box-shadow:0 0 10px rgba(160,125,92,.6)'),
+  cl: im(stage, IMG.curtainL, 1230, 1920, 'object-fit:cover;object-position:0 0'),
+  cr: im(stage, IMG.curtainR, 1230, 1920, 'object-fit:cover;object-position:100% 0'),
+};
+const DECO = Object.values(deco);
+DECO.forEach((e) => { e.style.display = 'none'; });
+function transition(el, type, p) {
+  el.style.clipPath = ''; el.style.opacity = ''; el.style.filter = ''; el.style.outline = '';
+  const show = (d) => { d.style.display = 'block'; return d; };
+  if (!(p > 0 && p < 1)) return;
+  const e = outC(p);
+  if (type === 'light') {
+    // Through the open door, into the light, and out into the courtyard.
+    P(show(deco.light), { s: lerp(0.6, 2.4, e), a: Math.sin(Math.PI * cl(p * 1.1)) });
+    el.style.opacity = cl((p - 0.2) / 0.45);
+  }
+  if (type === 'wave') {
+    // The next panel rises with the template's soft wave cap.
+    const y0 = (1 - e) * 2000 - 40, pts = [];
+    for (let x = 0; x <= 1080; x += 40) pts.push(`${x}px ${(y0 + Math.sin(x / 1080 * 9.4 + p * 5) * 34).toFixed(1)}px`);
+    el.style.clipPath = `polygon(0 1920px,${pts.join(',')},1080px 1920px)`;
+  }
+  if (type === 'ring') {
+    const r = lerp(30, 1500, inC(p) * 0.3 + e * 0.7);
+    el.style.clipPath = `circle(${r}px at ${RING_AT.x}px ${RING_AT.y}px)`;
+    const d = show(deco.ring); d.style.width = d.style.height = `${2 * r + 60}px`;
+    P(d, { ...RING_AT, a: 1 - seg(p, 0.6, 1) });
+  }
+  if (type === 'frame') {
+    // A photo frame grows out of the middle to hold the gallery.
+    const w = lerp(260, 1300, e), h = w * 1.33;
+    el.style.clipPath = `inset(${960 - h / 2}px ${(1080 - w) / 2}px ${960 - h / 2}px ${(1080 - w) / 2}px round 26px)`;
+    const d = show(deco.frame); d.style.width = `${w + 50}px`; d.style.height = `${h + 50}px`;
+    P(d, { y: 960, a: 1 - seg(p, 0.6, 1) });
+  }
+  if (type === 'vine') {
+    // The hanging flowers come down like a blind and leave the page behind them.
+    const y = e * 2100;
+    el.style.clipPath = `inset(0 0 ${Math.max(0, 1920 - y)}px 0)`;
+    P(show(deco.strip), { y: y - 150, r: 180 });
+  }
+  if (type === 'stem') {
+    // A stem draws down the middle, then the page opens out from it.
+    const g = outC(seg(p, 0, 0.45)), o = ioC(seg(p, 0.3, 1));
+    const d = show(deco.stem); d.style.height = `${g * 1920}px`;
+    P(d, { y: g * 960, a: 1 - seg(p, 0.75, 1) });
+    el.style.clipPath = `inset(0 ${(1 - o) * 50}% 0 ${(1 - o) * 50}%)`;
+    if (o <= 0) el.style.clipPath = 'inset(0 50% 0 50%)';
+  }
+  if (type === 'postcard') {
+    el.style.transform = `scale(${lerp(0.32, 1, e)}) rotate(${(1 - e) * -10}deg)`;
+    el.style.outline = `${(1 - e) * 60}px solid #fbf6ee`;
+    el.style.filter = `drop-shadow(0 40px 60px rgba(60,40,25,${0.5 * (1 - p)}))`;
+  }
+  if (type === 'curtains') {
+    // The lace curtains from the countdown close, then part on the welcome.
+    const c = p < 0.45 ? ioC(p / 0.45) : 1 - ioC((p - 0.45) / 0.55);
+    show(deco.cl); show(deco.cr);
+    deco.cl.style.transform = `translateX(${-1230 + c * 640}px)`;
+    deco.cr.style.transform = `translateX(${1080 - c * 640}px)`;
+    if (p < 0.45) el.style.clipPath = 'inset(0 50% 0 50%)';
+  }
+  if (type === 'bloom') el.style.opacity = cl(p * 1.6);
+}
+
+// ================= Warm dust on the end card =================
+const cv = document.createElement('canvas');
+cv.width = 1080; cv.height = 1920;
+stage.appendChild(cv);
+const c = cv.getContext('2d');
+const flash = full(stage, '');
+const RN = rng(57);
+const dust = Array.from({ length: 70 }, () => ({ x: RN() * 1080, y: RN() * 1920, v: 20 + RN() * 50, r: 1 + RN() * 2.6, p: RN() * 6.28, f: 1 + RN() * 3 }));
+function fx(T) {
+  c.clearRect(0, 0, 1080, 1920);
+  const now = SEGS.find((s) => T >= s.start && T < s.start + s.dur) || SEGS[SEGS.length - 1];
+  if (now.key !== 'end') return;
+  for (const d of dust) {
+    const y = (d.y - T * d.v + 1920 * 4) % 1920, tw = 0.4 + 0.6 * Math.abs(Math.sin(T * d.f + d.p));
+    c.fillStyle = `rgba(227,201,164,${0.7 * tw})`;
+    c.beginPath(); c.arc(d.x + Math.sin(T + d.p) * 10, y, d.r, 0, 6.3); c.fill();
+  }
+}
+const FLASH_COL = { light: '255,248,235', wave: '255,246,232', ring: '255,240,220', frame: '255,240,220', vine: '255,240,222', stem: '255,244,228', postcard: '255,250,242', curtains: '255,246,236', bloom: '255,236,215' };
+
+function render(T) {
+  T = cl(T, 0, TOTAL);
+  // A gentle pulse on each beat, stronger on the song's main pulse.
+  const k = T >= BAR ? Math.floor((T - BAR) / BEAT) : -1, beat = T >= BAR ? (T - BAR) % BEAT : 9;
+  stage.style.transform = `scale(${1 + (k % 2 ? 0.004 : 0.01) * Math.exp(-beat * 7)})`;
+  DECO.forEach((e) => { e.style.display = 'none'; });
+  SEGS.forEach((s, i) => {
+    const u = T - s.start, next = SEGS[i + 1];
+    const on = u >= 0 && (u < s.dur + (next ? TR[next.enter] : 0) || i === SEGS.length - 1);
+    const sc = R[s.key].sc;
+    sc.style.display = on ? 'block' : 'none';
+    if (!on) return;
+    sc.style.transform = '';
+    R[s.key].f(u, s);
+    if (s.enter) transition(sc, s.enter, seg(u, 0, TR[s.enter]));
+  });
+  let fa = 0, fc = '255,255,255';
+  SEGS.forEach((s) => {
+    if (!s.enter || s.enter === 'light' || s.enter === 'curtains') return;
+    const u = T - s.start, pk = s.enter === 'bloom' ? 0.5 : 0.3;
+    const v = u < 0 ? (u > -0.08 ? pk * (1 + u / 0.08) : 0) : pk * Math.exp(-u * 7);
+    if (v > fa) { fa = v; fc = FLASH_COL[s.enter]; }
+  });
+  const end = seg(T, TOTAL - 0.7, TOTAL);
+  flash.style.background = end > 0 ? `rgba(0,0,0,${end})` : `rgba(${fc},${fa})`;
+  fx(T);
+}
+
+window.__render = render;
+window.__firstBar = BAR;
+window.__ready = ready(stage, [['48px Vibes', 'A'], ['48px Allura', 'A'], ['600 48px Corm', 'A'], ['italic 500 48px Corm', 'A'], ['400 48px Nun', 'A'], ['800 48px Nun', 'A'], ['48px Mukta', 'Aक'], ['48px Rozha', 'श्री']], TOTAL);
+</script></body></html>

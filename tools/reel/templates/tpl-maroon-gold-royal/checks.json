@@ -1,0 +1,1748 @@
+[
+  {
+    "name": "saved with all the sample text",
+    "data": "$sample",
+    "want": [
+      "Karan",
+      "Nisha",
+      "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।",
+      "निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥",
+      "|| Shri Ganeshay Namah ||",
+      "Our families request",
+      "Our Wedding",
+      "Wednesday · 22nd July 2026 · Mumbai",
+      "The Wedding Day",
+      "Wednesday, 22nd July, 2026",
+      "22",
+      "07",
+      "2026",
+      "Day",
+      "Month",
+      "Year",
+      "Wedding Ceremony",
+      "Mr. & Mrs. Sharma",
+      "Karan with Nisha",
+      "at Hotel The Taj Palace, Mumbai (M.H.)",
+      "Wedding Events",
+      "Haldi Ceremony",
+      "11:30 a.m. onwards",
+      "Reception & Dinner",
+      "Know Us",
+      "G/S — Puran Sharma",
+      "D/O — Shrikant Verma",
+      "Our Beautiful Moments",
+      "The art of mehndi",
+      "Blessings & traditions",
+      "Our Wedding Venue",
+      "Hotel The Taj Mahal Palace,",
+      "Colaba, Mumbai (M.H.)",
+      "Invitee",
+      "Puran Ved Kumar Sharma",
+      "P V Jewellers",
+      "Karan & Nisha",
+      "We look forward",
+      "Made with love · 22 July 2026 · Mumbai",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "12 Lake Road",
+      "+91",
+      "Bapu Bazaar",
+      "Get Directions",
+      "Sita Nagar",
+      "Road No 6"
+    ]
+  },
+  {
+    "name": "every section filled with new details",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "when": "Friday, 19 November 2099",
+            "time": "4 pm onwards"
+          },
+          {
+            "title": "Sangeet",
+            "when": "Friday, 19 November 2099",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Saturday, 20 November 2099",
+            "time": "7:30 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Sunday, 21 November 2099",
+            "time": "8 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "Roka day"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+            "caption": "Our first trip"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Forever begins"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "Vihaan",
+      "Ananya",
+      "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।",
+      "निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥",
+      "॥ श्री गणेशाय नमः ॥",
+      "Together with their",
+      "Shubh Vivah",
+      "Saturday · 20th November 2099 · Udaipur",
+      "Ananya begin forever",
+      "Saturday, 20th November, 2099",
+      "20",
+      "11",
+      "2099",
+      "Shri Rakesh and Smt.",
+      "Vihaan with Ananya",
+      "Join us as Vihaan & Ananya",
+      "take their seven pheras",
+      "at The Oberoi Udaivilas, Udaipur",
+      "Mehendi",
+      "Sangeet",
+      "Phere",
+      "Reception",
+      "Sunday, 21 November 2099",
+      "S/O — Rakesh Malhotra",
+      "Jaipur (R.J.)",
+      "Roka day",
+      "Forever begins",
+      "The Oberoi Udaivilas,",
+      "Haridasji Ki Magri, Udaipur",
+      "Rakesh Malhotra",
+      "Malhotra Textiles",
+      "the world to us",
+      "Udaipur · November 2099",
+      "aisa invitation banaiye"
+    ],
+    "reject": [
+      "Karan",
+      "Nisha",
+      "Mumbai",
+      "Haldi Ceremony",
+      "P V Jewellers",
+      "The art of mehndi",
+      "Puran",
+      "Shri Ganeshay",
+      "12 Lake Road",
+      "+91",
+      "Bapu Bazaar",
+      "Get Directions",
+      "Sita Nagar",
+      "Road No 6"
+    ]
+  },
+  {
+    "name": "only the two names",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      }
+    },
+    "want": [
+      "Vihaan",
+      "Ananya",
+      "Vihaan & Ananya",
+      "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।",
+      "निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "The Wedding Day",
+      "Wedding Ceremony",
+      "Wedding Events",
+      "Know Us",
+      "Our Beautiful Moments",
+      "Our Wedding Venue",
+      "Invitee",
+      "Karan",
+      "Nisha",
+      "Mumbai",
+      "Haldi Ceremony",
+      "P V Jewellers",
+      "The art of mehndi",
+      "Puran",
+      "Shri Ganeshay"
+    ]
+  },
+  {
+    "name": "no countdown",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {},
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "when": "Friday, 19 November 2099",
+            "time": "4 pm onwards"
+          },
+          {
+            "title": "Sangeet",
+            "when": "Friday, 19 November 2099",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Saturday, 20 November 2099",
+            "time": "7:30 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Sunday, 21 November 2099",
+            "time": "8 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "Roka day"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+            "caption": "Our first trip"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Forever begins"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "Wedding Ceremony"
+    ],
+    "reject": [
+      "The Wedding Day"
+    ]
+  },
+  {
+    "name": "countdown with only its date",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "targetDate": "2099-11-20"
+      },
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "when": "Friday, 19 November 2099",
+            "time": "4 pm onwards"
+          },
+          {
+            "title": "Sangeet",
+            "when": "Friday, 19 November 2099",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Saturday, 20 November 2099",
+            "time": "7:30 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Sunday, 21 November 2099",
+            "time": "8 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "Roka day"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+            "caption": "Our first trip"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Forever begins"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "The Wedding Day",
+      "2099",
+      "Month"
+    ],
+    "reject": [
+      "begin forever"
+    ]
+  },
+  {
+    "name": "a countdown date that is not a date",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "20-11-2099",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "when": "Friday, 19 November 2099",
+            "time": "4 pm onwards"
+          },
+          {
+            "title": "Sangeet",
+            "when": "Friday, 19 November 2099",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Saturday, 20 November 2099",
+            "time": "7:30 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Sunday, 21 November 2099",
+            "time": "8 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "Roka day"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+            "caption": "Our first trip"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Forever begins"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "The Wedding Day",
+      "Saturday, 20th November, 2099"
+    ],
+    "reject": [
+      "Month"
+    ]
+  },
+  {
+    "name": "no ceremony",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "intro": " ",
+        "mid": "",
+        "venue": "<br>",
+        "photo": ""
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "when": "Friday, 19 November 2099",
+            "time": "4 pm onwards"
+          },
+          {
+            "title": "Sangeet",
+            "when": "Friday, 19 November 2099",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Saturday, 20 November 2099",
+            "time": "7:30 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Sunday, 21 November 2099",
+            "time": "8 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "Roka day"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+            "caption": "Our first trip"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Forever begins"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "Wedding Events"
+    ],
+    "reject": [
+      "Wedding Ceremony",
+      "Vihaan with Ananya"
+    ]
+  },
+  {
+    "name": "ceremony with only its photo",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "when": "Friday, 19 November 2099",
+            "time": "4 pm onwards"
+          },
+          {
+            "title": "Sangeet",
+            "when": "Friday, 19 November 2099",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Saturday, 20 November 2099",
+            "time": "7:30 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Sunday, 21 November 2099",
+            "time": "8 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "Roka day"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+            "caption": "Our first trip"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Forever begins"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "Wedding Ceremony",
+      "Vihaan with Ananya"
+    ],
+    "reject": [
+      "seek your blessings"
+    ]
+  },
+  {
+    "name": "no events",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": " ",
+            "when": "",
+            "time": ""
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "Roka day"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+            "caption": "Our first trip"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Forever begins"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "Know Us"
+    ],
+    "reject": [
+      "Wedding Events",
+      "Celebration"
+    ]
+  },
+  {
+    "name": "an event with only a time",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "",
+            "when": "",
+            "time": "6 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "Roka day"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+            "caption": "Our first trip"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Forever begins"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "Celebration",
+      "6 pm"
+    ],
+    "reject": [
+      "Mehendi"
+    ]
+  },
+  {
+    "name": "no profiles",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "when": "Friday, 19 November 2099",
+            "time": "4 pm onwards"
+          },
+          {
+            "title": "Sangeet",
+            "when": "Friday, 19 November 2099",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Saturday, 20 November 2099",
+            "time": "7:30 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Sunday, 21 November 2099",
+            "time": "8 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "",
+        "groomDesc": "",
+        "bridePhoto": " ",
+        "brideDesc": ""
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "Roka day"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+            "caption": "Our first trip"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Forever begins"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "Our Beautiful Moments"
+    ],
+    "reject": [
+      "Know Us"
+    ]
+  },
+  {
+    "name": "profiles without photos",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "when": "Friday, 19 November 2099",
+            "time": "4 pm onwards"
+          },
+          {
+            "title": "Sangeet",
+            "when": "Friday, 19 November 2099",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Saturday, 20 November 2099",
+            "time": "7:30 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Sunday, 21 November 2099",
+            "time": "8 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "Roka day"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+            "caption": "Our first trip"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Forever begins"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "Know Us",
+      "S/O — Rakesh Malhotra"
+    ]
+  },
+  {
+    "name": "gallery: a caption without a photo, and a bad photo alone",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "when": "Friday, 19 November 2099",
+            "time": "4 pm onwards"
+          },
+          {
+            "title": "Sangeet",
+            "when": "Friday, 19 November 2099",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Saturday, 20 November 2099",
+            "time": "7:30 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Sunday, 21 November 2099",
+            "time": "8 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "",
+            "caption": "Just us"
+          },
+          {
+            "image": "javascript:alert(1)",
+            "caption": ""
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "Our Beautiful Moments",
+      "Just us"
+    ]
+  },
+  {
+    "name": "gallery with only a bad photo",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "when": "Friday, 19 November 2099",
+            "time": "4 pm onwards"
+          },
+          {
+            "title": "Sangeet",
+            "when": "Friday, 19 November 2099",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Saturday, 20 November 2099",
+            "time": "7:30 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Sunday, 21 November 2099",
+            "time": "8 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "javascript:alert(1)"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "Our Wedding Venue"
+    ],
+    "reject": [
+      "Our Beautiful Moments"
+    ]
+  },
+  {
+    "name": "no venue or invitee",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "when": "Friday, 19 November 2099",
+            "time": "4 pm onwards"
+          },
+          {
+            "title": "Sangeet",
+            "when": "Friday, 19 November 2099",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Saturday, 20 November 2099",
+            "time": "7:30 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Sunday, 21 November 2099",
+            "time": "8 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "Roka day"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+            "caption": "Our first trip"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Forever begins"
+          }
+        ]
+      },
+      "venue": {
+        "address": ""
+      },
+      "invitee": {
+        "name": " ",
+        "firmName": ""
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "the world to us"
+    ],
+    "reject": [
+      "Our Wedding Venue",
+      "Invitee",
+      "Malhotra Textiles"
+    ]
+  },
+  {
+    "name": "Hindi text and very long names",
+    "data": {
+      "hero": {
+        "groomName": "विहान मल्होत्रा",
+        "brideName": "Ananya Ritu Kapoor-Venkataraman",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "मेहंदी",
+            "when": "Friday, 19 November 2099",
+            "time": "4 pm onwards"
+          },
+          {
+            "title": "Sangeet & Cocktail Night by the Lake Pichola Ghats",
+            "when": "Friday, 19 November 2099",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Saturday, 20 November 2099",
+            "time": "7:30 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Sunday, 21 November 2099",
+            "time": "8 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "The day our families met over chai in Jaipur"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+            "caption": "Our first trip"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Forever begins"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "विहान मल्होत्रा",
+      "Ananya Ritu Kapoor-Venkataraman",
+      "विहान मल्होत्रा & Ananya Ritu Kapoor-Venkataraman",
+      "मेहंदी",
+      "Sangeet & Cocktail Night by",
+      "the Lake Pichola Ghats",
+      "The day our families"
+    ]
+  },
+  {
+    "name": "wrong types, HTML and bad photo links",
+    "data": {
+      "hero": {
+        "groomName": "<b>Vihaan</b>",
+        "brideName": 42,
+        "invocation": {
+          "a": 1
+        },
+        "tagline": [
+          "x"
+        ]
+      },
+      "countdown": {
+        "targetDate": 20991120,
+        "bigDate": null
+      },
+      "ceremony": {
+        "venue": "<img src=x onerror=alert(1)>Lakeside Lawns",
+        "photo": "javascript:alert(1)"
+      },
+      "events": {
+        "items": [
+          "oops",
+          null,
+          {
+            "title": "Phere",
+            "when": {
+              "x": 1
+            },
+            "time": 5
+          }
+        ]
+      },
+      "profiles": {
+        "groomDesc": "<script>alert(1)</script>Udaipur",
+        "bridePhoto": "https://example.invalid/missing.jpg"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "javascript:alert(1)",
+            "caption": ""
+          }
+        ]
+      },
+      "invitee": {
+        "name": {
+          "a": 1
+        }
+      },
+      "footer": {
+        "closing": 7
+      }
+    },
+    "want": [
+      "<b>Vihaan</b>",
+      "42",
+      "Lakeside Lawns",
+      "Phere",
+      "5",
+      "Udaipur",
+      "7"
+    ],
+    "reject": [
+      "[object Object]",
+      "undefined",
+      "null",
+      "Our Beautiful Moments",
+      "Invitee",
+      "The Wedding Day",
+      "alert"
+    ]
+  },
+  {
+    "name": "eight events",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Roka",
+            "when": "Day 1",
+            "time": "4 pm"
+          },
+          {
+            "title": "Haldi",
+            "when": "Day 2",
+            "time": "5 pm"
+          },
+          {
+            "title": "Mehendi",
+            "when": "Day 3",
+            "time": "6 pm"
+          },
+          {
+            "title": "Sangeet",
+            "when": "Day 4",
+            "time": "7 pm"
+          },
+          {
+            "title": "Baraat",
+            "when": "Day 5",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Day 6",
+            "time": "9 pm"
+          },
+          {
+            "title": "Vidaai",
+            "when": "Day 7",
+            "time": "10 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Day 8",
+            "time": "11 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "Roka day"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+            "caption": "Our first trip"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Forever begins"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "Roka",
+      "Baraat",
+      "Vidaai",
+      "Reception",
+      "Day 8",
+      "11 pm"
+    ]
+  },
+  {
+    "name": "one gallery photo",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "when": "Friday, 19 November 2099",
+            "time": "4 pm onwards"
+          },
+          {
+            "title": "Sangeet",
+            "when": "Friday, 19 November 2099",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Saturday, 20 November 2099",
+            "time": "7:30 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Sunday, 21 November 2099",
+            "time": "8 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "Roka day"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "Roka day"
+    ],
+    "reject": [
+      "Forever begins"
+    ]
+  },
+  {
+    "name": "six gallery photos",
+    "data": {
+      "hero": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya",
+        "invocation": "॥ श्री गणेशाय नमः ॥",
+        "inviteLine": "Together with their families, request your presence at",
+        "tagline": "Shubh Vivah",
+        "dateChip": "Saturday · 20th November 2099 · Udaipur"
+      },
+      "countdown": {
+        "subtitle": "The day Karan & Nisha begin forever",
+        "bigDate": "Saturday, 20th November, 2099",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "ceremony": {
+        "intro": "Shri Rakesh and Smt. Neeta Malhotra seek your blessings at the wedding of their son",
+        "mid": "Join us as Karan & Nisha take their seven pheras",
+        "venue": "on Saturday, 20th November, 2099<br>at The Oberoi Udaivilas, Udaipur",
+        "photo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "when": "Friday, 19 November 2099",
+            "time": "4 pm onwards"
+          },
+          {
+            "title": "Sangeet",
+            "when": "Friday, 19 November 2099",
+            "time": "8 pm"
+          },
+          {
+            "title": "Phere",
+            "when": "Saturday, 20 November 2099",
+            "time": "7:30 pm"
+          },
+          {
+            "title": "Reception",
+            "when": "Sunday, 21 November 2099",
+            "time": "8 pm"
+          }
+        ]
+      },
+      "profiles": {
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomDesc": "S/O — Rakesh Malhotra<br>Udaipur (R.J.)",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "brideDesc": "D/O — Anil Kapoor<br>Jaipur (R.J.)"
+      },
+      "gallery": {
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Moment 1"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+            "caption": "Moment 2"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+            "caption": "Moment 3"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png",
+            "caption": "Moment 4"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+            "caption": "Moment 5"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+            "caption": "Moment 6"
+          }
+        ]
+      },
+      "venue": {
+        "address": "The Oberoi Udaivilas,<br>Haridasji Ki Magri, Udaipur",
+        "mapEmbed": "https://maps.google.com/maps?q=udaivilas&output=embed",
+        "directionsUrl": "https://maps.app.goo.gl/x"
+      },
+      "invitee": {
+        "name": "Rakesh Malhotra",
+        "address": "12 Lake Road<br>+91 98000 00000",
+        "firmName": "Malhotra Textiles",
+        "firmAddress": "Bapu Bazaar, Udaipur"
+      },
+      "footer": {
+        "closing": "Your blessings mean the world to us",
+        "small": "Udaipur · November 2099"
+      }
+    },
+    "want": [
+      "Moment 1",
+      "Moment 6"
+    ]
+  }
+]

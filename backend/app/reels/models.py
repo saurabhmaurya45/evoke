@@ -16,17 +16,25 @@ class ReelStatus(str, enum.Enum):
     FAILED = "FAILED"
 
 
+class ReelKind(str, enum.Enum):
+    # Low resolution with a watermark burned into every frame, shown before buying.
+    PREVIEW = "PREVIEW"
+    # The bought video, full quality and downloadable.
+    FULL = "FULL"
+
+
 class EventReel(Base):
     """One render of an invitation's video. The row is also the job: the API inserts
     it as QUEUED and a worker (app.reels.worker) claims and finishes it."""
 
     __tablename__ = "event_reels"
     __table_args__ = (
-        # Last-resort guard against two requests both queueing a render for one
-        # invitation; `request_reel` checks for an active render first.
+        # Last-resort guard against two requests both queueing a render of one kind for
+        # one invitation; the service checks for an active render first.
         Index(
             "ix_event_reels_one_active",
             "event_id",
+            "kind",
             unique=True,
             postgresql_where=text("status IN ('QUEUED', 'RENDERING')"),
         ),
@@ -41,6 +49,12 @@ class EventReel(Base):
         UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
     )
     template_slot_id: Mapped[str] = mapped_column(String(240), nullable=False)
+    kind: Mapped[ReelKind] = mapped_column(
+        Enum(ReelKind, name="reel_kind"),
+        nullable=False,
+        default=ReelKind.FULL,
+        server_default=ReelKind.FULL.value,
+    )
     # The draft revision this video shows. Refreshed when a worker claims the job, so
     # edits made while it waited in the queue are included.
     draft_revision: Mapped[int] = mapped_column(Integer, nullable=False)

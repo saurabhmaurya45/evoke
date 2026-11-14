@@ -330,7 +330,12 @@ async def count_free_published(db: AsyncSession, owner_id: uuid.UUID) -> int:
     """
     paid = (
         select(Payment.id)
-        .where(Payment.event_id == Event.id, Payment.status == PaymentStatus.PAID)
+        .where(
+            Payment.event_id == Event.id,
+            Payment.status == PaymentStatus.PAID,
+            # Buying only the video doesn't make the invitation a paid one.
+            Payment.includes_template.is_(True),
+        )
         .exists()
     )
     stmt = select(func.count(Event.id)).where(
@@ -345,11 +350,20 @@ async def publish_event(db: AsyncSession, event_id: uuid.UUID, current_user: Use
     Events on a PAID template need a PAID payment first. A user can have at most
     `free_invitation_limit` published invitations that weren't paid for
     (409 FREE_INVITATION_LIMIT). Admins are exempt from both.
+
+    Publishing an already published invitation changes nothing about it, but each
+    publish makes a new video from the latest details if the video was bought.
     """
+    # Imported here: the reels service builds on this module.
+    from app.reels.service import queue_video_on_publish
+
     event = await get_event(db, event_id, current_user)
     if event.status == EventStatus.ARCHIVED:
         raise ValidationFailedError("An archived event cannot be published.")
     if event.status == EventStatus.PUBLISHED:
+        if await queue_video_on_publish(db, event, current_user.id):
+            await db.commit()
+            await db.refresh(event)
         return event
 
     if current_user.role != UserRole.ADMIN:
@@ -379,6 +393,7 @@ async def publish_event(db: AsyncSession, event_id: uuid.UUID, current_user: Use
         resource_id=event.id,
         actor_user_id=current_user.id,
     )
+    await queue_video_on_publish(db, event, current_user.id)
     await db.commit()
     await db.refresh(event)
     return event

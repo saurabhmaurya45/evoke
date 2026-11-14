@@ -20,12 +20,18 @@ from app.events.service import (
     resolve_event_template,
 )
 from app.payments.models import Payment, PaymentStatus
-from app.payments.pricing import get_template_price, has_paid_payment
+from app.payments.pricing import (
+    get_template_price,
+    has_paid_payment,
+    has_paid_video,
+    video_price,
+)
 from app.payments.razorpay_client import RazorpayClient, require_client
 from app.payments.schemas import CheckoutOut, PaymentOut, PriceQuoteOut
+from app.reels.service import queue_video_on_publish, video_offered
 from app.shared.audit import log_action
 from app.shared.authorization import ensure_owner_or_admin
-from app.shared.errors import AppError, NotFoundError, ValidationFailedError
+from app.shared.errors import AppError, ConflictError, NotFoundError, ValidationFailedError
 from app.shared.pagination import Page, PageParams, make_page
 from app.templates.models import Template
 from app.users.models import User
@@ -70,6 +76,7 @@ async def _event_and_template(
 async def get_quote(db: AsyncSession, user: User, event_id: uuid.UUID) -> PriceQuoteOut:
     event, template = await _event_and_template(db, user, event_id)
     price = await get_template_price(db, template)
+    video = video_price(price)
     return PriceQuoteOut(
         event_id=event.id,
         event_slug=event.slug,
@@ -82,18 +89,55 @@ async def get_quote(db: AsyncSession, user: User, event_id: uuid.UUID) -> PriceQ
         currency=price.currency,
         payment_required=not price.is_free,
         already_paid=await has_paid_payment(db, event.id),
+        video_available=await video_offered(db, event),
+        video_price_minor=video.amount_minor,
+        video_currency=video.currency,
+        video_already_paid=await has_paid_video(db, event.id),
     )
 
 
 async def start_checkout(
-    db: AsyncSession, client: RazorpayClient | None, user: User, event_id: uuid.UUID
+    db: AsyncSession,
+    client: RazorpayClient | None,
+    user: User,
+    event_id: uuid.UUID,
+    include_video: bool = False,
 ) -> CheckoutOut:
+    """Publishes the invitation, or returns a payment link for whatever is still due: the
+    invitation, the video, or both in one payment. An invitation that needs no payment
+    (free, or already paid for) is published first, then a link for the video alone is made."""
     event, template = await _event_and_template(db, user, event_id, lock=True)
     price = await get_template_price(db, template)
 
-    if price.is_free or await has_paid_payment(db, event.id):
+    video_due = False
+    if include_video:
+        if not await video_offered(db, event):
+            raise ConflictError(
+                "REEL_NOT_AVAILABLE", "This invitation's template doesn't have a video yet."
+            )
+        video_due = not await has_paid_video(db, event.id)
+
+    template_due = not price.is_free and not await has_paid_payment(db, event.id)
+    if not template_due:
         event = await publish_event(db, event.id, user)
-        return CheckoutOut(payment_required=False, event=EventOut.model_validate(event))
+        if not video_due:
+            return CheckoutOut(payment_required=False, event=EventOut.model_validate(event))
+        # publish_event committed, which released the lock; take it again for the video's payment.
+        event, template = await _event_and_template(db, user, event_id, lock=True)
+        if await has_paid_video(db, event.id):
+            await db.rollback()
+            return CheckoutOut(payment_required=False, event=EventOut.model_validate(event))
+
+    video = video_price(price)
+    if template_due and video_due and video.currency != price.currency:
+        raise ValidationFailedError(
+            f"The video is sold in {video.currency} and this template in {price.currency}; "
+            "buy the invitation first, then the video."
+        )
+    amount_minor = (price.amount_minor if template_due else 0) + (
+        video.amount_minor if video_due else 0
+    )
+    currency = price.currency if template_due else video.currency
 
     now = datetime.now(UTC)
     reusable = (
@@ -102,8 +146,10 @@ async def start_checkout(
             .where(
                 Payment.event_id == event.id,
                 Payment.status == PaymentStatus.CREATED,
-                Payment.amount_minor == price.amount_minor,
-                Payment.currency == price.currency,
+                Payment.includes_template.is_(template_due),
+                Payment.includes_video.is_(video_due),
+                Payment.amount_minor == amount_minor,
+                Payment.currency == currency,
                 Payment.checkout_url.is_not(None),
                 Payment.expires_at > now + _REUSE_MIN_REMAINING,
             )
@@ -125,8 +171,10 @@ async def start_checkout(
         event_id=event.id,
         user_id=user.id,
         template_id=template.id,
-        amount_minor=price.amount_minor,
-        currency=price.currency,
+        includes_template=template_due,
+        includes_video=video_due,
+        amount_minor=amount_minor,
+        currency=currency,
         status=PaymentStatus.CREATED,
         expires_at=expires_at,
     )
@@ -135,10 +183,13 @@ async def start_checkout(
 
     try:
         link = await razorpay.create_payment_link(
-            amount_minor=price.amount_minor,
-            currency=price.currency,
+            amount_minor=amount_minor,
+            currency=currency,
             reference_id=str(payment.id),
-            description=f"{template.name} invitation",
+            description=(
+                f"{template.name} invitation"
+                + (" + video" if template_due and video_due else " video" if video_due else "")
+            ),
             customer_email=user.email,
             callback_url=f"{settings.api_base_url.rstrip('/')}/v1/payments/razorpay/callback",
             expire_by=int(expires_at.timestamp()),
@@ -156,7 +207,12 @@ async def start_checkout(
         resource_type="payment",
         resource_id=payment.id,
         actor_user_id=user.id,
-        metadata={"event_id": str(event.id), "amount_minor": price.amount_minor},
+        metadata={
+            "event_id": str(event.id),
+            "amount_minor": amount_minor,
+            "includes_template": template_due,
+            "includes_video": video_due,
+        },
     )
     await db.commit()
     await db.refresh(payment)
@@ -237,7 +293,7 @@ async def mark_paid(db: AsyncSession, payment: Payment, provider_payment_id: str
         metadata={"provider_payment_id": provider_payment_id},
     )
 
-    if event.status == EventStatus.DRAFT:
+    if payment.includes_template and event.status == EventStatus.DRAFT:
         event.status = EventStatus.PUBLISHED
         await assign_published_slug(db, event)
         await log_action(
@@ -247,6 +303,9 @@ async def mark_paid(db: AsyncSession, payment: Payment, provider_payment_id: str
             resource_id=event.id,
             actor_user_id=payment.user_id,
         )
+    if payment.includes_video:
+        await db.flush()
+        await queue_video_on_publish(db, event, payment.user_id)
     await db.commit()
     await db.refresh(event)
     return event

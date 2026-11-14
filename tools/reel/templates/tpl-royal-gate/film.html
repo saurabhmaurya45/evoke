@@ -1,0 +1,573 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Royal Gate Film</title>
+<style>
+@font-face{font-family:Cinzel;src:url("fonts/cinzel-variable.woff2");font-weight:400 900}
+@font-face{font-family:Corm;src:url("fonts/cormorant-garamond-variable.woff2");font-weight:300 700}
+@font-face{font-family:Paris;src:url("fonts/parisienne-400-latin.woff2")}
+@font-face{font-family:Mussica;src:url("fonts/mussica-swash.woff2")}
+@font-face{font-family:Vibes;src:url("fonts/great-vibes-400-latin.woff2")}
+@font-face{font-family:Mahee;src:url("fonts/mukta-mahee-500-gurmukhi.woff2");unicode-range:U+0A00-0A7F,U+200C-200D,U+25CC}
+@font-face{font-family:Mukta;src:url("fonts/mukta-400-latin.woff2");font-weight:400}
+@font-face{font-family:Mukta;src:url("fonts/mukta-400-devanagari.woff2");font-weight:400;unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF}
+@font-face{font-family:Mukta;src:url("fonts/mukta-600-devanagari.woff2");font-weight:600;unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF}
+html,body{margin:0;background:#000;overflow:hidden;width:1080px;height:1920px}
+#stage{position:absolute;inset:0;overflow:hidden;background:#faf5eb}
+.sc{position:absolute;inset:0;overflow:hidden;display:none}
+.a{position:absolute;left:0;top:0;transform-origin:center center}
+.t{white-space:nowrap;text-align:center}
+.t span{display:inline-block;white-space:pre}
+canvas{position:absolute;left:0;top:0}
+</style></head><body><div id="stage"></div>
+<script src="../../lib/core.js"></script>
+<script>
+const D = window.__DATA;
+const stage = document.querySelector('#stage');
+// The film's own media (frames cut from the template's videos) lives in the public media bucket.
+const MEDIA = 'https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/reel-films/tpl-royal-gate/media/';
+// The template's own song: 81 BPM, its strong beat on every other one.
+const BEAT = 60 / 81, BAR = 4 * BEAT;
+
+// ---- The template's palette and type: ivory, burgundy, gold ----
+const IVORY = '#faf5eb', IVORY2 = '#f5efe0', BURG = '#6e1f2f', GOLD = '#c9a227', GOLD_L = '#e7cf7a', INK = '#2f2f2f', SOFT = '#6b5a4e';
+const HEAD = 'Cinzel,Mukta', BODY = 'Corm,Mukta', SCRIPT = 'Paris,Mukta', NAMES = 'Mussica,Paris,Mukta', SACRED = 'Mahee,Mukta';
+const ART = 'https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/';
+const POSTER = `${ART}gate-poster.webp`;
+// The template's gate film, cut into frames at 12 a second (the renderer can't play H.264): from 1.5s, the ribbon falls and the gates open.
+const GATE = { dir: `${MEDIA}gate`, n: 104 }, GFPS = 12;
+
+// ---- Data, used exactly as saved. A section with nothing in it is left out. ----
+const val = (v) => str(v).trim().replace(/[ \t]+/g, ' ');
+const obj = (it) => (it && typeof it === 'object' ? it : {});
+const arr = (v) => (Array.isArray(v) ? v : []).map(obj);
+function lines(value, max, count) {
+  const out = [];
+  for (const w of str(value).trim().split(/\s+/).filter(Boolean)) {
+    const last = out[out.length - 1];
+    if (last !== undefined && (last + ' ' + w).length <= max) out[out.length - 1] = `${last} ${w}`;
+    else out.push(w);
+  }
+  if (out.length > count) { out.length = count; out[count - 1] = out[count - 1].replace(/[,.;:!?]*$/, '') + '…'; }
+  return out;
+}
+function para(value, max, count) {
+  const s = str(value).trim();
+  if (!s) return [];
+  const n = Math.ceil(s.length / max);
+  return n > count ? lines(s, max, count) : wrap(s, Math.max(1, n), 1);
+}
+// Text the couple wrote on several lines keeps its line breaks, as in the template.
+function mlines(value, max, count) {
+  const out = str(value).split(/\n/).map((l) => l.trim().replace(/[ \t]+/g, ' ')).filter(Boolean).flatMap((l) => para(l, max, count));
+  if (out.length > count) { out.length = count; out[count - 1] = out[count - 1].replace(/[,.;:!?]*$/, '') + '…'; }
+  return out;
+}
+const initial = (s) => (graphemes(s)[0] || '').toUpperCase();
+const H = obj(D?.hero), C = obj(D?.couple);
+const groom = val(C.groomName), bride = val(C.brideName);
+const loading = val(H.loadingText), tapText = val(H.tapText), heroJoiner = val(H.joiner);
+const symbol = val(C.symbol), shabad = mlines(C.shabad, 46, 4), heading = val(C.heading), message = mlines(C.message, 40, 5);
+const groomRel = val(C.groomRelation), groomPar = para(val(C.groomParents), 40, 2), joiner = val(C.joiner), brideRel = val(C.brideRelation), bridePar = para(val(C.brideParents), 40, 2);
+const S = obj(D?.saveTheDate);
+const stdLabel = val(S.label), stdHead = para(val(S.heading), 26, 3), stdInstr = val(S.instruction);
+const dateParts = [val(S.day), val(S.month), val(S.year)];
+const hasDate = dateParts.some(Boolean);
+const ST = obj(D?.story);
+const storyTitle = val(ST.title);
+const storyParas = arr(ST.paragraphs).map((p) => val(p.text)).filter(Boolean).slice(0, 4);
+const storyPhotos = arr(ST.photos).map((p) => safeImage(p.image)).filter(Boolean).slice(0, 5);
+const E = obj(D?.events);
+const eventsTitle = val(E.title);
+const events = arr(E.items).filter((e) => val(e.title) || val(e.venue) || val(e.date)).slice(0, 6).map((e) => ({
+  title: val(e.title), date: val(e.date), time: val(e.time), venue: val(e.venue), address: val(e.address), country: val(e.country), image: safeImage(e.image),
+}));
+// The journey (e.g. Canada to India) sits after the events it names, as in the template.
+const showJourney = E.showJourney !== false && (val(E.fromLabel) || val(E.toLabel));
+const splitAt = showJourney ? Math.min(events.length, Math.max(0, parseInt(str(E.journeyAfter), 10) || 0)) : events.length;
+const journey = { from: val(E.fromLabel), to: val(E.toLabel), fromImg: safeImage(E.fromImage), toImg: safeImage(E.toImage) };
+const F = obj(D?.family);
+const familyTitle = val(F.title);
+const groups = arr(F.groups).filter((g) => val(g.relation) || val(g.names)).slice(0, 6).map((g) => ({ rel: val(g.relation), names: para(val(g.names), 40, 2) }));
+const thanks = val(obj(D?.footer).thankYou);
+
+// ---- The cut list: whole bars, so any section may follow any and stay on the beat. ----
+const SEGS = [];
+const add = (key, dur, enter, extra = {}) => SEGS.push({ key, dur, enter, ...extra });
+add('gate', 3 * BAR, null);
+add('couple', 2 * BAR, 'unfold');
+if (hasDate) add('date', 2 * BAR, 'heart');
+if (storyParas.length || storyPhotos.length) add('story', 2 * BAR, 'pages');
+if (splitAt > 0) add('events1', splitAt * BAR, 'rope', { from: 0, to: splitAt });
+if (showJourney) add('journey', BAR, 'flight');
+if (events.length > splitAt) add('events2', (events.length - splitAt) * BAR, 'rope', { from: splitAt, to: events.length });
+if (groups.length) add('family', BAR, 'card');
+if (thanks) add('thanks', BAR, 'velvet');
+add('end', 4 * BEAT, 'bloom');
+let acc = 0;
+SEGS.forEach((s) => { s.start = acc; acc += s.dur; });
+const TOTAL = acc;
+const TR = { unfold: 0.7, heart: 0.65, pages: 0.65, rope: 0.65, flight: 0.7, card: 0.6, velvet: 0.75, bloom: 0.35 };
+
+// ---- Helpers ----
+const R = {};
+const fade = (u, a, d = 0.5) => outC(seg(u, a, a + d));
+const rise = (el, u, at, y, x = 540, d = 0.55) => { const p = fade(u, at, d); P(el, { x, y: y + (1 - p) * 30, a: p, b: (1 - p) * 6 }); };
+const wipe = (el, u, at, y, d = 0.7, x = 540) => {
+  P(el, { x, y, a: cl(seg(u, at, at + 0.15) * 3) });
+  el.style.clipPath = `inset(-40% ${(1 - ioC(seg(u, at, at + d))) * 100}% -40% -8%)`;
+};
+const pop = (u, a, d = 0.45, k = 1.8) => Math.max(0.001, outB(seg(u, a, a + d), k));
+function full(sc, css) { return mk(sc, 'div', `width:1080px;height:1920px;${css}`); }
+function ivory(sc) {
+  full(sc, `background:linear-gradient(135deg,${IVORY} 0%,${IVORY2} 100%)`);
+  full(sc, 'background:radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(201,162,39,.12) 100%)');
+}
+function stack(rows, center) {
+  let y = 0;
+  rows.forEach((r, i) => { if (i) y += r.gap || 0; r.y = y + r.h / 2; y += r.h; });
+  rows.forEach((r) => { r.y += center - y / 2; });
+  return y;
+}
+const PHOTO_FALLBACK = (() => {
+  const c = document.createElement('canvas'); c.width = 90; c.height = 120;
+  const x = c.getContext('2d'), g = x.createLinearGradient(0, 0, 90, 120);
+  g.addColorStop(0, GOLD_L); g.addColorStop(1, BURG);
+  x.fillStyle = g; x.fillRect(0, 0, 90, 120);
+  return c.toDataURL('image/png');
+})();
+const photo = (parent, url, w, h, extra = '') => im(parent, url, w, h, `object-fit:cover;${extra}`, PHOTO_FALLBACK);
+const card = (sc, w, h, extra = '') => mk(sc, 'div', `width:${w}px;height:${h}px;border-radius:24px;background:#fffdf8;box-sizing:border-box;border:2px solid rgba(201,162,39,.3);box-shadow:0 20px 50px rgba(0,0,0,.07);${extra}`);
+// A red wax seal with the couple's initials, tied to the gate's ribbon.
+function seal(parent, size) {
+  const w = mk(parent, 'div', `width:${size}px;height:${size}px`);
+  w.innerHTML = `<svg viewBox="0 0 200 200" width="${size}" height="${size}"><defs><radialGradient id="rw" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#d43b45"/><stop offset=".55" stop-color="#a11d2a"/><stop offset="1" stop-color="#6b0f19"/></radialGradient></defs><path d="M100 4 C140 2 186 26 194 74 C202 120 190 164 150 186 C120 202 76 200 46 182 C10 160 -2 116 8 74 C18 30 60 6 100 4Z" fill="url(#rw)"/><circle cx="100" cy="100" r="74" fill="none" stroke="${GOLD}" stroke-width="5"/><circle cx="100" cy="100" r="64" fill="none" stroke="#e7cf7a" stroke-width="1.5" stroke-dasharray="3 5"/></svg>`;
+  const t = text(w, `${initial(groom)}&${initial(bride)}`, `font:400 ${size * 0.36}px/1 ${SCRIPT};color:${GOLD_L};text-shadow:0 2px 0 #5a0c14`);
+  P(t, { x: size / 2, y: size / 2 + 4 });
+  return w;
+}
+// The template's divider: a gold rule with a small diamond.
+function rule(parent, w = 300) {
+  const e = mk(parent, 'div', `width:${w}px;height:2px;background:linear-gradient(90deg,transparent,${GOLD},transparent)`);
+  return e;
+}
+
+// ================= Scenes (in cut order, so a later scene draws over an earlier one) =================
+
+// ---- The gate: the love-story line, the gate tied with ribbon and sealed, then it opens on the palace ----
+{
+  const sc = scene(stage);
+  const loader = full(sc, `background:linear-gradient(135deg,${IVORY},${IVORY2})`);
+  const lt = loading ? para(loading, 24, 2).map((l) => text(loader, l, `font:500 50px ${HEAD};letter-spacing:6px;color:${GOLD}`, 960)) : [];
+  const lr = rule(loader, 260);
+  const W = 1080, Hh = 1920;
+  const box = mk(sc, 'div', 'width:1080px;height:1920px;overflow:hidden');
+  const inner = mk(box, 'div', 'width:1080px;height:1920px;transform-origin:540px 1000px');
+  const poster = im(inner, POSTER, W, Hh);
+  const frames = Array.from({ length: GATE.n }, (_, i) => im(inner, `${GATE.dir}/${String(i + 1).padStart(3, '0')}.webp`, W, Hh, 'display:none'));
+  const sl = seal(sc, 300);
+  const tap = tapText ? text(sc, tapText, `font:500 52px ${HEAD};letter-spacing:9px;text-transform:uppercase;color:#fdf6e3;text-shadow:0 3px 18px rgba(0,0,0,.7)`, 960) : null;
+  const shadow = 'text-shadow:0 4px 26px rgba(0,0,0,.65);';
+  const hn = [text(sc, groom, `font:400 150px ${NAMES};color:#fdf3d0;${shadow}`, 940), heroJoiner ? text(sc, heroJoiner, `font:500 48px ${HEAD};letter-spacing:12px;text-transform:uppercase;color:${GOLD_L};${shadow}`) : null, text(sc, bride, `font:400 150px ${NAMES};color:#fdf3d0;${shadow}`, 940)];
+  sc.appendChild(loader); // the love-story line sits over the gate until it fades
+  let shown = [];
+  R.gate = { sc, f(u) {
+    // The love-story line, then the gate.
+    loader.style.opacity = 1 - seg(u, 1.0, 1.4);
+    loader.style.display = u < 1.4 ? 'block' : 'none';
+    // The line drifts closer while it is read, so the opening never stands still.
+    lt.forEach((e, i) => { P(e, { y: 900 + i * 76 - u * 14, s: 1 + u * 0.05, a: cl(seg(u, 0, 0.12) * 0.4 + fade(u, 0.05 + i * 0.12, 0.5)) * (1 - seg(u, 0.9, 1.2)) }); });
+    P(lr, { y: 1080, a: fade(u, 0.4) * (1 - seg(u, 0.9, 1.2)) }); lr.style.transform += ` scaleX(${outC(seg(u, 0.4, 0.9))})`;
+    // From the first strong beat the gate film plays a little faster, so it opens within two bars.
+    const t = (u - BAR) * 1.45;
+    shown.forEach((e) => { e.style.display = 'none'; });
+    shown = [];
+    if (t > 0) {
+      const x = cl(t * GFPS, 0, GATE.n - 1), i = Math.floor(x), f = x - i;
+      frames[i].style.display = 'block'; frames[i].style.opacity = 1; shown.push(frames[i]);
+      if (f > 0.01 && i + 1 < GATE.n) { frames[i + 1].style.display = 'block'; frames[i + 1].style.opacity = f; shown.push(frames[i + 1]); }
+    }
+    inner.style.transform = `scale(${u < BAR ? lerp(1.06, 1, seg(u, 1, BAR)) : 1 + seg(u, 2 * BAR, 3 * BAR + 0.7) * 0.08})`;
+    // The seal pulses with the beat, then cracks away as the ribbon falls.
+    const gone = seg(u, BAR - 0.2, BAR + 0.35);
+    P(sl, { x: 540, y: 1010, s: pop(u, 1.3, 0.5, 1.6) * (1 + 0.05 * Math.exp(-((u - 1.3) % BEAT) * 8)) * (1 + gone * 0.4), a: (1 - gone) * cl(seg(u, 1.3, 1.5) * 3), r: gone * 30 });
+    if (tap) P(tap, { y: 760, a: fade(u, 1.5) * (1 - seg(u, BAR - 0.3, BAR)) });
+    // The couple's names over the moonlit palace.
+    const at = 2 * BAR + 0.4;
+    hn.forEach((e, i) => { if (!e) return; if (i === 1) P(e, { y: 800, a: fade(u, at + 0.5), s: lerp(1.3, 1, outC(seg(u, at + 0.5, at + 1.0))) }); else wipe(e, u, at + i * 0.5, i ? 1000 : 600, 0.8); });
+  } };
+}
+
+// ---- The invitation card: the sacred symbol and verse, the welcome, and the couple with their parents ----
+{
+  const sc = scene(stage);
+  ivory(sc);
+  const crd = card(sc, 960, 100, 'left:60px');
+  const rows = [];
+  const row = (el, h, gap = 0, kind = 'rise') => { if (el) rows.push({ el, h, gap, kind }); };
+  row(symbol ? text(sc, symbol, `font:500 110px/1.1 ${SACRED};color:${GOLD}`, 600) : null, 120, 0, 'symbol');
+  shabad.forEach((l, i) => row(text(sc, l, `font:500 34px ${SACRED};color:${BURG}`, 880), 50, i ? 0 : 16));
+  row(heading ? text(sc, heading, `font:400 82px ${SCRIPT};color:${BURG}`, 880) : null, 100, 30, 'wipe');
+  message.forEach((l, i) => row(text(sc, l, `font:500 38px ${BODY};color:${SOFT}`, 880), 52, i ? 0 : 16));
+  row(text(sc, groom, `font:400 130px ${NAMES};color:${BURG}`, 860), 150, 34, 'name');
+  row(groomRel ? text(sc, groomRel, `font:500 30px ${BODY};color:${SOFT}`) : null, 38);
+  groomPar.forEach((l) => row(text(sc, l, `font:600 34px ${HEAD};letter-spacing:1px;color:${GOLD}`, 860), 46));
+  row(joiner ? text(sc, joiner, `font:500 34px ${HEAD};letter-spacing:8px;color:${SOFT}`) : null, 60, 16);
+  row(text(sc, bride, `font:400 130px ${NAMES};color:${BURG}`, 860), 150, joiner ? 0 : 20, 'name');
+  row(brideRel ? text(sc, brideRel, `font:500 30px ${BODY};color:${SOFT}`) : null, 38);
+  bridePar.forEach((l) => row(text(sc, l, `font:600 34px ${HEAD};letter-spacing:1px;color:${GOLD}`, 860), 46));
+  const Hc = stack(rows, 960);
+  crd.style.top = `${960 - Hc / 2 - 80}px`; crd.style.height = `${Hc + 160}px`;
+  const innerLine = mk(sc, 'div', `left:78px;top:${960 - Hc / 2 - 62}px;width:924px;height:${Hc + 124}px;border-radius:16px;box-sizing:border-box;border:1.5px solid rgba(201,162,39,.35)`);
+  R.couple = { sc, f(u) {
+    const cp = seg(u, 0, 0.6);
+    crd.style.opacity = innerLine.style.opacity = cl(cp * 2);
+    const per = Math.min(0.24, (BAR * 1.3) / rows.length);
+    rows.forEach((r, i) => {
+      const at = 0.25 + i * per;
+      if (r.kind === 'symbol') { P(r.el, { y: r.y, s: pop(u, at, 0.55, 1.6), a: cl(seg(u, at, at + 0.2) * 3) }); r.el.style.filter = `drop-shadow(0 0 ${10 + 8 * Math.sin(u * 4)}px rgba(201,162,39,.6))`; }
+      else if (r.kind === 'name' || r.kind === 'wipe') wipe(r.el, u, at, r.y, 0.8);
+      else rise(r.el, u, at, r.y);
+    });
+  } };
+}
+
+// ---- Save the date: the gold heart is scratched on the beat to show the day, month and year ----
+const HEART_AT = { x: 540, y: 1060 };
+{
+  const sc = scene(stage);
+  ivory(sc);
+  const label = stdLabel ? text(sc, stdLabel, `font:500 32px ${HEAD};letter-spacing:10px;text-transform:uppercase;color:${GOLD}`, 960) : null;
+  const head = stdHead.map((l) => text(sc, l, `font:500 56px ${HEAD};letter-spacing:4px;text-transform:uppercase;color:${BURG}`, 960));
+  const HW = 720, HHt = HW * 185 / 200;
+  const HP = 'M100 185 C100 185, 200 125, 200 70 C200 23, 157 -10, 121.5 15 C100 31, 100 31, 100 31 C100 31, 100 31, 78.5 15 C43 -10, 0 23, 0 70 C0 125, 100 185, 100 185 Z';
+  const heart = mk(sc, 'div', `width:${HW}px;height:${HHt}px;filter:drop-shadow(0 26px 40px rgba(110,31,47,.18))`);
+  const face = mk(heart, 'div', `width:${HW}px;height:${HHt}px;background:linear-gradient(160deg,#fffdf6,#f6ecd6);-webkit-mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 185' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='${HP}'/%3E%3C/svg%3E") center/contain no-repeat`);
+  const vals = dateParts.filter(Boolean).map((v, i, a) => text(face, v, `font:600 ${i === 1 && a.length === 3 ? 74 : 110}px/1 ${i === 1 && a.length === 3 ? SCRIPT : HEAD};color:${BURG}`, HW - 220));
+  const cv = document.createElement('canvas'); cv.width = HW; cv.height = HHt; cv.className = 'a'; face.appendChild(cv);
+  const rr = rng(23);
+  const strokes = Array.from({ length: 12 }, (_, k) => ({ y: 40 + k * (HHt - 80) / 11 + (rr() - 0.5) * 20, w: 80 + rr() * 20 }));
+  const instr = stdInstr ? text(sc, stdInstr, `font:500 34px ${HEAD};letter-spacing:7px;text-transform:uppercase;color:${GOLD}`, 960) : null;
+  const CF = rng(63);
+  const conf = Array.from({ length: 80 }, () => ({ a: CF() * 6.28, v: 500 + CF() * 900, s: 10 + CF() * 12, r: CF() * 6, c: [BURG, GOLD, GOLD_L, '#ffffff'][Math.floor(CF() * 4)] }));
+  const cc = document.createElement('canvas'); cc.width = 1080; cc.height = 1920; cc.className = 'a'; sc.appendChild(cc);
+  R.date = { sc, f(u) {
+    if (label) rise(label, u, 0.05, 300);
+    head.forEach((e, i) => rise(e, u, 0.2 + i * 0.1, 400 + i * 74));
+    P(heart, { ...HEART_AT, s: pop(u, 0.4, 0.6, 1.5) });
+    const n = vals.length;
+    vals.forEach((e, i) => P(e, { x: HW / 2, y: HHt * 0.4 + (i - (n - 1) / 2) * (n === 3 ? 125 : 140) }));
+    // Gold foil scratched away, stroke by stroke, from the second strong beat.
+    const p = seg(u, 2 * BEAT, 2 * BEAT + 1.8);
+    const g = cv.getContext('2d');
+    g.globalCompositeOperation = 'source-over';
+    g.clearRect(0, 0, HW, HHt);
+    if (p < 1) {
+      const gr = g.createLinearGradient(0, 0, HW, HHt);
+      gr.addColorStop(0, '#e9c75a'); gr.addColorStop(0.45, '#c9a227'); gr.addColorStop(0.55, '#f3dd8a'); gr.addColorStop(1, '#b38a1a');
+      g.fillStyle = gr; g.fillRect(0, 0, HW, HHt);
+      g.globalCompositeOperation = 'destination-out'; g.lineCap = 'round';
+      strokes.forEach((s, k) => {
+        const q = cl(p * strokes.length - k); if (q <= 0) return;
+        g.lineWidth = s.w; g.beginPath();
+        g.moveTo(k % 2 ? HW + 30 : -30, s.y); g.lineTo(k % 2 ? HW + 30 - q * (HW + 60) : -30 + q * (HW + 60), s.y + (k % 2 ? -30 : 30)); g.stroke();
+      });
+    }
+    if (instr) P(instr, { y: 1530, a: fade(u, 0.8) });
+    const done = 2 * BEAT + 1.8, x = cc.getContext('2d');
+    x.clearRect(0, 0, 1080, 1920);
+    conf.forEach((c) => {
+      const t = u - done; if (t <= 0 || t > 2) return;
+      x.save(); x.translate(HEART_AT.x + Math.cos(c.a) * c.v * t, HEART_AT.y + Math.sin(c.a) * c.v * t * 0.8 + 700 * t * t); x.rotate(c.r + t * 9);
+      x.globalAlpha = cl(2 - t); x.fillStyle = c.c; x.fillRect(-c.s / 2, -c.s / 4, c.s, c.s / 2); x.restore();
+    });
+  } };
+}
+
+// ---- Our story: a fanned stack of photos, one coming to the front on each strong beat ----
+{
+  const sc = scene(stage);
+  ivory(sc);
+  const title = storyTitle ? text(sc, storyTitle, `font:400 140px ${SCRIPT};color:${BURG}`, 940) : null;
+  const PW = 560, PH = 700;
+  const cards = storyPhotos.map((url) => { const c = card(sc, PW + 30, PH + 30, 'border-radius:14px'); c.img = photo(c, url, PW, PH, 'left:15px;top:15px;border-radius:8px'); return c; });
+  const paras = storyParas.map((p) => para(p, 44, 3));
+  const pl = paras.flatMap((ls, i) => ls.map((l, j) => ({ e: text(sc, l, `font:500 36px ${BODY};color:${SOFT}`, 960), i, first: j === 0 })));
+  const hasP = cards.length > 0;
+  const photoY = title ? 680 : 560, textTop = hasP ? photoY + PH / 2 + 90 : 420;
+  R.story = { sc, f(u, s) {
+    if (title) wipe(title, u, 0.1, 230, 0.9);
+    const n = cards.length, per = (s.dur - 0.6) / Math.max(1, n);
+    cards.forEach((c, i) => {
+      // The current photo comes to the front; the others fan out behind it.
+      const cur = Math.min(n - 1, Math.floor(Math.max(0, u - 0.3) / per)), d = ((i - cur) % n + n) % n;
+      const rot = d === 0 ? 0 : (d % 2 ? -8 : 8) * Math.ceil(d / 2), dx = d === 0 ? 0 : (d % 2 ? -1 : 1) * 90 * Math.ceil(d / 2);
+      const k = fade(u, 0.3 + i * 0.12, 0.6);
+      P(c, { x: 540 + dx, y: photoY + (1 - k) * 120 + d * 8, r: rot, s: d === 0 ? 1 : 0.9, a: k * (d > 2 ? 0 : 1) });
+      c.style.zIndex = String(10 - d);
+      c.img.style.transform = `scale(${1.06 - seg(u, 0, s.dur) * 0.06})`;
+    });
+    let y = textTop;
+    const perL = Math.min(0.2, (s.dur - 1.4) / Math.max(1, pl.length));
+    pl.forEach((l, k) => { if (l.first && k) y += 24; rise(l.e, u, 0.8 + k * perL, y); y += 50; });
+  } };
+}
+
+// ---- The events: one a bar, each in its card with the gold-framed illustration ----
+function eventsScene(key, from, to) {
+  const sc = scene(stage);
+  ivory(sc);
+  const title = from === 0 && eventsTitle ? text(sc, eventsTitle, `font:400 120px ${SCRIPT};color:${BURG}`, 940) : null;
+  const cards = events.slice(from, to).map((ev) => {
+    const rows = [];
+    const row = (el, h, gap = 0, kind = 'rise') => { if (el) rows.push({ el, h, gap, kind }); };
+    row(ev.title ? text(sc, ev.title, `font:400 92px ${SCRIPT};color:${GOLD}`, 840) : null, 110, 0, 'wipe');
+    row(ev.date ? text(sc, ev.date, `font:500 36px ${HEAD};letter-spacing:6px;color:${INK}`, 840) : null, 50, 10);
+    row(ev.time ? text(sc, ev.time, `font:500 32px ${HEAD};letter-spacing:4px;color:${GOLD}`, 840) : null, 46);
+    const art = ev.image ? photo(sc, ev.image, 560, 560 * 974 / 724, 'object-fit:contain') : null;
+    row(art, 560 * 974 / 724, 24, 'art');
+    row(ev.venue ? text(sc, 'Venue', `font:500 26px ${HEAD};letter-spacing:6px;text-transform:uppercase;color:${SOFT}`) : null, 40, 20);
+    row(ev.venue ? text(sc, ev.venue, `font:600 46px ${HEAD};letter-spacing:4px;text-transform:uppercase;color:${GOLD}`, 840) : null, 62);
+    row(ev.address ? text(sc, ev.address, `font:500 36px ${BODY};font-variant:small-caps;letter-spacing:2px;color:${SOFT}`, 840) : null, 48, 6);
+    row(ev.country ? text(sc, ev.country, `font:500 40px ${HEAD};letter-spacing:5px;text-transform:uppercase;color:${INK}`, 840) : null, 56, 6);
+    const Hc = stack(rows, title ? 1070 : 980);
+    const bg = card(sc, 920, Hc + 100);
+    sc.insertBefore(bg, sc.children[2]);
+    return { rows, bg, cy: (title ? 1070 : 980), Hc };
+  });
+  R[key] = { sc, f(u) {
+    if (title) { wipe(title, u, 0.1, 150, 0.8); title.style.opacity = String(Number(title.style.opacity) * (1 - seg(u, BAR - 0.4, BAR))); }
+    cards.forEach((c, i) => {
+      const t0 = i * BAR, last = i === cards.length - 1;
+      const outP = last ? 0 : seg(u, t0 + BAR - 0.3, t0 + BAR + 0.1);
+      const on = u >= t0 - 0.05 && outP < 1;
+      c.bg.style.display = on ? 'block' : 'none';
+      c.rows.forEach((r) => { r.el.style.display = c.bg.style.display; });
+      if (!on) return;
+      const o = inC(outP), shift = -o * 1100, k = seg(u, t0, t0 + 0.5);
+      P(c.bg, { x: 540 + shift + (i ? (1 - outC(k)) * 1000 : 0), y: c.cy + (i ? 0 : (1 - outC(k)) * 120), a: cl(k * 3) });
+      c.rows.forEach((r, j) => {
+        const at = t0 + 0.15 + j * 0.08, x = 540 + shift;
+        if (r.kind === 'wipe') wipe(r.el, u, at, r.y, 0.6, x);
+        else if (r.kind === 'art') { const p = seg(u, at, at + 0.6); P(r.el, { x, y: r.y + (1 - outC(p)) * 60, s: lerp(0.9, 1, outB(p, 1.4)) * (1 + 0.012 * Math.sin(u * 2)), a: cl(p * 3) }); }
+        else rise(r.el, u, at, r.y, x, 0.45);
+      });
+    });
+  } };
+}
+if (splitAt > 0) eventsScene('events1', 0, splitAt);
+
+// ---- The journey: a plane flies the dotted route from one landmark to the other ----
+{
+  const sc = scene(stage);
+  ivory(sc);
+  const route = mk(sc, 'div', `left:538px;top:420px;width:4px;height:1080px;background:repeating-linear-gradient(180deg,${BURG} 0 18px,transparent 18px 34px);opacity:.55;transform-origin:50% 100%`);
+  const lm = [[journey.fromImg, journey.from, 1490], [journey.toImg, journey.to, 430]].map(([img, label, y]) => ({
+    img: img ? im(sc, img, 400, 376, 'object-fit:contain') : null,
+    label: label ? text(sc, label, `font:700 64px ${HEAD};letter-spacing:8px;text-transform:uppercase;color:${BURG}`, 900) : null, y,
+  }));
+  const plane = mk(sc, 'div', 'width:110px;height:110px');
+  plane.innerHTML = `<svg viewBox="0 0 24 24" width="110" height="110"><path fill="${BURG}" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>`;
+  R.journey = { sc, f(u) {
+    const [a, b] = lm;
+    if (a.img) P(a.img, { y: a.y - 120, s: pop(u, 0.05, 0.5, 1.5) });
+    if (a.label) rise(a.label, u, 0.2, a.y + 130);
+    const g = ioC(seg(u, 0.4, BAR - 0.5));
+    route.style.transform = `scaleY(${g})`;
+    P(plane, { y: 1440 - g * 1000, a: seg(u, 0.3, 0.5) * (1 - seg(u, BAR - 0.6, BAR - 0.3)), s: 1 + 0.08 * Math.sin(u * 6) });
+    if (b.img) P(b.img, { y: b.y + 70, s: pop(u, BAR - 1.0, 0.5, 1.5) });
+    if (b.label) rise(b.label, u, BAR - 0.8, b.y + 300);
+  } };
+}
+if (events.length > splitAt) eventsScene('events2', splitAt, events.length);
+
+// ---- With blessings from: the family, group by group ----
+{
+  const sc = scene(stage);
+  ivory(sc);
+  const title = familyTitle ? para(familyTitle, 16, 2).map((l) => text(sc, l, `font:400 120px ${SCRIPT};color:${BURG}`, 940)) : [];
+  const rows = [];
+  groups.forEach((g, i) => {
+    if (g.rel) rows.push({ el: text(sc, g.rel, `font:600 32px ${HEAD};letter-spacing:4px;text-transform:uppercase;color:${BURG}`, 820), h: 46, gap: i ? 40 : 0 });
+    g.names.forEach((l, j) => rows.push({ el: text(sc, l, `font:500 42px ${BODY};color:${INK}`, 820), h: 54, gap: !g.rel && j === 0 && i ? 40 : 0 }));
+  });
+  const top = 300 + title.length * 130;
+  const Hc = stack(rows, top + 80 + 0);
+  rows.forEach((r) => { r.y += Hc / 2; });
+  const bg = card(sc, 900, Hc + 120);
+  sc.insertBefore(bg, sc.children[2]);
+  const inner = mk(sc, 'div', `width:870px;height:${Hc + 90}px;border-radius:14px;box-sizing:border-box;border:1.5px solid rgba(201,162,39,.35)`);
+  sc.insertBefore(inner, sc.children[3]);
+  R.family = { sc, f(u) {
+    title.forEach((e, i) => wipe(e, u, 0.1 + i * 0.2, 230 + i * 130, 0.7));
+    const cy = top + 80 + Hc / 2, k = seg(u, 0.2, 0.7);
+    P(bg, { y: cy + (1 - outC(k)) * 80, a: cl(k * 3) }); P(inner, { y: cy + (1 - outC(k)) * 80, a: cl(k * 3) });
+    const per = Math.min(0.14, (BAR - 1.2) / Math.max(1, rows.length));
+    rows.forEach((r, i) => rise(r.el, u, 0.45 + i * per, r.y));
+  } };
+}
+
+// ---- Thank you, on burgundy ----
+{
+  const sc = scene(stage);
+  full(sc, `background:radial-gradient(ellipse at 50% 40%,#8a2a3d,${BURG} 55%,#3e0f19)`);
+  const t = text(sc, thanks, `font:400 190px ${SCRIPT};color:${GOLD_L}`, 960);
+  const r1 = rule(sc, 420);
+  const sl = seal(sc, 170);
+  R.thanks = { sc, f(u) {
+    wipe(t, u, 0.15, 900, 1.0);
+    P(r1, { y: 1040, a: fade(u, 0.7) }); r1.style.transform += ` scaleX(${outC(seg(u, 0.7, 1.3))})`;
+    P(sl, { y: 1200, s: pop(u, 1.0, 0.5, 1.8), r: Math.sin(u * 2) * 3 });
+  } };
+}
+
+// ---- End card ----
+{
+  const sc = scene(stage);
+  full(sc, `background:radial-gradient(ellipse at 50% 40%,#8a2a3d 0%,${BURG} 45%,#2a0911 100%)`);
+  const shadow = 'text-shadow:0 2px 14px rgba(20,0,8,.6);';
+  const a1 = text(sc, 'Apni shaadi ka', `font:600 80px ${HEAD};color:#fff;${shadow}`);
+  const a2 = text(sc, 'aisa invitation banaiye', `font:600 66px ${HEAD};color:#fff;${shadow}`, 980);
+  const halo = mk(sc, 'div', 'width:1100px;height:520px;border-radius:50%;background:radial-gradient(ellipse,rgba(231,207,122,.3),transparent 68%)');
+  const logo = mk(sc, 'div', `font:400 170px ${SCRIPT};white-space:nowrap;background:linear-gradient(100deg,${GOLD} 0%,#fff3c4 40%,#ffffff 50%,#fff3c4 60%,${GOLD} 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 30px`);
+  logo.textContent = 'theinvitely.in';
+  const under = mk(sc, 'div', `height:4px;background:linear-gradient(90deg,transparent,${GOLD_L},transparent)`);
+  R.end = { sc, f(u) {
+    P(a1, { y: 760 }); reveal(a1, u, 0.3 * BEAT, 0.03);
+    P(a2, { y: 870 }); reveal(a2, u, 1.0 * BEAT, 0.025);
+    const l = outB(seg(u, 2 * BEAT, 2 * BEAT + 0.5), 1.9);
+    P(halo, { y: 1090, s: l * (1 + 0.05 * Math.sin(u * 5)), a: cl(l) * 0.9 });
+    P(logo, { y: 1080, s: Math.max(l, 0.001), a: cl(l * 2) });
+    logo.style.backgroundPosition = `${lerp(130, -40, seg(u, 2 * BEAT + 0.3, 2 * BEAT + 1.6))}% 0`;
+    logo.style.filter = 'drop-shadow(0 3px 10px rgba(0,0,0,.6))';
+    under.style.width = `${outC(seg(u, 2 * BEAT + 0.3, 2 * BEAT + 0.8)) * 700}px`;
+    P(under, { y: 1190 });
+  } };
+}
+
+// ================= Transitions, each taken from the design =================
+const canvasEl = () => { const e = document.createElement('canvas'); e.width = 1080; e.height = 1920; e.className = 'a'; stage.appendChild(e); return e; };
+const FXC = canvasEl();
+const deco = {
+  edge: mk(stage, 'div', `height:6px;background:${GOLD};box-shadow:0 0 24px ${GOLD_L}`),
+  heart: mk(stage, 'div', 'width:200px;height:185px'),
+  rope: mk(stage, 'div', `border-radius:50%;box-sizing:border-box;border:22px solid ${GOLD};box-shadow:inset 0 0 0 6px #f3dd8a,0 0 0 5px #9c7a12,0 0 40px rgba(201,162,39,.6)`),
+  plane: mk(stage, 'div', 'width:180px;height:180px'),
+};
+deco.heart.innerHTML = `<svg viewBox="0 0 200 185" width="200" height="185" style="overflow:visible"><path d="M100 185 C100 185, 200 125, 200 70 C200 23, 157 -10, 121.5 15 C100 31, 100 31, 100 31 C100 31, 100 31, 78.5 15 C43 -10, 0 23, 0 70 C0 125, 100 185, 100 185 Z" fill="none" stroke="${GOLD}" stroke-width="3"/></svg>`;
+deco.plane.innerHTML = `<svg viewBox="0 0 24 24" width="180" height="180"><path fill="${BURG}" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>`;
+const DECO = Object.values(deco).concat([FXC]);
+DECO.forEach((e) => { e.style.display = 'none'; });
+const heartPath = (cx, cy, k) => {
+  const pts = [];
+  for (let i = 0; i <= 60; i++) { const t = (i / 60) * Math.PI * 2; pts.push(`${(cx + 16 * Math.sin(t) ** 3 * k).toFixed(1)}px ${(cy - (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) * k).toFixed(1)}px`); }
+  return pts.join(',');
+};
+const PS = rng(77);
+const velvet = Array.from({ length: 140 }, () => ({ x: PS() * 1080, o: PS() * 800, r: 9 + PS() * 12, rot: PS() * 6.28, c: ['#c9a227', '#e7cf7a', '#9b1c2a', '#f3dd8a'][Math.floor(PS() * 4)], w: (PS() - 0.5) * 140 }));
+function transition(el, type, p) {
+  el.style.clipPath = ''; el.style.opacity = ''; el.style.filter = ''; el.style.transform = '';
+  const show = (d) => { d.style.display = 'block'; return d; };
+  if (!(p > 0 && p < 1)) return;
+  const e = outC(p);
+  const fxc = () => { const c = show(FXC), g = c.getContext('2d'); g.clearRect(0, 0, 1080, 1920); return g; };
+  if (type === 'unfold') {
+    // The invitation card unfolds out of the palace light, from the middle outwards.
+    const h = e * 1920;
+    el.style.clipPath = `inset(${960 - h / 2}px 0 ${960 - h / 2}px 0)`;
+    const d = show(deco.edge);
+    d.style.width = '1080px';
+    P(d, { y: 960 - h / 2, a: 1 - seg(p, 0.7, 1) });
+  }
+  if (type === 'heart') {
+    const k = lerp(0.3, 70, inC(p) * 0.35 + e * 0.65);
+    el.style.clipPath = `polygon(${heartPath(HEART_AT.x, HEART_AT.y - 40, k)})`;
+    const d = show(deco.heart);
+    P(d, { x: HEART_AT.x, y: HEART_AT.y - 40 - k * 2, s: (k * 34) / 200, a: 1 - seg(p, 0.6, 1) });
+  }
+  if (type === 'pages') {
+    // The page turns in from the right like the next leaf of an album.
+    el.style.transform = `perspective(2200px) rotateY(${(1 - e) * -75}deg)`;
+    el.style.transformOrigin = '0 50%';
+    el.style.opacity = cl(p * 3);
+  }
+  if (type === 'rope') {
+    // The events open through the gold rope frame of their illustrations.
+    const w = lerp(160, 2200, inC(p) * 0.3 + e * 0.7), h = w * 1.35;
+    el.style.clipPath = `ellipse(${w / 2}px ${h / 2}px at 540px 1000px)`;
+    const d = show(deco.rope); d.style.width = `${w + 30}px`; d.style.height = `${h + 30}px`;
+    P(d, { y: 1000, a: 1 - seg(p, 0.6, 1) });
+  }
+  if (type === 'flight') {
+    // A plane sweeps across and draws the next page behind it.
+    const x = lerp(-200, 1400, e);
+    el.style.clipPath = `polygon(0 0,${x}px 0,${x - 500}px 1920px,0 1920px)`;
+    const d = show(deco.plane);
+    P(d, { x: x - 250, y: 960, r: 90 + 20, a: 1 - seg(p, 0.85, 1) });
+  }
+  if (type === 'card') {
+    const t = (1 - e) * 1920;
+    el.style.clipPath = `inset(${t}px ${(1 - e) * 90}px 0 ${(1 - e) * 90}px round ${(1 - e) * 60}px)`;
+  }
+  if (type === 'velvet') {
+    // Gold and red petals shower down and leave the burgundy page behind them.
+    const front = lerp(-200, 2400, e);
+    el.style.clipPath = `inset(0 0 ${Math.max(0, 1920 - front)}px 0)`;
+    const g = fxc();
+    for (const s of velvet) {
+      const y = front - s.o; if (y < -40 || y > 1960) continue;
+      g.save(); g.translate(s.x + Math.sin(p * 6 + s.rot) * s.w * 0.3, y); g.rotate(s.rot + p * 8); g.fillStyle = s.c;
+      g.beginPath(); g.ellipse(0, 0, s.r * 0.55, s.r, 0, 0, 6.3); g.fill(); g.restore();
+    }
+  }
+  if (type === 'bloom') el.style.opacity = cl(p * 1.6);
+}
+
+// ================= Gold sparkle across the ivory pages; gold dust on the end card =================
+const cv = canvasEl();
+const c = cv.getContext('2d');
+const flash = full(stage, '');
+const RN = rng(57);
+const dust = Array.from({ length: 60 }, () => ({ x: RN() * 1080, y: RN() * 1920, v: 15 + RN() * 40, r: 1 + RN() * 2.4, p: RN() * 6.28, f: 1 + RN() * 3 }));
+function fx(T) {
+  c.clearRect(0, 0, 1080, 1920);
+  const now = SEGS.find((s) => T >= s.start && T < s.start + s.dur) || SEGS[SEGS.length - 1];
+  if (now.key === 'gate') return;
+  const dark = now.key === 'end' || now.key === 'thanks';
+  for (const d of dust) {
+    const y = (d.y - T * d.v + 1920 * 4) % 1920, tw = 0.3 + 0.7 * Math.abs(Math.sin(T * d.f + d.p));
+    c.fillStyle = dark ? `rgba(231,207,122,${0.7 * tw})` : `rgba(201,162,39,${0.45 * tw})`;
+    c.beginPath(); c.arc(d.x + Math.sin(T + d.p) * 10, y, d.r, 0, 6.3); c.fill();
+  }
+}
+const FLASH_COL = { unfold: '255,246,220', heart: '255,244,215', pages: '255,250,240', rope: '255,240,200', flight: '255,250,240', card: '255,250,240', velvet: '255,226,200', bloom: '255,226,215' };
+
+function render(T) {
+  T = cl(T, 0, TOTAL);
+  // A pulse on the song's strong beats.
+  const k = T >= BAR ? Math.floor((T - BAR) / BEAT) : -1, beat = T >= BAR ? (T - BAR) % BEAT : 9;
+  stage.style.transform = `scale(${1 + (k % 2 === 0 ? 0.01 : 0.003) * Math.exp(-beat * 7)})`;
+  DECO.forEach((e) => { e.style.display = 'none'; });
+  SEGS.forEach((s, i) => {
+    const u = T - s.start, next = SEGS[i + 1];
+    const on = u >= 0 && (u < s.dur + (next ? TR[next.enter] : 0) || i === SEGS.length - 1);
+    const sc = R[s.key].sc;
+    sc.style.display = on ? 'block' : 'none';
+    if (!on) return;
+    R[s.key].f(u, s);
+    if (s.enter) transition(sc, s.enter, seg(u, 0, TR[s.enter]));
+  });
+  let fa = 0, fc = '255,255,255';
+  SEGS.forEach((s) => {
+    if (!s.enter) return;
+    const u = T - s.start, pk = s.enter === 'bloom' || s.enter === 'unfold' ? 0.5 : 0.3;
+    const v = u < 0 ? (u > -0.08 ? pk * (1 + u / 0.08) : 0) : pk * Math.exp(-u * 7);
+    if (v > fa) { fa = v; fc = FLASH_COL[s.enter]; }
+  });
+  const end = seg(T, TOTAL - 0.7, TOTAL);
+  flash.style.background = end > 0 ? `rgba(0,0,0,${end})` : `rgba(${fc},${fa})`;
+  fx(T);
+}
+
+window.__render = render;
+window.__firstBar = BAR;
+window.__ready = ready(stage, [['500 48px Cinzel', 'A'], ['500 48px Corm', 'A'], ['48px Paris', 'A'], ['48px Mussica', 'A'], ['500 48px Mahee', 'ੴ'], ['48px Mukta', 'Aक'], ['600 48px Mukta', 'क']], TOTAL);
+</script></body></html>

@@ -1,0 +1,740 @@
+[
+  {
+    "name": "saved with all the sample text",
+    "data": "$sample",
+    "want": [
+      "M & A",
+      "Tap to Open",
+      "Swagatam",
+      "to our wedding",
+      "We can't wait to celebrate",
+      "Shubh Muhurat",
+      "20",
+      "Feb",
+      "2027",
+      "Day",
+      "With the blessings of our families",
+      "Meera Sharma",
+      "and",
+      "Arjun Mehta",
+      "invite you to their shubh vivah",
+      "Saturday, 20 February 2027",
+      "Vivah &",
+      "Reception",
+      "Samode Bagh",
+      "Pheras · The Mandap Lawn · 5:00 PM",
+      "Dress Code",
+      "Traditional Indian",
+      "Our Story",
+      "Vivah Karyakram",
+      "4:00 PM",
+      "Baraat arrives at the",
+      "Vidaai",
+      "Griha Pravesh",
+      "The Garden Courtyard",
+      "C-Scheme, Jaipur",
+      "Shagun",
+      "Your blessings are the",
+      "Our Moments",
+      "Meera &",
+      "Arjun",
+      "February 20, 2027",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "Open in Maps",
+      "Add to Calendar",
+      "The pheras will take place",
+      "RSVP"
+    ]
+  },
+  {
+    "name": "every section filled with new details",
+    "data": {
+      "couple": {
+        "brideName": "Ananya",
+        "brideSurname": "Kapoor",
+        "groomName": "Vihaan",
+        "groomSurname": "Malhotra"
+      },
+      "greeting": {
+        "line1": "Aapka Swagat Hai",
+        "line2": "at our wedding",
+        "message": "Come celebrate our shubh vivah with family and friends."
+      },
+      "countdown": {
+        "title": "Shubh Lagna",
+        "date": "2099-11-20"
+      },
+      "welcome": {
+        "parents": "With the blessings of the Kapoor and Malhotra families",
+        "joiner": "weds",
+        "invite": "request the honour of your presence",
+        "dateText": "Friday, 20 November 2099"
+      },
+      "venue": {
+        "title": "Vivah",
+        "subtitle": "Where we celebrate",
+        "name": "The Oberoi Udaivilas",
+        "place1": "Udaipur",
+        "place2": "Rajasthan",
+        "dateText": "Friday, 20 November 2099",
+        "line1": "Pheras · Lakeside Mandap · 7:30 PM",
+        "line2": "Bhoj · Durbar Hall · 9:30 PM",
+        "mapAddress": "Udaivilas"
+      },
+      "dress": {
+        "title": "Dress Code",
+        "main": "Festive Indian",
+        "note": "Jewel tones, lehengas and sherwanis."
+      },
+      "story": {
+        "title": "Hamari Kahani",
+        "text": "We met at a Diwali party in Delhi and never stopped talking."
+      },
+      "program": {
+        "title": "Karyakram",
+        "items": [
+          {
+            "time": "6:00 PM",
+            "title": "Baraat"
+          },
+          {
+            "time": "7:30 PM",
+            "title": "Pheras"
+          },
+          {
+            "time": "11:00 PM",
+            "title": "Vidaai"
+          }
+        ],
+        "note": "x"
+      },
+      "after": {
+        "title": "Griha Pravesh",
+        "subtitle": "The day after",
+        "name": "Malhotra Haveli",
+        "place": "Family home",
+        "date": "Saturday | 21 November 2099",
+        "time": "From 1 PM",
+        "address1": "Old City, Udaipur",
+        "address2": "Rajasthan",
+        "text": "Join us for lunch as we welcome the bride home.",
+        "mapAddress": ""
+      },
+      "gifts": {
+        "title": "Aashirwad",
+        "text": "Your blessings are the greatest gift."
+      },
+      "gallery": {
+        "title": "Pal",
+        "subtitle": "A few moments together.",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      }
+    },
+    "want": [
+      "A & V",
+      "Aapka Swagat Hai",
+      "Shubh Lagna",
+      "Nov",
+      "2099",
+      "Ananya Kapoor",
+      "weds",
+      "Vihaan Malhotra",
+      "Vivah",
+      "The Oberoi Udaivilas",
+      "Pheras · Lakeside Mandap · 7:30 PM",
+      "Festive Indian",
+      "Hamari Kahani",
+      "Karyakram",
+      "Baraat",
+      "Griha Pravesh",
+      "Malhotra Haveli",
+      "Aashirwad",
+      "Pal",
+      "Ananya &",
+      "November 20, 2099",
+      "aisa invitation banaiye"
+    ],
+    "reject": [
+      "Meera",
+      "Arjun",
+      "Samode",
+      "Swagatam",
+      "Shagun",
+      "Vivah Karyakram",
+      "Garden Courtyard",
+      "Open in Maps",
+      "Add to Calendar",
+      "The pheras will take place",
+      "RSVP"
+    ]
+  },
+  {
+    "name": "only the two names",
+    "data": {
+      "couple": {
+        "brideName": "Ananya",
+        "groomName": "Vihaan"
+      }
+    },
+    "want": [
+      "A & V",
+      "Ananya",
+      "Vihaan",
+      "Ananya &"
+    ],
+    "reject": [
+      "Dress Code",
+      "Karyakram",
+      "Aashirwad",
+      "Shubh",
+      "Open in Maps",
+      "Add to Calendar",
+      "The pheras will take place",
+      "RSVP"
+    ]
+  },
+  {
+    "name": "no date",
+    "data": {
+      "couple": {
+        "brideName": "Ananya",
+        "brideSurname": "Kapoor",
+        "groomName": "Vihaan",
+        "groomSurname": "Malhotra"
+      },
+      "greeting": {
+        "line1": "Aapka Swagat Hai",
+        "line2": "at our wedding",
+        "message": "Come celebrate our shubh vivah with family and friends."
+      },
+      "countdown": {
+        "title": "",
+        "date": "soon"
+      },
+      "welcome": {
+        "parents": "With the blessings of the Kapoor and Malhotra families",
+        "joiner": "weds",
+        "invite": "request the honour of your presence",
+        "dateText": "Friday, 20 November 2099"
+      },
+      "venue": {
+        "title": "Vivah",
+        "subtitle": "Where we celebrate",
+        "name": "The Oberoi Udaivilas",
+        "place1": "Udaipur",
+        "place2": "Rajasthan",
+        "dateText": "Friday, 20 November 2099",
+        "line1": "Pheras · Lakeside Mandap · 7:30 PM",
+        "line2": "Bhoj · Durbar Hall · 9:30 PM",
+        "mapAddress": "Udaivilas"
+      },
+      "dress": {
+        "title": "Dress Code",
+        "main": "Festive Indian",
+        "note": "Jewel tones, lehengas and sherwanis."
+      },
+      "story": {
+        "title": "Hamari Kahani",
+        "text": "We met at a Diwali party in Delhi and never stopped talking."
+      },
+      "program": {
+        "title": "Karyakram",
+        "items": [
+          {
+            "time": "6:00 PM",
+            "title": "Baraat"
+          },
+          {
+            "time": "7:30 PM",
+            "title": "Pheras"
+          },
+          {
+            "time": "11:00 PM",
+            "title": "Vidaai"
+          }
+        ],
+        "note": "x"
+      },
+      "after": {
+        "title": "Griha Pravesh",
+        "subtitle": "The day after",
+        "name": "Malhotra Haveli",
+        "place": "Family home",
+        "date": "Saturday | 21 November 2099",
+        "time": "From 1 PM",
+        "address1": "Old City, Udaipur",
+        "address2": "Rajasthan",
+        "text": "Join us for lunch as we welcome the bride home.",
+        "mapAddress": ""
+      },
+      "gifts": {
+        "title": "Aashirwad",
+        "text": "Your blessings are the greatest gift."
+      },
+      "gallery": {
+        "title": "Pal",
+        "subtitle": "A few moments together.",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Vivah"
+    ],
+    "reject": [
+      "Shubh Lagna",
+      "November 20, 2099"
+    ]
+  },
+  {
+    "name": "no programme, story or gallery",
+    "data": {
+      "couple": {
+        "brideName": "Ananya",
+        "brideSurname": "Kapoor",
+        "groomName": "Vihaan",
+        "groomSurname": "Malhotra"
+      },
+      "greeting": {
+        "line1": "Aapka Swagat Hai",
+        "line2": "at our wedding",
+        "message": "Come celebrate our shubh vivah with family and friends."
+      },
+      "countdown": {
+        "title": "Shubh Lagna",
+        "date": "2099-11-20"
+      },
+      "welcome": {
+        "parents": "With the blessings of the Kapoor and Malhotra families",
+        "joiner": "weds",
+        "invite": "request the honour of your presence",
+        "dateText": "Friday, 20 November 2099"
+      },
+      "venue": {
+        "title": "Vivah",
+        "subtitle": "Where we celebrate",
+        "name": "The Oberoi Udaivilas",
+        "place1": "Udaipur",
+        "place2": "Rajasthan",
+        "dateText": "Friday, 20 November 2099",
+        "line1": "Pheras · Lakeside Mandap · 7:30 PM",
+        "line2": "Bhoj · Durbar Hall · 9:30 PM",
+        "mapAddress": "Udaivilas"
+      },
+      "dress": {
+        "title": "Dress Code",
+        "main": "Festive Indian",
+        "note": "Jewel tones, lehengas and sherwanis."
+      },
+      "story": {
+        "title": "Hamari Kahani",
+        "text": " "
+      },
+      "program": {
+        "title": "Karyakram",
+        "items": [
+          {
+            "time": "",
+            "title": ""
+          }
+        ],
+        "note": "x"
+      },
+      "after": {
+        "title": "Griha Pravesh",
+        "subtitle": "The day after",
+        "name": "Malhotra Haveli",
+        "place": "Family home",
+        "date": "Saturday | 21 November 2099",
+        "time": "From 1 PM",
+        "address1": "Old City, Udaipur",
+        "address2": "Rajasthan",
+        "text": "Join us for lunch as we welcome the bride home.",
+        "mapAddress": ""
+      },
+      "gifts": {
+        "title": "Aashirwad",
+        "text": "Your blessings are the greatest gift."
+      },
+      "gallery": {
+        "title": "Pal",
+        "subtitle": "A few moments together.",
+        "items": [
+          {
+            "image": "javascript:alert(1)"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Griha Pravesh"
+    ],
+    "reject": [
+      "Karyakram",
+      "Hamari Kahani",
+      "Pal"
+    ]
+  },
+  {
+    "name": "no venue, dress code, day after or gifts",
+    "data": {
+      "couple": {
+        "brideName": "Ananya",
+        "brideSurname": "Kapoor",
+        "groomName": "Vihaan",
+        "groomSurname": "Malhotra"
+      },
+      "greeting": {
+        "line1": "Aapka Swagat Hai",
+        "line2": "at our wedding",
+        "message": "Come celebrate our shubh vivah with family and friends."
+      },
+      "countdown": {
+        "title": "Shubh Lagna",
+        "date": "2099-11-20"
+      },
+      "welcome": {
+        "parents": "With the blessings of the Kapoor and Malhotra families",
+        "joiner": "weds",
+        "invite": "request the honour of your presence",
+        "dateText": "Friday, 20 November 2099"
+      },
+      "venue": {
+        "title": "Vivah"
+      },
+      "dress": {
+        "title": "Dress Code"
+      },
+      "story": {
+        "title": "Hamari Kahani",
+        "text": "We met at a Diwali party in Delhi and never stopped talking."
+      },
+      "program": {
+        "title": "Karyakram",
+        "items": [
+          {
+            "time": "6:00 PM",
+            "title": "Baraat"
+          },
+          {
+            "time": "7:30 PM",
+            "title": "Pheras"
+          },
+          {
+            "time": "11:00 PM",
+            "title": "Vidaai"
+          }
+        ],
+        "note": "x"
+      },
+      "after": {
+        "title": "Griha Pravesh"
+      },
+      "gifts": {
+        "title": "Aashirwad"
+      },
+      "gallery": {
+        "title": "Pal",
+        "subtitle": "A few moments together.",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Karyakram"
+    ],
+    "reject": [
+      "The Oberoi",
+      "Festive",
+      "Malhotra Haveli",
+      "Aashirwad"
+    ]
+  },
+  {
+    "name": "Hindi text and very long names",
+    "data": {
+      "couple": {
+        "brideName": "अनन्या",
+        "brideSurname": "Kapoor",
+        "groomName": "Vihaan",
+        "groomSurname": "Malhotra-Venkataraman"
+      },
+      "greeting": {
+        "line1": "Aapka Swagat Hai",
+        "line2": "at our wedding",
+        "message": "Come celebrate our shubh vivah with family and friends."
+      },
+      "countdown": {
+        "title": "Shubh Lagna",
+        "date": "2099-11-20"
+      },
+      "welcome": {
+        "parents": "With the blessings of the Kapoor and Malhotra families",
+        "joiner": "weds",
+        "invite": "request the honour of your presence",
+        "dateText": "Friday, 20 November 2099"
+      },
+      "venue": {
+        "title": "Vivah",
+        "subtitle": "Where we celebrate",
+        "name": "The Oberoi Udaivilas",
+        "place1": "Udaipur",
+        "place2": "Rajasthan",
+        "dateText": "Friday, 20 November 2099",
+        "line1": "Pheras · Lakeside Mandap · 7:30 PM",
+        "line2": "Bhoj · Durbar Hall · 9:30 PM",
+        "mapAddress": "Udaivilas"
+      },
+      "dress": {
+        "title": "Dress Code",
+        "main": "Festive Indian",
+        "note": "Jewel tones, lehengas and sherwanis."
+      },
+      "story": {
+        "title": "Hamari Kahani",
+        "text": "We met at a Diwali party in Delhi and never stopped talking."
+      },
+      "program": {
+        "title": "Karyakram",
+        "items": [
+          {
+            "time": "6:00 PM",
+            "title": "बारात"
+          },
+          {
+            "time": "7:30 PM",
+            "title": "Pheras"
+          },
+          {
+            "time": "11:00 PM",
+            "title": "Vidaai"
+          }
+        ],
+        "note": "x"
+      },
+      "after": {
+        "title": "Griha Pravesh",
+        "subtitle": "The day after",
+        "name": "Malhotra Haveli",
+        "place": "Family home",
+        "date": "Saturday | 21 November 2099",
+        "time": "From 1 PM",
+        "address1": "Old City, Udaipur",
+        "address2": "Rajasthan",
+        "text": "Join us for lunch as we welcome the bride home.",
+        "mapAddress": ""
+      },
+      "gifts": {
+        "title": "Aashirwad",
+        "text": "Your blessings are the greatest gift."
+      },
+      "gallery": {
+        "title": "Pal",
+        "subtitle": "A few moments together.",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      }
+    },
+    "want": [
+      "अनन्या",
+      "Vihaan Malhotra-Venkataraman",
+      "बारात"
+    ]
+  },
+  {
+    "name": "wrong types and HTML",
+    "data": {
+      "couple": {
+        "brideName": "<b>Ananya</b>",
+        "groomName": 42
+      },
+      "greeting": {
+        "line1": {
+          "a": 1
+        },
+        "message": 7
+      },
+      "program": {
+        "items": [
+          null,
+          "x",
+          {
+            "time": 5,
+            "title": "Pheras"
+          }
+        ]
+      },
+      "gifts": {
+        "text": [
+          "x"
+        ]
+      },
+      "gallery": {
+        "items": "x"
+      }
+    },
+    "want": [
+      "<b>Ananya</b>",
+      "42",
+      "7",
+      "5",
+      "Pheras"
+    ],
+    "reject": [
+      "[object Object]",
+      "undefined",
+      "null"
+    ]
+  },
+  {
+    "name": "six programme items",
+    "data": {
+      "couple": {
+        "brideName": "Ananya",
+        "brideSurname": "Kapoor",
+        "groomName": "Vihaan",
+        "groomSurname": "Malhotra"
+      },
+      "greeting": {
+        "line1": "Aapka Swagat Hai",
+        "line2": "at our wedding",
+        "message": "Come celebrate our shubh vivah with family and friends."
+      },
+      "countdown": {
+        "title": "Shubh Lagna",
+        "date": "2099-11-20"
+      },
+      "welcome": {
+        "parents": "With the blessings of the Kapoor and Malhotra families",
+        "joiner": "weds",
+        "invite": "request the honour of your presence",
+        "dateText": "Friday, 20 November 2099"
+      },
+      "venue": {
+        "title": "Vivah",
+        "subtitle": "Where we celebrate",
+        "name": "The Oberoi Udaivilas",
+        "place1": "Udaipur",
+        "place2": "Rajasthan",
+        "dateText": "Friday, 20 November 2099",
+        "line1": "Pheras · Lakeside Mandap · 7:30 PM",
+        "line2": "Bhoj · Durbar Hall · 9:30 PM",
+        "mapAddress": "Udaivilas"
+      },
+      "dress": {
+        "title": "Dress Code",
+        "main": "Festive Indian",
+        "note": "Jewel tones, lehengas and sherwanis."
+      },
+      "story": {
+        "title": "Hamari Kahani",
+        "text": "We met at a Diwali party in Delhi and never stopped talking."
+      },
+      "program": {
+        "title": "Karyakram",
+        "items": [
+          {
+            "time": "1:00 PM",
+            "title": "Roka"
+          },
+          {
+            "time": "2:00 PM",
+            "title": "Haldi"
+          },
+          {
+            "time": "3:00 PM",
+            "title": "Mehendi"
+          },
+          {
+            "time": "4:00 PM",
+            "title": "Sangeet"
+          },
+          {
+            "time": "5:00 PM",
+            "title": "Pheras"
+          },
+          {
+            "time": "6:00 PM",
+            "title": "Vidaai"
+          }
+        ],
+        "note": "x"
+      },
+      "after": {
+        "title": "Griha Pravesh",
+        "subtitle": "The day after",
+        "name": "Malhotra Haveli",
+        "place": "Family home",
+        "date": "Saturday | 21 November 2099",
+        "time": "From 1 PM",
+        "address1": "Old City, Udaipur",
+        "address2": "Rajasthan",
+        "text": "Join us for lunch as we welcome the bride home.",
+        "mapAddress": ""
+      },
+      "gifts": {
+        "title": "Aashirwad",
+        "text": "Your blessings are the greatest gift."
+      },
+      "gallery": {
+        "title": "Pal",
+        "subtitle": "A few moments together.",
+        "items": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Roka",
+      "Vidaai",
+      "6:00 PM"
+    ]
+  }
+]

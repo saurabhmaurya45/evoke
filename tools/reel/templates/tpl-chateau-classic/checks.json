@@ -1,0 +1,1035 @@
+[
+  {
+    "name": "saved with all the sample text",
+    "data": "$sample",
+    "want": [
+      "The Wedding Invitation",
+      "Kabir & Anaya",
+      "Dear Honored Guest,",
+      "Kabir",
+      "&",
+      "Anaya",
+      "Wedding Day",
+      "Join us to celebrate our love",
+      "॥ श्री गणेशाय नमः ॥",
+      "Dear Friends and Family,",
+      "Two families, one",
+      "The Celebration Begins In",
+      "July 3rd, 2027",
+      "16:00",
+      "Loire Valley, France",
+      "Schedule of Events",
+      "An unforgettable evening awaits",
+      "Wedding Ceremony",
+      "We say our vows in the rose garden,",
+      "⌖ Rose Garden",
+      "Dance Under the Stars",
+      "The Venue",
+      "Location",
+      "Château de Lumière",
+      "Wedding Style",
+      "Dress Code",
+      "Sage",
+      "Ivory",
+      "Wedding Details",
+      "Gifts",
+      "Your presence is the only gift",
+      "Hope to see you there!",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "+91",
+      "Need Assistance",
+      "VIEW ON GOOGLE MAPS",
+      "For Ladies"
+    ]
+  },
+  {
+    "name": "every section filled with new details",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "groomFullName": "Vihaan Malhotra",
+        "brideName": "Ananya",
+        "brideFullName": "Ananya Kapoor",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "20th November 2099",
+        "place": "Udaipur, Rajasthan",
+        "introText": "With the blessings of our elders, we invite you to celebrate our wedding and the seven pheras that begin our forever."
+      },
+      "events": {
+        "items": [
+          {
+            "time": "16:00",
+            "title": "Mehendi",
+            "description": "Henna, music and marigolds by the pool.",
+            "date": "19 Nov",
+            "location": "Poolside Lawn",
+            "emoji": "🌿",
+            "accent": "#6a9e6f"
+          },
+          {
+            "time": "20:00",
+            "title": "Sangeet",
+            "description": "An evening of song and dance with both families.",
+            "date": "19 Nov",
+            "location": "Durbar Hall",
+            "emoji": "🎶",
+            "accent": "#8e6fb5"
+          },
+          {
+            "time": "19:30",
+            "title": "Phere",
+            "description": "The seven vows around the sacred fire.",
+            "date": "20 Nov",
+            "location": "Lakeside Mandap",
+            "emoji": "🔥",
+            "accent": "#c9953a"
+          }
+        ]
+      },
+      "venue": {
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "mapUrl": "",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/images/chateau.png"
+      },
+      "dressCode": {
+        "text": "Festive Indian wear — lehengas, sarees and sherwanis in jewel tones.",
+        "colors": [
+          {
+            "name": "Marigold",
+            "hex": "#f2a516"
+          },
+          {
+            "name": "Maroon",
+            "hex": "#7a1022"
+          },
+          {
+            "name": "Emerald",
+            "hex": "#1d6b4f"
+          }
+        ]
+      },
+      "registry": {
+        "title": "Blessings",
+        "description": "Your blessings are all we ask for."
+      },
+      "contact": {
+        "title": "Need Assistance?",
+        "phone": "Riya: +91 98000 00000"
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Vihaan & Ananya",
+      "Vihaan",
+      "Ananya",
+      "With the blessings of our",
+      "20th November 2099",
+      "19:30",
+      "Udaipur, Rajasthan",
+      "Mehendi",
+      "Henna, music and marigolds",
+      "⌖ Poolside Lawn",
+      "Sangeet",
+      "Phere",
+      "The seven vows around the",
+      "20 Nov",
+      "The Oberoi Udaivilas",
+      "Haridasji Ki Magri, Udaipur",
+      "Festive Indian wear",
+      "Marigold",
+      "Emerald",
+      "Blessings",
+      "Your blessings are all we ask for.",
+      "aisa invitation banaiye"
+    ],
+    "reject": [
+      "Kabir",
+      "Anaya",
+      "Loire",
+      "Château de Lumière",
+      "Garden Cocktails",
+      "Sage",
+      "+91",
+      "Need Assistance",
+      "VIEW ON GOOGLE MAPS",
+      "For Ladies"
+    ]
+  },
+  {
+    "name": "only the two names",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      }
+    },
+    "want": [
+      "Vihaan & Ananya",
+      "Dear Friends and Family,",
+      "Hope to see you there!"
+    ],
+    "reject": [
+      "The Celebration Begins In",
+      "Schedule of Events",
+      "Location",
+      "Dress Code",
+      "Wedding Details",
+      "+91",
+      "Need Assistance",
+      "VIEW ON GOOGLE MAPS",
+      "For Ladies"
+    ]
+  },
+  {
+    "name": "no date, time or place",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "groomFullName": "Vihaan Malhotra",
+        "brideName": "Ananya",
+        "brideFullName": "Ananya Kapoor",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": " ",
+        "dateLabel": "",
+        "place": "",
+        "introText": "With the blessings of our elders, we invite you to celebrate our wedding and the seven pheras that begin our forever."
+      },
+      "events": {
+        "items": [
+          {
+            "time": "16:00",
+            "title": "Mehendi",
+            "description": "Henna, music and marigolds by the pool.",
+            "date": "19 Nov",
+            "location": "Poolside Lawn",
+            "emoji": "🌿",
+            "accent": "#6a9e6f"
+          },
+          {
+            "time": "20:00",
+            "title": "Sangeet",
+            "description": "An evening of song and dance with both families.",
+            "date": "19 Nov",
+            "location": "Durbar Hall",
+            "emoji": "🎶",
+            "accent": "#8e6fb5"
+          },
+          {
+            "time": "19:30",
+            "title": "Phere",
+            "description": "The seven vows around the sacred fire.",
+            "date": "20 Nov",
+            "location": "Lakeside Mandap",
+            "emoji": "🔥",
+            "accent": "#c9953a"
+          }
+        ]
+      },
+      "venue": {
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "mapUrl": "",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/images/chateau.png"
+      },
+      "dressCode": {
+        "text": "Festive Indian wear — lehengas, sarees and sherwanis in jewel tones.",
+        "colors": [
+          {
+            "name": "Marigold",
+            "hex": "#f2a516"
+          },
+          {
+            "name": "Maroon",
+            "hex": "#7a1022"
+          },
+          {
+            "name": "Emerald",
+            "hex": "#1d6b4f"
+          }
+        ]
+      },
+      "registry": {
+        "title": "Blessings",
+        "description": "Your blessings are all we ask for."
+      },
+      "contact": {
+        "title": "Need Assistance?",
+        "phone": "Riya: +91 98000 00000"
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Schedule of Events"
+    ],
+    "reject": [
+      "The Celebration Begins In"
+    ]
+  },
+  {
+    "name": "no events",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "groomFullName": "Vihaan Malhotra",
+        "brideName": "Ananya",
+        "brideFullName": "Ananya Kapoor",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "20th November 2099",
+        "place": "Udaipur, Rajasthan",
+        "introText": "With the blessings of our elders, we invite you to celebrate our wedding and the seven pheras that begin our forever."
+      },
+      "events": {
+        "items": [
+          {
+            "title": "",
+            "time": "",
+            "description": "",
+            "emoji": "🎉"
+          }
+        ]
+      },
+      "venue": {
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "mapUrl": "",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/images/chateau.png"
+      },
+      "dressCode": {
+        "text": "Festive Indian wear — lehengas, sarees and sherwanis in jewel tones.",
+        "colors": [
+          {
+            "name": "Marigold",
+            "hex": "#f2a516"
+          },
+          {
+            "name": "Maroon",
+            "hex": "#7a1022"
+          },
+          {
+            "name": "Emerald",
+            "hex": "#1d6b4f"
+          }
+        ]
+      },
+      "registry": {
+        "title": "Blessings",
+        "description": "Your blessings are all we ask for."
+      },
+      "contact": {
+        "title": "Need Assistance?",
+        "phone": "Riya: +91 98000 00000"
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "The Oberoi Udaivilas"
+    ],
+    "reject": [
+      "Schedule of Events"
+    ]
+  },
+  {
+    "name": "events without emoji or colours",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "groomFullName": "Vihaan Malhotra",
+        "brideName": "Ananya",
+        "brideFullName": "Ananya Kapoor",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "20th November 2099",
+        "place": "Udaipur, Rajasthan",
+        "introText": "With the blessings of our elders, we invite you to celebrate our wedding and the seven pheras that begin our forever."
+      },
+      "events": {
+        "items": [
+          {
+            "time": "16:00",
+            "title": "Mehendi",
+            "description": "Henna, music and marigolds by the pool.",
+            "date": "19 Nov",
+            "location": "Poolside Lawn",
+            "emoji": "",
+            "accent": "red; background:url(x)"
+          },
+          {
+            "time": "20:00",
+            "title": "Sangeet",
+            "description": "An evening of song and dance with both families.",
+            "date": "19 Nov",
+            "location": "Durbar Hall",
+            "emoji": "",
+            "accent": "red; background:url(x)"
+          },
+          {
+            "time": "19:30",
+            "title": "Phere",
+            "description": "The seven vows around the sacred fire.",
+            "date": "20 Nov",
+            "location": "Lakeside Mandap",
+            "emoji": "",
+            "accent": "red; background:url(x)"
+          }
+        ]
+      },
+      "venue": {
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "mapUrl": "",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/images/chateau.png"
+      },
+      "dressCode": {
+        "text": "Festive Indian wear — lehengas, sarees and sherwanis in jewel tones.",
+        "colors": [
+          {
+            "name": "Marigold",
+            "hex": "#f2a516"
+          },
+          {
+            "name": "Maroon",
+            "hex": "#7a1022"
+          },
+          {
+            "name": "Emerald",
+            "hex": "#1d6b4f"
+          }
+        ]
+      },
+      "registry": {
+        "title": "Blessings",
+        "description": "Your blessings are all we ask for."
+      },
+      "contact": {
+        "title": "Need Assistance?",
+        "phone": "Riya: +91 98000 00000"
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Mehendi",
+      "Phere"
+    ],
+    "reject": [
+      "background"
+    ]
+  },
+  {
+    "name": "no venue",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "groomFullName": "Vihaan Malhotra",
+        "brideName": "Ananya",
+        "brideFullName": "Ananya Kapoor",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "20th November 2099",
+        "place": "Udaipur, Rajasthan",
+        "introText": "With the blessings of our elders, we invite you to celebrate our wedding and the seven pheras that begin our forever."
+      },
+      "events": {
+        "items": [
+          {
+            "time": "16:00",
+            "title": "Mehendi",
+            "description": "Henna, music and marigolds by the pool.",
+            "date": "19 Nov",
+            "location": "Poolside Lawn",
+            "emoji": "🌿",
+            "accent": "#6a9e6f"
+          },
+          {
+            "time": "20:00",
+            "title": "Sangeet",
+            "description": "An evening of song and dance with both families.",
+            "date": "19 Nov",
+            "location": "Durbar Hall",
+            "emoji": "🎶",
+            "accent": "#8e6fb5"
+          },
+          {
+            "time": "19:30",
+            "title": "Phere",
+            "description": "The seven vows around the sacred fire.",
+            "date": "20 Nov",
+            "location": "Lakeside Mandap",
+            "emoji": "🔥",
+            "accent": "#c9953a"
+          }
+        ]
+      },
+      "venue": {
+        "name": "",
+        "address": " ",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/images/chateau.png"
+      },
+      "dressCode": {
+        "text": "Festive Indian wear — lehengas, sarees and sherwanis in jewel tones.",
+        "colors": [
+          {
+            "name": "Marigold",
+            "hex": "#f2a516"
+          },
+          {
+            "name": "Maroon",
+            "hex": "#7a1022"
+          },
+          {
+            "name": "Emerald",
+            "hex": "#1d6b4f"
+          }
+        ]
+      },
+      "registry": {
+        "title": "Blessings",
+        "description": "Your blessings are all we ask for."
+      },
+      "contact": {
+        "title": "Need Assistance?",
+        "phone": "Riya: +91 98000 00000"
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Dress Code"
+    ],
+    "reject": [
+      "Location",
+      "The Oberoi"
+    ]
+  },
+  {
+    "name": "venue without its picture",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "groomFullName": "Vihaan Malhotra",
+        "brideName": "Ananya",
+        "brideFullName": "Ananya Kapoor",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "20th November 2099",
+        "place": "Udaipur, Rajasthan",
+        "introText": "With the blessings of our elders, we invite you to celebrate our wedding and the seven pheras that begin our forever."
+      },
+      "events": {
+        "items": [
+          {
+            "time": "16:00",
+            "title": "Mehendi",
+            "description": "Henna, music and marigolds by the pool.",
+            "date": "19 Nov",
+            "location": "Poolside Lawn",
+            "emoji": "🌿",
+            "accent": "#6a9e6f"
+          },
+          {
+            "time": "20:00",
+            "title": "Sangeet",
+            "description": "An evening of song and dance with both families.",
+            "date": "19 Nov",
+            "location": "Durbar Hall",
+            "emoji": "🎶",
+            "accent": "#8e6fb5"
+          },
+          {
+            "time": "19:30",
+            "title": "Phere",
+            "description": "The seven vows around the sacred fire.",
+            "date": "20 Nov",
+            "location": "Lakeside Mandap",
+            "emoji": "🔥",
+            "accent": "#c9953a"
+          }
+        ]
+      },
+      "venue": {
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "mapUrl": "",
+        "image": ""
+      },
+      "dressCode": {
+        "text": "Festive Indian wear — lehengas, sarees and sherwanis in jewel tones.",
+        "colors": [
+          {
+            "name": "Marigold",
+            "hex": "#f2a516"
+          },
+          {
+            "name": "Maroon",
+            "hex": "#7a1022"
+          },
+          {
+            "name": "Emerald",
+            "hex": "#1d6b4f"
+          }
+        ]
+      },
+      "registry": {
+        "title": "Blessings",
+        "description": "Your blessings are all we ask for."
+      },
+      "contact": {
+        "title": "Need Assistance?",
+        "phone": "Riya: +91 98000 00000"
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Location",
+      "The Oberoi Udaivilas"
+    ]
+  },
+  {
+    "name": "colours only, and a bad colour",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "groomFullName": "Vihaan Malhotra",
+        "brideName": "Ananya",
+        "brideFullName": "Ananya Kapoor",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "20th November 2099",
+        "place": "Udaipur, Rajasthan",
+        "introText": "With the blessings of our elders, we invite you to celebrate our wedding and the seven pheras that begin our forever."
+      },
+      "events": {
+        "items": [
+          {
+            "time": "16:00",
+            "title": "Mehendi",
+            "description": "Henna, music and marigolds by the pool.",
+            "date": "19 Nov",
+            "location": "Poolside Lawn",
+            "emoji": "🌿",
+            "accent": "#6a9e6f"
+          },
+          {
+            "time": "20:00",
+            "title": "Sangeet",
+            "description": "An evening of song and dance with both families.",
+            "date": "19 Nov",
+            "location": "Durbar Hall",
+            "emoji": "🎶",
+            "accent": "#8e6fb5"
+          },
+          {
+            "time": "19:30",
+            "title": "Phere",
+            "description": "The seven vows around the sacred fire.",
+            "date": "20 Nov",
+            "location": "Lakeside Mandap",
+            "emoji": "🔥",
+            "accent": "#c9953a"
+          }
+        ]
+      },
+      "venue": {
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "mapUrl": "",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/images/chateau.png"
+      },
+      "dressCode": {
+        "text": "",
+        "colors": [
+          {
+            "name": "Gold",
+            "hex": "#c9953a"
+          },
+          {
+            "name": "Bad",
+            "hex": "url(x)"
+          }
+        ]
+      },
+      "registry": {
+        "title": "Blessings",
+        "description": "Your blessings are all we ask for."
+      },
+      "contact": {
+        "title": "Need Assistance?",
+        "phone": "Riya: +91 98000 00000"
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Dress Code",
+      "Gold"
+    ],
+    "reject": [
+      "Bad",
+      "Festive"
+    ]
+  },
+  {
+    "name": "no dress code or gifts",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "groomFullName": "Vihaan Malhotra",
+        "brideName": "Ananya",
+        "brideFullName": "Ananya Kapoor",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "20th November 2099",
+        "place": "Udaipur, Rajasthan",
+        "introText": "With the blessings of our elders, we invite you to celebrate our wedding and the seven pheras that begin our forever."
+      },
+      "events": {
+        "items": [
+          {
+            "time": "16:00",
+            "title": "Mehendi",
+            "description": "Henna, music and marigolds by the pool.",
+            "date": "19 Nov",
+            "location": "Poolside Lawn",
+            "emoji": "🌿",
+            "accent": "#6a9e6f"
+          },
+          {
+            "time": "20:00",
+            "title": "Sangeet",
+            "description": "An evening of song and dance with both families.",
+            "date": "19 Nov",
+            "location": "Durbar Hall",
+            "emoji": "🎶",
+            "accent": "#8e6fb5"
+          },
+          {
+            "time": "19:30",
+            "title": "Phere",
+            "description": "The seven vows around the sacred fire.",
+            "date": "20 Nov",
+            "location": "Lakeside Mandap",
+            "emoji": "🔥",
+            "accent": "#c9953a"
+          }
+        ]
+      },
+      "venue": {
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "mapUrl": "",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/images/chateau.png"
+      },
+      "dressCode": {
+        "text": " ",
+        "colors": []
+      },
+      "registry": {
+        "title": "Gifts",
+        "description": ""
+      },
+      "contact": {
+        "title": "Need Assistance?",
+        "phone": "Riya: +91 98000 00000"
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Hope to see you there!"
+    ],
+    "reject": [
+      "Dress Code",
+      "Wedding Details"
+    ]
+  },
+  {
+    "name": "Hindi text and very long names",
+    "data": {
+      "couple": {
+        "groomName": "विहान",
+        "groomFullName": "Vihaan Malhotra",
+        "brideName": "Ananya Ritu Kapoor-Venkataraman",
+        "brideFullName": "Ananya Kapoor",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "20th November 2099",
+        "place": "Udaipur, Rajasthan",
+        "introText": "With the blessings of our elders, we invite you to celebrate our wedding and the seven pheras that begin our forever."
+      },
+      "events": {
+        "items": [
+          {
+            "time": "16:00",
+            "title": "मेहंदी",
+            "description": "Henna, music and marigolds by the pool.",
+            "date": "19 Nov",
+            "location": "Poolside Lawn",
+            "emoji": "🌿",
+            "accent": "#6a9e6f"
+          },
+          {
+            "time": "20:00",
+            "title": "Sangeet & Cocktail Night by the Lake",
+            "description": "An evening of song and dance with both families.",
+            "date": "19 Nov",
+            "location": "Durbar Hall",
+            "emoji": "🎶",
+            "accent": "#8e6fb5"
+          },
+          {
+            "time": "19:30",
+            "title": "Phere",
+            "description": "The seven vows around the sacred fire.",
+            "date": "20 Nov",
+            "location": "Lakeside Mandap",
+            "emoji": "🔥",
+            "accent": "#c9953a"
+          }
+        ]
+      },
+      "venue": {
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "mapUrl": "",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/images/chateau.png"
+      },
+      "dressCode": {
+        "text": "Festive Indian wear — lehengas, sarees and sherwanis in jewel tones.",
+        "colors": [
+          {
+            "name": "Marigold",
+            "hex": "#f2a516"
+          },
+          {
+            "name": "Maroon",
+            "hex": "#7a1022"
+          },
+          {
+            "name": "Emerald",
+            "hex": "#1d6b4f"
+          }
+        ]
+      },
+      "registry": {
+        "title": "Blessings",
+        "description": "Your blessings are all we ask for."
+      },
+      "contact": {
+        "title": "Need Assistance?",
+        "phone": "Riya: +91 98000 00000"
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "विहान",
+      "Ananya Ritu Kapoor-Venkataraman",
+      "मेहंदी",
+      "Sangeet & Cocktail Night by the Lake"
+    ]
+  },
+  {
+    "name": "wrong types, HTML and bad links",
+    "data": {
+      "couple": {
+        "groomName": "<b>Vihaan</b>",
+        "brideName": 42,
+        "image": "javascript:alert(1)"
+      },
+      "wedding": {
+        "dateLabel": {
+          "a": 1
+        },
+        "time": 1930,
+        "introText": [
+          "x"
+        ]
+      },
+      "events": {
+        "items": [
+          null,
+          "x",
+          {
+            "title": "Phere",
+            "description": 7,
+            "emoji": 5
+          }
+        ]
+      },
+      "venue": {
+        "name": "<img src=x onerror=alert(1)>",
+        "image": "javascript:alert(1)"
+      },
+      "dressCode": {
+        "colors": "red"
+      },
+      "registry": {
+        "description": 9
+      }
+    },
+    "want": [
+      "<b>Vihaan</b>",
+      "42",
+      "1930",
+      "Phere",
+      "7",
+      "<img src=x onerror=alert(1)>",
+      "9"
+    ],
+    "reject": [
+      "[object Object]",
+      "undefined",
+      "null",
+      "Dress Code"
+    ]
+  },
+  {
+    "name": "six events",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "groomFullName": "Vihaan Malhotra",
+        "brideName": "Ananya",
+        "brideFullName": "Ananya Kapoor",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "20th November 2099",
+        "place": "Udaipur, Rajasthan",
+        "introText": "With the blessings of our elders, we invite you to celebrate our wedding and the seven pheras that begin our forever."
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Roka",
+            "time": "10:00",
+            "description": "Together with family.",
+            "emoji": "✨",
+            "accent": "#c9953a"
+          },
+          {
+            "title": "Haldi",
+            "time": "11:00",
+            "description": "Together with family.",
+            "emoji": "✨",
+            "accent": "#c9953a"
+          },
+          {
+            "title": "Mehendi",
+            "time": "12:00",
+            "description": "Together with family.",
+            "emoji": "✨",
+            "accent": "#c9953a"
+          },
+          {
+            "title": "Sangeet",
+            "time": "13:00",
+            "description": "Together with family.",
+            "emoji": "✨",
+            "accent": "#c9953a"
+          },
+          {
+            "title": "Phere",
+            "time": "14:00",
+            "description": "Together with family.",
+            "emoji": "✨",
+            "accent": "#c9953a"
+          },
+          {
+            "title": "Vidaai",
+            "time": "15:00",
+            "description": "Together with family.",
+            "emoji": "✨",
+            "accent": "#c9953a"
+          }
+        ]
+      },
+      "venue": {
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "mapUrl": "",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/images/chateau.png"
+      },
+      "dressCode": {
+        "text": "Festive Indian wear — lehengas, sarees and sherwanis in jewel tones.",
+        "colors": [
+          {
+            "name": "Marigold",
+            "hex": "#f2a516"
+          },
+          {
+            "name": "Maroon",
+            "hex": "#7a1022"
+          },
+          {
+            "name": "Emerald",
+            "hex": "#1d6b4f"
+          }
+        ]
+      },
+      "registry": {
+        "title": "Blessings",
+        "description": "Your blessings are all we ask for."
+      },
+      "contact": {
+        "title": "Need Assistance?",
+        "phone": "Riya: +91 98000 00000"
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Roka",
+      "Vidaai",
+      "15:00"
+    ]
+  }
+]

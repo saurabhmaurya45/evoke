@@ -1,0 +1,362 @@
+[
+  {
+    "name": "saved with all the sample text",
+    "data": "$sample",
+    "want": [
+      "AISHA",
+      "ROHAN",
+      "THE STRENGTH OF THE EARTH",
+      "Haldi",
+      "Sangeet",
+      "Reception",
+      "PALACE COURTYARD",
+      "SAVE THE DATE",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "TWO SOULS, ONE VOW",
+      "GLIMPSES OF US"
+    ]
+  },
+  {
+    "name": "every section filled",
+    "data": {
+      "hero": {
+        "brideName": "Meera Rathore",
+        "groomName": "Kabir Malhotra",
+        "date": "2099-02-14",
+        "tagline": "Two families, one celebration of love",
+        "accent": "#B8860B"
+      },
+      "story": {
+        "title": "How It Began",
+        "body": "We met at a friend's Diwali party in Jaipur and argued about the best chai in the city."
+      },
+      "portraits": {
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Mehendi",
+            "date": "2099-02-12",
+            "venue": "Rose Garden"
+          },
+          {
+            "name": "Pheras",
+            "date": "2099-02-14",
+            "venue": "Lakeside Mandap"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "src": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          }
+        ]
+      }
+    },
+    "want": [
+      "MEERA RATHORE",
+      "KABIR MALHOTRA",
+      "TWO FAMILIES",
+      "FEBRUARY",
+      "DAYS UNTIL FOREVER",
+      "WHEN TWO PATHS MEET",
+      "TWO SOULS, ONE VOW",
+      "HOW IT BEGAN",
+      "Diwali",
+      "Mehendi",
+      "ROSE GARDEN",
+      "12 FEBRUARY 2099",
+      "Pheras",
+      "GLIMPSES OF US",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "AISHA",
+      "ROHAN",
+      "Haldi",
+      "PALACE COURTYARD"
+    ]
+  },
+  {
+    "name": "only the names: every optional section is left out",
+    "data": {
+      "hero": {
+        "brideName": "Meera",
+        "groomName": "Kabir"
+      }
+    },
+    "want": [
+      "MEERA",
+      "KABIR",
+      "WHEN TWO PATHS MEET",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "SAVE THE DATE",
+      "DAYS UNTIL FOREVER",
+      "TWO SOULS",
+      "CELEBRATIONS",
+      "GLIMPSES",
+      "AISHA",
+      "Haldi"
+    ]
+  },
+  {
+    "name": "only one portrait",
+    "data": {
+      "hero": {
+        "brideName": "Meera",
+        "groomName": "Kabir"
+      },
+      "portraits": {
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "groomPhoto": ""
+      }
+    },
+    "want": [
+      "TWO SOULS, ONE VOW"
+    ]
+  },
+  {
+    "name": "story without a title, events without dates or photos",
+    "data": {
+      "hero": {
+        "brideName": "Meera",
+        "groomName": "Kabir"
+      },
+      "story": {
+        "title": "",
+        "body": "A short story."
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Sangeet"
+          }
+        ]
+      }
+    },
+    "want": [
+      "A short story.",
+      "Sangeet"
+    ],
+    "reject": [
+      "OUR STORY"
+    ]
+  },
+  {
+    "name": "blank strings count as empty",
+    "data": {
+      "hero": {
+        "brideName": "Meera",
+        "groomName": "Kabir",
+        "date": "  ",
+        "tagline": "   "
+      },
+      "story": {
+        "title": "HIDDEN TITLE",
+        "body": "   "
+      },
+      "events": {
+        "items": [
+          {
+            "name": "  ",
+            "venue": "Hidden venue"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "src": ""
+          }
+        ]
+      }
+    },
+    "reject": [
+      "HIDDEN TITLE",
+      "HIDDEN VENUE",
+      "SAVE THE DATE",
+      "GLIMPSES",
+      "CELEBRATIONS"
+    ]
+  },
+  {
+    "name": "a past date keeps the date but leaves the countdown out",
+    "data": {
+      "hero": {
+        "brideName": "Meera",
+        "groomName": "Kabir",
+        "date": "2020-01-01"
+      }
+    },
+    "want": [
+      "SAVE THE DATE",
+      "JANUARY"
+    ],
+    "reject": [
+      "DAYS UNTIL FOREVER"
+    ]
+  },
+  {
+    "name": "a full date-time is accepted",
+    "data": {
+      "hero": {
+        "brideName": "Meera",
+        "groomName": "Kabir",
+        "date": "2099-12-25T18:30:00"
+      }
+    },
+    "want": [
+      "DECEMBER",
+      "DAYS UNTIL FOREVER"
+    ]
+  },
+  {
+    "name": "an invalid date leaves both out",
+    "data": {
+      "hero": {
+        "brideName": "Meera",
+        "groomName": "Kabir",
+        "date": "next spring"
+      }
+    },
+    "reject": [
+      "SAVE THE DATE",
+      "DAYS UNTIL FOREVER"
+    ]
+  },
+  {
+    "name": "Hindi text and very long names",
+    "data": {
+      "hero": {
+        "brideName": "क्षितिज श्रीवास्तव",
+        "groomName": "Bartholomew Singh Rathore Malhotra Kapoor Sharma Verma",
+        "tagline": "दो परिवार, एक उत्सव"
+      },
+      "events": {
+        "items": [
+          {
+            "name": "A Farewell Dinner With A Very Very Long Name Indeed For Everyone",
+            "venue": "The Grand Palace Ballroom Hotel And Convention Centre, Udaipur"
+          }
+        ]
+      }
+    },
+    "want": [
+      "क्षितिज श्रीवास्तव",
+      "दो परिवार, एक उत्सव"
+    ]
+  },
+  {
+    "name": "many events and photos",
+    "data": {
+      "hero": {
+        "brideName": "Meera",
+        "groomName": "Kabir"
+      },
+      "events": {
+        "items": [
+          {
+            "name": "Roka"
+          },
+          {
+            "name": "Mehendi"
+          },
+          {
+            "name": "Haldi"
+          },
+          {
+            "name": "Sangeet"
+          },
+          {
+            "name": "Pheras"
+          },
+          {
+            "name": "Vidaai"
+          },
+          {
+            "name": "Reception"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "src": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "src": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "src": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          },
+          {
+            "src": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+          },
+          {
+            "src": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png"
+          },
+          {
+            "src": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "src": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "src": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+          },
+          {
+            "src": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+          },
+          {
+            "src": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Roka",
+      "Vidaai",
+      "Reception",
+      "GLIMPSES OF US"
+    ]
+  },
+  {
+    "name": "wrong data types and HTML in text",
+    "data": {
+      "hero": {
+        "brideName": "<img src=x onerror=window.__x=1>",
+        "groomName": {
+          "a": 1
+        },
+        "date": 5,
+        "tagline": [
+          "x"
+        ],
+        "accent": "red;background:url(x)"
+      },
+      "story": "nope",
+      "portraits": {
+        "bridePhoto": "javascript:alert(1)"
+      },
+      "events": {
+        "items": "nope"
+      },
+      "gallery": null
+    },
+    "want": [
+      "<IMG SRC=X ONERROR=WINDOW.__X=1>"
+    ],
+    "reject": [
+      "[object Object]",
+      "[OBJECT OBJECT]",
+      "TWO SOULS"
+    ]
+  }
+]

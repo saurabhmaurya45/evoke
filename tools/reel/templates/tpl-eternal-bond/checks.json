@@ -1,0 +1,266 @@
+[
+  {
+    "name": "saved with all the sample text",
+    "data": "$sample",
+    "want": [
+      "Aarav",
+      "Diya",
+      "शुभ विवाह",
+      "With love,",
+      "the Sharma & Kapoor",
+      "Our Story",
+      "chance",
+      "Venue",
+      "The Royal Palace Gardens",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "Moments",
+      "Scratch to Reveal",
+      "First Met"
+    ]
+  },
+  {
+    "name": "every section filled",
+    "data": {
+      "hero": {
+        "brideName": "Ananya",
+        "groomName": "Rohan",
+        "date": "2099-02-14",
+        "tagline": "Two hearts, one journey"
+      },
+      "families": {
+        "brideFamily": "Mehta",
+        "groomFamily": "Bansal"
+      },
+      "story": {
+        "intro": "From a rainy evening at a Pune bookshop to a lifetime of chai and long drives."
+      },
+      "venue": {
+        "name": "Umaid Bhawan Palace",
+        "address": "Circuit House Road, Jodhpur, Rajasthan"
+      },
+      "storyPhotos": {
+        "firstMet": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+        "firstJourney": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "proposal": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "engagement": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+      },
+      "gallery": {
+        "walking": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png",
+        "handsJoined": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+        "dancing": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "laughing": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+      },
+      "reveal": {
+        "hidden": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+      }
+    },
+    "want": [
+      "Rohan",
+      "Ananya",
+      "weds",
+      "14 February 2099",
+      "२०९९",
+      "Two hearts, one journey",
+      "the Bansal & Mehta",
+      "Counting every moment",
+      "Our Story",
+      "Pune",
+      "First Met",
+      "Engagement",
+      "Umaid Bhawan Palace",
+      "Jodhpur",
+      "Moments",
+      "Scratch to Reveal",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "Aarav",
+      "Diya",
+      "Sharma",
+      "Royal Palace Gardens"
+    ]
+  },
+  {
+    "name": "only the names: every optional section is left out",
+    "data": {
+      "hero": {
+        "groomName": "Rohan",
+        "brideName": "Ananya"
+      }
+    },
+    "want": [
+      "Rohan",
+      "Ananya",
+      "शुभ विवाह",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "With love,",
+      "Counting",
+      "Our Story",
+      "Venue",
+      "Moments",
+      "Scratch",
+      "Aarav"
+    ]
+  },
+  {
+    "name": "one family only",
+    "data": {
+      "hero": {
+        "groomName": "Rohan",
+        "brideName": "Ananya"
+      },
+      "families": {
+        "groomFamily": "Bansal",
+        "brideFamily": " "
+      }
+    },
+    "want": [
+      "the Bansal family"
+    ]
+  },
+  {
+    "name": "story photos without an intro",
+    "data": {
+      "hero": {
+        "groomName": "Rohan",
+        "brideName": "Ananya"
+      },
+      "storyPhotos": {
+        "firstMet": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+      }
+    },
+    "want": [
+      "Our Story",
+      "First Met"
+    ]
+  },
+  {
+    "name": "blank strings count as empty",
+    "data": {
+      "hero": {
+        "groomName": "Rohan",
+        "brideName": "Ananya",
+        "date": " ",
+        "tagline": "  "
+      },
+      "families": {
+        "groomFamily": "",
+        "brideFamily": "  "
+      },
+      "story": {
+        "intro": "   "
+      },
+      "venue": {
+        "name": " ",
+        "address": "Hidden address"
+      },
+      "gallery": {
+        "walking": ""
+      },
+      "reveal": {
+        "hidden": ""
+      }
+    },
+    "reject": [
+      "With love,",
+      "Our Story",
+      "Venue",
+      "Hidden address",
+      "Moments",
+      "Scratch",
+      "Counting"
+    ]
+  },
+  {
+    "name": "a past date shows the date but no countdown",
+    "data": {
+      "hero": {
+        "groomName": "Rohan",
+        "brideName": "Ananya",
+        "date": "2020-01-01"
+      }
+    },
+    "want": [
+      "1 January 2020"
+    ],
+    "reject": [
+      "Counting every moment"
+    ]
+  },
+  {
+    "name": "a full date-time is accepted",
+    "data": {
+      "hero": {
+        "groomName": "Rohan",
+        "brideName": "Ananya",
+        "date": "2099-12-25T18:30:00"
+      }
+    },
+    "want": [
+      "25 December 2099",
+      "Counting every moment"
+    ]
+  },
+  {
+    "name": "Hindi text and very long names",
+    "data": {
+      "hero": {
+        "groomName": "Bartholomew Singh Rathore Malhotra Kapoor",
+        "brideName": "क्षितिज श्रीवास्तव",
+        "tagline": "दो दिलों का मिलन — Two hearts, one journey"
+      },
+      "families": {
+        "groomFamily": "राठौर",
+        "brideFamily": "A Very Long Family Name Indeed Of Rajasthan"
+      },
+      "venue": {
+        "name": "The Grand Palace Ballroom Hotel And Convention Centre Of Udaipur",
+        "address": "A very long address line that keeps going, City Palace Complex, Old City, Udaipur, Rajasthan 313001"
+      }
+    },
+    "want": [
+      "क्षितिज श्रीवास्तव",
+      "दो दिलों का मिलन"
+    ]
+  },
+  {
+    "name": "wrong data types and HTML in text",
+    "data": {
+      "hero": {
+        "groomName": "<img src=x onerror=window.__x=1>",
+        "brideName": {
+          "a": 1
+        },
+        "date": 5,
+        "tagline": [
+          "x"
+        ]
+      },
+      "families": "nope",
+      "story": null,
+      "venue": {
+        "name": 7
+      },
+      "storyPhotos": {
+        "firstMet": "javascript:alert(1)"
+      },
+      "gallery": [],
+      "reveal": {
+        "hidden": {}
+      }
+    },
+    "want": [
+      "<img src=x onerror=window.__x=1>",
+      "Venue"
+    ],
+    "reject": [
+      "[object Object]",
+      "Our Story",
+      "Scratch"
+    ]
+  }
+]

@@ -31,7 +31,7 @@ from app.drafts.models import Draft
 from app.events.models import Event, EventStatus
 from app.media.paths import event_reel_path
 from app.media.service import resolve_media_refs
-from app.reels.models import EventReel, ReelStatus
+from app.reels.models import EventReel, ReelKind, ReelStatus
 from app.shared.database import _session_factory
 from app.shared.observability import configure_logging, init_sentry
 from app.shared.storage.b2_client import B2Client, get_b2_client
@@ -48,7 +48,8 @@ _DEFAULT_TOOL_DIR = Path(__file__).resolve().parents[3] / "tools" / "reel"
 _PROGRESS_LINE = re.compile(r"^\s*(\d{1,3})%\s*$")
 _URL_QUERY = re.compile(r"(https?://[^\s?]+)\?\S*")
 
-Renderer = Callable[[str, dict, Path, Callable[[int], None]], Awaitable[None]]
+# (template slot, invitation data, output file, progress callback, preview?)
+Renderer = Callable[[str, dict, Path, Callable[[int], None], bool], Awaitable[None]]
 
 
 class RenderError(Exception):
@@ -73,7 +74,7 @@ def _stop(process: asyncio.subprocess.Process) -> None:
 
 
 async def render_with_make_reel(
-    slot_id: str, data: dict, out: Path, on_progress: Callable[[int], None]
+    slot_id: str, data: dict, out: Path, on_progress: Callable[[int], None], preview: bool
 ) -> None:
     settings = get_settings()
     tool_dir = Path(settings.reel_tool_dir) if settings.reel_tool_dir else _DEFAULT_TOOL_DIR
@@ -90,6 +91,8 @@ async def render_with_make_reel(
         str(out),
         "--allow-hosts",
         ",".join(allowed_media_hosts(settings)),
+        # A preview is shown before payment: low resolution, watermark burned into every frame.
+        *(["--preview"] if preview else []),
         cwd=tool_dir,
         stdout=asyncio.subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -193,14 +196,16 @@ async def _record_failure(session_factory, reel_id: uuid.UUID, error: Exception)
 
 
 async def _replace_older_videos(
-    db: AsyncSession, b2: B2Client, event_id: uuid.UUID, keep: uuid.UUID
+    db: AsyncSession, b2: B2Client, event_id: uuid.UUID, kind: ReelKind, keep: uuid.UUID
 ) -> None:
-    """Only the newest video is kept, so re-rendering doesn't grow storage forever."""
+    """Only the newest video of each kind is kept: no versions, so re-rendering doesn't
+    grow storage forever. A new preview never removes the bought video, or the reverse."""
     older = (
         (
             await db.execute(
                 select(EventReel).where(
                     EventReel.event_id == event_id,
+                    EventReel.kind == kind,
                     EventReel.id != keep,
                     EventReel.storage_path.is_not(None),
                 )
@@ -236,11 +241,19 @@ async def process_reel(
         draft = (
             await db.execute(select(Draft).where(Draft.event_id == reel.event_id))
         ).scalar_one_or_none()
-        if event is None or draft is None or event.status != EventStatus.PUBLISHED:
+        kind = reel.kind
+        preview = kind == ReelKind.PREVIEW
+        # A preview is made before publishing; the bought video only of a live invitation.
+        allowed = (
+            (EventStatus.DRAFT, EventStatus.PUBLISHED) if preview else (EventStatus.PUBLISHED,)
+        )
+        if event is None or draft is None or event.status not in allowed:
             # Archived while it waited: nobody should get a video of it, and retrying won't help.
             reel.status = ReelStatus.FAILED
             reel.completed_at = datetime.now(UTC)
-            reel.failure_reason = "Invitation is no longer published"
+            reel.failure_reason = (
+                "Invitation is archived" if preview else "Invitation is no longer published"
+            )
             await db.commit()
             return
         event_id, owner_id, slug = event.id, event.owner_id, event.slug
@@ -259,9 +272,10 @@ async def process_reel(
     try:
         with tempfile.TemporaryDirectory(prefix="reel-") as work_dir:
             out = Path(work_dir) / "reel.mp4"
-            await renderer(slot_id, data, out, on_progress)
-            key = event_reel_path(owner_id, event_id)
-            await asyncio.to_thread(b2.upload_file, key, out, "video/mp4", f"{slug}-video.mp4")
+            await renderer(slot_id, data, out, on_progress, preview)
+            key = event_reel_path(owner_id, event_id, preview=preview)
+            name = f"{slug}-preview.mp4" if preview else f"{slug}-video.mp4"
+            await asyncio.to_thread(b2.upload_file, key, out, "video/mp4", name)
             size = out.stat().st_size
     except Exception as exc:  # noqa: BLE001 — every failure is recorded on the job, then retried
         logger.warning("Render of reel %s failed: %s", reel_id, _URL_QUERY.sub(r"\1", str(exc)))
@@ -280,8 +294,8 @@ async def process_reel(
         reel.failure_reason = None
         reel.completed_at = datetime.now(UTC)
         await db.commit()
-        await _replace_older_videos(db, b2, event_id, reel_id)
-    logger.info("Reel %s ready (%.1f MB)", reel_id, size / 1e6)
+        await _replace_older_videos(db, b2, event_id, kind, reel_id)
+    logger.info("Reel %s (%s) ready (%.1f MB)", reel_id, kind.value, size / 1e6)
 
 
 async def run_forever() -> None:

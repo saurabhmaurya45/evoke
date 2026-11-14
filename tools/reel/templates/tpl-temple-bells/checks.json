@@ -1,0 +1,956 @@
+[
+  {
+    "name": "saved with all the sample text",
+    "data": "$sample",
+    "want": [
+      "V&M",
+      "Tap to Open",
+      "The Wedding Of",
+      "Meera",
+      "&",
+      "Vihaan",
+      "The Royal Courtyard",
+      "Jaipur",
+      "Beginning of Forever",
+      "Meet the Couple",
+      "The Groom",
+      "Vihaan Kapoor",
+      "With Divine Blessings...",
+      "Son of Mr. Rajeev Kapoor & Mrs.",
+      "The Bride",
+      "Meera Joshi",
+      "In the presence of love...",
+      "With the blessings of our",
+      "— Saat Phere, Saat Vachan",
+      "Our Journey",
+      "How We Met",
+      "2020",
+      "First Hello",
+      "Our Forever",
+      "The Celebration",
+      "Wedding Events",
+      "Event 01",
+      "Haldi & Mehendi",
+      "◷ 11.00 Onwards",
+      "Sunday, 14 February 2027",
+      "📍 Palace Lawns",
+      "Amer Road, Jaipur, Rajasthan",
+      "Event 03",
+      "Grand Reception",
+      "Captured Moments",
+      "Our Love Gallery",
+      "Wishing Well",
+      "Blessings & Gifts",
+      "Your presence and blessings",
+      "With Gratitude",
+      "Thank You",
+      "It is the greatest honor to have you as",
+      "Wishing you a lifetime of love and happiness.",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "UPI",
+      "View Location Map",
+      "Counting Down the Days",
+      "Gift Details"
+    ]
+  },
+  {
+    "name": "every section filled with new details",
+    "data": {
+      "couple": {
+        "groomName": "Arjun Malhotra",
+        "groomShort": "Arjun",
+        "groomParents": "Son of Shri Rakesh & Smt. Neeta Malhotra",
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "brideName": "Ananya Kapoor",
+        "brideShort": "Ananya",
+        "brideParents": "Daughter of Shri Anil & Smt. Ritu Kapoor",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "Friday, 20 November 2099",
+        "dateLine": "November 20th, 2099 • Udaipur",
+        "venue": "Lakeside Mandap",
+        "city": "Udaipur"
+      },
+      "verse": {
+        "text": "Two souls, seven vows and the blessings of both our families.",
+        "source": "— Saptapadi"
+      },
+      "story": {
+        "items": [
+          {
+            "year": "2021",
+            "title": "Diwali in Delhi",
+            "text": "We met over sparklers at a friend’s Diwali party."
+          },
+          {
+            "year": "2099",
+            "title": "Saat Phere",
+            "text": "Now we take our seven steps together."
+          }
+        ]
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "time": "16.00 Onwards",
+            "venue": "Poolside Lawn",
+            "address": "Udaivilas, Udaipur"
+          },
+          {
+            "title": "Phere",
+            "time": "19.30 Onwards",
+            "venue": "Lakeside Mandap",
+            "address": "Udaivilas, Udaipur"
+          }
+        ]
+      },
+      "gift": {
+        "heading": "Aashirwad",
+        "message": "Your blessings are the only gift we ask for.",
+        "title": "Gift Details",
+        "name": "Arjun & Ananya",
+        "details": "UPI: arjunananya@upi",
+        "note": "Thank you"
+      },
+      "gallery": {
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png"
+          }
+        ]
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "A&A",
+      "Ananya",
+      "Arjun",
+      "Lakeside Mandap",
+      "Udaipur",
+      "Arjun Malhotra",
+      "Son of Shri Rakesh & Smt.",
+      "Ananya Kapoor",
+      "Two souls, seven vows and the",
+      "— Saptapadi",
+      "2021",
+      "Diwali in Delhi",
+      "Saat Phere",
+      "Mehendi",
+      "◷ 16.00 Onwards",
+      "Friday, 20 November 2099",
+      "📍 Poolside Lawn",
+      "Phere",
+      "Aashirwad",
+      "Your blessings are the only",
+      "aisa invitation banaiye"
+    ],
+    "reject": [
+      "Vihaan",
+      "Meera",
+      "Jaipur",
+      "Royal Courtyard",
+      "First Hello",
+      "Grand Reception",
+      "Saat Vachan",
+      "UPI",
+      "View Location Map",
+      "Counting Down the Days",
+      "Gift Details"
+    ]
+  },
+  {
+    "name": "only the two names",
+    "data": {
+      "couple": {
+        "groomName": "Arjun Malhotra",
+        "brideName": "Ananya Kapoor"
+      }
+    },
+    "want": [
+      "Ananya Kapoor",
+      "Arjun Malhotra",
+      "A&A",
+      "Meet the Couple",
+      "Thank You"
+    ],
+    "reject": [
+      "How We Met",
+      "Wedding Events",
+      "Our Love Gallery",
+      "Blessings & Gifts",
+      "Saat",
+      "UPI",
+      "View Location Map",
+      "Counting Down the Days",
+      "Gift Details"
+    ]
+  },
+  {
+    "name": "short names fall back to the full names",
+    "data": {
+      "couple": {
+        "groomName": "Arjun Malhotra",
+        "groomShort": "",
+        "groomParents": "Son of Shri Rakesh & Smt. Neeta Malhotra",
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "brideName": "Ananya Kapoor",
+        "brideShort": " ",
+        "brideParents": "Daughter of Shri Anil & Smt. Ritu Kapoor",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "Friday, 20 November 2099",
+        "dateLine": "November 20th, 2099 • Udaipur",
+        "venue": "Lakeside Mandap",
+        "city": "Udaipur"
+      },
+      "verse": {
+        "text": "Two souls, seven vows and the blessings of both our families.",
+        "source": "— Saptapadi"
+      },
+      "story": {
+        "items": [
+          {
+            "year": "2021",
+            "title": "Diwali in Delhi",
+            "text": "We met over sparklers at a friend’s Diwali party."
+          },
+          {
+            "year": "2099",
+            "title": "Saat Phere",
+            "text": "Now we take our seven steps together."
+          }
+        ]
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "time": "16.00 Onwards",
+            "venue": "Poolside Lawn",
+            "address": "Udaivilas, Udaipur"
+          },
+          {
+            "title": "Phere",
+            "time": "19.30 Onwards",
+            "venue": "Lakeside Mandap",
+            "address": "Udaivilas, Udaipur"
+          }
+        ]
+      },
+      "gift": {
+        "heading": "Aashirwad",
+        "message": "Your blessings are the only gift we ask for.",
+        "title": "Gift Details",
+        "name": "Arjun & Ananya",
+        "details": "UPI: arjunananya@upi",
+        "note": "Thank you"
+      },
+      "gallery": {
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png"
+          }
+        ]
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Ananya Kapoor",
+      "Arjun Malhotra"
+    ]
+  },
+  {
+    "name": "no verse or story",
+    "data": {
+      "couple": {
+        "groomName": "Arjun Malhotra",
+        "groomShort": "Arjun",
+        "groomParents": "Son of Shri Rakesh & Smt. Neeta Malhotra",
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "brideName": "Ananya Kapoor",
+        "brideShort": "Ananya",
+        "brideParents": "Daughter of Shri Anil & Smt. Ritu Kapoor",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "Friday, 20 November 2099",
+        "dateLine": "November 20th, 2099 • Udaipur",
+        "venue": "Lakeside Mandap",
+        "city": "Udaipur"
+      },
+      "verse": {
+        "text": " ",
+        "source": "— X"
+      },
+      "story": {
+        "items": [
+          {
+            "year": "",
+            "title": "",
+            "text": ""
+          }
+        ]
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "time": "16.00 Onwards",
+            "venue": "Poolside Lawn",
+            "address": "Udaivilas, Udaipur"
+          },
+          {
+            "title": "Phere",
+            "time": "19.30 Onwards",
+            "venue": "Lakeside Mandap",
+            "address": "Udaivilas, Udaipur"
+          }
+        ]
+      },
+      "gift": {
+        "heading": "Aashirwad",
+        "message": "Your blessings are the only gift we ask for.",
+        "title": "Gift Details",
+        "name": "Arjun & Ananya",
+        "details": "UPI: arjunananya@upi",
+        "note": "Thank you"
+      },
+      "gallery": {
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png"
+          }
+        ]
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Mehendi"
+    ],
+    "reject": [
+      "— X",
+      "How We Met"
+    ]
+  },
+  {
+    "name": "no events",
+    "data": {
+      "couple": {
+        "groomName": "Arjun Malhotra",
+        "groomShort": "Arjun",
+        "groomParents": "Son of Shri Rakesh & Smt. Neeta Malhotra",
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "brideName": "Ananya Kapoor",
+        "brideShort": "Ananya",
+        "brideParents": "Daughter of Shri Anil & Smt. Ritu Kapoor",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "Friday, 20 November 2099",
+        "dateLine": "November 20th, 2099 • Udaipur",
+        "venue": "Lakeside Mandap",
+        "city": "Udaipur"
+      },
+      "verse": {
+        "text": "Two souls, seven vows and the blessings of both our families.",
+        "source": "— Saptapadi"
+      },
+      "story": {
+        "items": [
+          {
+            "year": "2021",
+            "title": "Diwali in Delhi",
+            "text": "We met over sparklers at a friend’s Diwali party."
+          },
+          {
+            "year": "2099",
+            "title": "Saat Phere",
+            "text": "Now we take our seven steps together."
+          }
+        ]
+      },
+      "events": {
+        "items": [
+          {
+            "title": "",
+            "venue": "",
+            "time": "",
+            "address": "Somewhere"
+          }
+        ]
+      },
+      "gift": {
+        "heading": "Aashirwad",
+        "message": "Your blessings are the only gift we ask for.",
+        "title": "Gift Details",
+        "name": "Arjun & Ananya",
+        "details": "UPI: arjunananya@upi",
+        "note": "Thank you"
+      },
+      "gallery": {
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png"
+          }
+        ]
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Our Love Gallery"
+    ],
+    "reject": [
+      "Wedding Events",
+      "Somewhere"
+    ]
+  },
+  {
+    "name": "no photos",
+    "data": {
+      "couple": {
+        "groomName": "Arjun Malhotra",
+        "groomShort": "Arjun",
+        "groomParents": "Son of Shri Rakesh & Smt. Neeta Malhotra",
+        "groomPhoto": "",
+        "brideName": "Ananya Kapoor",
+        "brideShort": "Ananya",
+        "brideParents": "Daughter of Shri Anil & Smt. Ritu Kapoor",
+        "bridePhoto": ""
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "Friday, 20 November 2099",
+        "dateLine": "November 20th, 2099 • Udaipur",
+        "venue": "Lakeside Mandap",
+        "city": "Udaipur"
+      },
+      "verse": {
+        "text": "Two souls, seven vows and the blessings of both our families.",
+        "source": "— Saptapadi"
+      },
+      "story": {
+        "items": [
+          {
+            "year": "2021",
+            "title": "Diwali in Delhi",
+            "text": "We met over sparklers at a friend’s Diwali party."
+          },
+          {
+            "year": "2099",
+            "title": "Saat Phere",
+            "text": "Now we take our seven steps together."
+          }
+        ]
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "time": "16.00 Onwards",
+            "venue": "Poolside Lawn",
+            "address": "Udaivilas, Udaipur"
+          },
+          {
+            "title": "Phere",
+            "time": "19.30 Onwards",
+            "venue": "Lakeside Mandap",
+            "address": "Udaivilas, Udaipur"
+          }
+        ]
+      },
+      "gift": {
+        "heading": "Aashirwad",
+        "message": "Your blessings are the only gift we ask for.",
+        "title": "Gift Details",
+        "name": "Arjun & Ananya",
+        "details": "UPI: arjunananya@upi",
+        "note": "Thank you"
+      },
+      "gallery": {
+        "photos": [
+          {
+            "image": "javascript:alert(1)"
+          }
+        ]
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Meet the Couple",
+      "Aashirwad"
+    ],
+    "reject": [
+      "Our Love Gallery"
+    ]
+  },
+  {
+    "name": "no gift section",
+    "data": {
+      "couple": {
+        "groomName": "Arjun Malhotra",
+        "groomShort": "Arjun",
+        "groomParents": "Son of Shri Rakesh & Smt. Neeta Malhotra",
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "brideName": "Ananya Kapoor",
+        "brideShort": "Ananya",
+        "brideParents": "Daughter of Shri Anil & Smt. Ritu Kapoor",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "Friday, 20 November 2099",
+        "dateLine": "November 20th, 2099 • Udaipur",
+        "venue": "Lakeside Mandap",
+        "city": "Udaipur"
+      },
+      "verse": {
+        "text": "Two souls, seven vows and the blessings of both our families.",
+        "source": "— Saptapadi"
+      },
+      "story": {
+        "items": [
+          {
+            "year": "2021",
+            "title": "Diwali in Delhi",
+            "text": "We met over sparklers at a friend’s Diwali party."
+          },
+          {
+            "year": "2099",
+            "title": "Saat Phere",
+            "text": "Now we take our seven steps together."
+          }
+        ]
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "time": "16.00 Onwards",
+            "venue": "Poolside Lawn",
+            "address": "Udaivilas, Udaipur"
+          },
+          {
+            "title": "Phere",
+            "time": "19.30 Onwards",
+            "venue": "Lakeside Mandap",
+            "address": "Udaivilas, Udaipur"
+          }
+        ]
+      },
+      "gift": {
+        "heading": "",
+        "message": " "
+      },
+      "gallery": {
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png"
+          }
+        ]
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Thank You"
+    ],
+    "reject": [
+      "Wishing Well"
+    ]
+  },
+  {
+    "name": "no date, venue or parents",
+    "data": {
+      "couple": {
+        "groomName": "Arjun Malhotra",
+        "groomShort": "Arjun",
+        "groomParents": "",
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "brideName": "Ananya Kapoor",
+        "brideShort": "Ananya",
+        "brideParents": "",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+      },
+      "wedding": {
+        "date": "2099-11-20"
+      },
+      "verse": {
+        "text": "Two souls, seven vows and the blessings of both our families.",
+        "source": "— Saptapadi"
+      },
+      "story": {
+        "items": [
+          {
+            "year": "2021",
+            "title": "Diwali in Delhi",
+            "text": "We met over sparklers at a friend’s Diwali party."
+          },
+          {
+            "year": "2099",
+            "title": "Saat Phere",
+            "text": "Now we take our seven steps together."
+          }
+        ]
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Mehendi",
+            "time": "16.00 Onwards",
+            "venue": "Poolside Lawn",
+            "address": "Udaivilas, Udaipur"
+          },
+          {
+            "title": "Phere",
+            "time": "19.30 Onwards",
+            "venue": "Lakeside Mandap",
+            "address": "Udaivilas, Udaipur"
+          }
+        ]
+      },
+      "gift": {
+        "heading": "Aashirwad",
+        "message": "Your blessings are the only gift we ask for.",
+        "title": "Gift Details",
+        "name": "Arjun & Ananya",
+        "details": "UPI: arjunananya@upi",
+        "note": "Thank you"
+      },
+      "gallery": {
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png"
+          }
+        ]
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Mehendi",
+      "Arjun Malhotra"
+    ],
+    "reject": [
+      "Friday, 20 November 2099",
+      "Son of Shri"
+    ]
+  },
+  {
+    "name": "Hindi text and very long names",
+    "data": {
+      "couple": {
+        "groomName": "Arjun Malhotra",
+        "groomShort": "अर्जुन",
+        "groomParents": "Son of Shri Rakesh & Smt. Neeta Malhotra",
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "brideName": "Ananya Ritu Kapoor-Venkataraman",
+        "brideShort": "Ananya",
+        "brideParents": "Daughter of Shri Anil & Smt. Ritu Kapoor",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "Friday, 20 November 2099",
+        "dateLine": "November 20th, 2099 • Udaipur",
+        "venue": "Lakeside Mandap",
+        "city": "Udaipur"
+      },
+      "verse": {
+        "text": "Two souls, seven vows and the blessings of both our families.",
+        "source": "— Saptapadi"
+      },
+      "story": {
+        "items": [
+          {
+            "year": "2021",
+            "title": "Diwali in Delhi",
+            "text": "We met over sparklers at a friend’s Diwali party."
+          },
+          {
+            "year": "2099",
+            "title": "Saat Phere",
+            "text": "Now we take our seven steps together."
+          }
+        ]
+      },
+      "events": {
+        "items": [
+          {
+            "title": "मेहंदी",
+            "time": "16.00 Onwards",
+            "venue": "Poolside Lawn",
+            "address": "Udaivilas, Udaipur"
+          },
+          {
+            "title": "Sangeet & Cocktail Night by the Lake",
+            "time": "19.30 Onwards",
+            "venue": "Lakeside Mandap",
+            "address": "Udaivilas, Udaipur"
+          }
+        ]
+      },
+      "gift": {
+        "heading": "Aashirwad",
+        "message": "Your blessings are the only gift we ask for.",
+        "title": "Gift Details",
+        "name": "Arjun & Ananya",
+        "details": "UPI: arjunananya@upi",
+        "note": "Thank you"
+      },
+      "gallery": {
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png"
+          }
+        ]
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "अर्जुन",
+      "Ananya Ritu Kapoor-Venkataraman",
+      "मेहंदी",
+      "Sangeet & Cocktail Night by the Lake"
+    ]
+  },
+  {
+    "name": "wrong types, HTML and bad links",
+    "data": {
+      "couple": {
+        "groomName": "<b>Arjun</b>",
+        "brideName": 42,
+        "groomPhoto": "javascript:alert(1)",
+        "groomParents": {
+          "a": 1
+        }
+      },
+      "wedding": {
+        "venue": [
+          "x"
+        ],
+        "city": 7
+      },
+      "verse": {
+        "text": 9
+      },
+      "story": {
+        "items": [
+          "x",
+          null,
+          {
+            "title": "Met",
+            "text": {
+              "a": 1
+            }
+          }
+        ]
+      },
+      "events": {
+        "items": [
+          null,
+          {
+            "title": "Phere",
+            "time": 5
+          }
+        ]
+      },
+      "gallery": {
+        "photos": "x"
+      },
+      "gift": {
+        "heading": {
+          "a": 1
+        },
+        "message": 3
+      }
+    },
+    "want": [
+      "<b>Arjun</b>",
+      "42",
+      "7",
+      "9",
+      "Met",
+      "Phere",
+      "◷ 5",
+      "3"
+    ],
+    "reject": [
+      "[object Object]",
+      "undefined",
+      "null",
+      "Our Love Gallery"
+    ]
+  },
+  {
+    "name": "five events",
+    "data": {
+      "couple": {
+        "groomName": "Arjun Malhotra",
+        "groomShort": "Arjun",
+        "groomParents": "Son of Shri Rakesh & Smt. Neeta Malhotra",
+        "groomPhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png",
+        "brideName": "Ananya Kapoor",
+        "brideShort": "Ananya",
+        "brideParents": "Daughter of Shri Anil & Smt. Ritu Kapoor",
+        "bridePhoto": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+      },
+      "wedding": {
+        "date": "2099-11-20",
+        "time": "19:30",
+        "dateLabel": "Friday, 20 November 2099",
+        "dateLine": "November 20th, 2099 • Udaipur",
+        "venue": "Lakeside Mandap",
+        "city": "Udaipur"
+      },
+      "verse": {
+        "text": "Two souls, seven vows and the blessings of both our families.",
+        "source": "— Saptapadi"
+      },
+      "story": {
+        "items": [
+          {
+            "year": "2021",
+            "title": "Diwali in Delhi",
+            "text": "We met over sparklers at a friend’s Diwali party."
+          },
+          {
+            "year": "2099",
+            "title": "Saat Phere",
+            "text": "Now we take our seven steps together."
+          }
+        ]
+      },
+      "events": {
+        "items": [
+          {
+            "title": "Roka",
+            "time": "10.00 Onwards",
+            "venue": "Hall 1"
+          },
+          {
+            "title": "Haldi",
+            "time": "11.00 Onwards",
+            "venue": "Hall 2"
+          },
+          {
+            "title": "Mehendi",
+            "time": "12.00 Onwards",
+            "venue": "Hall 3"
+          },
+          {
+            "title": "Sangeet",
+            "time": "13.00 Onwards",
+            "venue": "Hall 4"
+          },
+          {
+            "title": "Phere",
+            "time": "14.00 Onwards",
+            "venue": "Hall 5"
+          }
+        ]
+      },
+      "gift": {
+        "heading": "Aashirwad",
+        "message": "Your blessings are the only gift we ask for.",
+        "title": "Gift Details",
+        "name": "Arjun & Ananya",
+        "details": "UPI: arjunananya@upi",
+        "note": "Thank you"
+      },
+      "gallery": {
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-4.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-5.png"
+          }
+        ]
+      },
+      "music": {
+        "track": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/media/background-music.mp3"
+      }
+    },
+    "want": [
+      "Roka",
+      "Phere",
+      "Event 05",
+      "📍 Hall 5"
+    ]
+  }
+]

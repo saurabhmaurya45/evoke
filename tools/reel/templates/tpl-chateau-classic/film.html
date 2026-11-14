@@ -1,0 +1,556 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Chateau Film</title>
+<style>
+@font-face{font-family:Imperial;src:url("fonts/imperial-script-400.woff2")}
+@font-face{font-family:Alex;src:url("fonts/alex-brush-400.woff2")}
+@font-face{font-family:Italiana;src:url("fonts/italiana-400.woff2")}
+@font-face{font-family:Corm;src:url("fonts/cormorant-garamond-variable.woff2");font-weight:300 700}
+@font-face{font-family:Inter;src:url("fonts/inter-variable.woff2");font-weight:100 900}
+@font-face{font-family:Mukta;src:url("fonts/mukta-400-latin.woff2");font-weight:400}
+@font-face{font-family:Mukta;src:url("fonts/mukta-400-devanagari.woff2");font-weight:400;unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF}
+@font-face{font-family:Mukta;src:url("fonts/mukta-600-devanagari.woff2");font-weight:600;unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF}
+html,body{margin:0;background:#000;overflow:hidden;width:1080px;height:1920px}
+#stage{position:absolute;inset:0;overflow:hidden;background:#faf6ee}
+.sc{position:absolute;inset:0;overflow:hidden;display:none}
+.a{position:absolute;left:0;top:0;transform-origin:center center}
+.t{white-space:nowrap;text-align:center}
+.t span{display:inline-block;white-space:pre}
+canvas{position:absolute;left:0;top:0}
+</style></head><body><div id="stage"></div>
+<script src="../../lib/core.js"></script>
+<script>
+const D = window.__DATA;
+const stage = document.querySelector('#stage');
+// The template's own music: 95 BPM, a strong beat every four.
+const BEAT = 60 / 95, BAR = 4 * BEAT;
+
+// ---- The template's palette and type: warm paper, wine, gold and sage ----
+const PAPER = '#faf6ee', WINE = '#600014', WINE2 = '#3a000c', GOLD = '#c9953a', GOLD_L = '#e7c27a', SAGE = '#4f5d3d', INK = '#3f3227', SOFT = '#7a6a5c';
+const NAMES = 'Imperial,Alex,Mukta', BRUSH = 'Alex,Imperial,Mukta', CAPS = 'Italiana,Corm,Mukta', BODY = 'Corm,Mukta', SANS = 'Inter,Mukta', EMOJI = '"Segoe UI Emoji","Noto Color Emoji","Apple Color Emoji",Inter';
+const ART = 'https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%209/static/images/';
+const IMG = { wreath: `${ART}intro-bg.png`, arch: `${ART}footer-bg.png`, small: `${ART}Couple-image.png`, fountain: `${ART}fountain.png` };
+
+// ---- Data, used exactly as saved. A section with nothing in it is left out. ----
+const val = (v) => str(v).trim().replace(/[ \t]+/g, ' ');
+const obj = (it) => (it && typeof it === 'object' ? it : {});
+const arr = (v) => (Array.isArray(v) ? v : []).map(obj);
+function lines(value, max, count) {
+  const out = [];
+  for (const w of str(value).trim().split(/\s+/).filter(Boolean)) {
+    const last = out[out.length - 1];
+    if (last !== undefined && (last + ' ' + w).length <= max) out[out.length - 1] = `${last} ${w}`;
+    else out.push(w);
+  }
+  if (out.length > count) { out.length = count; out[count - 1] = out[count - 1].replace(/[,.;:!?]*$/, '') + '…'; }
+  return out;
+}
+function para(value, max, count) {
+  const s = str(value).trim();
+  if (!s) return [];
+  const n = Math.ceil(s.length / max);
+  return n > count ? lines(s, max, count) : wrap(s, Math.max(1, n), 1);
+}
+const C = obj(D?.couple), W = obj(D?.wedding);
+const groom = val(C.groomName), bride = val(C.brideName);
+const coupleImg = safeImage(C.image);
+const dateLabel = val(W.dateLabel), time = val(W.time), place = val(W.place);
+const intro = lines(val(W.introText), 26, 9);
+const events = arr(D?.events?.items).filter((e) => val(e.title) || val(e.time) || val(e.description)).slice(0, 6).map((e) => ({
+  title: val(e.title), time: val(e.time), date: val(e.date), desc: para(val(e.description), 40, 2), loc: val(e.location), emoji: graphemes(val(e.emoji)).slice(0, 2).join(''),
+  accent: /^#[0-9a-f]{3,8}$/i.test(val(e.accent)) ? val(e.accent) : GOLD,
+}));
+const V = obj(D?.venue);
+const venueName = val(V.name), venueAddr = para(val(V.address), 36, 2), venueImg = safeImage(V.image);
+const DC = obj(D?.dressCode);
+const dressText = para(val(DC.text), 38, 4);
+const colors = arr(DC.colors).filter((c) => /^#[0-9a-f]{3,8}$/i.test(val(c.hex))).slice(0, 6).map((c) => ({ name: val(c.name), hex: val(c.hex) }));
+const RG = obj(D?.registry);
+const giftTitle = val(RG.title), giftDesc = para(val(RG.description), 36, 5);
+
+// ---- The cut list: whole bars, so any section may follow any and stay on the beat. ----
+const SEGS = [];
+const add = (key, dur, enter) => SEGS.push({ key, dur, enter });
+add('intro', BAR, null);
+add('hero', 2 * BAR, 'doors');
+add('letter', intro.length > 3 ? 2 * BAR : BAR, 'wreath');
+if (dateLabel || time || place) add('reveal', BAR, 'foil');
+if (events.length) add('schedule', events.length > 2 ? 2 * BAR : BAR, 'thread');
+if (venueName || venueAddr.length) add('venue', BAR, 'sketch');
+if (dressText.length || colors.length) add('dress', BAR, 'swatch');
+if (giftDesc.length) add('gifts', BAR, 'card');
+add('finale', BAR, 'arch');
+add('end', 4 * BEAT, 'bloom');
+let acc = 0;
+SEGS.forEach((s) => { s.start = acc; acc += s.dur; });
+const TOTAL = acc;
+const TR = { doors: 0.8, wreath: 0.65, foil: 0.6, thread: 0.65, sketch: 0.7, swatch: 0.65, card: 0.6, arch: 0.7, bloom: 0.35 };
+
+// ---- Helpers ----
+const R = {};
+const fade = (u, a, d = 0.5) => outC(seg(u, a, a + d));
+const rise = (el, u, at, y, x = 540, d = 0.55) => { const p = fade(u, at, d); P(el, { x, y: y + (1 - p) * 30, a: p, b: (1 - p) * 6 }); };
+const wipe = (el, u, at, y, d = 0.7, x = 540) => {
+  P(el, { x, y, a: cl(seg(u, at, at + 0.15) * 3) });
+  el.style.clipPath = `inset(-40% ${(1 - ioC(seg(u, at, at + d))) * 100}% -40% -8%)`;
+};
+const pop = (u, a, d = 0.45, k = 1.8) => Math.max(0.001, outB(seg(u, a, a + d), k));
+function full(sc, css) { return mk(sc, 'div', `width:1080px;height:1920px;${css}`); }
+function paper(sc) {
+  full(sc, `background:radial-gradient(ellipse at 50% 35%,#fffdf8,${PAPER} 70%)`);
+  full(sc, 'background:radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(201,149,58,.12) 100%)');
+}
+const PHOTO_FALLBACK = (() => {
+  const c = document.createElement('canvas'); c.width = 90; c.height = 120;
+  const x = c.getContext('2d'), g = x.createLinearGradient(0, 0, 90, 120);
+  g.addColorStop(0, '#cfe0ea'); g.addColorStop(1, '#ecd8bf');
+  x.fillStyle = g; x.fillRect(0, 0, 90, 120);
+  return c.toDataURL('image/png');
+})();
+const photo = (parent, url, w, h, extra = '') => im(parent, url, w, h, `object-fit:cover;${extra}`, PHOTO_FALLBACK);
+// The template's divider: two gold lines meeting at a diamond.
+function divider(parent, color = GOLD) {
+  const w = mk(parent, 'div', 'width:320px;height:30px');
+  w.l = mk(w, 'div', `left:0;top:14px;width:140px;height:2px;background:linear-gradient(90deg,transparent,${color});transform-origin:100% 50%`);
+  w.r = mk(w, 'div', `left:180px;top:14px;width:140px;height:2px;background:linear-gradient(90deg,${color},transparent);transform-origin:0 50%`);
+  w.d = mk(w, 'div', `left:146px;top:1px;width:28px;height:28px`);
+  w.d.innerHTML = `<svg viewBox="0 0 28 28" width="28" height="28"><path d="M14 2 L26 14 L14 26 L2 14Z" fill="none" stroke="${color}" stroke-width="2"/><circle cx="14" cy="14" r="4" fill="${color}"/></svg>`;
+  return w;
+}
+function drawDivider(d, u, at, y) {
+  P(d, { y });
+  const p = outC(seg(u, at, at + 0.5));
+  d.l.style.transform = d.r.style.transform = `scaleX(${p})`;
+  d.d.style.transform = `scale(${pop(u, at, 0.45, 2)}) rotate(${(1 - p) * 90}deg)`;
+}
+const label = (sc, s, color = GOLD, size = 28) => text(sc, s, `font:400 ${size}px ${CAPS};letter-spacing:${size * 0.38}px;text-transform:uppercase;color:${color}`, 960);
+const card = (sc, w, h, extra = '') => mk(sc, 'div', `width:${w}px;height:${h}px;border-radius:30px;background:rgba(255,253,248,.9);box-sizing:border-box;border:2px solid rgba(201,149,58,.28);box-shadow:0 20px 50px rgba(120,90,50,.1);${extra}`);
+
+// ================= Scenes (in cut order, so a later scene draws over an earlier one) =================
+
+// ---- The sealed invitation: wine-red doors with a golden keyhole, which part on the first beat ----
+const DOORS = {};
+{
+  const sc = scene(stage);
+  const make = (side) => {
+    const d = mk(sc, 'div', `width:540px;height:1920px;left:${side ? 540 : 0}px;overflow:hidden;background:linear-gradient(${side ? 270 : 90}deg,${WINE2},${WINE} 55%,#7a0a22)`);
+    mk(d, 'div', `left:${side ? 0 : 538}px;top:0;width:2px;height:1920px;background:linear-gradient(180deg,transparent,${GOLD_L},${GOLD},${GOLD_L},transparent)`);
+    mk(d, 'div', `left:${side ? 0 : 60}px;top:60px;width:480px;height:1800px;box-sizing:border-box;border:2px solid rgba(201,149,58,.35);border-${side ? 'left' : 'right'}:none`);
+    return d;
+  };
+  DOORS.l = make(0); DOORS.r = make(1);
+  const lab = label(sc, 'The Wedding Invitation', GOLD_L, 30);
+  const nm = text(sc, `${groom} & ${bride}`, `font:400 120px ${NAMES};color:#fff3e0;text-shadow:0 4px 20px rgba(0,0,0,.4)`, 940);
+  const key = mk(sc, 'div', 'width:220px;height:220px');
+  key.innerHTML = `<svg viewBox="0 0 220 220" width="220" height="220"><defs><radialGradient id="kg" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#f3d58b"/><stop offset=".6" stop-color="${GOLD}"/><stop offset="1" stop-color="#8a5f1c"/></radialGradient></defs><rect x="30" y="30" width="160" height="160" rx="54" fill="none" stroke="url(#kg)" stroke-width="10"/><rect x="48" y="48" width="124" height="124" rx="40" fill="none" stroke="#e7c27a" stroke-width="2" stroke-dasharray="4 6"/><circle cx="110" cy="96" r="17" fill="url(#kg)"/><path d="M100 104 L120 104 L126 150 L94 150Z" fill="url(#kg)"/></svg>`;
+  const g1 = text(sc, 'Dear Honored Guest,', `font:400 40px ${SANS};color:#f6e7d6`, 940);
+  const g2 = text(sc, 'You are warmly invited to celebrate our wedding day.', `font:400 34px ${SANS};color:#f6e7d6`, 960);
+  const petals = Array.from({ length: 12 }, (_, i) => ({ e: mk(sc, 'div', `width:22px;height:16px;border-radius:60% 40% 60% 40%;background:#b0182f;opacity:.8`), x: (i * 97) % 1080, v: 80 + (i % 5) * 40, r: i * 37 }));
+  R.intro = { sc, f(u) {
+    const open = ioC(seg(u, BAR - 0.25, BAR + 0.8));
+    DOORS.l.style.transform = `translateX(${-open * 560}px)`;
+    DOORS.r.style.transform = `translateX(${open * 560}px)`;
+    const k = 1 - open;
+    P(lab, { y: 560, a: fade(u, 0.05) * k });
+    P(nm, { y: 680, a: k }); nm.style.clipPath = `inset(-40% ${(1 - ioC(seg(u, 0.15, 0.95))) * 100}% -40% -8%)`;
+    P(key, { y: 980, s: pop(u, 0.3, 0.6, 1.6) * (1 + 0.04 * Math.sin(u * 6)), a: k });
+    key.style.filter = `drop-shadow(0 0 ${12 + 10 * Math.sin(u * 4)}px rgba(231,194,122,.6))`;
+    rise(g1, u, 0.8, 1210); rise(g2, u, 1.0, 1270);
+    g1.style.opacity = String(Number(g1.style.opacity) * k); g2.style.opacity = String(Number(g2.style.opacity) * k);
+    petals.forEach((p) => P(p.e, { x: p.x + Math.sin(u + p.r) * 30, y: ((u * p.v + p.r * 9) % 2000) - 40, r: u * 90 + p.r, a: 0.8 * k }));
+  } };
+}
+
+// ---- Wedding day: the names over a watercolour sky, and the couple ----
+{
+  const sc = scene(stage);
+  full(sc, `background:linear-gradient(180deg,#cfe1ec 0%,#e8eef0 35%,${PAPER} 60%)`);
+  // The photo starts under the solid part of the sky, so its top edge never shows.
+  const box = mk(sc, 'div', 'top:690px;width:1080px;height:1230px;overflow:hidden');
+  const img = coupleImg ? photo(box, coupleImg, 1230, 1230, 'left:-75px;transform-origin:50% 70%') : null;
+  if (!img) box.style.background = `linear-gradient(180deg,${PAPER},#ecd8bf)`;
+  full(sc, `background:linear-gradient(180deg,#d9e7ee 36%,rgba(217,231,238,.6) 44%,rgba(232,238,240,0) 58%)`);
+  const shadow = 'text-shadow:0 2px 0 rgba(255,255,255,.6);';
+  const nG = text(sc, groom, `font:400 180px ${NAMES};color:${INK};${shadow}`, 900);
+  const amp = text(sc, '&', `font:400 70px ${BODY};font-style:italic;color:${WINE}`);
+  const nB = text(sc, bride, `font:400 180px ${NAMES};color:${INK};${shadow}`, 900);
+  const wd = label(sc, 'Wedding Day', SOFT, 32);
+  const dv = divider(sc);
+  const join = label(sc, 'Join us to celebrate our love', INK, 32);
+  join.style.textShadow = '0 0 12px #e3edf2,0 0 24px #e3edf2';
+  R.hero = { sc, f(u) {
+    if (img) img.style.transform = `scale(${1.08 - seg(u, 0, 2 * BAR + 0.8) * 0.08})`;
+    wipe(nG, u, 0.35, 200, 0.9);
+    P(amp, { y: 335, s: pop(u, 0.9, 0.45, 2.2), a: cl(seg(u, 0.9, 1.1) * 3) });
+    wipe(nB, u, 1.1, 455, 0.9);
+    rise(wd, u, 1.9, 580);
+    drawDivider(dv, u, 2.1, 630);
+    rise(join, u, 2.3, 685);
+  } };
+}
+
+// ---- Dear friends and family: the welcome, within the template's wreath ----
+const WREATH_AT = { x: 540, y: 980 };
+{
+  const sc = scene(stage);
+  paper(sc);
+  // The wreath art has a square paper background, so only its round middle is shown.
+  const wr = im(sc, IMG.wreath, 1080, 1080, 'clip-path:circle(47%);mix-blend-mode:multiply');
+  const gan = text(sc, '॥ श्री गणेशाय नमः ॥', `font:600 40px Mukta;color:${WINE}`);
+  const head = text(sc, 'Dear Friends and Family,', `font:400 104px ${BRUSH};color:${INK}`, 940);
+  const ln = intro.map((l) => text(sc, l, `font:italic 500 40px ${BODY};color:${SOFT}`, 540));
+  const dv = divider(sc);
+  const top = 1000 - (ln.length - 1) * 28;
+  R.letter = { sc, f(u, s) {
+    P(wr, { ...WREATH_AT, s: lerp(0.92, 1.02, outC(seg(u, 0, 1))) + seg(u, 1, s.dur) * 0.02, a: fade(u, 0, 0.8) * 0.8 });
+    rise(gan, u, 0.1, 330);
+    wipe(head, u, 0.25, 450, 0.9);
+    const per = Math.min(0.2, (s.dur - 1.5) / Math.max(1, ln.length));
+    ln.forEach((e, i) => rise(e, u, 0.8 + i * per, top + i * 56));
+    drawDivider(dv, u, 0.9 + ln.length * per, top + ln.length * 56 + 40);
+  } };
+}
+
+// ---- The celebration begins: the gold card is scratched to show the day, the time and the place ----
+{
+  const sc = scene(stage);
+  paper(sc);
+  const head = text(sc, 'The Celebration Begins In', `font:400 92px ${BRUSH};color:${INK}`, 940);
+  const CW = 820, CH = 560;
+  const crd = mk(sc, 'div', `width:${CW}px;height:${CH}px;border-radius:34px;overflow:hidden;background:linear-gradient(160deg,#fffaf0,#f3e6cd);box-shadow:0 24px 60px rgba(120,90,50,.18)`);
+  const rows = [];
+  if (dateLabel) rows.push(text(crd, dateLabel, `font:400 108px ${NAMES};color:${WINE}`, CW - 80));
+  if (time) rows.push(text(crd, time, `font:500 50px ${CAPS};letter-spacing:10px;color:${GOLD}`, CW - 80));
+  if (place) rows.push(text(crd, place, `font:italic 500 46px ${BODY};color:${SOFT}`, CW - 80));
+  const cv = document.createElement('canvas'); cv.width = CW; cv.height = CH; cv.className = 'a'; crd.appendChild(cv);
+  const rr = rng(13);
+  const strokes = Array.from({ length: 10 }, (_, k) => ({ y: 40 + k * (CH - 80) / 9 + (rr() - 0.5) * 20, w: 80 + rr() * 20 }));
+  R.reveal = { sc, f(u) {
+    wipe(head, u, 0.1, 560, 0.9);
+    const cp = seg(u, 0.2, 0.7);
+    P(crd, { y: 1050 + (1 - outC(cp)) * 80, a: cl(cp * 3), s: lerp(0.94, 1, outC(cp)) });
+    const gap = rows.length === 3 ? [-140, 10, 120] : rows.length === 2 ? [-60, 70] : [0];
+    rows.forEach((e, i) => P(e, { x: CW / 2, y: CH / 2 + gap[i] }));
+    // The template's gold scratch foil, scratched away from the second beat.
+    const p = seg(u, BEAT, BEAT + 1.3), g = cv.getContext('2d');
+    g.globalCompositeOperation = 'source-over'; g.clearRect(0, 0, CW, CH);
+    if (p < 1) {
+      const gr = g.createLinearGradient(0, 0, CW, CH);
+      gr.addColorStop(0, '#b7862e'); gr.addColorStop(0.45, '#e2bd6a'); gr.addColorStop(0.55, '#f4dc9a'); gr.addColorStop(1, '#a87a25');
+      g.fillStyle = gr; g.fillRect(0, 0, CW, CH);
+      g.fillStyle = 'rgba(255,255,255,.85)'; g.font = '600 30px Inter'; g.textAlign = 'center'; g.fillText('SCRATCH TO REVEAL DETAILS', CW / 2, CH / 2 + 10);
+      g.globalCompositeOperation = 'destination-out'; g.lineCap = 'round';
+      strokes.forEach((st, k) => {
+        const q = cl(p * strokes.length - k); if (q <= 0) return;
+        g.lineWidth = st.w; g.beginPath();
+        g.moveTo(k % 2 ? CW + 30 : -30, st.y); g.lineTo(k % 2 ? CW + 30 - q * (CW + 60) : -30 + q * (CW + 60), st.y + (k % 2 ? -26 : 26)); g.stroke();
+      });
+    }
+  } };
+}
+
+// ---- The schedule: the timeline thread draws down, each event with its coloured ring and emoji ----
+{
+  const sc = scene(stage);
+  paper(sc);
+  const top = dateLabel ? label(sc, dateLabel, GOLD, 30) : null;
+  const head = text(sc, 'Schedule of Events', `font:400 120px ${NAMES};color:${INK}`, 940);
+  const sub = label(sc, 'An unforgettable evening awaits', SOFT, 26);
+  const n = events.length, step = Math.min(300, 1260 / n), y0 = 640 + step / 2;
+  const line = mk(sc, 'div', `left:888px;top:${y0 - step / 2 + 20}px;width:3px;height:${n * step - 40}px;background:linear-gradient(180deg,rgba(201,149,58,.15),rgba(201,149,58,.6),rgba(201,149,58,.15));transform-origin:50% 0`);
+  const items = events.map((ev, i) => {
+    const y = y0 + i * step;
+    const bar = mk(sc, 'div', `width:5px;height:${step - 50}px;border-radius:3px;background:${ev.accent}`);
+    const chips = [ev.date, ev.time].filter(Boolean).map((c) => text(sc, c, `font:600 26px ${CAPS};letter-spacing:3px;color:${SOFT};background:rgba(201,149,58,.12);border-radius:30px;padding:4px 18px`));
+    const title = ev.title ? text(sc, ev.title, `font:600 60px ${BODY};color:${INK}`, 680) : null;
+    const desc = ev.desc.map((l) => text(sc, l, `font:400 31px ${SANS};color:${SOFT}`, 680));
+    const loc = ev.loc ? text(sc, `⌖ ${ev.loc}`, `font:italic 600 34px ${BODY};color:${GOLD}`, 680) : null;
+    const ring = mk(sc, 'div', `width:110px;height:110px;border-radius:50%;background:#fffdf8;box-sizing:border-box;border:3px solid ${ev.accent};box-shadow:0 0 0 10px ${ev.accent}22`);
+    const emo = ev.emoji ? text(ring, ev.emoji, `font:400 52px/1 ${EMOJI}`) : null;
+    if (emo) P(emo, { x: 52, y: 56 });
+    return { y, bar, chips, title, desc, loc, ring };
+  });
+  R.schedule = { sc, f(u, s) {
+    if (top) rise(top, u, 0.05, 300);
+    wipe(head, u, 0.15, 410, 0.9);
+    rise(sub, u, 0.5, 520);
+    const grow = ioC(seg(u, 0.4, s.dur - 0.5));
+    line.style.transform = `scaleY(${grow})`;
+    const per = (s.dur - 1.0) / Math.max(1, n);
+    items.forEach((it, i) => {
+      const at = 0.5 + i * per, p = seg(u, at, at + 0.5);
+      P(it.ring, { x: 890, y: it.y, s: pop(u, at, 0.5, 2), r: (1 - outC(p)) * -60 });
+      P(it.bar, { x: 72, y: it.y, a: outC(p) }); it.bar.style.transform += ` scaleY(${outC(p)})`;
+      const rows = [];
+      if (it.chips.length) rows.push({ els: it.chips, h: 46 });
+      if (it.title) rows.push({ el: it.title, h: 72 });
+      it.desc.forEach((e) => rows.push({ el: e, h: 42 }));
+      if (it.loc) rows.push({ el: it.loc, h: 48 });
+      let yy = it.y - rows.reduce((a, r) => a + r.h, 0) / 2;
+      rows.forEach((r, j) => {
+        const cy = yy + r.h / 2;
+        if (r.els) { let x = 100; r.els.forEach((c) => { const w = c.offsetWidth; rise(c, u, at + 0.1, cy, x + w / 2, 0.4); x += w + 14; }); }
+        else { const w = r.el.offsetWidth; rise(r.el, u, at + 0.1 + j * 0.06, cy, 100 + w / 2, 0.4); }
+        yy += r.h;
+      });
+    });
+  } };
+}
+
+// ---- The venue: the château drawn in pencil, in its double gold frame ----
+{
+  const sc = scene(stage);
+  paper(sc);
+  const lab = label(sc, 'The Venue', GOLD, 30);
+  const head = text(sc, 'Location', `font:400 130px ${NAMES};color:${INK}`);
+  const dv = divider(sc);
+  const fr = mk(sc, 'div', `width:880px;height:${venueImg ? 760 : 10}px;background:#fffdf8;box-sizing:border-box;border:3px solid ${GOLD_L};outline:2px solid rgba(201,149,58,.4);outline-offset:-22px;box-shadow:0 20px 50px rgba(120,90,50,.12)`);
+  const img = venueImg ? photo(fr, venueImg, 800, 680, 'left:37px;top:37px') : null;
+  if (!venueImg) fr.style.display = 'none';
+  const nm = venueName ? text(sc, venueName, `font:500 66px ${BODY};color:${INK}`, 940) : null;
+  const ad = venueAddr.map((l) => text(sc, l, `font:400 36px ${SANS};color:${SOFT}`, 940));
+  const by = venueImg ? 1520 : 900;
+  R.venue = { sc, f(u) {
+    rise(lab, u, 0.05, 300);
+    wipe(head, u, 0.15, 410, 0.8);
+    drawDivider(dv, u, 0.5, 520);
+    if (img) {
+      const p = seg(u, 0.3, 0.9);
+      P(fr, { y: 1000 + (1 - outC(p)) * 80, a: cl(p * 3) });
+      // The pencil sketch is drawn in from the left.
+      img.style.clipPath = `inset(0 ${(1 - ioC(seg(u, 0.5, 1.6))) * 100}% 0 0)`;
+    }
+    if (nm) rise(nm, u, 1.0, by);
+    ad.forEach((e, i) => rise(e, u, 1.15 + i * 0.1, by + 80 + i * 50));
+  } };
+}
+
+// ---- Dress code: the palette, one colour on each beat ----
+{
+  const sc = scene(stage);
+  paper(sc);
+  const lab = label(sc, 'Wedding Style', GOLD, 30);
+  const head = text(sc, 'Dress Code', `font:400 130px ${NAMES};color:${INK}`);
+  const dv = divider(sc);
+  const tl = dressText.map((l) => text(sc, l, `font:400 40px ${SANS};color:${SOFT}`, 940));
+  const n = colors.length, gapX = Math.min(170, 960 / Math.max(1, n));
+  const sw = colors.map((c) => ({ dot: mk(sc, 'div', `width:120px;height:120px;border-radius:50%;background:${c.hex};box-shadow:0 0 0 6px #fffdf8,0 0 0 8px rgba(201,149,58,.35),0 12px 24px rgba(0,0,0,.12)`), name: c.name ? text(sc, c.name, `font:600 24px ${SANS};letter-spacing:4px;text-transform:uppercase;color:${SOFT}`, gapX - 10) : null }));
+  const ty = 760, swY = ty + tl.length * 60 + 160;
+  R.dress = { sc, f(u) {
+    rise(lab, u, 0.05, 420);
+    wipe(head, u, 0.15, 530, 0.8);
+    drawDivider(dv, u, 0.45, 640);
+    tl.forEach((e, i) => rise(e, u, 0.5 + i * 0.1, ty + i * 60));
+    sw.forEach((s, i) => {
+      const x = 540 + (i - (n - 1) / 2) * gapX, at = 0.8 + i * (BEAT / 2);
+      P(s.dot, { x, y: swY, s: pop(u, at, 0.45, 2.2) });
+      if (s.name) rise(s.name, u, at + 0.2, swY + 110, x, 0.4);
+    });
+  } };
+}
+
+// ---- Gifts ----
+{
+  const sc = scene(stage);
+  paper(sc);
+  const head = text(sc, 'Wedding Details', `font:400 120px ${BRUSH};color:${INK}`);
+  const heart = text(sc, '♡', `font:400 70px ${BODY};color:${GOLD}`);
+  const dv = divider(sc);
+  const CH = 200 + giftDesc.length * 56;
+  const crd = card(sc, 900, CH);
+  const icon = mk(sc, 'div', `width:96px;height:96px;border-radius:50%;background:rgba(201,149,58,.15)`);
+  icon.innerHTML = `<svg viewBox="0 0 24 24" width="96" height="96" style="padding:24px;box-sizing:border-box"><g fill="none" stroke="${SOFT}" stroke-width="1.6"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12M12 8s-1.5-4-4-4a2 2 0 0 0 0 4h4zM12 8s1.5-4 4-4a2 2 0 0 1 0 4h-4z"/></g></svg>`;
+  const t = giftTitle ? text(sc, giftTitle, `font:600 50px ${SANS};color:${INK}`, 640) : null;
+  const dl = giftDesc.map((l) => text(sc, l, `font:400 36px ${SANS};color:${SOFT}`, 800));
+  const cy = 1100;
+  R.gifts = { sc, f(u) {
+    P(heart, { y: 420, s: pop(u, 0.05, 0.5, 2) });
+    wipe(head, u, 0.15, 540, 0.8);
+    drawDivider(dv, u, 0.45, 660);
+    const p = seg(u, 0.3, 0.8);
+    P(crd, { y: cy + (1 - outC(p)) * 80, a: cl(p * 3) });
+    const topY = cy - CH / 2;
+    P(icon, { x: 170, y: topY + 100, s: pop(u, 0.5, 0.45, 2) });
+    if (t) rise(t, u, 0.6, topY + 100, 250 + t.offsetWidth / 2, 0.45);
+    dl.forEach((e, i) => rise(e, u, 0.75 + i * 0.08, topY + 190 + i * 56, 540, 0.45));
+  } };
+}
+
+// ---- Hope to see you there: the gold arch with dried flowers, and the couple ----
+{
+  const sc = scene(stage);
+  paper(sc);
+  const arch = im(sc, IMG.arch, 1000, 1000 * 1604 / 1080);
+  const t = text(sc, 'Hope to see you there!', `font:400 104px ${BRUSH};color:${INK}`, 860);
+  const nm = text(sc, `${groom} & ${bride}`, `font:400 44px ${CAPS};letter-spacing:10px;text-transform:uppercase;color:${SOFT}`, 820);
+  const dv = divider(sc);
+  const cp = im(sc, IMG.small, 300, 300 * 2160 / 1215);
+  R.finale = { sc, f(u) {
+    P(arch, { y: 1010, s: lerp(0.94, 1, outC(seg(u, 0, 0.9))), a: fade(u, 0, 0.7) });
+    arch.style.clipPath = `inset(${(1 - ioC(seg(u, 0, 1.0))) * 100}% 0 0 0)`;
+    wipe(t, u, 0.4, 720, 0.9);
+    rise(nm, u, 0.9, 840);
+    drawDivider(dv, u, 1.1, 920);
+    const p = seg(u, 1.0, 1.7);
+    P(cp, { y: 1340 + (1 - outC(p)) * 80, a: cl(p * 2), s: 1 + 0.01 * Math.sin(u * 2) });
+  } };
+}
+
+// ---- End card ----
+{
+  const sc = scene(stage);
+  full(sc, `background:radial-gradient(ellipse at 50% 40%,#7a0a22 0%,${WINE} 45%,#22000a 100%)`);
+  const shadow = 'text-shadow:0 2px 14px rgba(20,0,8,.6);';
+  const a1 = text(sc, 'Apni shaadi ka', `font:600 84px ${SANS};color:#fff;${shadow}`);
+  const a2 = text(sc, 'aisa invitation banaiye', `font:600 74px ${SANS};color:#fff;${shadow}`, 980);
+  const halo = mk(sc, 'div', 'width:1100px;height:520px;border-radius:50%;background:radial-gradient(ellipse,rgba(231,194,122,.3),transparent 68%)');
+  const logo = mk(sc, 'div', `font:400 170px ${BRUSH};white-space:nowrap;background:linear-gradient(100deg,${GOLD} 0%,#fff1d0 40%,#ffffff 50%,#fff1d0 60%,${GOLD} 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 30px`);
+  logo.textContent = 'theinvitely.in';
+  const under = mk(sc, 'div', `height:4px;background:linear-gradient(90deg,transparent,${GOLD_L},transparent)`);
+  R.end = { sc, f(u) {
+    P(a1, { y: 760 }); reveal(a1, u, 0.3 * BEAT, 0.03);
+    P(a2, { y: 870 }); reveal(a2, u, 1.0 * BEAT, 0.025);
+    const l = outB(seg(u, 2 * BEAT, 2 * BEAT + 0.5), 1.9);
+    P(halo, { y: 1090, s: l * (1 + 0.05 * Math.sin(u * 5)), a: cl(l) * 0.9 });
+    P(logo, { y: 1080, s: Math.max(l, 0.001), a: cl(l * 2) });
+    logo.style.backgroundPosition = `${lerp(130, -40, seg(u, 2 * BEAT + 0.3, 2 * BEAT + 1.6))}% 0`;
+    logo.style.filter = 'drop-shadow(0 3px 10px rgba(0,0,0,.6))';
+    under.style.width = `${outC(seg(u, 2 * BEAT + 0.3, 2 * BEAT + 0.8)) * 700}px`;
+    P(under, { y: 1190 });
+  } };
+}
+
+// ================= Transitions, each taken from the design =================
+const canvasEl = () => { const e = document.createElement('canvas'); e.width = 1080; e.height = 1920; e.className = 'a'; stage.appendChild(e); return e; };
+const FXC = canvasEl();
+const deco = {
+  wreath: im(stage, IMG.wreath, 1080, 1080, 'clip-path:circle(47%)'),
+  thread: mk(stage, 'div', `width:4px;background:${GOLD};box-shadow:0 0 14px ${GOLD_L}`),
+  frame: mk(stage, 'div', `box-sizing:border-box;border:14px solid ${GOLD_L};outline:3px solid ${GOLD};outline-offset:-26px`),
+  arch: im(stage, IMG.arch, 1080, 1080 * 1604 / 1080),
+};
+const DECO = Object.values(deco).concat([FXC]);
+DECO.forEach((e) => { e.style.display = 'none'; });
+function transition(el, type, p) {
+  el.style.clipPath = ''; el.style.opacity = ''; el.style.filter = ''; el.style.transform = '';
+  const show = (d) => { d.style.display = 'block'; return d; };
+  if (!(p > 0 && p < 1)) return;
+  const e = outC(p);
+  const fxc = () => { const c = show(FXC), g = c.getContext('2d'); g.clearRect(0, 0, 1080, 1920); return g; };
+  if (type === 'doors') el.style.opacity = cl(p * 4); // the wine doors part over it (drawn by the invitation)
+  if (type === 'wreath') {
+    // The page opens through the template's floral wreath.
+    const r = lerp(40, 1500, inC(p) * 0.3 + e * 0.7);
+    el.style.clipPath = `circle(${r}px at ${WREATH_AT.x}px ${WREATH_AT.y}px)`;
+    P(show(deco.wreath), { ...WREATH_AT, s: (r * 2.5) / 1080, r: p * 40, a: 1 - seg(p, 0.6, 1) });
+  }
+  if (type === 'foil') {
+    // A sweep of gold foil passes across and leaves the next page.
+    const x = lerp(-300, 1500, e);
+    el.style.clipPath = `polygon(0 0,${x}px 0,${x - 400}px 1920px,0 1920px)`;
+    const g = fxc(), gr = g.createLinearGradient(x - 500, 0, x + 100, 0);
+    gr.addColorStop(0, 'rgba(201,149,58,0)'); gr.addColorStop(0.6, 'rgba(231,194,122,.85)'); gr.addColorStop(0.8, 'rgba(255,240,200,.95)'); gr.addColorStop(1, 'rgba(201,149,58,0)');
+    g.fillStyle = gr; g.beginPath(); g.moveTo(x - 260, 0); g.lineTo(x + 100, 0); g.lineTo(x - 300, 1920); g.lineTo(x - 660, 1920); g.closePath(); g.fill();
+  }
+  if (type === 'thread') {
+    // A gold thread draws down the middle, then the page opens out from it.
+    const g1 = outC(seg(p, 0, 0.45)), o = ioC(seg(p, 0.3, 1));
+    const d = show(deco.thread); d.style.height = `${g1 * 1920}px`;
+    P(d, { y: g1 * 960, a: 1 - seg(p, 0.75, 1) });
+    el.style.clipPath = `inset(0 ${(1 - o) * 50}% 0 ${(1 - o) * 50}%)`;
+  }
+  if (type === 'sketch') {
+    // The page is drawn in from the top-left corner, like a pencil sketch.
+    const k = e * 3200;
+    el.style.clipPath = `polygon(0 0,${k}px 0,0 ${k}px)`;
+    const g = fxc();
+    g.strokeStyle = 'rgba(80,70,60,.6)'; g.lineWidth = 3;
+    for (let i = 0; i < 6; i++) { const o = k - i * 18; g.beginPath(); g.moveTo(o, 0); g.lineTo(0, o); g.stroke(); }
+    FXC.style.opacity = 1 - seg(p, 0.8, 1);
+  }
+  if (type === 'swatch') {
+    // The palette's colours bloom out of the middle and give way to the page.
+    const g = fxc(), cols = colors.length ? colors.map((c) => c.hex) : [SAGE, WINE, GOLD];
+    cols.forEach((col, i) => {
+      const r = lerp(0, 1400, cl(e * 1.3 - i * 0.08));
+      g.fillStyle = col; g.globalAlpha = 1 - seg(p, 0.55, 1); g.beginPath(); g.arc(540 + (i - (cols.length - 1) / 2) * 120, 1000, r, 0, 6.3); g.fill();
+    });
+    g.globalAlpha = 1;
+    el.style.clipPath = `circle(${lerp(0, 1500, seg(p, 0.35, 1))}px at 540px 1000px)`;
+  }
+  if (type === 'card') {
+    const t = (1 - e) * 1920;
+    el.style.clipPath = `inset(${t}px ${(1 - e) * 90}px 0 ${(1 - e) * 90}px round ${(1 - e) * 60}px)`;
+  }
+  if (type === 'arch') {
+    // The gold arch rises and widens into the closing page.
+    const w = lerp(240, 1500, e), h = lerp(360, 2300, e), top = 1920 - h;
+    el.style.clipPath = `inset(${top}px ${(1080 - w) / 2}px 0 ${(1080 - w) / 2}px round ${w / 2}px ${w / 2}px 0 0)`;
+    const d = show(deco.frame);
+    d.style.width = `${w + 28}px`; d.style.height = `${h + 14}px`; d.style.borderRadius = `${w / 2 + 14}px ${w / 2 + 14}px 0 0`; d.style.borderBottom = 'none'; d.style.outline = 'none';
+    P(d, { y: top - 14 + (h + 14) / 2, a: 1 - seg(p, 0.6, 1) });
+  }
+  if (type === 'bloom') el.style.opacity = cl(p * 1.6);
+}
+
+// ================= Red rose petals over the wedding-day sky; gold dust on the end card =================
+const cv = canvasEl();
+const c = cv.getContext('2d');
+const flash = full(stage, '');
+const RN = rng(57);
+const petals = Array.from({ length: 22 }, () => ({ x: RN() * 1080, y: RN() * 2000, r: 9 + RN() * 9, vy: 90 + RN() * 90, rot: RN() * 6.28, dr: (RN() - 0.5) * 2, a: 0.6 + RN() * 0.35 }));
+const dust = Array.from({ length: 60 }, () => ({ x: RN() * 1080, y: RN() * 1920, v: 15 + RN() * 40, r: 1 + RN() * 2.4, p: RN() * 6.28, f: 1 + RN() * 3 }));
+function fx(T) {
+  c.clearRect(0, 0, 1080, 1920);
+  const now = SEGS.find((s) => T >= s.start && T < s.start + s.dur) || SEGS[SEGS.length - 1];
+  if (now.key === 'hero' || now.key === 'finale') {
+    for (const p of petals) {
+      const y = (p.y + T * p.vy) % 2000 - 40;
+      c.save(); c.translate(p.x + Math.sin(T + p.rot) * 30, y); c.rotate(p.rot + T * p.dr); c.globalAlpha = p.a;
+      c.fillStyle = '#b0182f'; c.beginPath(); c.ellipse(0, 0, p.r * 0.6, p.r, 0, 0, 6.3); c.fill(); c.restore();
+    }
+  }
+  if (now.key === 'end') {
+    for (const d of dust) {
+      const y = (d.y - T * d.v + 1920 * 4) % 1920, tw = 0.3 + 0.7 * Math.abs(Math.sin(T * d.f + d.p));
+      c.fillStyle = `rgba(231,194,122,${0.7 * tw})`;
+      c.beginPath(); c.arc(d.x + Math.sin(T + d.p) * 10, y, d.r, 0, 6.3); c.fill();
+    }
+  }
+}
+const FLASH_COL = { doors: '255,240,220', wreath: '255,250,242', foil: '255,236,190', thread: '255,246,225', sketch: '255,252,246', swatch: '255,250,242', card: '255,250,242', arch: '255,240,210', bloom: '255,226,215' };
+
+function render(T) {
+  T = cl(T, 0, TOTAL);
+  const k = T >= BAR ? Math.floor((T - BAR) / BEAT) : -1, beat = T >= BAR ? (T - BAR) % BEAT : 9;
+  stage.style.transform = `scale(${1 + (k % 4 === 0 ? 0.01 : 0.004) * Math.exp(-beat * 7)})`;
+  DECO.forEach((e) => { e.style.display = 'none'; });
+  FXC.style.opacity = 1;
+  SEGS.forEach((s, i) => {
+    const u = T - s.start, next = SEGS[i + 1];
+    const on = u >= 0 && (u < s.dur + (next ? TR[next.enter] : 0) || i === SEGS.length - 1);
+    const sc = R[s.key].sc;
+    sc.style.display = on ? 'block' : 'none';
+    if (!on) return;
+    R[s.key].f(u, s);
+    if (s.enter) transition(sc, s.enter, seg(u, 0, TR[s.enter]));
+  });
+  // The parting doors draw over the wedding-day page as they open.
+  const intro = R.intro.sc;
+  if (intro.style.display === 'block') stage.appendChild(intro); else stage.insertBefore(intro, stage.firstChild);
+  let fa = 0, fc = '255,255,255';
+  SEGS.forEach((s) => {
+    if (!s.enter) return;
+    const u = T - s.start, pk = s.enter === 'bloom' ? 0.5 : 0.3;
+    const v = u < 0 ? (u > -0.08 ? pk * (1 + u / 0.08) : 0) : pk * Math.exp(-u * 7);
+    if (v > fa) { fa = v; fc = FLASH_COL[s.enter]; }
+  });
+  const end = seg(T, TOTAL - 0.7, TOTAL);
+  flash.style.background = end > 0 ? `rgba(0,0,0,${end})` : `rgba(${fc},${fa})`;
+  fx(T);
+  stage.appendChild(cv); stage.appendChild(flash);
+}
+
+window.__render = render;
+window.__firstBar = BAR;
+window.__ready = ready(stage, [['48px Imperial', 'A'], ['48px Alex', 'A'], ['48px Italiana', 'A'], ['500 48px Corm', 'A'], ['400 48px Inter', 'A'], ['48px Mukta', 'Aक'], ['600 48px Mukta', 'क']], TOTAL);
+</script></body></html>

@@ -1,0 +1,1644 @@
+[
+  {
+    "name": "saved with all the sample text",
+    "data": "$sample",
+    "want": [
+      "✨ A Beautiful Love",
+      "Tap to Begin",
+      "Arjan Singh",
+      "Weds",
+      "Simran Kaur",
+      "ੴ",
+      "We Cordially Invite You",
+      "Together with our beloved families,",
+      "Son of",
+      "Sdn. Gurpreet Kaur & S. Harjit Singh",
+      "With",
+      "Daughter of",
+      "A Special Surprise",
+      "Scratch to reveal! ✨",
+      "12",
+      "February",
+      "2027",
+      "Our Story",
+      "Our story did not begin with years of",
+      "Wedding Events",
+      "Sangeet & Cocktail Party",
+      "10 FEBRUARY 2027",
+      "WEDNESDAY • 7 PM ONWARDS",
+      "Venue",
+      "The Royal Banquet Hall",
+      "Surrey, BC",
+      "Canada",
+      "CANADA",
+      "INDIA",
+      "Anand Karaj",
+      "Reception",
+      "Heritage Palace Resort",
+      "Blessings From",
+      "Grand Parents",
+      "Sdn. Jaswant Kaur & S. Kartar Singh",
+      "Thank You",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "+91",
+      "VIEW ON MAPS",
+      "The Big Day Approaches"
+    ]
+  },
+  {
+    "name": "every section filled with new details (Hindu)",
+    "data": {
+      "hero": {
+        "tapText": "Tap to Open",
+        "loadingText": "A Royal Celebration Awaits",
+        "joiner": "Weds"
+      },
+      "couple": {
+        "symbol": "ॐ",
+        "shabad": "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥",
+        "heading": "Shubh Vivah",
+        "message": "With the blessings of our families,\nwe invite you to the wedding of",
+        "groomName": "Vihaan Malhotra",
+        "groomRelation": "Son of",
+        "groomParents": "Smt. Neeta & Shri Rakesh Malhotra",
+        "joiner": "With",
+        "brideName": "Ananya Kapoor",
+        "brideRelation": "Daughter of",
+        "brideParents": "Smt. Ritu & Shri Anil Kapoor"
+      },
+      "saveTheDate": {
+        "label": "Save the Date",
+        "heading": "Scratch the heart to see the day",
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "instruction": "Scratch gently"
+      },
+      "countdown": {
+        "title": "Counting the days",
+        "date": "2099-11-20",
+        "time": "19:30"
+      },
+      "story": {
+        "title": "How We Met",
+        "paragraphs": [
+          {
+            "text": "We met at a friend’s Diwali party in Delhi."
+          },
+          {
+            "text": "Two years and many chai dates later, here we are."
+          }
+        ],
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "events": {
+        "title": "Celebrations",
+        "mapLabel": "MAP",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 4 PM",
+            "venue": "Poolside Lawn",
+            "address": "New Delhi",
+            "country": "India",
+            "mapUrl": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-mehndi.webp"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 8 PM",
+            "venue": "Durbar Hall",
+            "address": "New Delhi",
+            "country": "India",
+            "image": ""
+          },
+          {
+            "title": "Phere",
+            "date": "20 NOVEMBER 2099",
+            "time": "FRIDAY • 7:30 PM",
+            "venue": "Lakeside Mandap",
+            "address": "Udaipur",
+            "country": "India",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-reception.webp"
+          }
+        ],
+        "showJourney": true,
+        "journeyAfter": "2",
+        "fromLabel": "DELHI",
+        "fromImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp",
+        "toLabel": "UDAIPUR",
+        "toImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp"
+      },
+      "family": {
+        "title": "With Blessings From",
+        "groups": [
+          {
+            "relation": "Grandparents",
+            "names": "Smt. Kamla Devi & Shri Ram Prakash Malhotra"
+          },
+          {
+            "relation": "Cousins",
+            "names": "Riya, Kabir & Meher"
+          }
+        ]
+      },
+      "footer": {
+        "thankYou": "Dhanyavaad",
+        "contacts": [
+          {
+            "name": "Rakesh Malhotra",
+            "phone": "+91 98000 00000"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Celebration Awaits",
+      "Tap to Open",
+      "Vihaan Malhotra",
+      "Ananya Kapoor",
+      "ॐ",
+      "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।",
+      "निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥",
+      "Shubh Vivah",
+      "With the blessings of our families,",
+      "Smt. Neeta & Shri Rakesh Malhotra",
+      "Smt. Ritu & Shri Anil Kapoor",
+      "Save the Date",
+      "20",
+      "November",
+      "2099",
+      "Scratch gently",
+      "How We Met",
+      "Diwali party",
+      "Celebrations",
+      "Mehendi",
+      "Poolside Lawn",
+      "Sangeet",
+      "Durbar Hall",
+      "DELHI",
+      "UDAIPUR",
+      "Phere",
+      "Lakeside Mandap",
+      "Grandparents",
+      "Riya, Kabir & Meher",
+      "Dhanyavaad",
+      "aisa invitation banaiye"
+    ],
+    "reject": [
+      "Arjan",
+      "Simran",
+      "Gurpreet",
+      "Sangeet & Cocktail",
+      "Anand Karaj",
+      "CANADA",
+      "Jaswant",
+      "Our Story",
+      "+91",
+      "VIEW ON MAPS",
+      "MAP",
+      "Counting the days",
+      "The Big Day Approaches"
+    ]
+  },
+  {
+    "name": "only the two names",
+    "data": {
+      "couple": {
+        "groomName": "Vihaan",
+        "brideName": "Ananya"
+      }
+    },
+    "want": [
+      "Vihaan",
+      "Ananya",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "ੴ",
+      "ॐ",
+      "A Special Surprise",
+      "Our Story",
+      "Wedding Events",
+      "With Blessings",
+      "Thank You",
+      "Tap to Begin",
+      "Weds",
+      "+91",
+      "VIEW ON MAPS",
+      "MAP",
+      "Counting the days",
+      "The Big Day Approaches"
+    ]
+  },
+  {
+    "name": "no journey",
+    "data": {
+      "hero": {
+        "tapText": "Tap to Open",
+        "loadingText": "A Royal Celebration Awaits",
+        "joiner": "Weds"
+      },
+      "couple": {
+        "symbol": "ॐ",
+        "shabad": "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥",
+        "heading": "Shubh Vivah",
+        "message": "With the blessings of our families,\nwe invite you to the wedding of",
+        "groomName": "Vihaan Malhotra",
+        "groomRelation": "Son of",
+        "groomParents": "Smt. Neeta & Shri Rakesh Malhotra",
+        "joiner": "With",
+        "brideName": "Ananya Kapoor",
+        "brideRelation": "Daughter of",
+        "brideParents": "Smt. Ritu & Shri Anil Kapoor"
+      },
+      "saveTheDate": {
+        "label": "Save the Date",
+        "heading": "Scratch the heart to see the day",
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "instruction": "Scratch gently"
+      },
+      "countdown": {
+        "title": "Counting the days",
+        "date": "2099-11-20",
+        "time": "19:30"
+      },
+      "story": {
+        "title": "How We Met",
+        "paragraphs": [
+          {
+            "text": "We met at a friend’s Diwali party in Delhi."
+          },
+          {
+            "text": "Two years and many chai dates later, here we are."
+          }
+        ],
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "events": {
+        "title": "Celebrations",
+        "mapLabel": "MAP",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 4 PM",
+            "venue": "Poolside Lawn",
+            "address": "New Delhi",
+            "country": "India",
+            "mapUrl": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-mehndi.webp"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 8 PM",
+            "venue": "Durbar Hall",
+            "address": "New Delhi",
+            "country": "India",
+            "image": ""
+          },
+          {
+            "title": "Phere",
+            "date": "20 NOVEMBER 2099",
+            "time": "FRIDAY • 7:30 PM",
+            "venue": "Lakeside Mandap",
+            "address": "Udaipur",
+            "country": "India",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-reception.webp"
+          }
+        ],
+        "showJourney": false,
+        "journeyAfter": "2",
+        "fromLabel": "DELHI",
+        "fromImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp",
+        "toLabel": "UDAIPUR",
+        "toImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp"
+      },
+      "family": {
+        "title": "With Blessings From",
+        "groups": [
+          {
+            "relation": "Grandparents",
+            "names": "Smt. Kamla Devi & Shri Ram Prakash Malhotra"
+          },
+          {
+            "relation": "Cousins",
+            "names": "Riya, Kabir & Meher"
+          }
+        ]
+      },
+      "footer": {
+        "thankYou": "Dhanyavaad",
+        "contacts": [
+          {
+            "name": "Rakesh Malhotra",
+            "phone": "+91 98000 00000"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Mehendi",
+      "Phere"
+    ],
+    "reject": [
+      "DELHI",
+      "UDAIPUR"
+    ]
+  },
+  {
+    "name": "journey after every event",
+    "data": {
+      "hero": {
+        "tapText": "Tap to Open",
+        "loadingText": "A Royal Celebration Awaits",
+        "joiner": "Weds"
+      },
+      "couple": {
+        "symbol": "ॐ",
+        "shabad": "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥",
+        "heading": "Shubh Vivah",
+        "message": "With the blessings of our families,\nwe invite you to the wedding of",
+        "groomName": "Vihaan Malhotra",
+        "groomRelation": "Son of",
+        "groomParents": "Smt. Neeta & Shri Rakesh Malhotra",
+        "joiner": "With",
+        "brideName": "Ananya Kapoor",
+        "brideRelation": "Daughter of",
+        "brideParents": "Smt. Ritu & Shri Anil Kapoor"
+      },
+      "saveTheDate": {
+        "label": "Save the Date",
+        "heading": "Scratch the heart to see the day",
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "instruction": "Scratch gently"
+      },
+      "countdown": {
+        "title": "Counting the days",
+        "date": "2099-11-20",
+        "time": "19:30"
+      },
+      "story": {
+        "title": "How We Met",
+        "paragraphs": [
+          {
+            "text": "We met at a friend’s Diwali party in Delhi."
+          },
+          {
+            "text": "Two years and many chai dates later, here we are."
+          }
+        ],
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "events": {
+        "title": "Celebrations",
+        "mapLabel": "MAP",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 4 PM",
+            "venue": "Poolside Lawn",
+            "address": "New Delhi",
+            "country": "India",
+            "mapUrl": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-mehndi.webp"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 8 PM",
+            "venue": "Durbar Hall",
+            "address": "New Delhi",
+            "country": "India",
+            "image": ""
+          },
+          {
+            "title": "Phere",
+            "date": "20 NOVEMBER 2099",
+            "time": "FRIDAY • 7:30 PM",
+            "venue": "Lakeside Mandap",
+            "address": "Udaipur",
+            "country": "India",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-reception.webp"
+          }
+        ],
+        "showJourney": true,
+        "journeyAfter": "9",
+        "fromLabel": "DELHI",
+        "fromImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp",
+        "toLabel": "UDAIPUR",
+        "toImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp"
+      },
+      "family": {
+        "title": "With Blessings From",
+        "groups": [
+          {
+            "relation": "Grandparents",
+            "names": "Smt. Kamla Devi & Shri Ram Prakash Malhotra"
+          },
+          {
+            "relation": "Cousins",
+            "names": "Riya, Kabir & Meher"
+          }
+        ]
+      },
+      "footer": {
+        "thankYou": "Dhanyavaad",
+        "contacts": [
+          {
+            "name": "Rakesh Malhotra",
+            "phone": "+91 98000 00000"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Phere",
+      "DELHI"
+    ]
+  },
+  {
+    "name": "journey before every event",
+    "data": {
+      "hero": {
+        "tapText": "Tap to Open",
+        "loadingText": "A Royal Celebration Awaits",
+        "joiner": "Weds"
+      },
+      "couple": {
+        "symbol": "ॐ",
+        "shabad": "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥",
+        "heading": "Shubh Vivah",
+        "message": "With the blessings of our families,\nwe invite you to the wedding of",
+        "groomName": "Vihaan Malhotra",
+        "groomRelation": "Son of",
+        "groomParents": "Smt. Neeta & Shri Rakesh Malhotra",
+        "joiner": "With",
+        "brideName": "Ananya Kapoor",
+        "brideRelation": "Daughter of",
+        "brideParents": "Smt. Ritu & Shri Anil Kapoor"
+      },
+      "saveTheDate": {
+        "label": "Save the Date",
+        "heading": "Scratch the heart to see the day",
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "instruction": "Scratch gently"
+      },
+      "countdown": {
+        "title": "Counting the days",
+        "date": "2099-11-20",
+        "time": "19:30"
+      },
+      "story": {
+        "title": "How We Met",
+        "paragraphs": [
+          {
+            "text": "We met at a friend’s Diwali party in Delhi."
+          },
+          {
+            "text": "Two years and many chai dates later, here we are."
+          }
+        ],
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "events": {
+        "title": "Celebrations",
+        "mapLabel": "MAP",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 4 PM",
+            "venue": "Poolside Lawn",
+            "address": "New Delhi",
+            "country": "India",
+            "mapUrl": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-mehndi.webp"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 8 PM",
+            "venue": "Durbar Hall",
+            "address": "New Delhi",
+            "country": "India",
+            "image": ""
+          },
+          {
+            "title": "Phere",
+            "date": "20 NOVEMBER 2099",
+            "time": "FRIDAY • 7:30 PM",
+            "venue": "Lakeside Mandap",
+            "address": "Udaipur",
+            "country": "India",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-reception.webp"
+          }
+        ],
+        "showJourney": true,
+        "journeyAfter": "x",
+        "fromLabel": "DELHI",
+        "fromImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp",
+        "toLabel": "UDAIPUR",
+        "toImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp"
+      },
+      "family": {
+        "title": "With Blessings From",
+        "groups": [
+          {
+            "relation": "Grandparents",
+            "names": "Smt. Kamla Devi & Shri Ram Prakash Malhotra"
+          },
+          {
+            "relation": "Cousins",
+            "names": "Riya, Kabir & Meher"
+          }
+        ]
+      },
+      "footer": {
+        "thankYou": "Dhanyavaad",
+        "contacts": [
+          {
+            "name": "Rakesh Malhotra",
+            "phone": "+91 98000 00000"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Mehendi",
+      "UDAIPUR"
+    ]
+  },
+  {
+    "name": "no events",
+    "data": {
+      "hero": {
+        "tapText": "Tap to Open",
+        "loadingText": "A Royal Celebration Awaits",
+        "joiner": "Weds"
+      },
+      "couple": {
+        "symbol": "ॐ",
+        "shabad": "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥",
+        "heading": "Shubh Vivah",
+        "message": "With the blessings of our families,\nwe invite you to the wedding of",
+        "groomName": "Vihaan Malhotra",
+        "groomRelation": "Son of",
+        "groomParents": "Smt. Neeta & Shri Rakesh Malhotra",
+        "joiner": "With",
+        "brideName": "Ananya Kapoor",
+        "brideRelation": "Daughter of",
+        "brideParents": "Smt. Ritu & Shri Anil Kapoor"
+      },
+      "saveTheDate": {
+        "label": "Save the Date",
+        "heading": "Scratch the heart to see the day",
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "instruction": "Scratch gently"
+      },
+      "countdown": {
+        "title": "Counting the days",
+        "date": "2099-11-20",
+        "time": "19:30"
+      },
+      "story": {
+        "title": "How We Met",
+        "paragraphs": [
+          {
+            "text": "We met at a friend’s Diwali party in Delhi."
+          },
+          {
+            "text": "Two years and many chai dates later, here we are."
+          }
+        ],
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "events": {
+        "title": "Celebrations",
+        "mapLabel": "MAP",
+        "items": [
+          {
+            "title": "",
+            "venue": "",
+            "date": "",
+            "time": "9 PM"
+          }
+        ],
+        "showJourney": false,
+        "journeyAfter": "2",
+        "fromLabel": "DELHI",
+        "fromImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp",
+        "toLabel": "UDAIPUR",
+        "toImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp"
+      },
+      "family": {
+        "title": "With Blessings From",
+        "groups": [
+          {
+            "relation": "Grandparents",
+            "names": "Smt. Kamla Devi & Shri Ram Prakash Malhotra"
+          },
+          {
+            "relation": "Cousins",
+            "names": "Riya, Kabir & Meher"
+          }
+        ]
+      },
+      "footer": {
+        "thankYou": "Dhanyavaad",
+        "contacts": [
+          {
+            "name": "Rakesh Malhotra",
+            "phone": "+91 98000 00000"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Grandparents"
+    ],
+    "reject": [
+      "Celebrations",
+      "9 PM"
+    ]
+  },
+  {
+    "name": "no date",
+    "data": {
+      "hero": {
+        "tapText": "Tap to Open",
+        "loadingText": "A Royal Celebration Awaits",
+        "joiner": "Weds"
+      },
+      "couple": {
+        "symbol": "ॐ",
+        "shabad": "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥",
+        "heading": "Shubh Vivah",
+        "message": "With the blessings of our families,\nwe invite you to the wedding of",
+        "groomName": "Vihaan Malhotra",
+        "groomRelation": "Son of",
+        "groomParents": "Smt. Neeta & Shri Rakesh Malhotra",
+        "joiner": "With",
+        "brideName": "Ananya Kapoor",
+        "brideRelation": "Daughter of",
+        "brideParents": "Smt. Ritu & Shri Anil Kapoor"
+      },
+      "saveTheDate": {
+        "label": "Save the Date",
+        "day": " ",
+        "month": "",
+        "year": ""
+      },
+      "countdown": {
+        "title": "Counting the days",
+        "date": "2099-11-20",
+        "time": "19:30"
+      },
+      "story": {
+        "title": "How We Met",
+        "paragraphs": [
+          {
+            "text": "We met at a friend’s Diwali party in Delhi."
+          },
+          {
+            "text": "Two years and many chai dates later, here we are."
+          }
+        ],
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "events": {
+        "title": "Celebrations",
+        "mapLabel": "MAP",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 4 PM",
+            "venue": "Poolside Lawn",
+            "address": "New Delhi",
+            "country": "India",
+            "mapUrl": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-mehndi.webp"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 8 PM",
+            "venue": "Durbar Hall",
+            "address": "New Delhi",
+            "country": "India",
+            "image": ""
+          },
+          {
+            "title": "Phere",
+            "date": "20 NOVEMBER 2099",
+            "time": "FRIDAY • 7:30 PM",
+            "venue": "Lakeside Mandap",
+            "address": "Udaipur",
+            "country": "India",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-reception.webp"
+          }
+        ],
+        "showJourney": true,
+        "journeyAfter": "2",
+        "fromLabel": "DELHI",
+        "fromImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp",
+        "toLabel": "UDAIPUR",
+        "toImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp"
+      },
+      "family": {
+        "title": "With Blessings From",
+        "groups": [
+          {
+            "relation": "Grandparents",
+            "names": "Smt. Kamla Devi & Shri Ram Prakash Malhotra"
+          },
+          {
+            "relation": "Cousins",
+            "names": "Riya, Kabir & Meher"
+          }
+        ]
+      },
+      "footer": {
+        "thankYou": "Dhanyavaad",
+        "contacts": [
+          {
+            "name": "Rakesh Malhotra",
+            "phone": "+91 98000 00000"
+          }
+        ]
+      }
+    },
+    "want": [
+      "How We Met"
+    ],
+    "reject": [
+      "Save the Date",
+      "Scratch gently"
+    ]
+  },
+  {
+    "name": "story with words but no photos",
+    "data": {
+      "hero": {
+        "tapText": "Tap to Open",
+        "loadingText": "A Royal Celebration Awaits",
+        "joiner": "Weds"
+      },
+      "couple": {
+        "symbol": "ॐ",
+        "shabad": "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥",
+        "heading": "Shubh Vivah",
+        "message": "With the blessings of our families,\nwe invite you to the wedding of",
+        "groomName": "Vihaan Malhotra",
+        "groomRelation": "Son of",
+        "groomParents": "Smt. Neeta & Shri Rakesh Malhotra",
+        "joiner": "With",
+        "brideName": "Ananya Kapoor",
+        "brideRelation": "Daughter of",
+        "brideParents": "Smt. Ritu & Shri Anil Kapoor"
+      },
+      "saveTheDate": {
+        "label": "Save the Date",
+        "heading": "Scratch the heart to see the day",
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "instruction": "Scratch gently"
+      },
+      "countdown": {
+        "title": "Counting the days",
+        "date": "2099-11-20",
+        "time": "19:30"
+      },
+      "story": {
+        "title": "How We Met",
+        "paragraphs": [
+          {
+            "text": "We met at a friend’s Diwali party in Delhi."
+          },
+          {
+            "text": "Two years and many chai dates later, here we are."
+          }
+        ],
+        "photos": [
+          {
+            "image": "javascript:alert(1)"
+          }
+        ]
+      },
+      "events": {
+        "title": "Celebrations",
+        "mapLabel": "MAP",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 4 PM",
+            "venue": "Poolside Lawn",
+            "address": "New Delhi",
+            "country": "India",
+            "mapUrl": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-mehndi.webp"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 8 PM",
+            "venue": "Durbar Hall",
+            "address": "New Delhi",
+            "country": "India",
+            "image": ""
+          },
+          {
+            "title": "Phere",
+            "date": "20 NOVEMBER 2099",
+            "time": "FRIDAY • 7:30 PM",
+            "venue": "Lakeside Mandap",
+            "address": "Udaipur",
+            "country": "India",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-reception.webp"
+          }
+        ],
+        "showJourney": true,
+        "journeyAfter": "2",
+        "fromLabel": "DELHI",
+        "fromImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp",
+        "toLabel": "UDAIPUR",
+        "toImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp"
+      },
+      "family": {
+        "title": "With Blessings From",
+        "groups": [
+          {
+            "relation": "Grandparents",
+            "names": "Smt. Kamla Devi & Shri Ram Prakash Malhotra"
+          },
+          {
+            "relation": "Cousins",
+            "names": "Riya, Kabir & Meher"
+          }
+        ]
+      },
+      "footer": {
+        "thankYou": "Dhanyavaad",
+        "contacts": [
+          {
+            "name": "Rakesh Malhotra",
+            "phone": "+91 98000 00000"
+          }
+        ]
+      }
+    },
+    "want": [
+      "How We Met",
+      "Diwali party"
+    ]
+  },
+  {
+    "name": "no story",
+    "data": {
+      "hero": {
+        "tapText": "Tap to Open",
+        "loadingText": "A Royal Celebration Awaits",
+        "joiner": "Weds"
+      },
+      "couple": {
+        "symbol": "ॐ",
+        "shabad": "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥",
+        "heading": "Shubh Vivah",
+        "message": "With the blessings of our families,\nwe invite you to the wedding of",
+        "groomName": "Vihaan Malhotra",
+        "groomRelation": "Son of",
+        "groomParents": "Smt. Neeta & Shri Rakesh Malhotra",
+        "joiner": "With",
+        "brideName": "Ananya Kapoor",
+        "brideRelation": "Daughter of",
+        "brideParents": "Smt. Ritu & Shri Anil Kapoor"
+      },
+      "saveTheDate": {
+        "label": "Save the Date",
+        "heading": "Scratch the heart to see the day",
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "instruction": "Scratch gently"
+      },
+      "countdown": {
+        "title": "Counting the days",
+        "date": "2099-11-20",
+        "time": "19:30"
+      },
+      "story": {
+        "title": "How We Met",
+        "paragraphs": [
+          {
+            "text": " "
+          }
+        ],
+        "photos": []
+      },
+      "events": {
+        "title": "Celebrations",
+        "mapLabel": "MAP",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 4 PM",
+            "venue": "Poolside Lawn",
+            "address": "New Delhi",
+            "country": "India",
+            "mapUrl": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-mehndi.webp"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 8 PM",
+            "venue": "Durbar Hall",
+            "address": "New Delhi",
+            "country": "India",
+            "image": ""
+          },
+          {
+            "title": "Phere",
+            "date": "20 NOVEMBER 2099",
+            "time": "FRIDAY • 7:30 PM",
+            "venue": "Lakeside Mandap",
+            "address": "Udaipur",
+            "country": "India",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-reception.webp"
+          }
+        ],
+        "showJourney": true,
+        "journeyAfter": "2",
+        "fromLabel": "DELHI",
+        "fromImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp",
+        "toLabel": "UDAIPUR",
+        "toImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp"
+      },
+      "family": {
+        "title": "With Blessings From",
+        "groups": [
+          {
+            "relation": "Grandparents",
+            "names": "Smt. Kamla Devi & Shri Ram Prakash Malhotra"
+          },
+          {
+            "relation": "Cousins",
+            "names": "Riya, Kabir & Meher"
+          }
+        ]
+      },
+      "footer": {
+        "thankYou": "Dhanyavaad",
+        "contacts": [
+          {
+            "name": "Rakesh Malhotra",
+            "phone": "+91 98000 00000"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Celebrations"
+    ],
+    "reject": [
+      "How We Met"
+    ]
+  },
+  {
+    "name": "no family or thank-you",
+    "data": {
+      "hero": {
+        "tapText": "Tap to Open",
+        "loadingText": "A Royal Celebration Awaits",
+        "joiner": "Weds"
+      },
+      "couple": {
+        "symbol": "ॐ",
+        "shabad": "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥",
+        "heading": "Shubh Vivah",
+        "message": "With the blessings of our families,\nwe invite you to the wedding of",
+        "groomName": "Vihaan Malhotra",
+        "groomRelation": "Son of",
+        "groomParents": "Smt. Neeta & Shri Rakesh Malhotra",
+        "joiner": "With",
+        "brideName": "Ananya Kapoor",
+        "brideRelation": "Daughter of",
+        "brideParents": "Smt. Ritu & Shri Anil Kapoor"
+      },
+      "saveTheDate": {
+        "label": "Save the Date",
+        "heading": "Scratch the heart to see the day",
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "instruction": "Scratch gently"
+      },
+      "countdown": {
+        "title": "Counting the days",
+        "date": "2099-11-20",
+        "time": "19:30"
+      },
+      "story": {
+        "title": "How We Met",
+        "paragraphs": [
+          {
+            "text": "We met at a friend’s Diwali party in Delhi."
+          },
+          {
+            "text": "Two years and many chai dates later, here we are."
+          }
+        ],
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "events": {
+        "title": "Celebrations",
+        "mapLabel": "MAP",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 4 PM",
+            "venue": "Poolside Lawn",
+            "address": "New Delhi",
+            "country": "India",
+            "mapUrl": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-mehndi.webp"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 8 PM",
+            "venue": "Durbar Hall",
+            "address": "New Delhi",
+            "country": "India",
+            "image": ""
+          },
+          {
+            "title": "Phere",
+            "date": "20 NOVEMBER 2099",
+            "time": "FRIDAY • 7:30 PM",
+            "venue": "Lakeside Mandap",
+            "address": "Udaipur",
+            "country": "India",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-reception.webp"
+          }
+        ],
+        "showJourney": true,
+        "journeyAfter": "2",
+        "fromLabel": "DELHI",
+        "fromImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp",
+        "toLabel": "UDAIPUR",
+        "toImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp"
+      },
+      "family": {
+        "title": "With Blessings From",
+        "groups": [
+          {
+            "relation": " ",
+            "names": ""
+          }
+        ]
+      },
+      "footer": {
+        "thankYou": "",
+        "contacts": [
+          {
+            "name": "Rakesh Malhotra",
+            "phone": "+91 98000 00000"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Phere"
+    ],
+    "reject": [
+      "With Blessings From",
+      "Dhanyavaad"
+    ]
+  },
+  {
+    "name": "no symbol, verse or welcome",
+    "data": {
+      "hero": {
+        "tapText": "Tap to Open",
+        "loadingText": "A Royal Celebration Awaits",
+        "joiner": "Weds"
+      },
+      "couple": {
+        "symbol": "",
+        "shabad": "",
+        "heading": "",
+        "message": "",
+        "groomName": "Vihaan Malhotra",
+        "groomRelation": "",
+        "groomParents": "",
+        "joiner": "",
+        "brideName": "Ananya Kapoor",
+        "brideRelation": "",
+        "brideParents": ""
+      },
+      "saveTheDate": {
+        "label": "Save the Date",
+        "heading": "Scratch the heart to see the day",
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "instruction": "Scratch gently"
+      },
+      "countdown": {
+        "title": "Counting the days",
+        "date": "2099-11-20",
+        "time": "19:30"
+      },
+      "story": {
+        "title": "How We Met",
+        "paragraphs": [
+          {
+            "text": "We met at a friend’s Diwali party in Delhi."
+          },
+          {
+            "text": "Two years and many chai dates later, here we are."
+          }
+        ],
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "events": {
+        "title": "Celebrations",
+        "mapLabel": "MAP",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 4 PM",
+            "venue": "Poolside Lawn",
+            "address": "New Delhi",
+            "country": "India",
+            "mapUrl": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-mehndi.webp"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 8 PM",
+            "venue": "Durbar Hall",
+            "address": "New Delhi",
+            "country": "India",
+            "image": ""
+          },
+          {
+            "title": "Phere",
+            "date": "20 NOVEMBER 2099",
+            "time": "FRIDAY • 7:30 PM",
+            "venue": "Lakeside Mandap",
+            "address": "Udaipur",
+            "country": "India",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-reception.webp"
+          }
+        ],
+        "showJourney": true,
+        "journeyAfter": "2",
+        "fromLabel": "DELHI",
+        "fromImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp",
+        "toLabel": "UDAIPUR",
+        "toImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp"
+      },
+      "family": {
+        "title": "With Blessings From",
+        "groups": [
+          {
+            "relation": "Grandparents",
+            "names": "Smt. Kamla Devi & Shri Ram Prakash Malhotra"
+          },
+          {
+            "relation": "Cousins",
+            "names": "Riya, Kabir & Meher"
+          }
+        ]
+      },
+      "footer": {
+        "thankYou": "Dhanyavaad",
+        "contacts": [
+          {
+            "name": "Rakesh Malhotra",
+            "phone": "+91 98000 00000"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Vihaan Malhotra",
+      "Ananya Kapoor"
+    ],
+    "reject": [
+      "ॐ",
+      "Shubh Vivah",
+      "Son of",
+      "Smt. Ritu"
+    ]
+  },
+  {
+    "name": "Sikh text in Gurmukhi and very long names",
+    "data": {
+      "hero": {
+        "tapText": "Tap to Open",
+        "loadingText": "A Royal Celebration Awaits",
+        "joiner": "Weds"
+      },
+      "couple": {
+        "symbol": "ੴ",
+        "shabad": "ਸਤਿਗੁਰੂ ਦਾਤੇ ਕਾਜਿ ਰਚਾਇਆ",
+        "heading": "Shubh Vivah",
+        "message": "With the blessings of our families,\nwe invite you to the wedding of",
+        "groomName": "Vihaan Rakesh Malhotra-Venkataraman",
+        "groomRelation": "Son of",
+        "groomParents": "Smt. Neeta & Shri Rakesh Malhotra",
+        "joiner": "With",
+        "brideName": "अनन्या कपूर",
+        "brideRelation": "Daughter of",
+        "brideParents": "Smt. Ritu & Shri Anil Kapoor"
+      },
+      "saveTheDate": {
+        "label": "Save the Date",
+        "heading": "Scratch the heart to see the day",
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "instruction": "Scratch gently"
+      },
+      "countdown": {
+        "title": "Counting the days",
+        "date": "2099-11-20",
+        "time": "19:30"
+      },
+      "story": {
+        "title": "How We Met",
+        "paragraphs": [
+          {
+            "text": "We met at a friend’s Diwali party in Delhi."
+          },
+          {
+            "text": "Two years and many chai dates later, here we are."
+          }
+        ],
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "events": {
+        "title": "Celebrations",
+        "mapLabel": "MAP",
+        "items": [
+          {
+            "title": "Sangeet & Cocktail Night by the Lake",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 4 PM",
+            "venue": "Poolside Lawn",
+            "address": "New Delhi",
+            "country": "India",
+            "mapUrl": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-mehndi.webp"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19 NOVEMBER 2099",
+            "time": "THURSDAY • 8 PM",
+            "venue": "Durbar Hall",
+            "address": "New Delhi",
+            "country": "India",
+            "image": ""
+          },
+          {
+            "title": "Phere",
+            "date": "20 NOVEMBER 2099",
+            "time": "FRIDAY • 7:30 PM",
+            "venue": "Lakeside Mandap",
+            "address": "Udaipur",
+            "country": "India",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-reception.webp"
+          }
+        ],
+        "showJourney": true,
+        "journeyAfter": "2",
+        "fromLabel": "DELHI",
+        "fromImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp",
+        "toLabel": "UDAIPUR",
+        "toImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp"
+      },
+      "family": {
+        "title": "With Blessings From",
+        "groups": [
+          {
+            "relation": "Grandparents",
+            "names": "Smt. Kamla Devi & Shri Ram Prakash Malhotra"
+          },
+          {
+            "relation": "Cousins",
+            "names": "Riya, Kabir & Meher"
+          }
+        ]
+      },
+      "footer": {
+        "thankYou": "Dhanyavaad",
+        "contacts": [
+          {
+            "name": "Rakesh Malhotra",
+            "phone": "+91 98000 00000"
+          }
+        ]
+      }
+    },
+    "want": [
+      "ੴ",
+      "ਸਤਿਗੁਰੂ ਦਾਤੇ ਕਾਜਿ ਰਚਾਇਆ",
+      "Vihaan Rakesh Malhotra-Venkataraman",
+      "अनन्या कपूर",
+      "Sangeet & Cocktail Night by the Lake"
+    ]
+  },
+  {
+    "name": "wrong types, HTML and bad links",
+    "data": {
+      "hero": {
+        "tapText": {
+          "a": 1
+        },
+        "joiner": 5
+      },
+      "couple": {
+        "groomName": "<b>Vihaan</b>",
+        "brideName": 42,
+        "shabad": [
+          "x"
+        ],
+        "heading": "<img src=x onerror=alert(1)>"
+      },
+      "saveTheDate": {
+        "day": 20,
+        "month": null
+      },
+      "story": {
+        "paragraphs": [
+          "oops",
+          {
+            "text": 7
+          }
+        ],
+        "photos": [
+          {
+            "image": "javascript:alert(1)"
+          }
+        ]
+      },
+      "events": {
+        "items": [
+          null,
+          "x",
+          {
+            "title": "Phere",
+            "venue": {
+              "a": 1
+            },
+            "image": "javascript:alert(1)"
+          }
+        ],
+        "showJourney": "yes",
+        "fromLabel": {
+          "a": 1
+        }
+      },
+      "family": {
+        "groups": [
+          {
+            "relation": 9
+          }
+        ]
+      },
+      "footer": {
+        "thankYou": [
+          "t"
+        ]
+      }
+    },
+    "want": [
+      "<b>Vihaan</b>",
+      "42",
+      "5",
+      "<img src=x onerror=alert(1)>",
+      "20",
+      "7",
+      "Phere",
+      "9"
+    ],
+    "reject": [
+      "[object Object]",
+      "undefined",
+      "null",
+      "Thank You"
+    ]
+  },
+  {
+    "name": "five events",
+    "data": {
+      "hero": {
+        "tapText": "Tap to Open",
+        "loadingText": "A Royal Celebration Awaits",
+        "joiner": "Weds"
+      },
+      "couple": {
+        "symbol": "ॐ",
+        "shabad": "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥",
+        "heading": "Shubh Vivah",
+        "message": "With the blessings of our families,\nwe invite you to the wedding of",
+        "groomName": "Vihaan Malhotra",
+        "groomRelation": "Son of",
+        "groomParents": "Smt. Neeta & Shri Rakesh Malhotra",
+        "joiner": "With",
+        "brideName": "Ananya Kapoor",
+        "brideRelation": "Daughter of",
+        "brideParents": "Smt. Ritu & Shri Anil Kapoor"
+      },
+      "saveTheDate": {
+        "label": "Save the Date",
+        "heading": "Scratch the heart to see the day",
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "instruction": "Scratch gently"
+      },
+      "countdown": {
+        "title": "Counting the days",
+        "date": "2099-11-20",
+        "time": "19:30"
+      },
+      "story": {
+        "title": "How We Met",
+        "paragraphs": [
+          {
+            "text": "We met at a friend’s Diwali party in Delhi."
+          },
+          {
+            "text": "Two years and many chai dates later, here we are."
+          }
+        ],
+        "photos": [
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png"
+          },
+          {
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          }
+        ]
+      },
+      "events": {
+        "title": "Celebrations",
+        "mapLabel": "MAP",
+        "items": [
+          {
+            "title": "Roka",
+            "date": "Day 1",
+            "venue": "Hall 1",
+            "image": ""
+          },
+          {
+            "title": "Haldi",
+            "date": "Day 2",
+            "venue": "Hall 2",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-sangeet.webp"
+          },
+          {
+            "title": "Mehendi",
+            "date": "Day 3",
+            "venue": "Hall 3",
+            "image": ""
+          },
+          {
+            "title": "Sangeet",
+            "date": "Day 4",
+            "venue": "Hall 4",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/event-sangeet.webp"
+          },
+          {
+            "title": "Phere",
+            "date": "Day 5",
+            "venue": "Hall 5",
+            "image": ""
+          }
+        ],
+        "showJourney": true,
+        "journeyAfter": "3",
+        "fromLabel": "DELHI",
+        "fromImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp",
+        "toLabel": "UDAIPUR",
+        "toImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%208/static/images/landmark-india.webp"
+      },
+      "family": {
+        "title": "With Blessings From",
+        "groups": [
+          {
+            "relation": "Grandparents",
+            "names": "Smt. Kamla Devi & Shri Ram Prakash Malhotra"
+          },
+          {
+            "relation": "Cousins",
+            "names": "Riya, Kabir & Meher"
+          }
+        ]
+      },
+      "footer": {
+        "thankYou": "Dhanyavaad",
+        "contacts": [
+          {
+            "name": "Rakesh Malhotra",
+            "phone": "+91 98000 00000"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Roka",
+      "Phere",
+      "Hall 5",
+      "DELHI"
+    ]
+  }
+]

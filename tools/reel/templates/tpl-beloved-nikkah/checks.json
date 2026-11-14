@@ -1,0 +1,1118 @@
+[
+  {
+    "name": "saved with all the sample text",
+    "data": "$sample",
+    "want": [
+      "Arjun",
+      "Priya",
+      "Pull the tassel to open",
+      "श्री गणेशाय नमः",
+      "tranquility",
+      "AUGUST",
+      "Sunday, 15",
+      "2027",
+      "11:00 AM - 3:00 PM",
+      "शुभ विवाह",
+      "Son of",
+      "Mr Rajesh & Mrs Sunita Sharma",
+      "Mr Suresh & Mrs Lakshmi Iyer",
+      "Nikkah Ceremony",
+      "Reception",
+      "Lunch",
+      "Grand Rose Event Hall,",
+      "Counting Down",
+      "Together",
+      "Blessed",
+      "blessings",
+      "Best wishes from",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "In the name of Allah",
+      "Bismillah"
+    ]
+  },
+  {
+    "name": "every section filled with new details",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "Mr Rajesh & Mrs Kavita Malhotra",
+        "brideParentPrefix": "Daughter of",
+        "brideParentsName": "Mr Suresh & Mrs Anjali Kapoor"
+      },
+      "ceremony": {
+        "date": "2099-11-21",
+        "time": "7:00 PM onwards",
+        "quote": "Two souls, one journey, seven vows.",
+        "invitationMessage": "With the blessings of our elders, we invite you to share the joy of our pheras."
+      },
+      "venue": {
+        "address": "Umaid Bhawan Palace, Circuit House Road, Jodhpur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Haldi",
+            "time": "10:00 AM"
+          },
+          {
+            "title": "Sangeet",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Phere",
+            "time": "9:00 PM"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "caption": "Roka"
+          },
+          {
+            "caption": "Sagai"
+          },
+          {
+            "caption": "Us"
+          },
+          {
+            "caption": "Forever"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Aarav",
+      "Meera",
+      "श्री गणेशाय नमः",
+      "seven vows",
+      "Save the Date",
+      "NOVEMBER",
+      "Saturday, 21",
+      "2099",
+      "7:00 PM onwards",
+      "शुभ विवाह",
+      "With joy and gratitude",
+      "Son of",
+      "Mr Rajesh & Mrs Kavita Malhotra",
+      "Daughter of",
+      "Mr Suresh & Mrs Anjali Kapoor",
+      "Event Timeline",
+      "Haldi",
+      "7:30 PM",
+      "Phere",
+      "Venue",
+      "Umaid Bhawan Palace,",
+      "Jodhpur",
+      "Counting Down",
+      "Roka",
+      "Forever",
+      "pheras",
+      "Best wishes from",
+      "family & friends",
+      "Apni shaadi ka",
+      "aisa invitation banaiye"
+    ],
+    "reject": [
+      "Arjun",
+      "Priya",
+      "Chennai",
+      "Nikkah Ceremony",
+      "Lunch",
+      "Together",
+      "tranquility",
+      "Rajesh & Mrs Sunita",
+      "In the name of Allah",
+      "Bismillah"
+    ]
+  },
+  {
+    "name": "only the two names",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera"
+      }
+    },
+    "want": [
+      "Aarav",
+      "Meera",
+      "श्री गणेशाय नमः",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "Save the Date",
+      "शुभ विवाह",
+      "Event Timeline",
+      "Venue",
+      "Counting Down",
+      "Best wishes from"
+    ]
+  },
+  {
+    "name": "no quote",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "Mr Rajesh & Mrs Kavita Malhotra",
+        "brideParentPrefix": "Daughter of",
+        "brideParentsName": "Mr Suresh & Mrs Anjali Kapoor"
+      },
+      "ceremony": {
+        "date": "2099-11-21",
+        "time": "7:00 PM onwards",
+        "quote": "",
+        "invitationMessage": "With the blessings of our elders, we invite you to share the joy of our pheras."
+      },
+      "venue": {
+        "address": "Umaid Bhawan Palace, Circuit House Road, Jodhpur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Haldi",
+            "time": "10:00 AM"
+          },
+          {
+            "title": "Sangeet",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Phere",
+            "time": "9:00 PM"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "caption": "Roka"
+          },
+          {
+            "caption": "Sagai"
+          },
+          {
+            "caption": "Us"
+          },
+          {
+            "caption": "Forever"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Save the Date"
+    ],
+    "reject": [
+      "seven vows"
+    ]
+  },
+  {
+    "name": "no date: no scroll and no countdown, polaroids stay",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "Mr Rajesh & Mrs Kavita Malhotra",
+        "brideParentPrefix": "Daughter of",
+        "brideParentsName": "Mr Suresh & Mrs Anjali Kapoor"
+      },
+      "ceremony": {
+        "time": "7:00 PM onwards",
+        "quote": "Two souls, one journey, seven vows.",
+        "invitationMessage": "With the blessings of our elders, we invite you to share the joy of our pheras."
+      },
+      "venue": {
+        "address": "Umaid Bhawan Palace, Circuit House Road, Jodhpur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Haldi",
+            "time": "10:00 AM"
+          },
+          {
+            "title": "Sangeet",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Phere",
+            "time": "9:00 PM"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "caption": "Roka"
+          },
+          {
+            "caption": "Sagai"
+          },
+          {
+            "caption": "Us"
+          },
+          {
+            "caption": "Forever"
+          }
+        ]
+      }
+    },
+    "want": [
+      "7:30 PM",
+      "Roka"
+    ],
+    "reject": [
+      "Save the Date",
+      "Counting Down",
+      "7:00 PM onwards"
+    ]
+  },
+  {
+    "name": "no parents",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "",
+        "brideParentPrefix": "Daughter of",
+        "brideParentsName": " "
+      },
+      "ceremony": {
+        "date": "2099-11-21",
+        "time": "7:00 PM onwards",
+        "quote": "Two souls, one journey, seven vows.",
+        "invitationMessage": "With the blessings of our elders, we invite you to share the joy of our pheras."
+      },
+      "venue": {
+        "address": "Umaid Bhawan Palace, Circuit House Road, Jodhpur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Haldi",
+            "time": "10:00 AM"
+          },
+          {
+            "title": "Sangeet",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Phere",
+            "time": "9:00 PM"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "caption": "Roka"
+          },
+          {
+            "caption": "Sagai"
+          },
+          {
+            "caption": "Us"
+          },
+          {
+            "caption": "Forever"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Event Timeline"
+    ],
+    "reject": [
+      "शुभ विवाह",
+      "Son of"
+    ]
+  },
+  {
+    "name": "only the bride's parents, no prefix",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "",
+        "brideParentPrefix": "",
+        "brideParentsName": "Mr Suresh & Mrs Anjali Kapoor"
+      },
+      "ceremony": {
+        "date": "2099-11-21",
+        "time": "7:00 PM onwards",
+        "quote": "Two souls, one journey, seven vows.",
+        "invitationMessage": "With the blessings of our elders, we invite you to share the joy of our pheras."
+      },
+      "venue": {
+        "address": "Umaid Bhawan Palace, Circuit House Road, Jodhpur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Haldi",
+            "time": "10:00 AM"
+          },
+          {
+            "title": "Sangeet",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Phere",
+            "time": "9:00 PM"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "caption": "Roka"
+          },
+          {
+            "caption": "Sagai"
+          },
+          {
+            "caption": "Us"
+          },
+          {
+            "caption": "Forever"
+          }
+        ]
+      }
+    },
+    "want": [
+      "शुभ विवाह",
+      "Mr Suresh & Mrs Anjali Kapoor"
+    ],
+    "reject": [
+      "Son of",
+      "Daughter of",
+      "Kavita"
+    ]
+  },
+  {
+    "name": "no events",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "Mr Rajesh & Mrs Kavita Malhotra",
+        "brideParentPrefix": "Daughter of",
+        "brideParentsName": "Mr Suresh & Mrs Anjali Kapoor"
+      },
+      "ceremony": {
+        "date": "2099-11-21",
+        "time": "7:00 PM onwards",
+        "quote": "Two souls, one journey, seven vows.",
+        "invitationMessage": "With the blessings of our elders, we invite you to share the joy of our pheras."
+      },
+      "venue": {
+        "address": "Umaid Bhawan Palace, Circuit House Road, Jodhpur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": []
+      },
+      "gallery": {
+        "items": [
+          {
+            "caption": "Roka"
+          },
+          {
+            "caption": "Sagai"
+          },
+          {
+            "caption": "Us"
+          },
+          {
+            "caption": "Forever"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Venue"
+    ],
+    "reject": [
+      "Event Timeline",
+      "Haldi"
+    ]
+  },
+  {
+    "name": "no address",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "Mr Rajesh & Mrs Kavita Malhotra",
+        "brideParentPrefix": "Daughter of",
+        "brideParentsName": "Mr Suresh & Mrs Anjali Kapoor"
+      },
+      "ceremony": {
+        "date": "2099-11-21",
+        "time": "7:00 PM onwards",
+        "quote": "Two souls, one journey, seven vows.",
+        "invitationMessage": "With the blessings of our elders, we invite you to share the joy of our pheras."
+      },
+      "venue": {
+        "address": "",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Haldi",
+            "time": "10:00 AM"
+          },
+          {
+            "title": "Sangeet",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Phere",
+            "time": "9:00 PM"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "caption": "Roka"
+          },
+          {
+            "caption": "Sagai"
+          },
+          {
+            "caption": "Us"
+          },
+          {
+            "caption": "Forever"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Counting Down"
+    ],
+    "reject": [
+      "Venue",
+      "Jodhpur"
+    ]
+  },
+  {
+    "name": "no captions: counters only",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "Mr Rajesh & Mrs Kavita Malhotra",
+        "brideParentPrefix": "Daughter of",
+        "brideParentsName": "Mr Suresh & Mrs Anjali Kapoor"
+      },
+      "ceremony": {
+        "date": "2099-11-21",
+        "time": "7:00 PM onwards",
+        "quote": "Two souls, one journey, seven vows.",
+        "invitationMessage": "With the blessings of our elders, we invite you to share the joy of our pheras."
+      },
+      "venue": {
+        "address": "Umaid Bhawan Palace, Circuit House Road, Jodhpur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Haldi",
+            "time": "10:00 AM"
+          },
+          {
+            "title": "Sangeet",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Phere",
+            "time": "9:00 PM"
+          }
+        ]
+      },
+      "gallery": {
+        "items": []
+      }
+    },
+    "want": [
+      "Counting Down"
+    ],
+    "reject": [
+      "Roka"
+    ]
+  },
+  {
+    "name": "past date and no captions: no countdown section",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "Mr Rajesh & Mrs Kavita Malhotra",
+        "brideParentPrefix": "Daughter of",
+        "brideParentsName": "Mr Suresh & Mrs Anjali Kapoor"
+      },
+      "ceremony": {
+        "date": "2020-01-04",
+        "time": "7:00 PM onwards",
+        "quote": "Two souls, one journey, seven vows.",
+        "invitationMessage": "With the blessings of our elders, we invite you to share the joy of our pheras."
+      },
+      "venue": {
+        "address": "Umaid Bhawan Palace, Circuit House Road, Jodhpur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Haldi",
+            "time": "10:00 AM"
+          },
+          {
+            "title": "Sangeet",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Phere",
+            "time": "9:00 PM"
+          }
+        ]
+      },
+      "gallery": {
+        "items": []
+      }
+    },
+    "want": [
+      "JANUARY",
+      "2020"
+    ],
+    "reject": [
+      "Counting Down"
+    ]
+  },
+  {
+    "name": "past date with captions: polaroids without counters",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "Mr Rajesh & Mrs Kavita Malhotra",
+        "brideParentPrefix": "Daughter of",
+        "brideParentsName": "Mr Suresh & Mrs Anjali Kapoor"
+      },
+      "ceremony": {
+        "date": "2020-01-04T18:30:00",
+        "time": "7:00 PM onwards",
+        "quote": "Two souls, one journey, seven vows.",
+        "invitationMessage": "With the blessings of our elders, we invite you to share the joy of our pheras."
+      },
+      "venue": {
+        "address": "Umaid Bhawan Palace, Circuit House Road, Jodhpur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Haldi",
+            "time": "10:00 AM"
+          },
+          {
+            "title": "Sangeet",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Phere",
+            "time": "9:00 PM"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "caption": "Roka"
+          },
+          {
+            "caption": "Sagai"
+          },
+          {
+            "caption": "Us"
+          },
+          {
+            "caption": "Forever"
+          }
+        ]
+      }
+    },
+    "want": [
+      "JANUARY",
+      "Roka"
+    ],
+    "reject": [
+      "Counting Down"
+    ]
+  },
+  {
+    "name": "no message",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "Mr Rajesh & Mrs Kavita Malhotra",
+        "brideParentPrefix": "Daughter of",
+        "brideParentsName": "Mr Suresh & Mrs Anjali Kapoor"
+      },
+      "ceremony": {
+        "date": "2099-11-21",
+        "time": "7:00 PM onwards",
+        "quote": "Two souls, one journey, seven vows.",
+        "invitationMessage": ""
+      },
+      "venue": {
+        "address": "Umaid Bhawan Palace, Circuit House Road, Jodhpur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Haldi",
+            "time": "10:00 AM"
+          },
+          {
+            "title": "Sangeet",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Phere",
+            "time": "9:00 PM"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "caption": "Roka"
+          },
+          {
+            "caption": "Sagai"
+          },
+          {
+            "caption": "Us"
+          },
+          {
+            "caption": "Forever"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Counting Down"
+    ],
+    "reject": [
+      "Best wishes from",
+      "pheras"
+    ]
+  },
+  {
+    "name": "blank strings everywhere but the names",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "  ",
+        "groomParentsName": "  ",
+        "brideParentPrefix": " ",
+        "brideParentsName": "   "
+      },
+      "ceremony": {
+        "date": "  ",
+        "time": " ",
+        "quote": "   ",
+        "invitationMessage": "\n "
+      },
+      "venue": {
+        "address": "   "
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "  ",
+            "time": "8 PM"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "caption": "   "
+          }
+        ]
+      }
+    },
+    "want": [
+      "Aarav",
+      "Meera"
+    ],
+    "reject": [
+      "Save the Date",
+      "शुभ विवाह",
+      "Event Timeline",
+      "Venue",
+      "Counting Down",
+      "Best wishes from",
+      "8 PM"
+    ]
+  },
+  {
+    "name": "Hindi text and very long names",
+    "data": {
+      "couple": {
+        "groomName": "आरव मल्होत्रा",
+        "brideName": "Meera Anjali Kapoor-Venkataraman Iyer",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "Mr Rajesh & Mrs Kavita Malhotra",
+        "brideParentPrefix": "Daughter of",
+        "brideParentsName": "श्री सुरेश एवं श्रीमती अंजलि कपूर"
+      },
+      "ceremony": {
+        "date": "2099-11-21",
+        "time": "7:00 PM onwards",
+        "quote": "Two souls, one journey, seven vows.",
+        "invitationMessage": "With the blessings of our elders, we invite you to share the joy of our pheras."
+      },
+      "venue": {
+        "address": "Umaid Bhawan Palace, Circuit House Road, Jodhpur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Haldi & Mehendi Morning at the Old Haveli Courtyard",
+            "time": "10:00 AM"
+          },
+          {
+            "title": "Sangeet",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Phere",
+            "time": "9:00 PM"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "caption": "सगाई"
+          },
+          {
+            "caption": "Sagai"
+          },
+          {
+            "caption": "Us"
+          },
+          {
+            "caption": "Forever"
+          }
+        ]
+      }
+    },
+    "want": [
+      "आरव मल्होत्रा",
+      "Meera Anjali",
+      "Kapoor-Venkataraman Iyer",
+      "श्री सुरेश एवं श्रीमती अंजलि कपूर",
+      "Haldi & Mehendi Morning",
+      "Old Haveli Courtyard",
+      "सगाई"
+    ]
+  },
+  {
+    "name": "wrong types and HTML",
+    "data": {
+      "couple": {
+        "groomName": "<b>Aarav</b>",
+        "brideName": 42,
+        "groomParentPrefix": {
+          "a": 1
+        },
+        "groomParentsName": [
+          "x"
+        ],
+        "brideParentsName": "<img src=x onerror=alert(1)>"
+      },
+      "ceremony": {
+        "date": true,
+        "time": 9,
+        "quote": [
+          "a"
+        ],
+        "invitationMessage": {
+          "m": 1
+        }
+      },
+      "venue": {
+        "address": 7
+      },
+      "timeline": {
+        "items": "Haldi"
+      },
+      "gallery": {
+        "items": {
+          "caption": "x"
+        }
+      }
+    },
+    "want": [
+      "<b>Aarav</b>",
+      "42",
+      "<img src=x onerror=alert(1)>",
+      "Venue"
+    ],
+    "reject": [
+      "[object Object]",
+      "undefined",
+      "null",
+      "Save the Date",
+      "Event Timeline",
+      "Counting Down"
+    ]
+  },
+  {
+    "name": "one event and one caption",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "Mr Rajesh & Mrs Kavita Malhotra",
+        "brideParentPrefix": "Daughter of",
+        "brideParentsName": "Mr Suresh & Mrs Anjali Kapoor"
+      },
+      "ceremony": {
+        "date": "2099-11-21",
+        "time": "7:00 PM onwards",
+        "quote": "Two souls, one journey, seven vows.",
+        "invitationMessage": "With the blessings of our elders, we invite you to share the joy of our pheras."
+      },
+      "venue": {
+        "address": "Umaid Bhawan Palace, Circuit House Road, Jodhpur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Phere",
+            "time": ""
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "caption": "Us"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Phere",
+      "Us",
+      "Event Timeline"
+    ],
+    "reject": [
+      "Haldi",
+      "Roka"
+    ]
+  },
+  {
+    "name": "eight events and six captions",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "Mr Rajesh & Mrs Kavita Malhotra",
+        "brideParentPrefix": "Daughter of",
+        "brideParentsName": "Mr Suresh & Mrs Anjali Kapoor"
+      },
+      "ceremony": {
+        "date": "2099-11-21",
+        "time": "7:00 PM onwards",
+        "quote": "Two souls, one journey, seven vows.",
+        "invitationMessage": "With the blessings of our elders, we invite you to share the joy of our pheras."
+      },
+      "venue": {
+        "address": "Umaid Bhawan Palace, Circuit House Road, Jodhpur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Roka",
+            "time": "1:00 PM"
+          },
+          {
+            "title": "Haldi",
+            "time": "2:00 PM"
+          },
+          {
+            "title": "Mehendi",
+            "time": "3:00 PM"
+          },
+          {
+            "title": "Sangeet",
+            "time": "4:00 PM"
+          },
+          {
+            "title": "Baraat",
+            "time": "5:00 PM"
+          },
+          {
+            "title": "Phere",
+            "time": "6:00 PM"
+          },
+          {
+            "title": "Vidaai",
+            "time": "7:00 PM"
+          },
+          {
+            "title": "Reception",
+            "time": "8:00 PM"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "caption": "One"
+          },
+          {
+            "caption": "Two"
+          },
+          {
+            "caption": "Three"
+          },
+          {
+            "caption": "Four"
+          },
+          {
+            "caption": "Five"
+          },
+          {
+            "caption": "Six"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Roka",
+      "Reception",
+      "8:00 PM",
+      "One",
+      "Four"
+    ],
+    "reject": [
+      "Five",
+      "Six"
+    ]
+  },
+  {
+    "name": "long quote and message take two bars each",
+    "data": {
+      "couple": {
+        "groomName": "Aarav",
+        "brideName": "Meera",
+        "groomParentPrefix": "Son of",
+        "groomParentsName": "Mr Rajesh & Mrs Kavita Malhotra",
+        "brideParentPrefix": "Daughter of",
+        "brideParentsName": "Mr Suresh & Mrs Anjali Kapoor"
+      },
+      "ceremony": {
+        "date": "2099-11-21",
+        "time": "7:00 PM onwards",
+        "quote": "With the seven steps around the sacred fire, we promise to walk together through every season of life, to share every joy and every sorrow, and to remain friends forever.",
+        "invitationMessage": "With the blessings of Lord Ganesha and our elders, we request the honour of your presence at the wedding of our children. Your presence and your blessings will make this day complete, and we cannot wait to celebrate with you."
+      },
+      "venue": {
+        "address": "Umaid Bhawan Palace, Circuit House Road, Jodhpur",
+        "mapLink": "https://maps.app.goo.gl/x",
+        "mapEmbed": ""
+      },
+      "timeline": {
+        "items": [
+          {
+            "title": "Haldi",
+            "time": "10:00 AM"
+          },
+          {
+            "title": "Sangeet",
+            "time": "7:30 PM"
+          },
+          {
+            "title": "Phere",
+            "time": "9:00 PM"
+          }
+        ]
+      },
+      "gallery": {
+        "items": [
+          {
+            "caption": "Roka"
+          },
+          {
+            "caption": "Sagai"
+          },
+          {
+            "caption": "Us"
+          },
+          {
+            "caption": "Forever"
+          }
+        ]
+      }
+    },
+    "want": [
+      "friends forever",
+      "celebrate with you",
+      "Best wishes from"
+    ]
+  }
+]

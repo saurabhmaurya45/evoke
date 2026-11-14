@@ -73,3 +73,65 @@
   border: 1px solid rgba(var(--glass-rgb), 0.2);
   color: rgba(var(--text-rgb), 0.85);
 }
+
+.reel__preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reel__text--center { text-align: center; }
+
+// Not bought yet: a small phone-shaped preview beside the text, so the card stays compact.
+.reel--split {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+}
+
+// The preview's own small layout (styled inside the preview component).
+.reel__preview--compact {
+  gap: 8px;
+
+  .reel__video {
+    max-width: none;
+    width: 132px;
+    margin: 0;
+  }
+
+  .reel__text { font-size: 12px; }
+
+  .reel__btn {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+}
+
+.reel__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+
+.reel__info .reel__btn { white-space: nowrap; }
+
+// Phones: a slimmer preview, so the text keeps room beside it.
+@media (max-width: 520px) {
+  .reel--split {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .reel__preview--compact .reel__video { width: 96px; }
+
+  .reel__info .reel__text { font-size: 12px; }
+}
+
+a.reel__btn {
+  display: inline-block;
+  text-decoration: none;
+}

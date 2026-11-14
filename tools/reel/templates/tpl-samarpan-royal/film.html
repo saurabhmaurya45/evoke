@@ -1,0 +1,693 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Samarpan Film</title>
+<style>
+@font-face{font-family:Cin;src:url("../../../../frontend/public/invitation-templates/template 8/static/fonts/cinzel-variable.woff2");font-weight:400 900}
+@font-face{font-family:Corm;src:url("../../../../frontend/public/invitation-templates/template 10/static/fonts/cormorant-garamond-variable.woff2");font-weight:300 700}
+@font-face{font-family:Corm;font-style:italic;src:url("../../../../frontend/public/invitation-templates/template 10/static/fonts/cormorant-garamond-italic-variable.woff2");font-weight:300 700}
+@font-face{font-family:Vibes;src:url("../../../../frontend/public/invitation-templates/template 8/static/fonts/great-vibes-400-latin.woff2")}
+@font-face{font-family:Sans;src:url("../../../../frontend/public/invitation-templates/template 10/static/fonts/inter-variable.woff2");font-weight:100 900}
+@font-face{font-family:Gotu;src:url("../../../../frontend/public/invitation-templates/template 11/static/fonts/o-0FIpksx3QOpHsBi7h6.woff2");unicode-range:U+0900-097F,U+1CD0-1CF6,U+200C-200D,U+20A8,U+25CC}
+html,body{margin:0;background:#000;overflow:hidden;width:1080px;height:1920px}
+#stage{position:absolute;inset:0;overflow:hidden;background:#14030a}
+.sc{position:absolute;inset:0;overflow:hidden;display:none}
+.a{position:absolute;left:0;top:0;transform-origin:center center}
+.t{white-space:nowrap;text-align:center}
+.t span{display:inline-block;white-space:pre}
+canvas{position:absolute;left:0;top:0}
+</style></head><body><div id="stage"></div>
+<script src="../../lib/core.js"></script>
+<script>
+const D = window.__DATA;
+const stage = document.querySelector('#stage');
+const BEAT = 0.625, BAR = 2.5;
+
+// ---- Palette: the template's oxblood and gold. Its accent colour, when set, is the gold. ----
+const accent = str(D.hero?.accent).trim();
+const GOLD = /^#[0-9a-f]{6}$/i.test(accent) ? accent : '#d4af37';
+const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+const mix = (a, b, k) => { const A = hex(a), B = hex(b); return `rgb(${A.map((v, i) => Math.round(lerp(v, B[i], k))).join(',')})`; };
+const PALE = mix(GOLD, '#ffffff', 0.62), LIGHT = mix(GOLD, '#fff3c4', 0.4), DEEP = mix(GOLD, '#2a1400', 0.45);
+const glow = 'text-shadow:0 2px 16px rgba(0,0,0,.7),0 0 30px rgba(212,175,55,.35);';
+const up = (s) => str(s).toUpperCase();
+const SERIF = 'Cin,Gotu', ITAL = 'Corm,Gotu', SANS = 'Sans,Gotu';
+
+// A user photo that fails to load falls back to the template's own placeholder: its gold gradient.
+const GRAD = (() => {
+  const c = document.createElement('canvas'); c.width = 96; c.height = 128;
+  const x = c.getContext('2d'), g = x.createLinearGradient(0, 0, 96, 128);
+  g.addColorStop(0, '#7c5f0e'); g.addColorStop(1, '#3d2e05');
+  x.fillStyle = g; x.fillRect(0, 0, 96, 128);
+  return c.toDataURL('image/png');
+})();
+const photo = (parent, url, w, h, extra = '') => (safeImage(url)
+  ? im(parent, safeImage(url), w, h, `object-fit:cover;${extra}`, GRAD)
+  : placeholder(parent, w, h, extra));
+function placeholder(parent, w, h, extra) {
+  // The template's own empty photo: its gold gradient, here with its diamond ornament.
+  const e = mk(parent, 'div', `width:${w}px;height:${h}px;background:radial-gradient(ellipse at 50% 45%,#8a6a16,#3d2e05 75%);${extra}`);
+  const m = Math.min(w, h);
+  mk(e, 'div', `left:${w / 2 - m * 0.16}px;top:${h / 2 - m * 0.16}px;width:${m * 0.32}px;height:${m * 0.32}px;box-sizing:border-box;border:3px solid rgba(255,236,180,.55);transform:rotate(45deg)`);
+  mk(e, 'div', `left:${w / 2 - m * 0.06}px;top:${h / 2 - m * 0.06}px;width:${m * 0.12}px;height:${m * 0.12}px;background:rgba(255,236,180,.7);transform:rotate(45deg);box-shadow:0 0 24px rgba(255,220,140,.8)`);
+  mk(e, 'div', `left:${m * 0.08}px;width:${w - m * 0.16}px;top:${h / 2 - 1}px;height:2px;background:linear-gradient(90deg,transparent,rgba(255,236,180,.5) 25%,transparent 38%,transparent 62%,rgba(255,236,180,.5) 75%,transparent)`);
+  return e;
+}
+
+// ---- Data. A section with nothing in it is left out of the film. ----
+const bride = str(D.hero?.brideName), groom = str(D.hero?.groomName);
+const parseDate = (v) => {
+  const s = str(v).trim();
+  if (!s) return null;
+  const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(s) ? `${s}T00:00:00` : s);
+  return Number.isNaN(d.getTime()) ? null : d;
+};
+const fmt = (d, o) => d.toLocaleDateString('en-GB', o);
+const heroDate = parseDate(D.hero?.date);
+const left = heroDate ? Math.max(0, Math.floor((heroDate.getTime() - window.__NOW) / 1000)) : 0;
+const FIN = [Math.floor(left / 86400), Math.floor((left % 86400) / 3600), Math.floor((left % 3600) / 60), left % 60];
+const portraits = [['bride', D.portraits?.bridePhoto, bride], ['groom', D.portraits?.groomPhoto, groom]]
+  .filter(([, p]) => safeImage(p));
+const storyTitle = str(D.story?.title).trim(), storyBody = str(D.story?.body).trim().replace(/\s+/g, ' ');
+const events = (Array.isArray(D.events?.items) ? D.events.items : []).filter((e) => e && str(e.name).trim());
+const gallery = (Array.isArray(D.gallery?.items) ? D.gallery.items : []).filter((g) => g && safeImage(g.src)).slice(0, 8);
+
+// ---- The cut list. Every section is whole bars, so any may follow any and stay on the beat. ----
+const SEGS = [];
+const add = (key, dur, enter) => SEGS.push({ key, dur, enter });
+add('intro', BAR, null);
+add('rings', 2 * BAR, 'bloom');
+if (heroDate) add('date', BAR, 'zoom');
+if (left > 0) add('count', BAR, 'line');
+add('paths', 2 * BAR, 'arc');
+if (portraits.length) add('portraits', BAR, 'arch');
+if (storyBody) add('story', BAR, 'silk');
+if (events.length) add('events', Math.ceil((events.length * 2 * BEAT) / BAR) * BAR, 'split');
+if (gallery.length) add('gallery', gallery.length > 4 ? 2 * BAR : BAR, 'diamond');
+add('end', 2 * BAR, 'bloom');
+let acc = 0;
+SEGS.forEach((s, i) => {
+  s.start = acc; acc += s.dur;
+  s.type = i === 0 ? null : SEGS[i - 1].key === 'rings' ? 'ring' : s.enter;
+});
+const TOTAL = acc;
+const startOf = (key) => SEGS.find((s) => s.key === key)?.start;
+
+// Transitions: the incoming scene is revealed over the outgoing one, which keeps playing underneath.
+const TR = {
+  ring: { pre: 0.55, post: 0.3 }, bloom: { pre: 0, post: 0.3 }, zoom: { pre: 0, post: 0.5 },
+  line: { pre: 0, post: 0.5 }, arc: { pre: 0, post: 0.6 }, arch: { pre: 0, post: 0.55 },
+  silk: { pre: 0, post: 0.55 }, split: { pre: 0, post: 0.5 }, diamond: { pre: 0, post: 0.55 },
+};
+
+// ---- Shared backdrop: oxblood depth, drifting gold bokeh, a slowly turning mandala. ----
+function backdrop(sc, seed, tone = 0) {
+  const base = mk(sc, 'div', `width:1080px;height:1920px;background:radial-gradient(ellipse at 50% ${40 + tone * 8}%,#4d0e14 0%,#2b060b 46%,#12020a 100%)`);
+  const bok = mk(sc, 'div', 'width:1600px;height:2600px');
+  const r = rng(seed);
+  for (let i = 0; i < 18; i++) {
+    const s = 60 + r() * 220;
+    mk(bok, 'div', `left:${r() * 1600}px;top:${r() * 2600}px;width:${s}px;height:${s}px;border-radius:50%;background:radial-gradient(circle,rgba(255,206,120,${0.1 + r() * 0.22}),transparent 70%)`);
+  }
+  const man = mk(sc, 'div', 'width:1500px;height:1500px');
+  [1500, 1180, 900, 640].forEach((s, i) => {
+    mk(man, 'div', `left:${(1500 - s) / 2}px;top:${(1500 - s) / 2}px;width:${s}px;height:${s}px;border-radius:50%;border:${i % 2 ? 2 : 3}px ${['dotted', 'solid', 'dashed', 'solid'][i]} rgba(212,175,55,.5)`);
+  });
+  mk(man, 'div', 'left:0;top:0;width:1500px;height:1500px;border-radius:50%;background:repeating-conic-gradient(rgba(212,175,55,.5) 0 1.2deg,transparent 1.2deg 15deg);-webkit-mask:radial-gradient(circle,transparent 42%,#000 43%,#000 60%,transparent 61%);mask:radial-gradient(circle,transparent 42%,#000 43%,#000 60%,transparent 61%)');
+  return (u, o = {}) => {
+    const { mx = 0, my = 0, y = 960, a = 0.16, s = 1 } = o;
+    P(base);
+    P(bok, { x: 540 + mx * 0.35, y: 960 + my * 0.35 - u * 18, s: 1 + u * 0.01 });
+    P(man, { y, s, r: u * 6, a });
+  };
+}
+
+// ---- Interlocked rings, drawn as two gold tori turning in 3D (the template's hero). ----
+function ringLayer(sc) {
+  const cv = mk(sc, 'canvas', '');
+  cv.width = 1080; cv.height = 1920;
+  return cv.getContext('2d');
+}
+function oneRing(c, cx, cy, rx, ry, rot, W, pal, glint) {
+  const g = c.createLinearGradient(cx - rx, cy - ry, cx + rx, cy + ry);
+  const k = cl(glint, 0.06, 0.94);
+  g.addColorStop(0, pal[0]); g.addColorStop(cl(k - 0.22), pal[1]); g.addColorStop(k, pal[2]);
+  g.addColorStop(cl(k + 0.22), pal[1]); g.addColorStop(1, pal[0]);
+  c.lineWidth = W; c.strokeStyle = g;
+  c.beginPath(); c.ellipse(cx, cy, rx, ry, rot, 0, 6.2832); c.stroke();
+  c.lineWidth = W * 0.2; c.strokeStyle = 'rgba(255,250,228,.55)';
+  c.beginPath(); c.ellipse(cx, cy, Math.max(1, rx - W * 0.2), Math.max(1, ry - W * 0.2), rot, 0, 6.2832); c.stroke();
+  c.lineWidth = 2; c.strokeStyle = 'rgba(50,22,0,.55)';
+  for (const d of [W / 2, -W / 2]) { c.beginPath(); c.ellipse(cx, cy, Math.max(1, rx + d), Math.max(1, ry + d), rot, 0, 6.2832); c.stroke(); }
+}
+const GOLDPAL = [DEEP, GOLD, '#fff6d6'], ROSEPAL = ['#6e3328', '#c98a76', '#ffe4d6'];
+// x, y: where ring A's centre sits. fly 0..1 turns ring A to face the camera, for flying through it.
+function drawRings(c, x, y, R, time, fly = 0, alpha = 1) {
+  if (alpha <= 0.002 || R < 1) return;
+  const W = R * 0.17, off = R * 1.1;
+  const rx = (ph) => R * lerp(0.84 + 0.16 * Math.cos(time * 0.7 + ph), 1, fly);
+  const ry = (ph) => R * lerp(0.4 + 0.2 * Math.sin(time * 0.9 + ph), 1, fly);
+  const rotA = lerp(-0.42 + 0.12 * Math.sin(time * 0.6), 0, fly), rotB = lerp(0.38 + 0.12 * Math.cos(time * 0.5), 0, fly);
+  const glint = (time * 0.35) % 1.4 - 0.2;
+  c.save(); c.globalAlpha = alpha;
+  const A = () => oneRing(c, x, y, rx(0), ry(0), rotA, W, GOLDPAL, glint);
+  A();
+  oneRing(c, x + off, y + R * 0.08, rx(1.3), ry(1.3), rotB, W, ROSEPAL, glint - 0.25);
+  // Ring A passes over ring B at the top crossing and under it at the bottom one.
+  c.save(); c.beginPath(); c.rect(x - R * 3, y - R * 3, R * 7, R * 3 - R * 0.02); c.clip(); A(); c.restore();
+  // The diamond on ring A.
+  const th = -Math.PI / 2, ex = rx(0) * Math.cos(th), ey = ry(0) * Math.sin(th);
+  const gx = x + ex * Math.cos(rotA) - ey * Math.sin(rotA), gy = y + ex * Math.sin(rotA) + ey * Math.cos(rotA) - W * 0.55;
+  const s = W * 0.75, tw = 0.5 + 0.5 * Math.sin(time * 5.3);
+  c.fillStyle = '#ffffff';
+  c.beginPath(); c.moveTo(gx, gy - s); c.lineTo(gx + s * 0.7, gy); c.lineTo(gx, gy + s * 0.6); c.lineTo(gx - s * 0.7, gy); c.closePath(); c.fill();
+  c.globalCompositeOperation = 'lighter';
+  c.fillStyle = `rgba(255,250,235,${0.35 + 0.6 * tw})`;
+  const f = s * (2.2 + 2 * tw);
+  c.fillRect(gx - f, gy - 1.5, f * 2, 3); c.fillRect(gx - 1.5, gy - f, 3, f * 2);
+  c.restore();
+}
+
+// Gold rule with a diamond in the middle, as on every heading of the template.
+function rule(parent) {
+  const g = mk(parent, 'div', 'width:520px;height:40px');
+  const l = mk(g, 'div', `left:0;top:19px;height:2px;width:520px;background:linear-gradient(90deg,transparent,${GOLD} 30%,${GOLD} 70%,transparent)`);
+  const d = mk(g, 'div', `left:246px;top:6px;width:28px;height:28px;background:${GOLD};box-shadow:0 0 18px ${GOLD}`);
+  return (u, start, o = {}) => {
+    P(g, o);
+    l.style.transform = `scaleX(${outC(seg(u, start, start + 0.6))})`;
+    const p = outB(seg(u, start + 0.15, start + 0.6), 2);
+    d.style.transform = `rotate(${45 + (1 - p) * 180}deg) scale(${Math.max(0.001, p)})`;
+  };
+}
+const label = (parent, s, size = 34, ls = 10, color = GOLD, maxW = 900) =>
+  text(parent, s, `font:500 ${size}px ${SANS};letter-spacing:${ls}px;color:${color}`, maxW);
+// Letters fade in while the tracking closes up, like the template's spaced captions.
+function track(el, u, start, from, to, d = 0.9) {
+  const p = outC(seg(u, start, start + d));
+  el.style.letterSpacing = `${lerp(from, to, p)}px`;
+  el._l.forEach((c, i) => { c.style.opacity = cl(seg(u, start + i * 0.012, start + i * 0.012 + 0.35)); });
+}
+// A gold glint travelling across a line of letters.
+function shimmer(el, u, start, d, base = GOLD) {
+  const n = el._l.length, pos = lerp(-0.25, 1.25, seg(u, start, start + d));
+  el._l.forEach((c, i) => {
+    const k = Math.exp(-Math.pow((n > 1 ? i / (n - 1) : 0.5) - pos, 2) / 0.012);
+    c.style.color = mix(base, '#fffbea', k);
+  });
+}
+// Breaks text into lines of at most `max` characters, keeping `lines` of them.
+function lines(value, max, count) {
+  const out = [];
+  for (const w of str(value).trim().split(/\s+/).filter(Boolean)) {
+    const last = out[out.length - 1];
+    if (last !== undefined && (last + ' ' + w).length <= max) out[out.length - 1] = `${last} ${w}`;
+    else out.push(w);
+  }
+  if (out.length > count) { out.length = count; out[count - 1] = out[count - 1].replace(/[,.;:!?]*$/, '') + '…'; }
+  return out;
+}
+
+// ================= Scenes (created in cut order, so a later scene draws over an earlier one) =================
+const R = {};
+
+// ---- Consecration ----
+{
+  const sc = scene(stage), bg = backdrop(sc, 3);
+  const line = mk(sc, 'div', `width:820px;height:3px;background:linear-gradient(90deg,transparent,${GOLD} 25%,${PALE} 50%,${GOLD} 75%,transparent)`);
+  const halo = mk(sc, 'div', 'width:640px;height:640px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,140,.55),rgba(255,180,90,.1) 50%,transparent 70%)');
+  const dia = mk(sc, 'div', `width:64px;height:64px;background:linear-gradient(135deg,${PALE},${GOLD} 55%,${DEEP});box-shadow:0 0 30px ${GOLD},0 0 80px rgba(255,214,140,.5)`);
+  const l1 = label(sc, 'A UNION CONSECRATED', 38, 10, GOLD, 860);
+  const l2 = label(sc, 'IN TRADITION', 38, 10, GOLD, 860);
+  const marks = ['॥', '॥'].map(() => text(sc, '॥', `font:400 60px Gotu;color:${GOLD}`));
+  R.intro = { sc, f(u) {
+    const z = inC(seg(u, 2.0, 2.5)), a = 1 - z;
+    bg(u, { a: 0.1 + 0.1 * seg(u, 0, 1.5), s: 1.1 - u * 0.03 });
+    P(halo, { y: 960, s: (0.6 + 0.4 * outC(seg(u, 0, 1.2))) * (1 + z * 2.2), a: 0.6 + z * 0.4 });
+    P(line, { y: 960, a });
+    line.style.width = `${lerp(420, 820, outC(seg(u, 0, 1.1))) * (1 - z)}px`;
+    const p = lerp(0.55, 1, outB(seg(u, 0, 0.7), 1.6));
+    P(dia, { y: 960, r: 45 + (1 - p) * 225 + u * 20, s: p * (1 + z * 1.6) });
+    P(l1, { y: 820 + z * 140, a }); track(l1, u, 0.6, 18, 10);
+    P(l2, { y: 1100 - z * 140, a }); track(l2, u, 0.95, 18, 10);
+    marks.forEach((m, i) => P(m, { x: i ? 990 : 90, y: 960, a: a * seg(u, 0.9, 1.4), s: 1 + 0.06 * Math.sin(u * 4) }));
+  } };
+}
+
+// ---- The rings and the names ----
+const RING_FLY = { r: 0 };
+{
+  const sc = scene(stage), bg = backdrop(sc, 11);
+  const rc = ringLayer(sc);
+  const nameCss = `font:600 124px ${SERIF};letter-spacing:6px;color:${GOLD};${glow}`;
+  const nB = text(sc, up(bride), nameCss, 940);
+  const amp = text(sc, '&', `font:400 150px Vibes;color:${LIGHT};${glow}`);
+  const nG = text(sc, up(groom), nameCss, 940);
+  const tag = lines(D.hero?.tagline, 26, 2).filter(Boolean).map((l) => text(sc, up(l), `font:500 32px ${SANS};letter-spacing:7px;color:${PALE};${glow}`, 820));
+  const RX = 405, RY = 640, RR = 205;
+  R.rings = { sc, f(u, s) {
+    const fly = inC(seg(u, s.dur - 0.55, s.dur + 0.3)), out = 1 - seg(u, s.dur - 0.6, s.dur - 0.3);
+    const push = 1 + u * 0.012;
+    bg(u, { mx: -u * 10, a: 0.16, y: 700, s: 1 + u * 0.02 });
+    rc.clearRect(0, 0, 1080, 1920);
+    const pop = outB(seg(u, 0, 0.7), 1.5), scale = Math.max(0.001, pop) * (1 + 0.025 * Math.sin(u * 2.2)) * (1 + fly * 16);
+    const x = lerp(RX, 540, ioC(seg(u, s.dur - 0.85, s.dur - 0.3))), y = lerp(RY + 12 * Math.sin(u * 1.6), 960, ioC(seg(u, s.dur - 0.85, s.dur - 0.3)));
+    drawRings(rc, x, y, RR * scale, u + 1.7, ioC(seg(u, s.dur - 0.85, s.dur - 0.25)));
+    RING_FLY.r = Math.max(0, (RR - RR * 0.085) * scale);
+    P(nB, { y: 1060, s: push, a: out }); reveal(nB, u, BEAT, 0.045, 0.55, 80);
+    P(amp, { y: 1195, s: push * lerp(0.2, 1, outB(seg(u, 2 * BEAT, 2 * BEAT + 0.5), 2)), a: out * cl(seg(u, 2 * BEAT, 2 * BEAT + 0.2)), r: (1 - seg(u, 1.25, 1.75)) * -25 });
+    P(nG, { y: 1330, s: push, a: out }); reveal(nG, u, 3 * BEAT, 0.045, 0.55, 80);
+    if (u > 3.1) { shimmer(nB, u, 3.1, 0.9); shimmer(nG, u, 3.35, 0.9); }
+    tag.forEach((e, i) => { P(e, { y: 1440 + i * 54, a: out }); track(e, u, 4 * BEAT + i * 0.2, 12, 7); });
+  } };
+}
+
+// ---- Save the date ----
+{
+  const sc = scene(stage), bg = backdrop(sc, 21, 1);
+  const rays = mk(sc, 'div', 'width:1700px;height:1700px;border-radius:50%;background:repeating-conic-gradient(rgba(255,214,130,.22) 0 5deg,transparent 5deg 18deg);-webkit-mask:radial-gradient(circle,#000 8%,transparent 64%);mask:radial-gradient(circle,#000 8%,transparent 64%)');
+  const eyebrow = label(sc, 'SAVE THE DATE', 38, 14);
+  const ru = rule(sc);
+  const d = heroDate || new Date(0);
+  const dayStr = String(d.getDate());
+  const day = mk(sc, 'div', `font:600 380px/1 ${SERIF};color:${GOLD};white-space:nowrap;${glow}`);
+  const month = text(sc, up(fmt(d, { month: 'long' })), `font:600 120px ${SERIF};letter-spacing:10px;color:${PALE};${glow}`, 940);
+  const year = label(sc, String(d.getFullYear()), 60, 26, GOLD);
+  const wd = text(sc, fmt(d, { weekday: 'long' }), `font:italic 500 76px ${ITAL};color:${PALE};${glow}`, 900);
+  R.date = { sc, f(u) {
+    bg(u, { a: 0.14, s: 1.08 - u * 0.03 });
+    P(rays, { y: 860, r: u * 14, s: lerp(0.6, 1, outC(seg(u, 0, 1))), a: 0.8 });
+    P(eyebrow, { y: 400 }); track(eyebrow, u, 0.05, 34, 14);
+    ru(u, 0.2, { y: 470 });
+    const roll = seg(u, 0.05, 0.9);
+    day.textContent = roll < 1 ? String(1 + Math.floor(((Math.sin(Math.floor(u * 28) * 12.9898) * 43758.5) % 1 + 1) % 1 * 31)) : dayStr;
+    P(day, { y: 830, s: lerp(1.3, 1, outC(seg(u, 0, 0.5))) * (roll >= 1 ? 1 + 0.08 * Math.exp(-(u - 0.9) * 8) : 1), a: cl(seg(u, 0, 0.2)), b: (1 - roll) * 6 });
+    P(month, { y: 1110 }); reveal(month, u, 0.95, 0.04, 0.4, 60);
+    P(year, { y: 1235 }); track(year, u, 1.25, 60, 26);
+    P(wd, { y: 1340 }); reveal(wd, u, 1.55, 0.03, 0.4, 30);
+  } };
+}
+
+// ---- Days until forever ----
+{
+  const sc = scene(stage), bg = backdrop(sc, 31);
+  const title = text(sc, 'DAYS UNTIL FOREVER', `font:600 84px ${SERIF};letter-spacing:4px;color:${PALE};${glow}`, 940);
+  const ru = rule(sc);
+  const boxes = ['DAYS', 'HOURS', 'MINUTES', 'SECONDS'].map((lab) => {
+    const b = mk(sc, 'div', `width:380px;height:300px;background:linear-gradient(170deg,rgba(80,14,22,.92),rgba(38,6,12,.94));border:2px solid rgba(212,175,55,.55);box-shadow:0 18px 50px rgba(0,0,0,.5)`);
+    mk(b, 'div', `left:95px;top:-3px;width:190px;height:5px;background:${GOLD};box-shadow:0 0 14px ${GOLD}`);
+    b.v = mk(b, 'div', `left:0;right:0;top:46px;text-align:center;font:600 140px/1 ${SERIF};color:${PALE}`);
+    const l = mk(b, 'div', `left:0;right:0;top:214px;text-align:center;font:500 30px ${SANS};letter-spacing:8px;color:${GOLD}`);
+    l.textContent = lab;
+    return b;
+  });
+  const settle = [0.95, 1.25, 1.55, 1.875];
+  R.count = { sc, f(u) {
+    bg(u, { a: 0.14, s: 1 + u * 0.02 });
+    P(title, { y: 400 }); reveal(title, u, 0.05, 0.03, 0.4, 50);
+    ru(u, 0.3, { y: 490 });
+    boxes.forEach((b, i) => {
+      const p = seg(u, 0.25 + i * 0.1, 0.75 + i * 0.1), done = u >= settle[i];
+      const spin = Math.sin(i * 97.1 + Math.floor(u * 22) * 12.9) * 43758.5;
+      let v = done ? FIN[i] : Math.floor((spin - Math.floor(spin)) * [100, 24, 60, 60][i]);
+      if (i === 3 && done) v = (FIN[3] - Math.floor(u - settle[3]) + 60) % 60;
+      b.v.textContent = String(v).padStart(2, '0');
+      b.v.style.fontSize = `${[140, 140, 140, 112, 88, 72][Math.min(b.v.textContent.length, 5)]}px`;
+      const o = { x: i % 2 ? 740 : 340, y: i < 2 ? 820 : 1160, s: done ? 1 + 0.08 * Math.exp(-(u - settle[i]) * 9) : 1, a: p > 0 ? 1 : 0 };
+      P(b, o);
+      b.style.transform += ` perspective(1400px) rotateX(${(1 - outB(p, 1.3)) * -95}deg)`;
+    });
+  } };
+}
+
+// ---- When two paths meet ----
+const MEET = (startOf('paths') ?? 0) + 5 * BEAT;
+{
+  const sc = scene(stage), bg = backdrop(sc, 41, 1);
+  const eyebrow = label(sc, 'A MOMENT IN MOTION', 34, 12);
+  const title = text(sc, 'WHEN TWO PATHS MEET', `font:600 80px ${SERIF};letter-spacing:3px;color:${PALE};${glow}`, 960);
+  const cv = ringLayer(sc);
+  const nb = text(sc, up(bride), `font:600 52px ${SERIF};letter-spacing:3px;color:${PALE};${glow}`, 420);
+  const ng = text(sc, up(groom), `font:600 52px ${SERIF};letter-spacing:3px;color:${PALE};${glow}`, 420);
+  const q1 = text(sc, 'Two hearts, walking their own journeys…', `font:italic 500 58px ${ITAL};color:${PALE};${glow}`, 940);
+  const q2 = text(sc, '…until their paths became one.', `font:italic 500 64px ${ITAL};color:${LIGHT};${glow}`, 940);
+  const CX = 540, CY = 1150;
+  const path = (side, p) => {
+    // A cubic curve from a lower corner up to the centre of the stage.
+    const x0 = side ? 1000 : 80, c1 = side ? 1060 : 20, c2 = side ? 760 : 320;
+    const b = (a, b2, c, d) => (1 - p) ** 3 * a + 3 * (1 - p) ** 2 * p * b2 + 3 * (1 - p) * p * p * c + p ** 3 * d;
+    return [b(x0, c1, c2, CX + (side ? 34 : -34)), b(1760, 1400, 1220, CY)];
+  };
+  R.paths = { sc, f(u) {
+    const met = u >= 5 * BEAT, k = seg(u, 5 * BEAT, 5 * BEAT + 1.2);
+    sc.style.transform = `translateY(${-u * 10}px) scale(${1 + u * 0.016})`;
+    bg(u, { a: 0.12 + 0.1 * k, y: CY - 200, s: 0.9 + k * 0.2 });
+    P(eyebrow, { y: 330 }); track(eyebrow, u, 0.05, 28, 12);
+    P(title, { y: 410 }); reveal(title, u, 0.2, 0.03, 0.4, 40);
+    const c = cv;
+    c.clearRect(0, 0, 1080, 1920);
+    // The stage: a dark disc with a gold ring, and the glowing horizon arc behind it.
+    c.save();
+    c.globalAlpha = cl(seg(u, 0.1, 0.8));
+    const hg = c.createLinearGradient(0, 0, 1080, 0);
+    hg.addColorStop(0, 'rgba(212,175,55,0)'); hg.addColorStop(0.5, `rgba(255,236,180,${0.75 + 0.25 * k})`); hg.addColorStop(1, 'rgba(212,175,55,0)');
+    c.strokeStyle = hg; c.lineWidth = 6 + 6 * k; c.shadowColor = GOLD; c.shadowBlur = 30 + 40 * k;
+    c.beginPath(); c.ellipse(540, 980, 760, 120, 0, Math.PI * 1.04, Math.PI * 1.96); c.stroke();
+    c.shadowBlur = 0;
+    c.fillStyle = 'rgba(10,1,4,.55)';
+    c.beginPath(); c.ellipse(CX, CY + 30, 460, 120, 0, 0, 6.2832); c.fill();
+    c.strokeStyle = GOLD; c.lineWidth = 4; c.shadowColor = GOLD; c.shadowBlur = 20 + 50 * k;
+    c.beginPath(); c.ellipse(CX, CY + 30, 300 + 160 * outC(k), 78 + 42 * outC(k), 0, 0, 6.2832); c.stroke();
+    c.shadowBlur = 0;
+    // Two lights walk a step on every beat and leave a trail of light behind them.
+    const walk = (x) => { const steps = x / BEAT, w = Math.floor(steps); return (w + outC(steps - w)) * BEAT; };
+    const prog = cl(walk(Math.max(0, u - 0.6)) / (5 * BEAT - 0.6));
+    for (const side of [0, 1]) {
+      c.globalCompositeOperation = 'lighter';
+      c.lineWidth = 7; c.lineCap = 'round';
+      for (let i = 0; i < 40; i++) {
+        const a = (i / 40) * prog, b2 = ((i + 1) / 40) * prog;
+        const [x1, y1] = path(side, a), [x2, y2] = path(side, b2);
+        c.strokeStyle = `rgba(255,${side ? 190 : 220},${side ? 150 : 140},${0.08 + 0.55 * (i / 40)})`;
+        c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2, y2); c.stroke();
+      }
+      const [x, y] = path(side, prog), bob = Math.abs(Math.sin((u / BEAT) * Math.PI)) * 16 * (met ? 0 : 1);
+      const rg = c.createRadialGradient(x, y - bob, 0, x, y - bob, 90);
+      rg.addColorStop(0, 'rgba(255,252,235,1)'); rg.addColorStop(0.25, side ? 'rgba(255,170,150,.75)' : 'rgba(255,214,130,.75)'); rg.addColorStop(1, 'rgba(255,180,90,0)');
+      c.fillStyle = rg; c.globalAlpha = cl(seg(u, 0.4, 0.8)) * (met ? 1 - k : 1);
+      c.beginPath(); c.arc(x, y - bob, 90, 0, 6.2832); c.fill();
+      c.globalAlpha = 1;
+      const el = side ? ng : nb;
+      P(el, { x: cl(x, 240, 840), y: y - bob - 120, a: cl(seg(u, 0.7, 1.1)) * (1 - seg(u, 5 * BEAT - 0.2, 5 * BEAT + 0.1)) });
+    }
+    c.globalCompositeOperation = 'source-over';
+    c.restore();
+    // Where they meet, the rings appear.
+    drawRings(c, CX - 70 * lerp(0.4, 1, outB(k, 1.4)), CY - 250, 70 * Math.max(0.001, outB(k, 1.6)), u, 0, cl(k * 3));
+    P(q1, { y: 1530, a: cl(seg(u, 1, 1.4)) * (1 - seg(u, 5 * BEAT - 0.3, 5 * BEAT)) }); reveal(q1, u, 1.0, 0.018, 0.35, 24);
+    P(q2, { y: 1530, a: met ? 1 : 0 }); reveal(q2, u, 5 * BEAT + 0.35, 0.025, 0.4, 30);
+  } };
+}
+
+// ---- Two souls, one vow (only with a photo) ----
+{
+  const sc = scene(stage), bg = backdrop(sc, 51);
+  const eyebrow = label(sc, 'THE COUPLE', 34, 14);
+  const title = text(sc, 'TWO SOULS, ONE VOW', `font:600 80px ${SERIF};letter-spacing:3px;color:${PALE};${glow}`, 960);
+  const one = portraits.length === 1, W = one ? 560 : 430, H = one ? 760 : 600;
+  const frames = portraits.map(([, url, name]) => {
+    const f = mk(sc, 'div', `width:${W + 36}px;height:${H + 36}px;border:3px solid ${GOLD};border-radius:${(W + 36) / 2}px ${(W + 36) / 2}px 0 0;box-shadow:0 0 30px rgba(212,175,55,.35)`);
+    const hole = mk(f, 'div', `left:15px;top:15px;width:${W}px;height:${H}px;border-radius:${W / 2}px ${W / 2}px 0 0;overflow:hidden;background:#1a0408`);
+    f.img = photo(hole, url, W, H);
+    f.glint = mk(hole, 'div', `left:0;top:0;width:${W * 0.5}px;height:${H * 1.6}px;background:linear-gradient(90deg,transparent,rgba(255,245,215,.45),transparent)`);
+    f.n = text(sc, up(name), `font:600 54px ${SERIF};letter-spacing:3px;color:${GOLD};${glow}`, one ? 900 : 440);
+    return f;
+  });
+  R.portraits = { sc, f(u) {
+    bg(u, { a: 0.14, s: 1 + u * 0.02 });
+    P(eyebrow, { y: 300 }); track(eyebrow, u, 0.05, 30, 14);
+    P(title, { y: 380 }); reveal(title, u, 0.2, 0.03, 0.4, 40);
+    frames.forEach((f, i) => {
+      const side = one ? 0 : i ? 1 : -1, p = seg(u, 0.25 + i * 0.25, 0.95 + i * 0.25);
+      const x = one ? 540 : i ? 790 : 290, y = one ? 940 : 900;
+      P(f, { x: x + side * (1 - outE(p)) * 700, y: y + (one ? (1 - outE(p)) * 900 : 0), ry: side * (1 - outC(p)) * -70, a: cl(p * 4) });
+      f.img.style.transform = `scale(${1.12 - u * 0.03}) translateY(${(u - 1) * -10}px)`;
+      f.glint.style.transform = `translateX(${lerp(-W * 0.6, W * 1.2, seg(u, 1.3 + i * 0.15, 2.0 + i * 0.15))}px) translateY(${-H * 0.3}px) rotate(18deg)`;
+      P(f.n, { x, y: y + (H + 36) / 2 + 70 }); reveal(f.n, u, 0.85 + i * 0.25, 0.035, 0.4, 40);
+    });
+  } };
+}
+
+// ---- Our story (only with a story) ----
+{
+  const sc = scene(stage), bg = backdrop(sc, 61, 1);
+  const title = storyTitle ? text(sc, up(storyTitle), `font:600 84px ${SERIF};letter-spacing:4px;color:${PALE};${glow}`, 940) : null;
+  const ru = rule(sc);
+  const body = lines(storyBody, 30, 6).map((l) => text(sc, l, `font:italic 500 60px ${ITAL};color:${PALE};${glow}`, 900));
+  const top = 820 - ((body.length - 1) * 86) / 2 + (title ? 60 : 0);
+  R.story = { sc, f(u) {
+    bg(u, { a: 0.18, y: 960, s: 1.05 + u * 0.03, mx: u * 14 });
+    if (title) { P(title, { y: top - 230 }); reveal(title, u, 0.05, 0.035, 0.4, 50); }
+    ru(u, 0.25, { y: top - 140 });
+    body.forEach((e, i) => {
+      const p = outC(seg(u, 0.45 + i * 0.16, 1.05 + i * 0.16));
+      P(e, { y: top + i * 86 + (1 - p) * 40, a: p, b: (1 - p) * 8 });
+    });
+  } };
+}
+
+// ---- The royal festivities (one card every two beats) ----
+{
+  const sc = scene(stage), bg = backdrop(sc, 71);
+  const eyebrow = label(sc, 'CELEBRATIONS', 32, 14);
+  const title = text(sc, 'THE ROYAL FESTIVITIES', `font:600 74px ${SERIF};letter-spacing:3px;color:${PALE};${glow}`, 960);
+  events.forEach((e) => {
+    const card = mk(sc, 'div', `width:760px;height:930px;background:linear-gradient(170deg,rgba(70,12,20,.95),rgba(30,5,10,.97));border:2px solid rgba(212,175,55,.6);box-shadow:0 24px 70px rgba(0,0,0,.6),inset 0 0 0 12px rgba(212,175,55,.08)`);
+    const nWrap = mk(card, 'div', 'left:0;top:70px;width:760px;display:flex;justify-content:center');
+    e.n = text(nWrap, str(e.name), `position:static;font:600 76px ${SERIF};letter-spacing:3px;color:${GOLD}`, 660);
+    const hole = mk(card, 'div', 'left:60px;top:190px;width:640px;height:500px;overflow:hidden;border:1px solid rgba(212,175,55,.35)');
+    e.img = photo(hole, e.image, 640, 500);
+    const when = parseDate(e.date), dateTxt = when ? fmt(when, { day: 'numeric', month: 'long', year: 'numeric' }) : str(e.date).trim();
+    [dateTxt, str(e.venue).trim()].filter(Boolean).forEach((m, k) => {
+      const w = mk(card, 'div', `left:0;top:${730 + k * 66}px;width:760px;display:flex;justify-content:center`);
+      text(w, up(m), `position:static;font:500 34px ${SANS};letter-spacing:5px;color:${k ? PALE : GOLD}`, 660);
+    });
+    e.card = card;
+  });
+  const N = events.length, D2 = 2 * BEAT;
+  const kind = (i) => (i === 0 ? 0 : [1, 2, 3, 4][(i - 1) % 4]);
+  R.events = { sc, f(u) {
+    bg(u, { a: 0.12, s: 1 + u * 0.015, mx: -u * 12 });
+    P(eyebrow, { y: 280 }); track(eyebrow, u, 0.05, 28, 14);
+    P(title, { y: 355 }); reveal(title, u, 0.15, 0.025, 0.4, 40);
+    events.forEach((e, i) => {
+      const t0 = i * D2, t1 = t0 + D2, last = i === N - 1, on = u >= t0 - 0.05 && (last || u < t1 + 0.35);
+      e.card.style.display = on ? 'block' : 'none';
+      if (!on) return;
+      const p = seg(u, t0, t0 + 0.5), q = last ? 0 : seg(u, t1, t1 + 0.35), type = kind(i);
+      const o = { x: 540, y: 960 + 8 * Math.sin((u - t0) * 2.6), s: 1, r: 1.5 * Math.sin((u - t0) * 2.1), a: 1, b: 0, ry: 0 };
+      if (type === 0) { o.y += (1 - outB(p, 1.2)) * -1500; o.r += (1 - p) * -12; }
+      if (type === 1) { o.s = lerp(0.2, 1, outB(p, 1.5)); o.a = cl(p * 4); }
+      if (type === 2) { o.x += (1 - outE(p)) * 1400; o.b = (1 - p) * p * 80; }
+      if (type === 3) { o.ry = (1 - outC(p)) * 90; o.a = p > 0 ? 1 : 0; }
+      if (type === 4) { o.r += (1 - outB(p, 1.2)) * 260; o.s = outB(p, 1.3); o.a = cl(p * 5); }
+      if (q > 0) { const qq = inC(q); o.s *= 1 - qq * 0.25; o.y -= qq * 220; o.a *= 1 - q; o.b += q * 10; }
+      P(e.card, o);
+      e.img.style.transform = `scale(${1.06 + (u - t0) * 0.06}) translateX(${(t0 + 0.6 - u) * 12}px)`;
+      reveal(e.n, u, t0 + 0.12, 0.025, 0.32, 40);
+    });
+  } };
+}
+
+// ---- Glimpses of us (only with photos) ----
+{
+  const sc = scene(stage), bg = backdrop(sc, 81, 1);
+  const eyebrow = label(sc, 'MEMORIES', 32, 14);
+  const title = text(sc, 'GLIMPSES OF US', `font:600 80px ${SERIF};letter-spacing:4px;color:${PALE};${glow}`, 960);
+  const r = rng(5);
+  const prints = gallery.map((g) => {
+    const f = mk(sc, 'div', `width:700px;height:880px;background:#1c0509;border:3px solid ${GOLD};box-shadow:0 26px 70px rgba(0,0,0,.65)`);
+    const hole = mk(f, 'div', 'left:22px;top:22px;width:650px;height:830px;overflow:hidden');
+    f.img = photo(hole, g.src, 650, 830);
+    f.tilt = (r() - 0.5) * 12; f.dx = (r() - 0.5) * 60;
+    return f;
+  });
+  R.gallery = { sc, f(u, s) {
+    bg(u, { a: 0.12, s: 1 + u * 0.02 });
+    P(eyebrow, { y: 280 }); track(eyebrow, u, 0.05, 28, 14);
+    P(title, { y: 355 }); reveal(title, u, 0.15, 0.03, 0.4, 40);
+    const step = Math.max(BEAT, Math.floor(s.dur / prints.length / BEAT) * BEAT);
+    const cur = Math.floor(u / step);
+    prints.forEach((f, i) => {
+      const t0 = i * step, p = seg(u, t0, t0 + 0.55), behind = cl(cur - i, 0, 4);
+      f.style.display = u >= t0 - 0.02 && behind < 4 ? 'block' : 'none';
+      const push = outC(seg(u, (i + 1) * step, (i + 1) * step + 0.4)) + Math.max(0, behind - 1);
+      P(f, {
+        x: 540 + f.dx * (1 - push * 0.3) + (i % 2 ? 1 : -1) * push * 40,
+        y: 1000 + (1 - outE(p)) * 1300 - push * 70,
+        s: (1 - push * 0.12) * lerp(1.25, 1, outC(p)),
+        r: f.tilt + (1 - p) * (i % 2 ? 30 : -30),
+        a: cl(p * 5) * (1 - push * 0.22),
+        b: (1 - p) * 10 + push * 2,
+      });
+      f.img.style.transform = `scale(${1.05 + (u - t0) * 0.04})`;
+    });
+  } };
+}
+
+// ---- End card ----
+{
+  const sc = scene(stage), bg = backdrop(sc, 91);
+  const rc = ringLayer(sc);
+  const a1 = text(sc, 'Apni shaadi ka', `font:600 80px ${SERIF};letter-spacing:2px;color:#fff;${glow}`);
+  const a2 = text(sc, 'aisa invitation banaiye', `font:600 80px ${SERIF};letter-spacing:2px;color:#fff;${glow}`, 980);
+  const halo = mk(sc, 'div', 'width:1100px;height:520px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,210,130,.45),transparent 68%)');
+  const logo = mk(sc, 'div', `font:600 150px ${ITAL};white-space:nowrap;background:linear-gradient(100deg,${GOLD} 0%,${PALE} 40%,#ffffff 50%,${PALE} 60%,${GOLD} 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent`);
+  logo.textContent = 'theinvitely.in';
+  const under = mk(sc, 'div', `height:4px;background:linear-gradient(90deg,transparent,${GOLD},transparent)`);
+  R.end = { sc, f(u) {
+    bg(u, { a: 0.16, y: 560, s: 1.1 - u * 0.02 });
+    rc.clearRect(0, 0, 1080, 1920);
+    const g = outB(seg(u, 0.1, 0.8), 1.4);
+    drawRings(rc, 470, 560, 120 * Math.max(0.001, g), u + 4, 0, cl(g * 2));
+    P(a1, { y: 860 }); reveal(a1, u, BEAT, 0.03);
+    P(a2, { y: 965 }); reveal(a2, u, 2 * BEAT, 0.025);
+    const l = outB(seg(u, 4 * BEAT, 4 * BEAT + 0.5), 1.9);
+    P(halo, { y: 1170, s: l * (1 + 0.05 * Math.sin(u * 5)), a: cl(l) * 0.9 });
+    P(logo, { y: 1165, s: Math.max(l, 0.001), a: cl(l * 2) });
+    logo.style.backgroundPosition = `${lerp(130, -40, seg(u, 2.9, 4.3))}% 0`;
+    logo.style.filter = 'drop-shadow(0 3px 10px rgba(0,0,0,.7))';
+    under.style.width = `${outC(seg(u, 2.85, 3.35)) * 720}px`;
+    P(under, { y: 1258 });
+  } };
+}
+
+// ================= Transitions, particles, light =================
+const deco = {
+  line: mk(stage, 'div', `width:1080px;height:10px;background:linear-gradient(90deg,transparent,${PALE},#fff,${PALE},transparent);box-shadow:0 0 40px ${GOLD},0 0 90px ${GOLD}`),
+  arc: mk(stage, 'div', `border-radius:50%;border:6px solid ${PALE};box-shadow:0 0 40px ${GOLD},inset 0 0 40px ${GOLD}`),
+  arch: mk(stage, 'div', `border:6px solid ${PALE};box-shadow:0 0 40px ${GOLD},inset 0 0 30px ${GOLD}`),
+  silk: mk(stage, 'div', `width:260px;height:3400px;background:linear-gradient(90deg,transparent,${DEEP} 15%,${GOLD} 40%,#fff6d8 50%,${GOLD} 60%,${DEEP} 85%,transparent);opacity:.9`),
+  seamT: mk(stage, 'div', `width:1080px;height:6px;background:${PALE};box-shadow:0 0 34px ${GOLD}`),
+  seamB: mk(stage, 'div', `width:1080px;height:6px;background:${PALE};box-shadow:0 0 34px ${GOLD}`),
+  dia: mk(stage, 'div', `border:6px solid ${PALE};box-shadow:0 0 40px ${GOLD},inset 0 0 30px ${GOLD}`),
+};
+Object.values(deco).forEach((e) => { e.style.display = 'none'; });
+
+function transition(el, type, p) {
+  const on = p > 0 && p < 1;
+  el.style.clipPath = ''; el.style.filter = ''; el.style.opacity = ''; el.style.transform = el.style.transform || '';
+  if (!on) return;
+  const e = outC(p);
+  if (type === 'ring') el.style.clipPath = `circle(${RING_FLY.r}px at 540px 960px)`;
+  if (type === 'bloom') el.style.opacity = cl(p * 1.6);
+  if (type === 'zoom') { el.style.opacity = cl(p * 2.2); el.style.filter = `blur(${(1 - e) * 18}px)`; el.style.transform = `scale(${lerp(1.5, 1, e)})`; }
+  if (type === 'line') {
+    el.style.clipPath = `inset(0 0 ${(1 - e) * 100}% 0)`;
+    deco.line.style.display = 'block'; P(deco.line, { y: e * 1920 });
+  }
+  if (type === 'arc') {
+    const rx = lerp(60, 1500, e), ry = lerp(40, 2300, e);
+    el.style.clipPath = `ellipse(${rx}px ${ry}px at 540px 1920px)`;
+    deco.arc.style.display = 'block';
+    deco.arc.style.width = `${rx * 2}px`; deco.arc.style.height = `${ry * 2}px`;
+    P(deco.arc, { y: 1920, a: 1 - p * 0.6 });
+  }
+  if (type === 'arch') {
+    const w = lerp(120, 1500, e), h = lerp(160, 2400, e), top = 1920 - h, l = 540 - w / 2;
+    el.style.clipPath = `inset(${top}px ${1080 - l - w}px 0 ${l}px round ${w / 2}px ${w / 2}px 0 0)`;
+    deco.arch.style.display = 'block';
+    Object.assign(deco.arch.style, { width: `${w}px`, height: `${h}px`, borderRadius: `${w / 2}px ${w / 2}px 0 0` });
+    P(deco.arch, { y: 1920 - h / 2, a: 1 - p * 0.5 });
+  }
+  if (type === 'silk') {
+    const x = lerp(-700, 2100, e);
+    el.style.clipPath = `polygon(0 0,${x}px 0,${x - 1100}px 1920px,0 1920px)`;
+    deco.silk.style.display = 'block'; P(deco.silk, { x: x - 550, y: 960, r: 29.8 });
+  }
+  if (type === 'split') {
+    const g = (1 - e) * 50;
+    el.style.clipPath = `inset(${g}% 0 ${g}% 0)`;
+    deco.seamT.style.display = deco.seamB.style.display = 'block';
+    P(deco.seamT, { y: g * 19.2 }); P(deco.seamB, { y: 1920 - g * 19.2 });
+  }
+  if (type === 'diamond') {
+    const r = lerp(0, 1600, e);
+    el.style.clipPath = `polygon(540px ${960 - r}px,${540 + r}px 960px,540px ${960 + r}px,${540 - r}px 960px)`;
+    deco.dia.style.display = 'block';
+    const side = r * Math.SQRT2;
+    deco.dia.style.width = deco.dia.style.height = `${side}px`;
+    P(deco.dia, { y: 960, r: 45, a: 1 - p * 0.4 });
+  }
+}
+
+const leak = mk(stage, 'div', 'width:1500px;height:1500px;border-radius:50%;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,170,80,.7),rgba(200,40,60,.3) 42%,transparent 68%)');
+const cv = document.createElement('canvas');
+cv.width = 1080; cv.height = 1920;
+stage.appendChild(cv);
+const c = cv.getContext('2d');
+mk(stage, 'div', 'width:1080px;height:1920px;background:radial-gradient(ellipse at 50% 46%,transparent 56%,rgba(6,0,2,.6) 100%)');
+const flash = mk(stage, 'div', 'width:1080px;height:1920px');
+const RN = rng(17);
+const sparks = Array.from({ length: 130 }, () => ({ x: RN() * 1080, y: RN() * 1920, v: 22 + RN() * 60, f: 0.4 + RN() * 1.3, p: RN() * 6.28, r: 1.1 + RN() * 3 }));
+const PET = ['#7a0f22', '#a3122f', '#c2185b', '#e0405e', '#8e1b3a', '#d4af37'];
+const petals = Array.from({ length: 56 }, () => ({ x: RN() * 1080, y: RN() * 2200, v: 170 + RN() * 220, sw: 30 + RN() * 70, f: 0.6 + RN() * 1.2, p: RN() * 6.28, w: 14 + RN() * 16, c: PET[Math.floor(RN() * 6)], rs: 1 + RN() * 3 }));
+const burst = (t, y, seed, x = 540) => { const r = rng(seed); return { t, x, y, p: Array.from({ length: 80 }, () => ({ a: r() * 6.28, d: 220 + r() * 660, s: 2 + r() * 5, h: r() })) }; };
+const BURSTS = [
+  burst(startOf('rings'), 640, 101, 520),
+  burst(MEET, 1150, 102),
+  burst(startOf('end') + 4 * BEAT, 1165, 103),
+  ...events.map((_, i) => burst(startOf('events') + i * 2 * BEAT + 0.3, 960, 200 + i)),
+];
+const PETAL_TIMES = [[startOf('rings'), startOf('rings') + 5], [MEET, MEET + 2.2], [startOf('end'), TOTAL]];
+
+function fx(T) {
+  c.clearRect(0, 0, 1080, 1920);
+  c.globalCompositeOperation = 'lighter';
+  for (const s of sparks) {
+    const y = (s.y - T * s.v + 192000) % 1920, x = s.x + Math.sin(T * s.f + s.p) * 30, a = 0.2 + 0.6 * Math.pow(0.5 + 0.5 * Math.sin(T * s.f * 3 + s.p), 2);
+    c.fillStyle = `rgba(255,214,140,${a})`;
+    c.beginPath(); c.arc(x, y, s.r, 0, 6.3); c.fill();
+  }
+  for (const b of BURSTS) {
+    const u = T - b.t;
+    if (u < 0 || u > 1.1) continue;
+    const e = outE(u / 1.1), a = 1 - u / 1.1;
+    for (const p of b.p) {
+      c.fillStyle = p.h > 0.5 ? `rgba(255,222,150,${a})` : `rgba(255,248,232,${a})`;
+      c.beginPath(); c.arc(b.x + Math.cos(p.a) * p.d * e, b.y + Math.sin(p.a) * p.d * e + u * u * 240, p.s * (1 - u / 2), 0, 6.3); c.fill();
+    }
+  }
+  c.globalCompositeOperation = 'source-over';
+  let pa = 0;
+  for (const [a, b] of PETAL_TIMES) if (T >= a && T < b) pa = Math.max(pa, seg(T, a, a + 0.6) * (1 - seg(T, b - 0.4, b)));
+  if (pa > 0) {
+    c.globalAlpha = pa * 0.9;
+    for (const p of petals) {
+      const y = (p.y + T * p.v) % 2200 - 140, x = p.x + Math.sin(T * p.f + p.p) * p.sw, sq = 0.28 + 0.72 * Math.abs(Math.sin(T * p.rs + p.p));
+      c.save();
+      c.translate(x, y); c.rotate(T * p.rs * 0.6 + p.p); c.scale(1, sq);
+      c.fillStyle = p.c;
+      c.beginPath(); c.moveTo(-p.w, 0); c.quadraticCurveTo(0, -p.w * 0.95, p.w, 0); c.quadraticCurveTo(0, p.w * 0.95, -p.w, 0); c.fill();
+      c.restore();
+    }
+    c.globalAlpha = 1;
+  }
+}
+
+const FLASH_COL = { ring: '255,240,205', bloom: '255,226,160', zoom: '255,236,200', line: '255,244,214', arc: '255,214,150', arch: '255,232,190', silk: '255,220,170', split: '255,240,220', diamond: '255,236,190' };
+
+function render(T) {
+  T = cl(T, 0, TOTAL);
+  const beat = T >= BAR ? (T - BAR) % BEAT : 9;
+  stage.style.transform = `scale(${1 + 0.011 * Math.exp(-beat * 7)})`;
+  Object.values(deco).forEach((e) => { e.style.display = 'none'; });
+
+  SEGS.forEach((s, i) => {
+    const u = T - s.start, tr = s.type ? TR[s.type] : { pre: 0, post: 0 };
+    const nextPost = SEGS[i + 1] ? TR[SEGS[i + 1].type].post : 0;
+    const on = u >= -tr.pre && (u < s.dur + nextPost || i === SEGS.length - 1);
+    const sc = R[s.key].sc;
+    sc.style.display = on ? 'block' : 'none';
+    if (!on) return;
+    sc.style.transform = '';
+    R[s.key].f(Math.max(u, s.type === 'ring' ? -tr.pre : 0), s);
+    if (s.type) transition(sc, s.type, seg(u, -tr.pre, tr.post));
+  });
+
+  const bar = T >= BAR ? (T - BAR) % BAR : 9, odd = Math.floor(T / BAR) % 2;
+  P(leak, { x: lerp(-120, 1200, odd ? 1 - bar / BAR : bar / BAR), y: 520 + (Math.floor(T / BAR) * 730) % 1000, a: 0.45 * Math.exp(-bar * 1.7) });
+  let fa = 0, fc = '255,255,255';
+  SEGS.forEach((s) => {
+    if (!s.type) return;
+    const u = T - s.start, pk = s.type === 'bloom' ? 0.9 : 0.5;
+    const v = u < 0 ? (u > -0.08 ? pk * (1 + u / 0.08) : 0) : pk * Math.exp(-u * 7);
+    if (v > fa) { fa = v; fc = FLASH_COL[s.type]; }
+  });
+  const end = seg(T, TOTAL - 0.7, TOTAL);
+  flash.style.background = end > 0 ? `rgba(0,0,0,${end})` : `rgba(${fc},${fa})`;
+  fx(T);
+}
+
+window.__render = render;
+window.__firstBar = BAR;
+window.__ready = ready(stage, [['48px Cin', 'A'], ['italic 48px Corm', 'A'], ['48px Corm', 'A'], ['48px Vibes', 'A'], ['48px Sans', 'A'], ['48px Gotu', '॥']], TOTAL);
+</script></body></html>

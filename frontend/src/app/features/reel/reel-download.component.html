@@ -1,5 +1,30 @@
 @if (reel(); as r) {
-  @if (r.available) {
+  @if (r.available && !r.purchased) {
+    <section class="reel reel--split" aria-label="Your invitation video">
+      <app-reel-preview
+        class="reel__media"
+        [eventId]="eventId()"
+        [autoStart]="autoStart()"
+        [compact]="true"
+      />
+      <div class="reel__info">
+        <h2 class="reel__title">Your invitation video</h2>
+        <p class="reel__text">
+          Share your invitation as a video on WhatsApp and Instagram. The preview has a watermark;
+          the video you buy is full quality, without it.
+        </p>
+        <div class="reel__actions">
+          <a
+            class="reel__btn"
+            routerLink="/payment"
+            [queryParams]="{ site: eventId(), video: 1 }"
+          >
+            Buy video · {{ price() }}
+          </a>
+        </div>
+      </div>
+    </section>
+  } @else if (r.available) {
     <section class="reel" aria-label="Your invitation video">
       <h2 class="reel__title">Your invitation video</h2>
 
@@ -25,9 +50,12 @@
       } @else if (r.status === 'FAILED') {
         <p class="reel__text reel__text--error">We couldn't create your video. Please try again.</p>
       } @else if (r.downloadUrl && r.isStale) {
-        <p class="reel__text">You edited your invitation after this video was made.</p>
+        <p class="reel__text">
+          You edited your invitation after this video was made. Publish your changes to get a new
+          video.
+        </p>
       } @else if (!r.downloadUrl) {
-        <p class="reel__text">Turn your invitation into a video to share on WhatsApp and Instagram.</p>
+        <p class="reel__text">Your video will be ready to download here once it's made.</p>
       }
 
       @if (error()) {
@@ -40,15 +68,20 @@
             Download video{{ sizeLabel() ? ' (' + sizeLabel() + ')' : '' }}
           </a>
         }
-        @if (!isWorking() && (!r.downloadUrl || r.isStale || r.status === 'FAILED')) {
+        @if (!isWorking() && (!r.downloadUrl || r.status === 'FAILED')) {
           <button
             type="button"
             class="reel__btn"
             [class.reel__btn--ghost]="r.downloadUrl"
             (click)="create()"
           >
-            {{ r.status === 'FAILED' ? 'Try again' : r.downloadUrl ? 'Create new video' : 'Create my video' }}
+            {{ r.status === 'FAILED' ? 'Try again' : 'Create my video' }}
           </button>
+        }
+        @if (r.isStale && !isWorking()) {
+          <a class="reel__btn reel__btn--ghost" routerLink="/payment" [queryParams]="{ site: eventId() }">
+            Publish changes
+          </a>
         }
       </div>
     </section>

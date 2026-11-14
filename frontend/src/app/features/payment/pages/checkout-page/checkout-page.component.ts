@@ -15,6 +15,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AnalyticsService } from '../../../../core/services/analytics.service';
 import { SeoService } from '../../../../core/services/seo.service';
 import { WINDOW } from '../../../../core/tokens/window.token';
+import { ReelPreviewComponent } from '../../../reel/reel-preview.component';
 import {
   PaymentApiService,
   type PriceQuote,
@@ -26,14 +27,16 @@ import {
 type CheckoutState = 'loading' | 'ready' | 'processing' | 'redirecting' | 'error';
 
 /**
- * `/payment?site=<eventId>` — confirms what the user is publishing and what it costs
- * (price always comes from the backend), then either publishes a free invitation or
- * hands off to Razorpay's hosted payment page.
+ * `/payment?site=<eventId>[&video=1]` — confirms what the user is publishing and what it
+ * costs (prices always come from the backend), then either publishes or hands off to
+ * Razorpay's hosted payment page. The invitation's video can be added to the order after
+ * watching its watermarked preview. On a live invitation it publishes the latest changes
+ * (which also makes a new video, if one was bought).
  */
 @Component({
   selector: 'app-checkout-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, LoaderComponent],
+  imports: [RouterLink, LoaderComponent, ReelPreviewComponent],
   templateUrl: './checkout-page.component.html',
   styleUrl: '../payment-page.scss',
 })
@@ -48,14 +51,45 @@ export class CheckoutPageComponent {
   readonly site = input('');
   /** Query param `?template=` — the template slot id, used for the "back to editor" link. */
   readonly template = input('');
+  /** Query param `?video=1` — start with the video added, as from "Buy video". */
+  readonly video = input('');
 
   protected readonly state = signal<CheckoutState>('loading');
   protected readonly quote = signal<PriceQuote | null>(null);
   protected readonly error = signal('');
+  protected readonly includeVideo = signal(false);
 
   protected readonly price = computed(() => {
     const q = this.quote();
     return q ? formatMoney(q.amountMinor, q.currency) : '';
+  });
+  /** The invitation itself still has to be paid for. */
+  protected readonly templateDue = computed(() => {
+    const q = this.quote();
+    return !!q && q.paymentRequired && !q.alreadyPaid;
+  });
+  protected readonly canAddVideo = computed(() => {
+    const q = this.quote();
+    return !!q && q.videoAvailable && !q.videoAlreadyPaid;
+  });
+  protected readonly videoPrice = computed(() => {
+    const q = this.quote();
+    return q ? formatMoney(q.videoPriceMinor, q.videoCurrency) : '';
+  });
+  protected readonly videoDue = computed(() => this.canAddVideo() && this.includeVideo());
+  protected readonly totalMinor = computed(() => {
+    const q = this.quote();
+    if (!q) {
+      return 0;
+    }
+    return (this.templateDue() ? q.amountMinor : 0) + (this.videoDue() ? q.videoPriceMinor : 0);
+  });
+  protected readonly total = computed(() => {
+    const q = this.quote();
+    if (!q || this.totalMinor() === 0) {
+      return '';
+    }
+    return formatMoney(this.totalMinor(), this.templateDue() ? q.currency : q.videoCurrency);
   });
   protected readonly isLive = computed(() => this.quote()?.eventStatus === 'PUBLISHED');
   protected readonly editorSlotId = computed(() => this.template() || this.quote()?.templateSlug || '');
@@ -81,11 +115,11 @@ export class CheckoutPageComponent {
     this.state.set('processing');
     this.error.set('');
     this.analytics.track('begin_checkout', {
-      value: q.paymentRequired ? q.amountMinor / 100 : 0,
+      value: this.totalMinor() / 100,
       currency: q.currency || 'INR',
     });
     this.api
-      .checkout(q.eventId)
+      .checkout(q.eventId, this.videoDue())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (result) => {
@@ -105,6 +139,10 @@ export class CheckoutPageComponent {
       });
   }
 
+  protected toggleVideo(event: Event): void {
+    this.includeVideo.set((event.target as HTMLInputElement).checked);
+  }
+
   protected retry(): void {
     this.loadQuote(this.site());
   }
@@ -122,6 +160,7 @@ export class CheckoutPageComponent {
       .subscribe({
         next: (quote) => {
           this.quote.set(quote);
+          this.includeVideo.set(this.video() === '1');
           this.state.set('ready');
         },
         error: (err: unknown) => {
@@ -150,6 +189,8 @@ export class CheckoutPageComponent {
         return 'Online payments are not available right now. Please try again later.';
       case 'FREE_INVITATION_LIMIT':
         return 'You have already published 2 invitations with free templates. Archive one from your dashboard, or choose a premium template to publish this one.';
+      case 'REEL_NOT_AVAILABLE':
+        return "This template doesn't have a video yet. Untick the video to continue.";
       case 'PAYMENT_PROVIDER_ERROR':
         return 'The payment gateway did not respond. Please try again.';
       default:

@@ -69,6 +69,11 @@ class Settings(BaseSettings):
     reels_enabled: bool = False
     # Videos one user may request in 24 hours; each ties up a worker for minutes.
     reel_daily_limit: int = 5
+    # Previews one user may request in 24 hours. A preview is made before anything is paid.
+    reel_preview_daily_limit: int = 10
+    # What the video costs for an invitation on a free template, in paise. On a paid template
+    # the video costs the same as the template.
+    reel_price_free_template_minor: int = 50000
     reel_render_timeout_seconds: int = 30 * 60
     # Worker only: the tools/reel folder. Unset -> its place in this repository.
     reel_tool_dir: str | None = None

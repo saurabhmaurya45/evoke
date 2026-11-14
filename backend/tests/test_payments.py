@@ -6,9 +6,11 @@ import uuid
 import pytest
 from sqlalchemy import select
 
+from app.drafts.models import Draft
 from app.events.models import Event, EventStatus
 from app.payments.models import Payment, PaymentStatus
 from app.payments.razorpay_client import RazorpayClient, get_razorpay_client
+from app.reels.models import EventReel, ReelKind, ReelStatus
 from app.templates.models import PricingModel, Template, TemplateStatus
 
 KEY_SECRET = "test_key_secret"
@@ -257,3 +259,133 @@ async def test_other_user_cannot_checkout_someone_elses_event(
     assert resp.status_code == 404
     assert resp.json()["error"]["code"] == "EVENT_NOT_FOUND"
     assert razorpay.created == []
+
+
+# --- Buying the invitation's video -------------------------------------------------
+
+FILM_SLUG = "tpl-lace-classic"  # a template with a video film
+
+
+@pytest.fixture
+def videos_on(monkeypatch):
+    from app.config import get_settings
+
+    monkeypatch.setattr(get_settings(), "reels_enabled", True)
+    return get_settings().reel_price_free_template_minor
+
+
+async def _film_invitation(client, db_session, headers, *, paid: bool) -> dict:
+    template = Template(
+        slug=FILM_SLUG,
+        name="Lace",
+        status=TemplateStatus.ACTIVE,
+        storefront_status="LISTED",
+        pricing_model=(PricingModel.PAID if paid else PricingModel.FREE).value,
+        price_amount_minor=149900 if paid else None,
+    )
+    db_session.add(template)
+    await db_session.commit()
+    event = await _make_event(client, headers, template)
+    draft = (
+        await db_session.execute(select(Draft).where(Draft.event_id == uuid.UUID(event["id"])))
+    ).scalar_one()
+    draft.data = {"couple": {"groomName": "Arjun", "brideName": "Priya"}}
+    draft.revision = 1
+    await db_session.commit()
+    return event
+
+
+async def _checkout_video(client, headers, event_id: str):
+    return await client.post(
+        "/v1/payments/checkout", headers=headers, json={"eventId": event_id, "includeVideo": True}
+    )
+
+
+async def _reels(db_session) -> list[EventReel]:
+    return list((await db_session.execute(select(EventReel))).scalars().all())
+
+
+async def test_video_is_added_to_the_invitations_payment(
+    client, db_session, auth_headers, razorpay, videos_on
+):
+    headers = auth_headers()
+    event = await _film_invitation(client, db_session, headers, paid=True)
+
+    quote = (await client.get(f"/v1/payments/quote?eventId={event['id']}", headers=headers)).json()
+    assert quote["data"]["videoAvailable"] is True
+    # On a paid template the video costs the same as the template.
+    assert quote["data"]["videoPriceMinor"] == 149900
+    assert quote["data"]["videoAlreadyPaid"] is False
+
+    body = (await _checkout_video(client, headers, event["id"])).json()["data"]
+    assert body["amountMinor"] == 149900 + 149900
+    assert razorpay.created[0]["description"] == "Lace invitation + video"
+    # Without the video it's a different payment, so the link isn't reused.
+    alone = (await _checkout(client, headers, event["id"])).json()["data"]
+    assert alone["amountMinor"] == 149900
+    assert alone["paymentId"] != body["paymentId"]
+
+    payment = await db_session.get(Payment, uuid.UUID(body["paymentId"]))
+    assert payment.includes_template and payment.includes_video
+    resp = await client.get("/v1/payments/razorpay/callback", params=_callback_params(payment))
+    assert "status=success" in resp.headers["location"]
+
+    db_event = await db_session.get(Event, uuid.UUID(event["id"]))
+    await db_session.refresh(db_event)
+    assert db_event.status == EventStatus.PUBLISHED
+    reels = await _reels(db_session)
+    assert [(r.kind, r.status) for r in reels] == [(ReelKind.FULL, ReelStatus.QUEUED)]
+
+    again = (await _checkout_video(client, headers, event["id"])).json()["data"]
+    assert again["paymentRequired"] is False  # never charged twice
+
+
+async def test_free_invitation_is_published_then_video_paid_for_alone(
+    client, db_session, auth_headers, razorpay, videos_on
+):
+    headers = auth_headers()
+    event = await _film_invitation(client, db_session, headers, paid=False)
+
+    body = (await _checkout_video(client, headers, event["id"])).json()["data"]
+    assert body["paymentRequired"] is True
+    assert videos_on == 50000  # ₹500 for the video of a free template
+    assert body["amountMinor"] == videos_on
+    assert body["event"]["status"] == "PUBLISHED"
+    payment = await db_session.get(Payment, uuid.UUID(body["paymentId"]))
+    assert not payment.includes_template and payment.includes_video
+    assert await _reels(db_session) == []
+
+    await client.get("/v1/payments/razorpay/callback", params=_callback_params(payment))
+    assert [r.kind for r in await _reels(db_session)] == [ReelKind.FULL]
+
+    # A video-only payment doesn't take the invitation out of the free quota.
+    from app.events.service import count_free_published
+
+    db_event = await db_session.get(Event, uuid.UUID(event["id"]))
+    assert await count_free_published(db_session, db_event.owner_id) == 1
+
+
+async def test_video_for_template_without_film_is_refused(
+    client, db_session, auth_headers, razorpay, videos_on
+):
+    headers = auth_headers()
+    template = await _make_template(db_session, paid=True)
+    event = await _make_event(client, headers, template)
+    quote = (await client.get(f"/v1/payments/quote?eventId={event['id']}", headers=headers)).json()
+    assert quote["data"]["videoAvailable"] is False
+    resp = await _checkout_video(client, headers, event["id"])
+    assert resp.status_code == 409
+    assert resp.json()["error"]["code"] == "REEL_NOT_AVAILABLE"
+    assert razorpay.created == []
+
+
+@pytest.mark.parametrize(("paid", "expected"), [(True, 149900), (False, 50000)])
+async def test_video_price_follows_the_template(
+    client, db_session, auth_headers, razorpay, videos_on, paid, expected
+):
+    headers = auth_headers()
+    event = await _film_invitation(client, db_session, headers, paid=paid)
+    quote = (await client.get(f"/v1/payments/quote?eventId={event['id']}", headers=headers)).json()
+    assert quote["data"]["videoPriceMinor"] == expected
+    reel = (await client.get(f"/v1/events/{event['id']}/reel", headers=headers)).json()
+    assert reel["data"]["priceMinor"] == expected

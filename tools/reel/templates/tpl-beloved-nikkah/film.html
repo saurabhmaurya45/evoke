@@ -1,0 +1,816 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Beloved Nikkah Film</title>
+<style>
+@font-face{font-family:Allura;src:url("fonts/allura-400-latin.woff2")}
+@font-face{font-family:Vibes;src:url("fonts/great-vibes-400-latin.woff2")}
+@font-face{font-family:Play;src:url("fonts/playfair-display-latin.woff2");font-weight:400 900}
+@font-face{font-family:Play;font-style:italic;src:url("fonts/playfair-display-italic-latin.woff2");font-weight:400 900}
+@font-face{font-family:Corm;src:url("fonts/cormorant-garamond-latin.woff2");font-weight:300 700}
+@font-face{font-family:Corm;font-style:italic;src:url("fonts/cormorant-garamond-italic-latin.woff2");font-weight:300 700}
+@font-face{font-family:Nun;src:url("fonts/nunito-latin.woff2");font-weight:200 1000}
+@font-face{font-family:Mukta;src:url("fonts/mukta-400-latin.woff2");font-weight:400}
+@font-face{font-family:Mukta;src:url("fonts/mukta-400-devanagari.woff2");font-weight:400;unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF}
+@font-face{font-family:Mukta;src:url("fonts/mukta-600-latin.woff2");font-weight:600}
+@font-face{font-family:Mukta;src:url("fonts/mukta-600-devanagari.woff2");font-weight:600;unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF}
+@font-face{font-family:Rozha;src:url("fonts/rozha-one-latin.woff2")}
+@font-face{font-family:Rozha;src:url("fonts/rozha-one-devanagari.woff2");unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF}
+@font-face{font-family:Naskh;src:url("fonts/noto-naskh-arabic-500-arabic.woff2");unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+html,body{margin:0;background:#000;overflow:hidden;width:1080px;height:1920px}
+#stage{position:absolute;inset:0;overflow:hidden;background:#faf3f0}
+.sc{position:absolute;inset:0;overflow:hidden;display:none}
+.a{position:absolute;left:0;top:0;transform-origin:center center}
+.t{white-space:nowrap;text-align:center}
+.t span{display:inline-block;white-space:pre}
+canvas{position:absolute;left:0;top:0}
+</style></head><body><div id="stage"></div>
+<script src="../../lib/core.js"></script>
+<script>
+const D = window.__DATA;
+const stage = document.querySelector('#stage');
+// Choreographed at 96 BPM, the Hindu wedding song the other films use. The template's own General
+// song is only 28 seconds, shorter than the film.
+const BEAT = 60 / 96, BAR = 4 * BEAT;
+
+// ---- The template's palette and type ----
+const BG = '#faf3f0', BLUSH = '#f5e6e4', CREAM = '#fff9f5', PAPER = '#fffaf8';
+const RED = '#8b2942', REDS = '#c45c6a', REDD = '#6b1d32', GOLD = '#c9a86c', LGOLD = '#ecd6a4', INK = '#4a2c32', INKS = '#7a5a60';
+const FB = ',Mukta,Naskh';
+const RING = `Allura${FB}`, VIBES = `Vibes${FB}`, PLAY = `Play${FB}`, BODY = `Corm${FB}`, SANS = `Nun${FB}`;
+const ART = 'https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%203/assets/images/';
+
+// ---- Data, used exactly as saved. A section with nothing in it is left out. ----
+const val = (v) => str(v).trim().replace(/\s+/g, ' ');
+const groom = val(D?.couple?.groomName), bride = val(D?.couple?.brideName);
+const gPre = val(D?.couple?.groomParentPrefix), gPar = val(D?.couple?.groomParentsName);
+const bPre = val(D?.couple?.brideParentPrefix), bPar = val(D?.couple?.brideParentsName);
+const parseDate = (v) => {
+  const s = str(v).trim();
+  if (!s) return null;
+  const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(s) ? `${s}T00:00:00` : s);
+  return Number.isNaN(d.getTime()) ? null : d;
+};
+const date = parseDate(D?.ceremony?.date);
+const time = val(D?.ceremony?.time);
+const left = date ? Math.max(0, Math.floor((date.getTime() - window.__NOW) / 1000)) : 0;
+const FIN = [Math.floor(left / 86400), Math.floor((left % 86400) / 3600), Math.floor((left % 3600) / 60), left % 60];
+const quote = val(D?.ceremony?.quote), message = val(D?.ceremony?.invitationMessage);
+const address = val(D?.venue?.address);
+const list = (v) => (Array.isArray(v) ? v : []);
+// An event needs its title; the template shows up to four polaroids.
+const events = list(D?.timeline?.items).map((it) => ({ title: val(it?.title), time: val(it?.time) })).filter((e) => e.title).slice(0, 8);
+const captions = list(D?.gallery?.items).map((it) => val(it?.caption)).filter(Boolean).slice(0, 4);
+
+// ---- The cut list: whole bars, so any section may follow any and stay on the beat. ----
+const SEGS = [];
+const add = (key, dur, enter) => SEGS.push({ key, dur, enter });
+add('env', BAR, null);
+add('hero', 2 * BAR, 'panels');
+if (quote) add('quote', quote.length > 100 ? 2 * BAR : BAR, 'rose');
+if (date) add('date', BAR, 'scroll');
+if (gPar || bPar) add('details', BAR, 'frame');
+if (events.length) add('timeline', events.length > 4 ? 2 * BAR : BAR, 'thread');
+if (address) add('venue', BAR, 'pin');
+if (left > 0 || captions.length) add('count', BAR, 'swing');
+if (message) add('message', message.length > 110 ? 2 * BAR : BAR, 'petals');
+add('end', 6 * BEAT, 'bloom');
+let acc = 0;
+SEGS.forEach((s) => { s.start = acc; acc += s.dur; });
+const TOTAL = acc;
+const TR = { panels: 0.72, rose: 0.6, scroll: 0.6, frame: 0.55, thread: 0.6, pin: 0.55, swing: 0.7, petals: 0.6, bloom: 0.35 };
+
+// ---- Helpers ----
+const R = {};
+// User text. Arabic-script names (Urdu, Arabic) stay one piece, because splitting them into letters
+// breaks the joins between them.
+const RTL = /[֐-ࣿיִ-﻿]/;
+function T(parent, value, css, maxW) {
+  const s = str(value);
+  if (!RTL.test(s)) return text(parent, s, css, maxW);
+  const e = text(parent, '', `${css};direction:rtl`, maxW);
+  const sp = document.createElement('span');
+  sp.textContent = s;
+  e.appendChild(sp);
+  e._l = [sp];
+  return e;
+}
+function lines(value, max, count) {
+  const out = [];
+  for (const w of str(value).trim().split(/\s+/).filter(Boolean)) {
+    const last = out[out.length - 1];
+    if (last !== undefined && (last + ' ' + w).length <= max) out[out.length - 1] = `${last} ${w}`;
+    else out.push(w);
+  }
+  if (out.length > count) { out.length = count; out[count - 1] = out[count - 1].replace(/[,.;:!?]*$/, '') + '…'; }
+  return out;
+}
+// A paragraph in even lines, so no word is left alone on the last one.
+function para(value, max, count) {
+  const s = str(value).trim();
+  const n = Math.ceil(s.length / max);
+  return n > count ? lines(s, max, count) : wrap(s, Math.max(1, n), 1);
+}
+// The template's cream page with its soft rose corners.
+function cream(sc) {
+  return mk(sc, 'div', `width:1080px;height:1920px;background:radial-gradient(ellipse at 85% 10%,#fde8e8,transparent 40%),radial-gradient(ellipse at 12% 88%,#fde8e8,transparent 42%),linear-gradient(180deg,${CREAM} 0%,${BG} 100%)`);
+}
+// The template's deep wine sections, with their faint grid.
+function wine(sc) {
+  mk(sc, 'div', 'width:1080px;height:1920px;background:radial-gradient(ellipse at 50% 30%,#7a1f38 0%,#5a1528 55%,#3d0f1a 100%)');
+  return mk(sc, 'div', 'width:1080px;height:1920px;opacity:.5;background-image:linear-gradient(rgba(255,210,220,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,210,220,.07) 1px,transparent 1px);background-size:44px 44px');
+}
+// Section title, rising with a rose rule drawn out beneath it.
+function heading(sc, s, y, color = RED) {
+  const h = text(sc, s, `font:600 96px ${PLAY};letter-spacing:3px;color:${color}`, 920);
+  const l = mk(sc, 'div', `width:360px;height:2px;background:linear-gradient(90deg,transparent,${GOLD} 30%,${GOLD} 70%,transparent)`);
+  const o = text(sc, '❦', `font:400 46px ${PLAY};color:${color === RED ? REDS : LGOLD}`);
+  return (u, start = 0.1) => {
+    const p = outC(seg(u, start, start + 0.6));
+    P(h, { y: y + (1 - p) * 40, a: p, b: (1 - p) * 8 });
+    P(l, { y: y + 82, a: seg(u, start + 0.25, start + 0.5) });
+    l.style.transform += ` scaleX(${outC(seg(u, start + 0.25, start + 0.8))})`;
+    P(o, { y: y + 82, s: Math.max(0.001, outB(seg(u, start + 0.4, start + 0.8), 2)), r: (1 - seg(u, start + 0.4, start + 0.8)) * -90 });
+  };
+}
+function svg(parent, w, h, css = '') {
+  const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  s.setAttribute('width', w); s.setAttribute('height', h); s.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  s.setAttribute('class', 'a'); s.style.cssText = css;
+  parent.appendChild(s);
+  return s;
+}
+function path(s, d, stroke, width) {
+  const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  p.setAttribute('d', d); p.setAttribute('fill', 'none'); p.setAttribute('stroke', stroke);
+  p.setAttribute('stroke-width', width); p.setAttribute('stroke-linecap', 'round'); p.setAttribute('pathLength', '1');
+  p.style.strokeDasharray = '1 1';
+  s.appendChild(p);
+  return p;
+}
+const draw = (p, k) => { p.style.strokeDashoffset = String(1 - cl(k)); };
+// A hand-drawn rectangle: the template's vine border.
+function vineRect(x0, y0, x1, y1, wob, seed) {
+  const r = rng(seed), pts = [];
+  const side = (ax, ay, bx, by, n) => { for (let i = 0; i < n; i++) { const k = i / n; pts.push([lerp(ax, bx, k) + (r() - 0.5) * wob, lerp(ay, by, k) + (r() - 0.5) * wob]); } };
+  side(x0, y1, x0, y0, 9); side(x0, y0, x1, y0, 6); side(x1, y0, x1, y1, 9); side(x1, y1, x0, y1, 6);
+  pts.push(pts[0]);
+  let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+  for (let i = 1; i < pts.length; i++) {
+    const [px, py] = pts[i - 1], [x, y] = pts[i];
+    d += ` Q${px.toFixed(1)} ${py.toFixed(1)} ${((px + x) / 2).toFixed(1)} ${((py + y) / 2).toFixed(1)}`;
+  }
+  return d + ` L${pts[pts.length - 1][0].toFixed(1)} ${pts[pts.length - 1][1].toFixed(1)}`;
+}
+const fmt = (d, o) => d.toLocaleDateString('en-GB', o);
+
+// ================= Scenes (in cut order, so a later scene draws over an earlier one) =================
+
+// ---- The envelope: two panels meeting at a crease, held by the "Save the Date" seal ----
+const panelGap = (p) => 600 * ioC(cl(p));
+{
+  const sc = scene(stage);
+  mk(sc, 'div', `width:1080px;height:1920px;background:${BLUSH}`);
+  const cam = mk(sc, 'div', 'width:1080px;height:1920px');
+  // The envelope art is drawn once, then shown as two halves that part.
+  const art = document.createElement('canvas');
+  art.width = 1080; art.height = 1920;
+  const g = art.getContext('2d');
+  const base = g.createLinearGradient(0, 0, 0, 1920);
+  base.addColorStop(0, '#fffdf9'); base.addColorStop(1, '#f5e6e4');
+  g.fillStyle = base; g.fillRect(0, 0, 1080, 1920);
+  g.fillStyle = 'rgba(160,110,110,.05)';
+  for (let x = 0; x < 1080; x += 6) g.fillRect(x, 0, 2, 1920);
+  // The bottom fold, a shade darker.
+  g.fillStyle = 'rgba(214,170,165,.28)';
+  g.beginPath(); g.moveTo(0, 1920); g.lineTo(540, 1180); g.lineTo(1080, 1920); g.closePath(); g.fill();
+  // Soft creases from the corners, as on the template's cover.
+  const crease = (ax, ay, bx, by) => {
+    const lg = g.createLinearGradient(ax, ay, bx, by);
+    lg.addColorStop(0, 'rgba(255,255,255,0)'); lg.addColorStop(0.5, 'rgba(255,255,255,.9)'); lg.addColorStop(1, 'rgba(255,255,255,0)');
+    g.strokeStyle = lg; g.lineWidth = 26; g.beginPath(); g.moveTo(ax, ay); g.lineTo(bx, by); g.stroke();
+    g.strokeStyle = 'rgba(190,140,140,.18)'; g.lineWidth = 2; g.beginPath(); g.moveTo(ax, ay); g.lineTo(bx, by); g.stroke();
+  };
+  crease(0, 0, 540, 900); crease(1080, 0, 540, 900); crease(0, 1920, 540, 1180); crease(1080, 1920, 540, 1180);
+  const half = (side) => {
+    const c = mk(cam, 'canvas', '');
+    c.width = 540; c.height = 1920;
+    c.getContext('2d').drawImage(art, side * 540, 0, 540, 1920, 0, 0, 540, 1920);
+    // A shadow along the inner edge, so the parting reads.
+    const e = mk(c.parentNode, 'div', `width:60px;height:1920px;background:linear-gradient(${side ? 90 : 270}deg,rgba(90,30,40,.22),transparent)`);
+    return [c, e];
+  };
+  const [L, LE] = half(0), [Rt, RE] = half(1);
+  const creaseLine = mk(cam, 'div', 'width:2px;height:1920px;background:linear-gradient(180deg,transparent,rgba(160,100,100,.35) 20%,rgba(160,100,100,.35) 80%,transparent)');
+  // The seal, in two halves that go with their panels.
+  // Each half is cut from a box wide enough to keep the seal's shadow whole.
+  const sealHalf = (side) => {
+    const w = mk(cam, 'div', `width:440px;height:440px;clip-path:inset(0 ${side ? 0 : 220}px 0 ${side ? 220 : 0}px)`);
+    mk(w, 'div', 'left:70px;top:70px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#9e2d4a 0%,#7a1f38 38%,#5a1528 72%,#3d0f1a 100%);box-shadow:0 18px 40px rgba(61,15,26,.45),inset 0 -8px 18px rgba(0,0,0,.35)');
+    mk(w, 'div', 'left:94px;top:94px;width:246px;height:246px;border-radius:50%;border:3px solid rgba(252,232,236,.55)');
+    [['Save', 72, 168], ['the', 40, 222], ['Date', 72, 272]].forEach(([s, f, y]) => {
+      const l = mk(w, 'div', `left:0;width:440px;top:${y - f / 2}px;text-align:center;font:400 ${f}px/1 ${VIBES};color:#fce8ec`);
+      l.textContent = s;
+    });
+    return w;
+  };
+  const sL = sealHalf(0), sR = sealHalf(1);
+  const ring = mk(cam, 'div', `width:330px;height:330px;border-radius:50%;border:4px solid ${GOLD}`);
+  // The tassel that the guest pulls.
+  const tassel = mk(cam, 'div', 'width:120px;height:600px;transform-origin:50% 0');
+  mk(tassel, 'div', `left:58px;top:0;width:4px;height:350px;background:linear-gradient(180deg,#5a1528,${GOLD})`);
+  mk(tassel, 'div', 'left:34px;top:340px;width:52px;height:78px;border-radius:12px 12px 6px 6px;background:linear-gradient(90deg,#5a1528,#9e2d4a 45%,#5a1528)');
+  mk(tassel, 'div', `left:30px;top:350px;width:60px;height:8px;border-radius:4px;background:${GOLD}`);
+  for (let i = 0; i < 19; i++) mk(tassel, 'div', `left:${36 + i * 2.6}px;top:412px;width:2px;height:${150 + (i % 3) * 8}px;background:linear-gradient(180deg,#7a1f38,#5a1528);transform:rotate(${(9 - i) * 0.9}deg);transform-origin:50% 0`);
+  const cap = text(sc, 'Pull the tassel to open', `font:600 40px ${SANS};letter-spacing:5px;color:${INKS}`, 900);
+  R.env = { sc, f(u) {
+    const p = seg(u, BAR, BAR + TR.panels), gap = panelGap(p);
+    cam.style.transform = `scale(${1 + seg(u, 0, BAR) * 0.04 + inC(p) * 0.08})`;
+    P(L, { x: 270 - gap, y: 960 }); P(LE, { x: 510 - gap, y: 960 });
+    P(Rt, { x: 810 + gap, y: 960 }); P(RE, { x: 570 + gap, y: 960 });
+    P(creaseLine, { y: 960, a: 1 - seg(u, BAR - 0.1, BAR + 0.1) });
+    // The seal beats with the music, then is pulled apart on the first strong beat.
+    const beatIn = u < BAR ? (u % BEAT) : 9;
+    const pulse = 1 + 0.06 * Math.exp(-beatIn * 7);
+    P(sL, { x: 540 - gap, y: 960, s: pulse }); P(sR, { x: 540 + gap, y: 960, s: pulse });
+    P(ring, { y: 960, s: u < BAR ? 1 + (beatIn / BEAT) * 0.5 : 1, a: u < BAR ? (1 - beatIn / BEAT) * 0.75 : 0 });
+    // The tassel sways, then is tugged on the last beat before the seal gives.
+    const tug = outB(seg(u, 3 * BEAT, 3 * BEAT + 0.3), 2) * (1 - seg(u, 3 * BEAT + 0.35, BAR));
+    tassel.style.transform = `translate(${150 - 60 - gap}px,${-10 + tug * 110}px) rotate(${Math.sin(u * 2.4) * 5 * (1 - tug)}deg)`;
+    P(cap, { y: 1420, a: (0.6 + 0.4 * Math.sin(u * 3)) * (1 - seg(u, 3 * BEAT, 3 * BEAT + 0.3)) * seg(u, 0.1, 0.5) });
+  } };
+}
+
+// ---- Hero: vine border, roses, Bismillah, the ring with the names, and the couple ----
+{
+  const sc = scene(stage);
+  cream(sc);
+  const cam = mk(sc, 'div', 'width:1080px;height:1920px');
+  const frame = svg(cam, 1080, 1920);
+  const v1 = path(frame, vineRect(34, 34, 1046, 1886, 10, 4), RED, 3);
+  const v2 = path(frame, vineRect(48, 48, 1032, 1872, 8, 9), GOLD, 2.5);
+  const dots = Array.from({ length: 22 }, (_, i) => {
+    const k = i / 22, per = k * 4, s = Math.floor(per), f = per - s;
+    const [x, y] = [[41, lerp(1879, 41, f)], [lerp(41, 1039, f), 41], [1039, lerp(41, 1879, f)], [lerp(1039, 41, f), 1879]][s];
+    return mk(cam, 'div', `left:${x - 7}px;top:${y - 10}px;width:14px;height:20px;border-radius:50%;background:${i % 3 ? REDS : GOLD};transform-origin:50% 50%`);
+  });
+  const vine = im(cam, `${ART}red-3.png`, 340, 633, 'transform-origin:20% 0');
+  const roses = im(cam, `${ART}red-1.png`, 470, 513, 'transform-origin:80% 20%');
+  // The Ganesh invocation that opens a Hindu wedding card, with gold rules either side.
+  const BY = 300;
+  const ganesh = text(cam, '॥ श्री गणेशाय नमः ॥', `font:400 66px Rozha,Mukta;color:${RED}`, 640);
+  const gl = mk(cam, 'div', `width:520px;height:2px;background:linear-gradient(90deg,transparent,${GOLD} 25%,${GOLD} 75%,transparent)`);
+  const gd = mk(cam, 'div', `width:14px;height:14px;background:${GOLD}`);
+  // The ring: its circle is centred in the image with a radius of 159px of 360.
+  const RY = 810;
+  const ring = im(cam, `${ART}red-ring-2.png`, 860, 860);
+  // A long name takes two lines inside the ring rather than shrinking to nothing.
+  const nameBlock = (name) => {
+    const two = graphemes(name).length > 13 && /\s/.test(name);
+    const fs = two ? 104 : 150;
+    return { fs, two, els: (two ? wrap(name, 2, 1) : [name]).map((l) => T(cam, l, `font:400 ${fs}px ${RING};color:${RED}`, two ? 540 : 560)) };
+  };
+  const nG = nameBlock(groom);
+  const amp = text(cam, '&', `font:italic 400 92px ${PLAY};color:${REDS}`);
+  const nB = nameBlock(bride);
+  // The couple stand at the bottom left; the figure's feet are at 643px of the image's 666.
+  const CS = 640 / 375;
+  const couple = im(cam, `${ART}red-gAndb.png`, 640, 1137, 'transform-origin:50% 100%');
+  const glow = mk(cam, 'div', 'width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(253,232,232,.95),transparent 65%)');
+  cam.insertBefore(glow, ring);
+  R.hero = { sc, f(u) {
+    // The camera settles in as the panels part, then drifts closer.
+    const enter = seg(u, 0, TR.panels);
+    cam.style.transform = `scale(${lerp(1.1, 1, outC(enter)) + seg(u, 1, 2 * BAR) * 0.035}) translateY(${seg(u, 1, 2 * BAR) * 14}px)`;
+    draw(v1, seg(u, 0.25, 1.7)); draw(v2, seg(u, 0.4, 1.85));
+    dots.forEach((d, i) => { const p = outB(seg(u, 1.6 + i * 0.03, 1.9 + i * 0.03), 2.5); d.style.transform = `scale(${Math.max(0.001, p)}) rotate(${i * 40}deg)`; });
+    const vp = outC(seg(u, 0.25, 1.3));
+    vine.style.transform = `translate(${-70 - (1 - vp) * 420}px,${-10}px) rotate(${Math.sin(u * 1.4) * 1.6}deg)`;
+    const rp = outC(seg(u, 0.4, 1.4));
+    roses.style.transform = `translate(${670 + (1 - rp) * 500}px,${-150 - (1 - rp) * 200}px) rotate(${(1 - rp) * 25 + Math.sin(u * 1.1 + 1) * 1.4}deg) scale(${lerp(0.8, 1, rp)})`;
+    // The invocation is written in from the left, on the second beat.
+    const bp = seg(u, BEAT, BEAT + 0.9);
+    P(ganesh, { y: BY, a: cl(bp * 3), s: lerp(1.04, 1, outC(bp)) });
+    ganesh.style.clipPath = `inset(-30% ${(1 - ioC(bp)) * 100}% -30% -5%)`;
+    const lp = outC(seg(u, BEAT + 0.6, BEAT + 1.2));
+    P(gl, { y: BY + 62, a: lp }); gl.style.transform += ` scaleX(${lp})`;
+    P(gd, { y: BY + 62, r: 45, s: Math.max(0.001, outB(seg(u, BEAT + 0.8, BEAT + 1.2), 2.4)) });
+    // The ring draws itself round, then turns slowly.
+    const ringP = seg(u, 1.1, 2.3);
+    P(ring, { y: RY, r: lerp(-40, 0, outC(ringP)) + Math.sin(u * 0.8) * 1.5, s: lerp(0.9, 1, outC(ringP)) });
+    ring.style.webkitMaskImage = ring.style.maskImage = ringP >= 1 ? '' : `conic-gradient(#000 ${ringP * 360}deg,transparent ${ringP * 360 + 0.5}deg)`;
+    P(glow, { y: RY, a: outC(ringP) * 0.9, s: 1 + 0.03 * Math.sin(u * 2) });
+    // Names are written into the ring, groom on the third beat, bride on the downbeat after.
+    const wr = (b, at, y, x, up) => {
+      const lh = b.fs * 0.92, n = b.els.length;
+      b.els.forEach((el, i) => {
+        const p = seg(u, at + i * 0.3, at + i * 0.3 + 0.75);
+        P(el, { x: b.two ? 540 : x, y: y + (up ? i - (n - 1) : i) * lh, a: cl(p * 4), b: (1 - p) * 3 });
+        el.style.clipPath = `inset(-40% ${(1 - ioC(p)) * 100}% -40% -10%)`;
+      });
+    };
+    wr(nG, 3 * BEAT, RY - 110, 515, true);
+    P(amp, { y: RY + 5, s: Math.max(0.001, outB(seg(u, BAR, BAR + 0.4), 2.2)), a: cl(seg(u, BAR, BAR + 0.2)) });
+    wr(nB, BAR + BEAT, RY + 120, 565, false);
+    // The couple rise into place and sway with the music.
+    const cp = outC(seg(u, 0.9, 2.1));
+    couple.style.transform = `translate(${330 - 320}px,${1880 - 643 * CS + (1 - cp) * 700}px) rotate(${Math.sin(u * 2 * Math.PI / (2 * BAR)) * 0.8}deg)`;
+    couple.style.opacity = cl(cp * 2);
+  } };
+}
+
+// ---- Quote ----
+{
+  const sc = scene(stage);
+  cream(sc);
+  const big = quote.length > 100;
+  const ls = para(`“${quote}”`, big ? 30 : 20, 10);
+  const fs = big ? (ls.length > 8 ? 52 : 58) : 84, lh = fs * 1.36;
+  const el = ls.map((l) => T(sc, l, `font:italic 500 ${fs}px ${BODY};color:${INK}`, 900));
+  const top = 900 - ((ls.length - 1) * lh) / 2;
+  const o1 = text(sc, '❦', `font:400 90px ${PLAY};color:${REDS}`), o2 = text(sc, '❦', `font:400 90px ${PLAY};color:${REDS}`);
+  const vine = im(sc, `${ART}red-3.png`, 300, 558, 'transform-origin:20% 0');
+  const roses = im(sc, `${ART}red-1.png`, 420, 459, 'opacity:.9');
+  R.quote = { sc, f(u, s) {
+    vine.style.transform = `translate(${-60 - (1 - outC(seg(u, 0.1, 1))) * 300}px,${-20}px) rotate(${Math.sin(u * 1.3) * 1.5}deg)`;
+    const per = Math.max(0.22, Math.min(0.5, (s.dur - 1.4) / el.length));
+    P(o1, { y: top - 150, r: (1 - outB(seg(u, 0.2, 0.7), 1.8)) * -180, s: Math.max(0.001, outB(seg(u, 0.2, 0.7), 1.8)) });
+    el.forEach((e, i) => {
+      const at = 0.45 + i * per, p = outC(seg(u, at, at + 0.6));
+      P(e, { y: top + i * lh + (1 - p) * 26, a: p, b: (1 - p) * 6 });
+    });
+    const end = 0.45 + el.length * per;
+    P(o2, { y: top + (el.length - 1) * lh + 150, r: (1 - outB(seg(u, end, end + 0.5), 1.8)) * 180, s: Math.max(0.001, outB(seg(u, end, end + 0.5), 1.8)) });
+    roses.style.transform = `translate(${760 + Math.sin(u * 0.9) * 8}px,${1440 - seg(u, 0, s.dur) * 30}px) rotate(${170 + Math.sin(u) * 2}deg)`;
+  } };
+}
+
+// ---- Save the Date: the gold scroll, scratched open ----
+{
+  const sc = scene(stage);
+  wine(sc);
+  const head = heading(sc, 'Save the Date', 360, '#f8d7de');
+  const hint = text(sc, 'Scratch to reveal the date', `font:600 38px ${SANS};letter-spacing:3px;color:rgba(252,232,236,.75)`);
+  const W = 760, H = 700, Y = 1000;
+  const panel = mk(sc, 'div', `width:${W}px;height:${H}px;overflow:hidden;background:linear-gradient(180deg,#fffaf3,#f6e6dc);box-shadow:0 30px 70px rgba(20,0,8,.5)`);
+  const inner = mk(panel, 'div', `left:0;top:0;width:${W}px;height:${H}px`);
+  const rows = [];
+  const add2 = (s, css, y, maxW = 680) => { const e = text(inner, s, css, maxW); rows.push([e, y]); return e; };
+  if (date) {
+    add2(fmt(date, { month: 'long' }).toUpperCase(), `font:700 60px ${PLAY};letter-spacing:14px;color:#a67c3d`, 190);
+    add2(`${fmt(date, { weekday: 'long' })}, ${date.getDate()}`, `font:600 104px ${PLAY};color:${REDD}`, 320);
+    add2(String(date.getFullYear()), `font:400 76px ${PLAY};letter-spacing:10px;color:${RED}`, 440);
+  }
+  const tm = time ? T(inner, time, `font:700 48px ${SANS};letter-spacing:2px;color:${INKS}`, 660) : null;
+  if (tm) rows.push([tm, 560]);
+  const foil = mk(panel, 'canvas', '');
+  foil.width = W; foil.height = H;
+  const f = foil.getContext('2d');
+  const rod = () => mk(sc, 'div', `width:${W + 80}px;height:56px;border-radius:28px;background:linear-gradient(180deg,#f3dba0 0%,#c9a86c 45%,#8f6d32 100%);box-shadow:0 10px 24px rgba(0,0,0,.4)`);
+  const rodT = rod(), rodB = rod();
+  const coin = mk(sc, 'div', `width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3c4,${GOLD} 55%,#8a6a1c);box-shadow:0 0 30px rgba(255,220,140,.9)`);
+  const sparks = Array.from({ length: 26 }, (_, i) => mk(sc, 'div', `width:14px;height:14px;background:${i % 2 ? LGOLD : '#fff3d6'};clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)`));
+  const route = (p) => { const n = 5, k = p * n, r = Math.floor(k), x = r % 2 ? 1 - (k - r) : k - r; return [70 + x * (W - 140), 90 + (Math.min(r, n - 1) + (k - r)) * ((H - 180) / n)]; };
+  const paint = () => {
+    f.globalCompositeOperation = 'source-over';
+    const g = f.createLinearGradient(0, 0, W, H);
+    g.addColorStop(0, '#e9c9a8'); g.addColorStop(0.5, '#d7a08f'); g.addColorStop(1, '#b5707a');
+    f.fillStyle = g; f.fillRect(0, 0, W, H);
+    f.fillStyle = 'rgba(255,240,230,.45)';
+    const r = rng(5);
+    for (let i = 0; i < 160; i++) { f.beginPath(); f.arc(r() * W, r() * H, 1 + r() * 2, 0, 6.3); f.fill(); }
+    f.fillStyle = 'rgba(107,29,50,.75)'; f.font = `700 44px ${SANS}`; f.textAlign = 'center';
+    f.fillText('Scratch here', W / 2, H / 2 + 14);
+  };
+  const bang = 3 * BEAT;
+  R.date = { sc, f(u) {
+    head(u);
+    P(hint, { y: 470, a: seg(u, 0.4, 0.7) * (1 - seg(u, bang, bang + 0.3)) });
+    // The scroll unrolls from its middle.
+    const open = ioC(seg(u, 0.3, 0.95)), h = Math.max(1, H * open);
+    P(panel, { y: Y });
+    panel.style.clipPath = `inset(${(H - h) / 2}px 0 ${(H - h) / 2}px 0)`;
+    P(rodT, { y: Y - h / 2 - 20 }); P(rodB, { y: Y + h / 2 + 20 });
+    paint();
+    const p = seg(u, 1.0, bang - 0.05);
+    f.globalCompositeOperation = 'destination-out';
+    f.lineCap = 'round'; f.lineJoin = 'round'; f.lineWidth = 150;
+    f.beginPath();
+    for (let i = 0; i <= 70; i++) { const [x, y] = route((i / 70) * p); i ? f.lineTo(x, y) : f.moveTo(x, y); }
+    if (p > 0) f.stroke();
+    if (u >= bang) f.clearRect(0, 0, W, H);
+    const [cx, cy] = route(p);
+    P(coin, { x: 540 - W / 2 + cx, y: Y - H / 2 + cy, a: p > 0 && p < 1 ? 1 : 0, r: u * 420 });
+    // The date pops on the third beat, with a burst of gold.
+    const pop = u >= bang ? 1 + 0.08 * Math.exp(-(u - bang) * 7) : 1;
+    rows.forEach(([e, y]) => P(e, { x: W / 2, y, s: pop }));
+    const b = seg(u, bang, bang + 0.8);
+    sparks.forEach((e, i) => {
+      const a = (i / sparks.length) * 6.283 + i * 0.4, d = outC(b) * (380 + (i % 4) * 70);
+      P(e, { x: 540 + Math.cos(a) * d, y: Y + Math.sin(a) * d * 0.8, s: 1.6 + (i % 3), r: b * 200, a: b > 0 && b < 1 ? 1 - b : 0 });
+    });
+  } };
+}
+
+// ---- Groom and bride, with their parents ----
+{
+  const sc = scene(stage);
+  cream(sc);
+  const card = mk(sc, 'div', `width:920px;height:1220px;border-radius:30px;background:linear-gradient(165deg,#fffefb,#fff7f2 42%,#fffaf6);box-shadow:0 30px 80px rgba(139,41,66,.16)`);
+  const cardIn = mk(sc, 'div', `width:880px;height:1180px;border-radius:24px;border:2px solid rgba(201,168,108,.7);box-shadow:inset 0 0 0 8px rgba(255,255,255,.8),inset 0 0 0 10px rgba(196,92,106,.35)`);
+  const top = text(sc, 'शुभ विवाह', `font:400 78px Rozha,Mukta;color:${RED}`, 820);
+  const greet = text(sc, 'With joy and gratitude', `font:600 34px ${PLAY};letter-spacing:6px;color:${REDS};text-transform:uppercase`, 820);
+  const person = (role, name, pre, par) => {
+    const box = mk(sc, 'div', 'width:780px;height:360px;border-radius:24px;background:rgba(255,255,255,.85);border:2px solid rgba(196,92,106,.18);box-shadow:0 14px 36px rgba(139,41,66,.1)');
+    const items = [[text(box, role, `font:700 30px ${SANS};letter-spacing:6px;color:${REDS};text-transform:uppercase`), 52]];
+    // A long name takes two smaller lines.
+    const two = graphemes(name).length > 18 && /\s/.test(name);
+    const nl = two ? wrap(name, 2, 1) : [name];
+    nl.forEach((l, i) => items.push([T(box, l, `font:400 ${two ? 76 : 112}px ${VIBES};color:${RED}`, 700), two ? 112 + i * 68 : 140]));
+    let y = two ? 230 : 222;
+    if (!par) items.slice(1).forEach((it) => { it[1] += 40; });
+    if (par) {
+      if (pre) { items.push([T(box, pre, `font:700 30px ${SANS};letter-spacing:5px;color:${INKS};text-transform:uppercase`, 700), y]); y += 52; }
+      items.push([T(box, par, `font:500 44px ${PLAY};color:${INK}`, 720), y + (pre ? 6 : 30)]);
+    }
+    return { box, items };
+  };
+  const pg = person('Groom', groom, gPre, gPar), pb = person('Bride', bride, bPre, bPar);
+  const dl = mk(sc, 'div', `width:200px;height:2px;background:${GOLD}`), dr = mk(sc, 'div', `width:200px;height:2px;background:${GOLD}`);
+  const and = text(sc, 'and', `font:400 80px ${VIBES};color:${REDS}`);
+  R.details = { sc, f(u) {
+    P(card, { y: 900 }); P(cardIn, { y: 900 });
+    const tp = outC(seg(u, 0.3, 0.8));
+    P(top, { y: 365, a: tp, s: lerp(0.9, 1, tp) });
+    P(greet, { y: 440, a: outC(seg(u, 0.45, 0.9)) });
+    [[pg, -1, BEAT * 0.5, 660], [pb, 1, BEAT * 1.5, 1200]].forEach(([pp, side, at, y]) => {
+      const p = seg(u, at, at + 0.6), e = outB(p, 1.3);
+      P(pp.box, { x: 540 + side * (1 - e) * 1000, y, r: side * (1 - e) * 6 });
+      pp.items.forEach(([el, iy], i) => {
+        el.style.transform = `translate(390px,${iy}px) translate(-50%,-50%)`;
+        el.style.opacity = cl(seg(u, at + 0.3 + i * 0.1, at + 0.6 + i * 0.1));
+      });
+    });
+    const dp = outC(seg(u, BEAT * 1.2, BEAT * 1.2 + 0.6));
+    P(and, { y: 920, s: Math.max(0.001, outB(seg(u, BEAT * 1.1, BEAT * 1.1 + 0.4), 2)) });
+    P(dl, { x: 540 - 70 - 100 * dp, y: 930, a: dp }); dl.style.transform += ` scaleX(${dp})`;
+    P(dr, { x: 540 + 70 + 100 * dp, y: 930, a: dp }); dr.style.transform += ` scaleX(${dp})`;
+  } };
+}
+
+// ---- Event timeline ----
+{
+  const sc = scene(stage);
+  cream(sc);
+  const head = heading(sc, 'Event Timeline', 330);
+  // Up to four events get tall cards; more get one-row cards with the time on the right.
+  const n = events.length, compact = n > 4, top = compact ? 500 : 540, room = (compact ? 1500 : 1460) - top;
+  const gap = Math.min(250, room / Math.max(1, n)), ch = compact ? gap - 18 : Math.min(190, gap - 26);
+  const tf = compact ? 46 : 56, mf = compact ? 36 : 40;
+  const LX = 210;
+  const line = mk(sc, 'div', `width:4px;background:linear-gradient(180deg,${RED},${REDS})`);
+  const items = events.map((ev, i) => {
+    const y = top + gap * i + gap / 2;
+    const dot = mk(sc, 'div', `width:44px;height:44px;border-radius:50%;background:${PAPER};border:6px solid ${RED};box-sizing:border-box`);
+    const card = mk(sc, 'div', `width:720px;height:${ch}px;border-radius:20px;background:rgba(255,255,255,.92);box-shadow:0 12px 30px rgba(139,41,66,.12);border:2px solid rgba(196,92,106,.14)`);
+    // A long title takes two lines on a tall card.
+    const tl = !compact && ev.title.length > 22 ? wrap(ev.title, 2, 1) : [ev.title];
+    const tfs = tl.length > 1 ? 44 : tf;
+    const t1 = tl.map((l) => T(sc, l, `font:600 ${tfs}px ${PLAY};color:${RED};text-align:left`, compact && ev.time ? 440 : 640));
+    const t2 = ev.time ? T(sc, ev.time, `font:700 ${mf}px ${SANS};letter-spacing:1px;color:${INKS};text-align:left`, compact ? 200 : 640) : null;
+    return { y, dot, card, t1, t2, tfs };
+  });
+  R.timeline = { sc, f(u, s) {
+    head(u);
+    const lp = outC(seg(u, 0.35, 0.35 + Math.min(1.4, s.dur * 0.4)));
+    const len = (gap * n) * lp;
+    line.style.height = `${Math.max(1, len)}px`;
+    line.style.transform = `translate(${LX - 2}px,${top}px)`;
+    // One event per beat, each with its dot and card.
+    const step = n > 1 ? Math.min(BEAT, (s.dur - 1.0) / n) : BEAT;
+    items.forEach((it, i) => {
+      const at = 0.45 + i * step, p = seg(u, at, at + 0.5), e = outB(p, 1.4);
+      P(it.dot, { x: LX, y: it.y, s: Math.max(0.001, outB(seg(u, at, at + 0.35), 2.4)) });
+      P(it.card, { x: 650 + (1 - e) * 600, y: it.y, a: cl(p * 3) });
+      // Text is left-aligned in the card: it is placed by its left edge.
+      const lx = 330 + (1 - e) * 600, op = cl(seg(u, at + 0.15, at + 0.5));
+      const place = (el, y, right) => {
+        el.style.transform = right ? `translate(${lx + 660}px,${y}px) translate(-100%,-50%)` : `translate(${lx}px,${y}px) translate(0,-50%)`;
+        el.style.opacity = op;
+      };
+      const lh = it.tfs * 1.1, k = it.t1.length;
+      if (compact) {
+        place(it.t1[0], it.y);
+        if (it.t2) place(it.t2, it.y, true);
+      } else {
+        const blockTop = it.y - ((k - 1) * lh + (it.t2 ? mf * 1.4 : 0)) / 2;
+        it.t1.forEach((el, j) => place(el, blockTop + j * lh));
+        if (it.t2) place(it.t2, blockTop + (k - 1) * lh + mf * 1.4);
+      }
+    });
+  } };
+}
+
+// ---- Venue ----
+const PIN = { x: 540, y: 820 };
+{
+  const sc = scene(stage);
+  cream(sc);
+  const head = heading(sc, 'Venue', 330);
+  const map = mk(sc, 'div', `width:860px;height:600px;border-radius:26px;overflow:hidden;background:#fbf2ec;box-shadow:0 22px 60px rgba(139,41,66,.2);border:3px solid ${RED}`);
+  const mc = mk(map, 'canvas', '');
+  mc.width = 860; mc.height = 600;
+  const g = mc.getContext('2d'), r = rng(31);
+  // A park, a river, a street grid at a slight angle, and two main roads.
+  g.fillStyle = '#e2eedd'; g.beginPath(); g.roundRect(70, 60, 230, 170, 30); g.fill();
+  g.strokeStyle = '#d6e7f2'; g.lineWidth = 46; g.lineCap = 'round';
+  g.beginPath(); g.moveTo(-40, 520); g.bezierCurveTo(260, 430, 520, 600, 900, 470); g.stroke();
+  g.save(); g.translate(430, 300); g.rotate(-0.12); g.translate(-430, -300);
+  g.strokeStyle = '#efe2dc'; g.lineWidth = 8;
+  for (let x = -100; x < 1000; x += 92 + r() * 20) { g.beginPath(); g.moveTo(x, -100); g.lineTo(x, 700); g.stroke(); }
+  for (let y = -60; y < 700; y += 84 + r() * 18) { g.beginPath(); g.moveTo(-100, y); g.lineTo(1000, y); g.stroke(); }
+  g.restore();
+  g.strokeStyle = '#f0c9bd'; g.lineWidth = 20;
+  g.beginPath(); g.moveTo(-20, 330); g.bezierCurveTo(300, 280, 560, 360, 880, 250); g.stroke();
+  g.beginPath(); g.moveTo(560, -20); g.bezierCurveTo(520, 200, 600, 400, 520, 620); g.stroke();
+  const pin = mk(sc, 'div', `width:110px;height:110px;border-radius:50% 50% 50% 0;background:radial-gradient(circle at 40% 35%,#c45c6a,${RED} 60%,#5a1528)`);
+  mk(pin, 'div', `left:35px;top:35px;width:40px;height:40px;border-radius:50%;background:${PAPER}`);
+  const rip = [0, 1, 2].map(() => mk(sc, 'div', `width:180px;height:70px;border-radius:50%;border:4px solid ${RED}`));
+  const va = para(address, 28, 3).map((l) => T(sc, l, `font:600 58px ${BODY};color:${INK}`, 940));
+  R.venue = { sc, f(u) {
+    head(u);
+    const mp = outC(seg(u, 0.15, 0.65));
+    P(map, { y: 800 + (1 - mp) * 120, a: mp, s: lerp(0.94, 1, mp) });
+    mc.style.transform = `scale(${1.08 - u * 0.02}) translate(${-u * 6}px,0)`;
+    const drop = seg(u, BEAT, BEAT + 0.4), land = u >= BEAT + 0.4, lt = u - BEAT - 0.4;
+    const py = lerp(380, PIN.y, outB(drop, 1.1)) + (land ? -Math.abs(Math.sin(lt * 7)) * 22 * Math.exp(-lt * 3) : 0);
+    pin.style.transform = `translate(${PIN.x}px,${py}px) translate(-50%,-100%) rotate(-45deg)`;
+    pin.style.opacity = cl(drop * 4);
+    rip.forEach((e, i) => {
+      const w = (((lt - i * 0.24) % BEAT) + BEAT) % BEAT / BEAT;
+      P(e, { x: PIN.x, y: PIN.y + 20, s: 0.4 + w * 1.6, a: land ? (1 - w) * 0.7 : 0 });
+    });
+    va.forEach((e, i) => { P(e, { y: 1230 + i * 80 }); reveal(e, u, 1.2 + i * 0.15, 0.02, 0.4, 40); });
+  } };
+}
+
+// ---- Counting down, with the polaroids hanging on threads ----
+{
+  const sc = scene(stage);
+  wine(sc);
+  const counting = left > 0, k = captions.length;
+  const head = counting ? heading(sc, 'Counting Down', 340, '#f8d7de') : null;
+  const CY = k ? 640 : 900;
+  const cells = counting ? ['Days', 'Hours', 'Minutes', 'Seconds'].map((lab) => {
+    const c = mk(sc, 'div', 'width:210px;height:220px;border-radius:18px;background:rgba(255,248,245,.1);border:2px solid rgba(240,184,194,.3);box-shadow:0 10px 30px rgba(0,0,0,.2)');
+    c.v = mk(c, 'div', `left:0;right:0;top:44px;text-align:center;font:600 92px/1 ${PLAY};color:#fff4f1`);
+    const l = mk(c, 'div', `left:0;right:0;top:152px;text-align:center;font:700 26px ${SANS};letter-spacing:3px;color:${LGOLD};text-transform:uppercase`);
+    l.textContent = lab;
+    return c;
+  }) : [];
+  const PY = counting ? 1110 : 960, PW = counting ? 230 : 280, PH = PW * 1.3;
+  const threads = svg(sc, 1080, 1920);
+  const rope = counting ? null : path(threads, 'M -20 520 Q 540 640 1100 520', GOLD, 4);
+  const lines2 = captions.map(() => path(threads, 'M0 0', GOLD, 2.5));
+  const pol = captions.map((c, i) => {
+    const w = mk(sc, 'div', `width:${PW}px;height:${PH}px;transform-origin:50% -60px`);
+    mk(w, 'div', `left:0;top:0;width:${PW}px;height:${PH}px;background:#fffdf9;box-shadow:0 18px 36px rgba(0,0,0,.35)`);
+    const hole = mk(w, 'div', `left:${PW * 0.08}px;top:${PW * 0.08}px;width:${PW * 0.84}px;height:${PW * 0.9}px;overflow:hidden;background:linear-gradient(160deg,#fde8e8,#f5d4d6)`);
+    // The template's roses in each polaroid, each framed differently.
+    im(hole, `${ART}red-1.png`, PW * 1.2, PW * 1.31, `left:${-PW * (0.2 + (i % 2) * 0.25)}px;top:${-PW * (0.15 + (i % 3) * 0.12)}px;transform:rotate(${i * 70}deg)`);
+    const cap = T(w, c, `font:400 ${PW * 0.2}px ${VIBES};color:${RED}`, PW * 0.88);
+    cap.style.transform = `translate(${PW / 2}px,${PW * 1.13}px) translate(-50%,-50%)`;
+    mk(w, 'div', `left:${PW / 2 - 9}px;top:-9px;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3c4,${GOLD})`);
+    return w;
+  });
+  const xs = captions.map((_, i) => (counting && k === 4 ? 180 + i * 240 : 540 + (i - (k - 1) / 2) * (PW + 40)));
+  const settle = [0.95, 1.25, 1.55, 1.85];
+  R.count = { sc, f(u) {
+    if (head) head(u);
+    cells.forEach((c, i) => {
+      const p = seg(u, 0.3 + i * 0.1, 0.8 + i * 0.1), done = u >= settle[i];
+      const spin = Math.sin(i * 91.7 + Math.floor(u * 22) * 13.1) * 43758.5;
+      let v = done ? FIN[i] : Math.floor((spin - Math.floor(spin)) * [100, 24, 60, 60][i]);
+      if (i === 3 && done) v = (FIN[3] - Math.floor(u - settle[3]) + 60) % 60;
+      c.v.textContent = String(v).padStart(2, '0');
+      c.v.style.fontSize = `${[92, 92, 92, 76, 62, 52][Math.min(c.v.textContent.length, 5)]}px`;
+      P(c, { x: 180 + i * 240, y: CY, s: outB(p, 1.6) * (done ? 1 + 0.1 * Math.exp(-(u - settle[i]) * 9) : 1), a: cl(p * 3) });
+    });
+    if (rope) draw(rope, outC(seg(u, 0.1, 0.7)));
+    // Each polaroid drops in on a beat and swings on its thread until it settles.
+    pol.forEach((w, i) => {
+      const at = 0.7 + i * (BEAT / 2), p = seg(u, at, at + 0.45), t = Math.max(0, u - at);
+      const r = (i % 2 ? 1 : -1) * 14 * Math.exp(-t * 1.6) * Math.cos(t * 5.2) + Math.sin(u * 1.6 + i) * 1.5;
+      const y = PY - (1 - outB(p, 1.2)) * 900;
+      w.style.transform = `translate(${xs[i] - PW / 2}px,${y - PH / 2}px) rotate(${r}deg)`;
+      w.style.opacity = cl(p * 4);
+      const topY = counting ? CY + 110 : 520 + 120 * (1 - ((xs[i] - 540) / 560) ** 2);
+      const pinX = xs[i] + Math.sin((r * Math.PI) / 180) * 60, pinY = y - PH / 2;
+      lines2[i].setAttribute('d', `M${xs[i].toFixed(1)} ${topY.toFixed(1)} L${pinX.toFixed(1)} ${pinY.toFixed(1)}`);
+      draw(lines2[i], p);
+    });
+  } };
+}
+
+// ---- The invitation message ----
+{
+  const sc = scene(stage);
+  cream(sc);
+  const big = message.length > 110;
+  const ls = para(message, big ? 30 : 26, 10);
+  const fs = big ? (ls.length > 8 ? 50 : 56) : 64, lh = fs * 1.4;
+  const el = ls.map((l) => T(sc, l, `font:500 ${fs}px ${BODY};color:${INK}`, 900));
+  const blockH = (ls.length - 1) * lh;
+  const top = 820 - blockH / 2;
+  const orn = ['❦', '❦', '❦'].map((s) => text(sc, s, `font:400 60px ${PLAY};color:${REDS}`));
+  const c1 = text(sc, 'Best wishes from', `font:400 100px ${VIBES};color:${RED}`, 900);
+  const c2 = text(sc, 'family & friends', `font:600 46px ${PLAY};letter-spacing:8px;color:${INKS};text-transform:uppercase`, 900);
+  R.message = { sc, f(u, s) {
+    orn.forEach((o, i) => P(o, { x: 460 + i * 80, y: top - 140, s: Math.max(0.001, outB(seg(u, 0.2 + i * 0.1, 0.55 + i * 0.1), 2)) }));
+    const per = Math.max(0.18, Math.min(0.4, (s.dur - 1.8) / el.length));
+    el.forEach((e, i) => {
+      const at = 0.4 + i * per, p = outC(seg(u, at, at + 0.55));
+      P(e, { y: top + i * lh + (1 - p) * 24, a: p, b: (1 - p) * 5 });
+    });
+    const at = 0.4 + el.length * per, cy = top + blockH + 150;
+    P(c1, { y: cy, a: seg(u, at, at + 0.2) }); c1.style.clipPath = `inset(-30% ${(1 - outC(seg(u, at, at + 0.7))) * 100}% -30% -5%)`;
+    P(c2, { y: cy + 100 }); reveal(c2, u, at + 0.35, 0.02, 0.4, 24);
+  } };
+}
+
+// ---- End card ----
+{
+  const sc = scene(stage);
+  wine(sc);
+  const shadow = 'text-shadow:0 2px 14px rgba(30,0,10,.55);';
+  const a1 = text(sc, 'Apni shaadi ka', `font:600 84px ${PLAY};color:#fff;${shadow}`);
+  const a2 = text(sc, 'aisa invitation banaiye', `font:600 84px ${PLAY};color:#fff;${shadow}`, 980);
+  const halo = mk(sc, 'div', 'width:1100px;height:520px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,180,200,.4),transparent 68%)');
+  const logo = mk(sc, 'div', `font:400 170px ${VIBES};white-space:nowrap;background:linear-gradient(100deg,${GOLD} 0%,#ffe8b8 40%,#ffffff 50%,#ffe8b8 60%,${GOLD} 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 30px`);
+  logo.textContent = 'theinvitely.in';
+  const under = mk(sc, 'div', `height:4px;background:linear-gradient(90deg,transparent,${LGOLD},transparent)`);
+  R.end = { sc, f(u) {
+    P(a1, { y: 760 }); reveal(a1, u, 0.5 * BEAT, 0.03);
+    P(a2, { y: 870 }); reveal(a2, u, 1.5 * BEAT, 0.025);
+    const l = outB(seg(u, 3 * BEAT, 3 * BEAT + 0.5), 1.9);
+    P(halo, { y: 1090, s: l * (1 + 0.05 * Math.sin(u * 5)), a: cl(l) * 0.9 });
+    P(logo, { y: 1080, s: Math.max(l, 0.001), a: cl(l * 2) });
+    logo.style.backgroundPosition = `${lerp(130, -40, seg(u, 3 * BEAT + 0.3, 3 * BEAT + 1.6))}% 0`;
+    logo.style.filter = 'drop-shadow(0 3px 10px rgba(0,0,0,.6))';
+    under.style.width = `${outC(seg(u, 3 * BEAT + 0.3, 3 * BEAT + 0.8)) * 700}px`;
+    P(under, { y: 1190 });
+  } };
+}
+
+// ================= Transitions, each taken from the design =================
+const deco = {
+  petalRing: mk(stage, 'div', `border-radius:50%;border:6px solid ${REDS};box-shadow:0 0 0 3px ${GOLD},0 0 50px rgba(196,92,106,.55)`),
+  rose: im(stage, `${ART}red-1.png`, 478, 522),
+  rodT: mk(stage, 'div', 'width:1160px;height:60px;border-radius:30px;background:linear-gradient(180deg,#f3dba0,#c9a86c 45%,#8f6d32);box-shadow:0 10px 24px rgba(0,0,0,.45)'),
+  rodB: mk(stage, 'div', 'width:1160px;height:60px;border-radius:30px;background:linear-gradient(180deg,#f3dba0,#c9a86c 45%,#8f6d32);box-shadow:0 -10px 24px rgba(0,0,0,.35)'),
+  frame: mk(stage, 'div', `box-sizing:border-box;border:10px double ${GOLD};outline:3px solid ${REDS};outline-offset:6px`),
+  thread: mk(stage, 'div', `width:6px;background:${RED};box-shadow:0 0 18px rgba(139,41,66,.6)`),
+  ring: mk(stage, 'div', `border-radius:50%;border:10px solid ${RED};box-shadow:0 0 0 4px ${GOLD},0 0 40px rgba(139,41,66,.5)`),
+  petals: (() => { const e = mk(stage, 'canvas', ''); e.width = 1080; e.height = 1920; return e; })(),
+};
+Object.values(deco).forEach((e) => { e.style.display = 'none'; });
+const PETAL = ['#f0b8c2', '#e8909f', '#c45c6a', '#f5d0d6', '#8b2942'];
+// One generator for all of them: generators seeded close together start out nearly the same.
+const SW = rng(77);
+const sweep = Array.from({ length: 140 }, (_, i) => ({ k: SW(), o: (SW() - 0.5) * 380 * SW(), w: 22 + SW() * 30, c: PETAL[i % 5], a: SW() * 6.28 }));
+function transition(el, type, p) {
+  el.style.clipPath = ''; el.style.opacity = ''; el.style.filter = ''; el.style.transformOrigin = '';
+  if (!(p > 0 && p < 1)) return;
+  const e = outC(p), show = (d) => { d.style.display = 'block'; return d; };
+  if (type === 'panels') {
+    const g = panelGap(p);
+    el.style.clipPath = `inset(0 ${Math.max(0, 540 - g)}px 0 ${Math.max(0, 540 - g)}px)`;
+  }
+  if (type === 'rose') {
+    // A rose blooms towards the camera and the quote opens behind it.
+    const r = lerp(0, 1250, inC(p) * 0.3 + e * 0.7);
+    el.style.clipPath = `circle(${r}px at 540px 960px)`;
+    const g = show(deco.petalRing);
+    g.style.width = g.style.height = `${r * 2}px`;
+    P(g, { y: 960, a: 1 - p * 0.5 });
+    P(show(deco.rose), { y: 960, s: lerp(0.3, 6, inC(p) * 0.5 + p * 0.5), r: p * 80, a: 1 - inC(p) });
+  }
+  if (type === 'scroll') {
+    // The page unrolls like the template's scroll, between two gold rods.
+    const h = lerp(0, 1980, ioC(p));
+    el.style.clipPath = `inset(${960 - h / 2}px 0 ${960 - h / 2}px 0)`;
+    P(show(deco.rodT), { y: 960 - h / 2 - 20, a: 1 - seg(p, 0.75, 1) });
+    P(show(deco.rodB), { y: 960 + h / 2 + 20, a: 1 - seg(p, 0.75, 1) });
+  }
+  if (type === 'frame') {
+    // The details card's double border opens out to the screen's edges.
+    const w = lerp(300, 1080, e), h = lerp(400, 1920, e);
+    el.style.clipPath = `inset(${(1920 - h) / 2}px ${(1080 - w) / 2}px round ${lerp(30, 0, e)}px)`;
+    const f = show(deco.frame);
+    f.style.width = `${w + 20}px`; f.style.height = `${h + 20}px`; f.style.borderRadius = `${lerp(36, 0, e)}px`;
+    P(f, { y: 960, a: 1 - seg(p, 0.6, 1) });
+  }
+  if (type === 'thread') {
+    // The timeline's thread drops down, and the page opens sideways from it.
+    const d = seg(p, 0, 0.4), o = outC(seg(p, 0.3, 1));
+    const t = show(deco.thread);
+    t.style.height = `${Math.max(1, 1920 * outC(d))}px`;
+    t.style.transform = `translate(207px,0)`;
+    t.style.opacity = 1 - seg(p, 0.7, 1);
+    el.style.clipPath = `inset(0 ${(1080 - 210) * (1 - o)}px 0 ${210 * (1 - o)}px)`;
+  }
+  if (type === 'pin') {
+    const r = lerp(0, 1350, e);
+    el.style.clipPath = `circle(${r}px at ${PIN.x}px ${PIN.y}px)`;
+    const g = show(deco.ring);
+    g.style.width = g.style.height = `${r * 2}px`;
+    P(g, { x: PIN.x, y: PIN.y, a: 1 - p * 0.6 });
+  }
+  if (type === 'swing') {
+    // The section swings down into place from the top, like the hanging polaroids.
+    el.style.transformOrigin = '50% -200px';
+    const r = -24 * Math.pow(1 - p, 2) * Math.cos(p * 8);
+    el.style.transform = `translateY(${-(1 - outC(p)) * 600}px) rotate(${r}deg)`;
+    el.style.filter = `drop-shadow(0 30px 40px rgba(0,0,0,${0.5 * (1 - p)}))`;
+  }
+  if (type === 'petals') {
+    // A drift of petals sweeps across and leaves the message behind it.
+    const x = lerp(-700, 2100, e);
+    el.style.clipPath = `polygon(0 0,${x}px 0,${x - 900}px 1920px,0 1920px)`;
+    const c = show(deco.petals), g = c.getContext('2d');
+    g.clearRect(0, 0, 1080, 1920);
+    for (const s of sweep) {
+      const yy = s.k * 1920, xx = x - 900 * s.k + s.o;
+      g.save(); g.translate(xx, yy); g.rotate(s.a + p * 6); g.scale(1, 0.55);
+      g.fillStyle = s.c; g.beginPath(); g.ellipse(0, 0, s.w, s.w * 0.7, 0, 0, 6.3); g.fill(); g.restore();
+    }
+  }
+  if (type === 'bloom') el.style.opacity = cl(p * 1.6);
+}
+
+// ================= Petals on the cream pages, gold dust on the wine ones =================
+const cv = document.createElement('canvas');
+cv.width = 1080; cv.height = 1920;
+stage.appendChild(cv);
+const c = cv.getContext('2d');
+mk(stage, 'div', 'width:1080px;height:1920px;background:radial-gradient(ellipse at 50% 46%,transparent 62%,rgba(60,15,26,.32) 100%)');
+const flash = mk(stage, 'div', 'width:1080px;height:1920px');
+const RN = rng(41);
+const petals = Array.from({ length: 34 }, () => ({ x: RN() * 1080, y: RN() * 2200, v: 110 + RN() * 140, sw: 30 + RN() * 60, f: 0.5 + RN() * 1.1, p: RN() * 6.28, w: 10 + RN() * 10, c: PETAL[Math.floor(RN() * 4)], rs: 1 + RN() * 2.5 }));
+const dust = Array.from({ length: 70 }, () => ({ x: RN() * 1080, y: RN() * 1920, v: 20 + RN() * 50, r: 1 + RN() * 2.6, p: RN() * 6.28, f: 1 + RN() * 3 }));
+const WINE_SCENES = new Set(['date', 'count', 'end']);
+
+function fx(T) {
+  c.clearRect(0, 0, 1080, 1920);
+  const now = SEGS.find((s) => T >= s.start && T < s.start + s.dur) || SEGS[SEGS.length - 1];
+  if (WINE_SCENES.has(now.key)) {
+    for (const d of dust) {
+      const y = (d.y - T * d.v + 1920 * 4) % 1920, tw = 0.4 + 0.6 * Math.abs(Math.sin(T * d.f + d.p));
+      c.fillStyle = `rgba(236,214,164,${0.7 * tw})`;
+      c.beginPath(); c.arc(d.x + Math.sin(T + d.p) * 10, y, d.r, 0, 6.3); c.fill();
+    }
+    return;
+  }
+  // The template's falling petals; they gather pace once the invitation is open.
+  const a = now.key === 'env' ? 0.55 : 0.85;
+  c.globalAlpha = a;
+  for (const p of petals) {
+    const y = (p.y + T * p.v) % 2200 - 140, x = p.x + Math.sin(T * p.f + p.p) * p.sw, sq = 0.3 + 0.7 * Math.abs(Math.sin(T * p.rs + p.p));
+    c.save(); c.translate(x, y); c.rotate(T * p.rs * 0.6 + p.p); c.scale(1, sq);
+    c.fillStyle = p.c; c.beginPath(); c.ellipse(0, 0, p.w, p.w * 0.62, 0, 0, 6.3); c.fill();
+    c.restore();
+  }
+  c.globalAlpha = 1;
+}
+
+const FLASH_COL = { panels: '255,244,236', rose: '255,226,232', scroll: '255,236,200', frame: '255,246,236', thread: '255,232,236', pin: '255,236,236', swing: '255,226,232', petals: '255,232,236', bloom: '255,226,232' };
+
+function render(T) {
+  T = cl(T, 0, TOTAL);
+  const beat = T >= BAR ? (T - BAR) % BEAT : 9;
+  stage.style.transform = `scale(${1 + 0.01 * Math.exp(-beat * 7)})`;
+  Object.values(deco).forEach((e) => { e.style.display = 'none'; });
+  SEGS.forEach((s, i) => {
+    const u = T - s.start, next = SEGS[i + 1];
+    const on = u >= 0 && (u < s.dur + (next ? TR[next.enter] : 0) || i === SEGS.length - 1);
+    const sc = R[s.key].sc;
+    sc.style.display = on ? 'block' : 'none';
+    if (!on) return;
+    sc.style.transform = '';
+    R[s.key].f(u, s);
+    if (s.enter) transition(sc, s.enter, seg(u, 0, TR[s.enter]));
+  });
+  let fa = 0, fc = '255,255,255';
+  SEGS.forEach((s) => {
+    if (!s.enter) return;
+    const u = T - s.start, pk = s.enter === 'panels' || s.enter === 'bloom' ? 0.7 : 0.4;
+    const v = u < 0 ? (u > -0.08 ? pk * (1 + u / 0.08) : 0) : pk * Math.exp(-u * 7);
+    if (v > fa) { fa = v; fc = FLASH_COL[s.enter]; }
+  });
+  const end = seg(T, TOTAL - 0.7, TOTAL);
+  flash.style.background = end > 0 ? `rgba(0,0,0,${end})` : `rgba(${fc},${fa})`;
+  fx(T);
+}
+
+window.__render = render;
+window.__firstBar = BAR;
+window.__ready = ready(stage, [['48px Allura', 'A'], ['48px Vibes', 'A'], ['600 48px Play', 'A'], ['italic 48px Play', 'A'], ['500 48px Corm', 'A'], ['italic 500 48px Corm', 'A'], ['700 48px Nun', 'A'], ['48px Mukta', 'Aक'], ['600 48px Mukta', 'Aक'], ['48px Naskh', 'ب'], ['48px Rozha', 'श्री']], TOTAL);
+</script></body></html>

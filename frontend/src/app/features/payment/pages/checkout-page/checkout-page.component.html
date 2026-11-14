@@ -21,17 +21,30 @@
 
     @default {
       @if (quote(); as q) {
-        <h1 class="pay__title">{{ isLive() ? 'Already live' : 'Publish your invitation' }}</h1>
+        <h1 class="pay__title">{{ isLive() ? 'Your invitation is live' : 'Publish your invitation' }}</h1>
         <p class="pay__sub">
-          @if (isLive()) {
-            This invitation is already published and visible to your guests.
-          } @else if (q.paymentRequired && !q.alreadyPaid) {
+          @if (totalMinor() > 0) {
             You'll be taken to Razorpay's secure page to complete a one-time payment.
-            Your invitation goes live as soon as the payment succeeds.
+            @if (templateDue()) {
+              Your invitation goes live as soon as the payment succeeds.
+            } @else if (!isLive()) {
+              Your invitation goes live right away; the video is ready to download after payment.
+            } @else {
+              Your video is ready to download after payment.
+            }
+          } @else if (isLive()) {
+            Edited it? Publish your changes so your guests see them. If you bought the video, a new
+            one is made from your changes.
           } @else {
             No payment needed — your invitation will go live right away.
           }
         </p>
+
+        @if (canAddVideo()) {
+          <div class="pay__video">
+            <app-reel-preview [eventId]="q.eventId" [autoStart]="true" />
+          </div>
+        }
 
         <div class="pay__card">
           <div class="pay__row">
@@ -39,11 +52,7 @@
             <span class="pay__value">{{ q.templateName }}</span>
           </div>
           <div class="pay__row">
-            <span class="pay__label">Plan</span>
-            <span class="pay__value">One-time · lifetime access</span>
-          </div>
-          <div class="pay__row pay__row--total">
-            <span class="pay__label">Total</span>
+            <span class="pay__label">Invitation</span>
             <span class="pay__value">
               @if (!q.paymentRequired) {
                 Free
@@ -53,6 +62,29 @@
                 {{ price() }}
               }
             </span>
+          </div>
+          @if (canAddVideo()) {
+            <label class="pay__row pay__row--option">
+              <span class="pay__label">
+                <input
+                  type="checkbox"
+                  [checked]="includeVideo()"
+                  [disabled]="state() !== 'ready'"
+                  (change)="toggleVideo($event)"
+                />
+                Add invitation video
+              </span>
+              <span class="pay__value">{{ videoPrice() }}</span>
+            </label>
+          } @else if (q.videoAlreadyPaid) {
+            <div class="pay__row">
+              <span class="pay__label">Invitation video</span>
+              <span class="pay__value">Paid</span>
+            </div>
+          }
+          <div class="pay__row pay__row--total">
+            <span class="pay__label">Total</span>
+            <span class="pay__value">{{ totalMinor() > 0 ? total() : 'Free' }}</span>
           </div>
         </div>
 
@@ -71,26 +103,29 @@
             </a>
           }
           @if (isLive()) {
-            <a class="pay__btn" [routerLink]="['/i', q.eventSlug]">View invitation</a>
-          } @else {
-            <button
-              type="button"
-              class="pay__btn"
-              [disabled]="state() !== 'ready'"
-              (click)="submit()"
-            >
-              @switch (state()) {
-                @case ('processing') { Please wait… }
-                @case ('redirecting') { Redirecting to Razorpay… }
-                @default {
-                  {{ q.paymentRequired && !q.alreadyPaid ? 'Pay ' + price() + ' & publish' : 'Publish now' }}
+            <a class="pay__btn pay__btn--ghost" [routerLink]="['/i', q.eventSlug]">View invitation</a>
+          }
+          <button
+            type="button"
+            class="pay__btn"
+            [disabled]="state() !== 'ready'"
+            (click)="submit()"
+          >
+            @switch (state()) {
+              @case ('processing') { Please wait… }
+              @case ('redirecting') { Redirecting to Razorpay… }
+              @default {
+                @if (totalMinor() > 0) {
+                  Pay {{ total() }}{{ isLive() ? '' : ' & publish' }}
+                } @else {
+                  {{ isLive() ? 'Publish changes' : 'Publish now' }}
                 }
               }
-            </button>
-          }
+            }
+          </button>
         </div>
 
-        @if (q.paymentRequired && !q.alreadyPaid && !isLive()) {
+        @if (totalMinor() > 0) {
           <p class="pay__note">Payments are processed securely by Razorpay. We never see your card details.</p>
         }
       }

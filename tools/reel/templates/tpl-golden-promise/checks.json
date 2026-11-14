@@ -1,0 +1,1266 @@
+[
+  {
+    "name": "saved with all the sample text",
+    "data": "$sample",
+    "want": [
+      "You are invited to the wedding of",
+      "Ishita & Aryan",
+      "वक्रतुंड महाकाय सूर्यकोटि समप्रभा",
+      "With Divine Blessings Of",
+      "Late Smt. Savitri Malhotra and",
+      "Request your gracious presence",
+      "Ishita",
+      "(D/O Mrs. Neelam Malhotra",
+      "With",
+      "Aryan",
+      "Grand S/o Late Kamla & Late Suresh Mehra",
+      "Save The Date",
+      "Reveal Our",
+      "Big Day",
+      "Scratch the hearts to reveal",
+      "Day",
+      "07",
+      "July",
+      "2026",
+      "The start of a",
+      "The Celebration Unfolds",
+      "6th July 2026",
+      "Phoolon ki Mehfil",
+      "Garden Lawn (Poolside)",
+      "Light Shades of Pink",
+      "Two Souls, One Journey",
+      "5:00 PM Baarat · 7:00 PM Varmala",
+      "Where Love Awaits",
+      "Our Cherished",
+      "Venue",
+      "Anantum Gateway Resort",
+      "Jim Corbett, Ramnagar, Uttarakhand",
+      "A Glimpse of Us",
+      "Our Beautiful",
+      "Moments",
+      "A moment captured in",
+      "Aryan & Ishita",
+      "Heartfelt Wishes From",
+      "Sonakshi - Prateek Mehra",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "Get Directions",
+      "Khushboo",
+      "Pranshul",
+      "Days",
+      "Hrs",
+      "Four Sacred"
+    ]
+  },
+  {
+    "name": "every section filled with new details",
+    "data": {
+      "hero": {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+        "entryVideo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/entry.mp4",
+        "audioTrack": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/background-music.mp3"
+      },
+      "family": {
+        "deityImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/ganesh.png",
+        "invocation": "ॐ श्री गणेशाय नमः",
+        "blessingsLabel": "With the Blessings of",
+        "blessingsNames": "Smt. Kamla Devi &amp; Shri Ram Prakash Malhotra",
+        "inviteLine": "Request the pleasure of your company at the wedding of their granddaughter",
+        "brideName": "Ananya",
+        "brideFamily": "(D/O Smt. Ritu &amp; Shri Anil Kapoor)",
+        "joiner": "Weds",
+        "groomName": "Vihaan",
+        "groomFamily": "(S/O Smt. Neeta &amp; Shri Rakesh Malhotra)<br>Udaipur"
+      },
+      "saveTheDate": {
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "surpriseMessage": "Ishita and Aryan begin forever",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "events": {
+        "label": "Wedding Festivities",
+        "heading": "Three<br>Celebrations",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19th November 2099",
+            "time": "4:00 PM",
+            "venue": "Poolside Lawn",
+            "dressCode": "Shades of Green",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-haldi.png"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19th November 2099",
+            "venue": "Durbar Hall",
+            "dressCode": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "title": "Phere",
+            "date": "20th November 2099",
+            "time": "7:30 PM",
+            "venue": "Lakeside Mandap",
+            "dressCode": "Indian Traditional",
+            "image": ""
+          }
+        ]
+      },
+      "venue": {
+        "label": "Where We Wed",
+        "heading": "The<br>Venue",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=udaivilas"
+      },
+      "memories": {
+        "label": "Our Journey",
+        "heading": "Little<br>Moments",
+        "video": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/memories.mp4",
+        "caption": "Ishita and Aryan, always"
+      },
+      "footer": {
+        "coupleName": "Aryan & Ishita",
+        "wishesHeading": "With Love From",
+        "wishesFrom": [
+          {
+            "text": "Dadaji & Dadiji"
+          },
+          {
+            "text": "Riya, Kabir, Meher"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Ananya & Vihaan",
+      "ॐ श्री गणेशाय नमः",
+      "With the Blessings of",
+      "Smt. Kamla Devi & Shri",
+      "Ananya",
+      "(D/O Smt. Ritu & Shri Anil Kapoor)",
+      "Weds",
+      "Vihaan",
+      "Udaipur",
+      "20",
+      "November",
+      "2099",
+      "Vihaan begin forever",
+      "Wedding Festivities",
+      "Mehendi",
+      "19th November 2099",
+      "Poolside Lawn",
+      "Shades of Green",
+      "Sangeet",
+      "Durbar Hall",
+      "Phere",
+      "Lakeside Mandap",
+      "Where We Wed",
+      "The Oberoi Udaivilas",
+      "Haridasji Ki Magri, Udaipur",
+      "Our Journey",
+      "Little",
+      "Ananya and Vihaan, always",
+      "Vihaan & Ananya",
+      "With Love From",
+      "Dadaji & Dadiji",
+      "aisa invitation banaiye"
+    ],
+    "reject": [
+      "Aryan",
+      "Ishita",
+      "Savitri",
+      "Phoolon ki Mehfil",
+      "Sparkling Night",
+      "Anantum",
+      "Sonakshi",
+      "Neelam",
+      "Four Sacred",
+      "Get Directions",
+      "Khushboo",
+      "Pranshul",
+      "Days",
+      "Hrs"
+    ]
+  },
+  {
+    "name": "only the two names",
+    "data": {
+      "family": {
+        "brideName": "Ananya",
+        "groomName": "Vihaan"
+      }
+    },
+    "want": [
+      "Ananya & Vihaan",
+      "Ananya",
+      "Vihaan",
+      "Apni shaadi ka"
+    ],
+    "reject": [
+      "Save The Date",
+      "The Celebration Unfolds",
+      "Our Cherished",
+      "Our Beautiful",
+      "Heartfelt Wishes",
+      "With Divine",
+      "Get Directions",
+      "Khushboo",
+      "Pranshul",
+      "Days",
+      "Hrs"
+    ]
+  },
+  {
+    "name": "no date",
+    "data": {
+      "hero": {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+        "entryVideo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/entry.mp4",
+        "audioTrack": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/background-music.mp3"
+      },
+      "family": {
+        "deityImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/ganesh.png",
+        "invocation": "ॐ श्री गणेशाय नमः",
+        "blessingsLabel": "With the Blessings of",
+        "blessingsNames": "Smt. Kamla Devi &amp; Shri Ram Prakash Malhotra",
+        "inviteLine": "Request the pleasure of your company at the wedding of their granddaughter",
+        "brideName": "Ananya",
+        "brideFamily": "(D/O Smt. Ritu &amp; Shri Anil Kapoor)",
+        "joiner": "Weds",
+        "groomName": "Vihaan",
+        "groomFamily": "(S/O Smt. Neeta &amp; Shri Rakesh Malhotra)<br>Udaipur"
+      },
+      "saveTheDate": {
+        "day": " ",
+        "month": "",
+        "year": "",
+        "surpriseMessage": "Soon"
+      },
+      "events": {
+        "label": "Wedding Festivities",
+        "heading": "Three<br>Celebrations",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19th November 2099",
+            "time": "4:00 PM",
+            "venue": "Poolside Lawn",
+            "dressCode": "Shades of Green",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-haldi.png"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19th November 2099",
+            "venue": "Durbar Hall",
+            "dressCode": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "title": "Phere",
+            "date": "20th November 2099",
+            "time": "7:30 PM",
+            "venue": "Lakeside Mandap",
+            "dressCode": "Indian Traditional",
+            "image": ""
+          }
+        ]
+      },
+      "venue": {
+        "label": "Where We Wed",
+        "heading": "The<br>Venue",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=udaivilas"
+      },
+      "memories": {
+        "label": "Our Journey",
+        "heading": "Little<br>Moments",
+        "video": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/memories.mp4",
+        "caption": "Ishita and Aryan, always"
+      },
+      "footer": {
+        "coupleName": "Aryan & Ishita",
+        "wishesHeading": "With Love From",
+        "wishesFrom": [
+          {
+            "text": "Dadaji & Dadiji"
+          },
+          {
+            "text": "Riya, Kabir, Meher"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Mehendi"
+    ],
+    "reject": [
+      "Save The Date",
+      "Soon"
+    ]
+  },
+  {
+    "name": "only a year",
+    "data": {
+      "hero": {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+        "entryVideo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/entry.mp4",
+        "audioTrack": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/background-music.mp3"
+      },
+      "family": {
+        "deityImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/ganesh.png",
+        "invocation": "ॐ श्री गणेशाय नमः",
+        "blessingsLabel": "With the Blessings of",
+        "blessingsNames": "Smt. Kamla Devi &amp; Shri Ram Prakash Malhotra",
+        "inviteLine": "Request the pleasure of your company at the wedding of their granddaughter",
+        "brideName": "Ananya",
+        "brideFamily": "(D/O Smt. Ritu &amp; Shri Anil Kapoor)",
+        "joiner": "Weds",
+        "groomName": "Vihaan",
+        "groomFamily": "(S/O Smt. Neeta &amp; Shri Rakesh Malhotra)<br>Udaipur"
+      },
+      "saveTheDate": {
+        "year": "2099"
+      },
+      "events": {
+        "label": "Wedding Festivities",
+        "heading": "Three<br>Celebrations",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19th November 2099",
+            "time": "4:00 PM",
+            "venue": "Poolside Lawn",
+            "dressCode": "Shades of Green",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-haldi.png"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19th November 2099",
+            "venue": "Durbar Hall",
+            "dressCode": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "title": "Phere",
+            "date": "20th November 2099",
+            "time": "7:30 PM",
+            "venue": "Lakeside Mandap",
+            "dressCode": "Indian Traditional",
+            "image": ""
+          }
+        ]
+      },
+      "venue": {
+        "label": "Where We Wed",
+        "heading": "The<br>Venue",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=udaivilas"
+      },
+      "memories": {
+        "label": "Our Journey",
+        "heading": "Little<br>Moments",
+        "video": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/memories.mp4",
+        "caption": "Ishita and Aryan, always"
+      },
+      "footer": {
+        "coupleName": "Aryan & Ishita",
+        "wishesHeading": "With Love From",
+        "wishesFrom": [
+          {
+            "text": "Dadaji & Dadiji"
+          },
+          {
+            "text": "Riya, Kabir, Meher"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Save The Date",
+      "2099",
+      "Month"
+    ],
+    "reject": [
+      "begin forever"
+    ]
+  },
+  {
+    "name": "no events",
+    "data": {
+      "hero": {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+        "entryVideo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/entry.mp4",
+        "audioTrack": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/background-music.mp3"
+      },
+      "family": {
+        "deityImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/ganesh.png",
+        "invocation": "ॐ श्री गणेशाय नमः",
+        "blessingsLabel": "With the Blessings of",
+        "blessingsNames": "Smt. Kamla Devi &amp; Shri Ram Prakash Malhotra",
+        "inviteLine": "Request the pleasure of your company at the wedding of their granddaughter",
+        "brideName": "Ananya",
+        "brideFamily": "(D/O Smt. Ritu &amp; Shri Anil Kapoor)",
+        "joiner": "Weds",
+        "groomName": "Vihaan",
+        "groomFamily": "(S/O Smt. Neeta &amp; Shri Rakesh Malhotra)<br>Udaipur"
+      },
+      "saveTheDate": {
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "surpriseMessage": "Ishita and Aryan begin forever",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "events": {
+        "label": "Wedding Festivities",
+        "heading": "Three<br>Celebrations",
+        "items": [
+          {
+            "title": "",
+            "date": "",
+            "venue": "",
+            "time": "6 pm"
+          }
+        ]
+      },
+      "venue": {
+        "label": "Where We Wed",
+        "heading": "The<br>Venue",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=udaivilas"
+      },
+      "memories": {
+        "label": "Our Journey",
+        "heading": "Little<br>Moments",
+        "video": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/memories.mp4",
+        "caption": "Ishita and Aryan, always"
+      },
+      "footer": {
+        "coupleName": "Aryan & Ishita",
+        "wishesHeading": "With Love From",
+        "wishesFrom": [
+          {
+            "text": "Dadaji & Dadiji"
+          },
+          {
+            "text": "Riya, Kabir, Meher"
+          }
+        ]
+      }
+    },
+    "want": [
+      "The Oberoi Udaivilas"
+    ],
+    "reject": [
+      "Wedding Festivities",
+      "6 pm"
+    ]
+  },
+  {
+    "name": "an event with only a venue",
+    "data": {
+      "hero": {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+        "entryVideo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/entry.mp4",
+        "audioTrack": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/background-music.mp3"
+      },
+      "family": {
+        "deityImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/ganesh.png",
+        "invocation": "ॐ श्री गणेशाय नमः",
+        "blessingsLabel": "With the Blessings of",
+        "blessingsNames": "Smt. Kamla Devi &amp; Shri Ram Prakash Malhotra",
+        "inviteLine": "Request the pleasure of your company at the wedding of their granddaughter",
+        "brideName": "Ananya",
+        "brideFamily": "(D/O Smt. Ritu &amp; Shri Anil Kapoor)",
+        "joiner": "Weds",
+        "groomName": "Vihaan",
+        "groomFamily": "(S/O Smt. Neeta &amp; Shri Rakesh Malhotra)<br>Udaipur"
+      },
+      "saveTheDate": {
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "surpriseMessage": "Ishita and Aryan begin forever",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "events": {
+        "label": "Wedding Festivities",
+        "heading": "Three<br>Celebrations",
+        "items": [
+          {
+            "venue": "Rooftop"
+          }
+        ]
+      },
+      "venue": {
+        "label": "Where We Wed",
+        "heading": "The<br>Venue",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=udaivilas"
+      },
+      "memories": {
+        "label": "Our Journey",
+        "heading": "Little<br>Moments",
+        "video": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/memories.mp4",
+        "caption": "Ishita and Aryan, always"
+      },
+      "footer": {
+        "coupleName": "Aryan & Ishita",
+        "wishesHeading": "With Love From",
+        "wishesFrom": [
+          {
+            "text": "Dadaji & Dadiji"
+          },
+          {
+            "text": "Riya, Kabir, Meher"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Celebration",
+      "Rooftop"
+    ]
+  },
+  {
+    "name": "no venue",
+    "data": {
+      "hero": {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+        "entryVideo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/entry.mp4",
+        "audioTrack": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/background-music.mp3"
+      },
+      "family": {
+        "deityImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/ganesh.png",
+        "invocation": "ॐ श्री गणेशाय नमः",
+        "blessingsLabel": "With the Blessings of",
+        "blessingsNames": "Smt. Kamla Devi &amp; Shri Ram Prakash Malhotra",
+        "inviteLine": "Request the pleasure of your company at the wedding of their granddaughter",
+        "brideName": "Ananya",
+        "brideFamily": "(D/O Smt. Ritu &amp; Shri Anil Kapoor)",
+        "joiner": "Weds",
+        "groomName": "Vihaan",
+        "groomFamily": "(S/O Smt. Neeta &amp; Shri Rakesh Malhotra)<br>Udaipur"
+      },
+      "saveTheDate": {
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "surpriseMessage": "Ishita and Aryan begin forever",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "events": {
+        "label": "Wedding Festivities",
+        "heading": "Three<br>Celebrations",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19th November 2099",
+            "time": "4:00 PM",
+            "venue": "Poolside Lawn",
+            "dressCode": "Shades of Green",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-haldi.png"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19th November 2099",
+            "venue": "Durbar Hall",
+            "dressCode": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "title": "Phere",
+            "date": "20th November 2099",
+            "time": "7:30 PM",
+            "venue": "Lakeside Mandap",
+            "dressCode": "Indian Traditional",
+            "image": ""
+          }
+        ]
+      },
+      "venue": {
+        "label": "Where",
+        "heading": "X",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png"
+      },
+      "memories": {
+        "label": "Our Journey",
+        "heading": "Little<br>Moments",
+        "video": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/memories.mp4",
+        "caption": "Ishita and Aryan, always"
+      },
+      "footer": {
+        "coupleName": "Aryan & Ishita",
+        "wishesHeading": "With Love From",
+        "wishesFrom": [
+          {
+            "text": "Dadaji & Dadiji"
+          },
+          {
+            "text": "Riya, Kabir, Meher"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Our Journey"
+    ],
+    "reject": [
+      "Where We Wed",
+      "The Oberoi"
+    ]
+  },
+  {
+    "name": "the couple's own memories video can't be shown",
+    "data": {
+      "hero": {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+        "entryVideo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/entry.mp4",
+        "audioTrack": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/background-music.mp3"
+      },
+      "family": {
+        "deityImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/ganesh.png",
+        "invocation": "ॐ श्री गणेशाय नमः",
+        "blessingsLabel": "With the Blessings of",
+        "blessingsNames": "Smt. Kamla Devi &amp; Shri Ram Prakash Malhotra",
+        "inviteLine": "Request the pleasure of your company at the wedding of their granddaughter",
+        "brideName": "Ananya",
+        "brideFamily": "(D/O Smt. Ritu &amp; Shri Anil Kapoor)",
+        "joiner": "Weds",
+        "groomName": "Vihaan",
+        "groomFamily": "(S/O Smt. Neeta &amp; Shri Rakesh Malhotra)<br>Udaipur"
+      },
+      "saveTheDate": {
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "surpriseMessage": "Ishita and Aryan begin forever",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "events": {
+        "label": "Wedding Festivities",
+        "heading": "Three<br>Celebrations",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19th November 2099",
+            "time": "4:00 PM",
+            "venue": "Poolside Lawn",
+            "dressCode": "Shades of Green",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-haldi.png"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19th November 2099",
+            "venue": "Durbar Hall",
+            "dressCode": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "title": "Phere",
+            "date": "20th November 2099",
+            "time": "7:30 PM",
+            "venue": "Lakeside Mandap",
+            "dressCode": "Indian Traditional",
+            "image": ""
+          }
+        ]
+      },
+      "venue": {
+        "label": "Where We Wed",
+        "heading": "The<br>Venue",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=udaivilas"
+      },
+      "memories": {
+        "label": "Our Journey",
+        "heading": "Little<br>Moments",
+        "video": "https://example.com/our-film.mp4",
+        "caption": "Ishita and Aryan, always"
+      },
+      "footer": {
+        "coupleName": "Aryan & Ishita",
+        "wishesHeading": "With Love From",
+        "wishesFrom": [
+          {
+            "text": "Dadaji & Dadiji"
+          },
+          {
+            "text": "Riya, Kabir, Meher"
+          }
+        ]
+      }
+    },
+    "want": [
+      "With Love From"
+    ],
+    "reject": [
+      "Our Journey",
+      "always"
+    ]
+  },
+  {
+    "name": "no footer",
+    "data": {
+      "hero": {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+        "entryVideo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/entry.mp4",
+        "audioTrack": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/background-music.mp3"
+      },
+      "family": {
+        "deityImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/ganesh.png",
+        "invocation": "ॐ श्री गणेशाय नमः",
+        "blessingsLabel": "With the Blessings of",
+        "blessingsNames": "Smt. Kamla Devi &amp; Shri Ram Prakash Malhotra",
+        "inviteLine": "Request the pleasure of your company at the wedding of their granddaughter",
+        "brideName": "Ananya",
+        "brideFamily": "(D/O Smt. Ritu &amp; Shri Anil Kapoor)",
+        "joiner": "Weds",
+        "groomName": "Vihaan",
+        "groomFamily": "(S/O Smt. Neeta &amp; Shri Rakesh Malhotra)<br>Udaipur"
+      },
+      "saveTheDate": {
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "surpriseMessage": "Ishita and Aryan begin forever",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "events": {
+        "label": "Wedding Festivities",
+        "heading": "Three<br>Celebrations",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19th November 2099",
+            "time": "4:00 PM",
+            "venue": "Poolside Lawn",
+            "dressCode": "Shades of Green",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-haldi.png"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19th November 2099",
+            "venue": "Durbar Hall",
+            "dressCode": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "title": "Phere",
+            "date": "20th November 2099",
+            "time": "7:30 PM",
+            "venue": "Lakeside Mandap",
+            "dressCode": "Indian Traditional",
+            "image": ""
+          }
+        ]
+      },
+      "venue": {
+        "label": "Where We Wed",
+        "heading": "The<br>Venue",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=udaivilas"
+      },
+      "memories": {
+        "label": "Our Journey",
+        "heading": "Little<br>Moments",
+        "video": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/memories.mp4",
+        "caption": "Ishita and Aryan, always"
+      },
+      "footer": {
+        "coupleName": " ",
+        "wishesHeading": "With Love From",
+        "wishesFrom": [
+          {
+            "text": " "
+          }
+        ]
+      }
+    },
+    "want": [
+      "Our Journey"
+    ],
+    "reject": [
+      "With Love From",
+      "Vihaan & Ananya"
+    ]
+  },
+  {
+    "name": "wishes without a heading",
+    "data": {
+      "hero": {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+        "entryVideo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/entry.mp4",
+        "audioTrack": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/background-music.mp3"
+      },
+      "family": {
+        "deityImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/ganesh.png",
+        "invocation": "ॐ श्री गणेशाय नमः",
+        "blessingsLabel": "With the Blessings of",
+        "blessingsNames": "Smt. Kamla Devi &amp; Shri Ram Prakash Malhotra",
+        "inviteLine": "Request the pleasure of your company at the wedding of their granddaughter",
+        "brideName": "Ananya",
+        "brideFamily": "(D/O Smt. Ritu &amp; Shri Anil Kapoor)",
+        "joiner": "Weds",
+        "groomName": "Vihaan",
+        "groomFamily": "(S/O Smt. Neeta &amp; Shri Rakesh Malhotra)<br>Udaipur"
+      },
+      "saveTheDate": {
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "surpriseMessage": "Ishita and Aryan begin forever",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "events": {
+        "label": "Wedding Festivities",
+        "heading": "Three<br>Celebrations",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19th November 2099",
+            "time": "4:00 PM",
+            "venue": "Poolside Lawn",
+            "dressCode": "Shades of Green",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-haldi.png"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19th November 2099",
+            "venue": "Durbar Hall",
+            "dressCode": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "title": "Phere",
+            "date": "20th November 2099",
+            "time": "7:30 PM",
+            "venue": "Lakeside Mandap",
+            "dressCode": "Indian Traditional",
+            "image": ""
+          }
+        ]
+      },
+      "venue": {
+        "label": "Where We Wed",
+        "heading": "The<br>Venue",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=udaivilas"
+      },
+      "memories": {
+        "label": "Our Journey",
+        "heading": "Little<br>Moments",
+        "video": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/memories.mp4",
+        "caption": "Ishita and Aryan, always"
+      },
+      "footer": {
+        "coupleName": "",
+        "wishesHeading": "",
+        "wishesFrom": [
+          {
+            "text": "Dadaji & Dadiji"
+          },
+          {
+            "text": "Riya, Kabir, Meher"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Dadaji & Dadiji"
+    ],
+    "reject": [
+      "With Love From"
+    ]
+  },
+  {
+    "name": "no family lines, blessings or deity",
+    "data": {
+      "hero": {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+        "entryVideo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/entry.mp4",
+        "audioTrack": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/background-music.mp3"
+      },
+      "family": {
+        "deityImage": "",
+        "invocation": "",
+        "blessingsLabel": "",
+        "blessingsNames": "",
+        "inviteLine": "",
+        "brideName": "Ananya",
+        "brideFamily": "",
+        "joiner": "",
+        "groomName": "Vihaan",
+        "groomFamily": ""
+      },
+      "saveTheDate": {
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "surpriseMessage": "Ishita and Aryan begin forever",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "events": {
+        "label": "Wedding Festivities",
+        "heading": "Three<br>Celebrations",
+        "items": [
+          {
+            "title": "Mehendi",
+            "date": "19th November 2099",
+            "time": "4:00 PM",
+            "venue": "Poolside Lawn",
+            "dressCode": "Shades of Green",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-haldi.png"
+          },
+          {
+            "title": "Sangeet",
+            "date": "19th November 2099",
+            "venue": "Durbar Hall",
+            "dressCode": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "title": "Phere",
+            "date": "20th November 2099",
+            "time": "7:30 PM",
+            "venue": "Lakeside Mandap",
+            "dressCode": "Indian Traditional",
+            "image": ""
+          }
+        ]
+      },
+      "venue": {
+        "label": "Where We Wed",
+        "heading": "The<br>Venue",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=udaivilas"
+      },
+      "memories": {
+        "label": "Our Journey",
+        "heading": "Little<br>Moments",
+        "video": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/memories.mp4",
+        "caption": "Ishita and Aryan, always"
+      },
+      "footer": {
+        "coupleName": "Aryan & Ishita",
+        "wishesHeading": "With Love From",
+        "wishesFrom": [
+          {
+            "text": "Dadaji & Dadiji"
+          },
+          {
+            "text": "Riya, Kabir, Meher"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Ananya",
+      "Vihaan"
+    ],
+    "reject": [
+      "ॐ श्री",
+      "With the Blessings",
+      "D/O",
+      "Weds"
+    ]
+  },
+  {
+    "name": "Hindi text and very long names",
+    "data": {
+      "hero": {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+        "entryVideo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/entry.mp4",
+        "audioTrack": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/background-music.mp3"
+      },
+      "family": {
+        "deityImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/ganesh.png",
+        "invocation": "ॐ श्री गणेशाय नमः",
+        "blessingsLabel": "With the Blessings of",
+        "blessingsNames": "Smt. Kamla Devi &amp; Shri Ram Prakash Malhotra",
+        "inviteLine": "Request the pleasure of your company at the wedding of their granddaughter",
+        "brideName": "अनन्या कपूर",
+        "brideFamily": "(D/O Smt. Ritu &amp; Shri Anil Kapoor)",
+        "joiner": "Weds",
+        "groomName": "Vihaan Rakesh Malhotra-Venkataraman",
+        "groomFamily": "(S/O Smt. Neeta &amp; Shri Rakesh Malhotra)<br>Udaipur"
+      },
+      "saveTheDate": {
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "surpriseMessage": "Ishita and Aryan begin forever",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "events": {
+        "label": "Wedding Festivities",
+        "heading": "Three<br>Celebrations",
+        "items": [
+          {
+            "title": "मेहंदी",
+            "date": "19th November 2099",
+            "time": "4:00 PM",
+            "venue": "Poolside Lawn",
+            "dressCode": "Shades of Green",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-haldi.png"
+          },
+          {
+            "title": "Sangeet & Cocktail Night by the Lake",
+            "date": "19th November 2099",
+            "venue": "Durbar Hall",
+            "dressCode": "",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-2.png"
+          },
+          {
+            "title": "Phere",
+            "date": "20th November 2099",
+            "time": "7:30 PM",
+            "venue": "Lakeside Mandap",
+            "dressCode": "Indian Traditional",
+            "image": ""
+          }
+        ]
+      },
+      "venue": {
+        "label": "Where We Wed",
+        "heading": "The<br>Venue",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=udaivilas"
+      },
+      "memories": {
+        "label": "Our Journey",
+        "heading": "Little<br>Moments",
+        "video": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/memories.mp4",
+        "caption": "Ishita and Aryan, always"
+      },
+      "footer": {
+        "coupleName": "Aryan & Ishita",
+        "wishesHeading": "With Love From",
+        "wishesFrom": [
+          {
+            "text": "समस्त मल्होत्रा एवं कपूर परिवार"
+          }
+        ]
+      }
+    },
+    "want": [
+      "अनन्या कपूर",
+      "Vihaan Rakesh Malhotra-Venkataraman",
+      "मेहंदी",
+      "Sangeet & Cocktail Night by the Lake",
+      "समस्त मल्होत्रा एवं कपूर परिवार"
+    ]
+  },
+  {
+    "name": "wrong types, HTML and bad links",
+    "data": {
+      "hero": {
+        "image": "javascript:alert(1)"
+      },
+      "family": {
+        "brideName": "<b>Ananya</b>",
+        "groomName": 42,
+        "invocation": {
+          "a": 1
+        },
+        "blessingsNames": "<img src=x onerror=alert(1)>Elders",
+        "groomFamily": "<script>alert(1)</script>Udaipur",
+        "deityImage": "javascript:alert(1)"
+      },
+      "saveTheDate": {
+        "day": 20,
+        "month": [
+          "x"
+        ],
+        "year": null
+      },
+      "events": {
+        "label": 7,
+        "items": [
+          "oops",
+          null,
+          {
+            "title": "Phere",
+            "venue": {
+              "x": 1
+            },
+            "time": 5,
+            "image": "javascript:alert(1)"
+          }
+        ]
+      },
+      "venue": {
+        "name": {
+          "a": 1
+        },
+        "address": "Lawns"
+      },
+      "memories": {
+        "video": 5
+      },
+      "footer": {
+        "coupleName": null,
+        "wishesFrom": [
+          "x",
+          {
+            "text": 9
+          }
+        ]
+      }
+    },
+    "want": [
+      "<b>Ananya</b>",
+      "42",
+      "Elders",
+      "Udaipur",
+      "20",
+      "7",
+      "Phere",
+      "5",
+      "Lawns",
+      "9"
+    ],
+    "reject": [
+      "[object Object]",
+      "undefined",
+      "null",
+      "alert",
+      "Our Beautiful"
+    ]
+  },
+  {
+    "name": "six events",
+    "data": {
+      "hero": {
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-1.png",
+        "entryVideo": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/entry.mp4",
+        "audioTrack": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/background-music.mp3"
+      },
+      "family": {
+        "deityImage": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/ganesh.png",
+        "invocation": "ॐ श्री गणेशाय नमः",
+        "blessingsLabel": "With the Blessings of",
+        "blessingsNames": "Smt. Kamla Devi &amp; Shri Ram Prakash Malhotra",
+        "inviteLine": "Request the pleasure of your company at the wedding of their granddaughter",
+        "brideName": "Ananya",
+        "brideFamily": "(D/O Smt. Ritu &amp; Shri Anil Kapoor)",
+        "joiner": "Weds",
+        "groomName": "Vihaan",
+        "groomFamily": "(S/O Smt. Neeta &amp; Shri Rakesh Malhotra)<br>Udaipur"
+      },
+      "saveTheDate": {
+        "day": "20",
+        "month": "November",
+        "year": "2099",
+        "surpriseMessage": "Ishita and Aryan begin forever",
+        "targetDate": "2099-11-20",
+        "targetTime": "19:30"
+      },
+      "events": {
+        "label": "Wedding Festivities",
+        "heading": "Three<br>Celebrations",
+        "items": [
+          {
+            "title": "Roka",
+            "date": "Day 1",
+            "venue": "Hall 1",
+            "image": ""
+          },
+          {
+            "title": "Haldi",
+            "date": "Day 2",
+            "venue": "Hall 2",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-sangeet.png"
+          },
+          {
+            "title": "Mehendi",
+            "date": "Day 3",
+            "venue": "Hall 3",
+            "image": ""
+          },
+          {
+            "title": "Sangeet",
+            "date": "Day 4",
+            "venue": "Hall 4",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-sangeet.png"
+          },
+          {
+            "title": "Phere",
+            "date": "Day 5",
+            "venue": "Hall 5",
+            "image": ""
+          },
+          {
+            "title": "Vidaai",
+            "date": "Day 6",
+            "venue": "Hall 6",
+            "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/images/event-sangeet.png"
+          }
+        ]
+      },
+      "venue": {
+        "label": "Where We Wed",
+        "heading": "The<br>Venue",
+        "image": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%2010/static/images/gallery-3.png",
+        "name": "The Oberoi Udaivilas",
+        "address": "Haridasji Ki Magri, Udaipur",
+        "directionsUrl": "https://maps.google.com/?q=udaivilas"
+      },
+      "memories": {
+        "label": "Our Journey",
+        "heading": "Little<br>Moments",
+        "video": "https://pub-da9e4ff58a2b4062a77df0109c7d7c6f.r2.dev/asset/invitation-templates/template%207/static/media/memories.mp4",
+        "caption": "Ishita and Aryan, always"
+      },
+      "footer": {
+        "coupleName": "Aryan & Ishita",
+        "wishesHeading": "With Love From",
+        "wishesFrom": [
+          {
+            "text": "Dadaji & Dadiji"
+          },
+          {
+            "text": "Riya, Kabir, Meher"
+          }
+        ]
+      }
+    },
+    "want": [
+      "Roka",
+      "Vidaai",
+      "Hall 6"
+    ]
+  }
+]

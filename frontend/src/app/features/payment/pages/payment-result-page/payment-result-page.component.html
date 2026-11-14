@@ -12,7 +12,11 @@
       <h1 class="pay__title">Your invitation is live</h1>
       <p class="pay__sub">
         @if (payment(); as p) {
-          We received {{ amount() }}{{ p.templateName ? ' for ' + p.templateName : '' }}.
+          @if (p.includesVideo && !p.includesTemplate) {
+            We received {{ amount() }} for your invitation video.
+          } @else {
+            We received {{ amount() }}{{ p.templateName ? ' for ' + p.templateName : '' }}{{ p.includesVideo ? ' and its video' : '' }}.
+          }
         }
         Share the link below with your guests.
       </p>

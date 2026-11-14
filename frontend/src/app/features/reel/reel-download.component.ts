@@ -11,19 +11,25 @@ import {
   untracked,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
 import { type Observable, type Subscription, switchMap, takeWhile, timer } from 'rxjs';
+import { formatMoney } from '../payment/data/payment-api.service';
 import { type Reel, ReelApiService } from './reel-api.service';
+import { ReelPreviewComponent } from './reel-preview.component';
 
 const POLL_INTERVAL_MS = 4000;
 
 /**
- * "Download your video" section of a published invitation. Renders nothing when the
- * invitation can't have a video (its template has no film yet). The video is made on
- * the server, so the visitor can leave and find it on their dashboard later.
+ * "Your invitation video" section of a published invitation. Renders nothing when the
+ * invitation can't have a video (its template has no film yet). Until the video is
+ * bought it shows the watermarked preview and a way to buy it; afterwards the download.
+ * The video is made on the server, so the visitor can leave and find it on their
+ * dashboard later, and a new one is made each time the invitation is published.
  */
 @Component({
   selector: 'app-reel-download',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, ReelPreviewComponent],
   templateUrl: './reel-download.component.html',
   styleUrl: './reel-download.component.scss',
 })
@@ -44,6 +50,10 @@ export class ReelDownloadComponent {
   protected readonly isWorking = computed(() => {
     const status = this.reel()?.status;
     return status === 'QUEUED' || status === 'RENDERING';
+  });
+  protected readonly price = computed(() => {
+    const r = this.reel();
+    return r ? formatMoney(r.priceMinor, r.currency) : '';
   });
   protected readonly sizeLabel = computed(() => {
     const bytes = this.reel()?.sizeBytes;
@@ -73,7 +83,7 @@ export class ReelDownloadComponent {
     this.subscription = first.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (reel) => {
         this.reel.set(reel);
-        if (startIfNone && reel.available && reel.status === null) {
+        if (startIfNone && reel.available && reel.purchased && reel.status === null) {
           this.create();
         } else if (this.isWorking()) {
           this.poll();

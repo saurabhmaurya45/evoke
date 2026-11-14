@@ -1,0 +1,59 @@
+@if (reel(); as r) {
+  @if (r.available) {
+    <div class="reel__preview" [class.reel__preview--compact]="compact()">
+      @if (r.previewUrl && !isWorking()) {
+        <video
+          class="reel__video"
+          [src]="r.previewUrl"
+          controls
+          controlsList="nodownload noplaybackrate"
+          disablePictureInPicture
+          disableRemotePlayback
+          playsinline
+          preload="metadata"
+          (contextmenu)="blockMenu($event)"
+        ></video>
+        @if (!compact()) {
+          <p class="reel__text reel__text--center">
+            Preview with watermark. The video you buy is full quality, without it.
+          </p>
+        }
+      }
+
+      @if (isWorking()) {
+        <p class="reel__text">Making a preview of your video. This takes a few minutes.</p>
+        <div
+          class="reel__bar"
+          role="progressbar"
+          aria-label="Preview progress"
+          [attr.aria-valuenow]="r.previewProgress"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <span class="reel__fill" [style.width.%]="r.previewProgress"></span>
+        </div>
+      } @else if (r.previewStatus === 'FAILED') {
+        <p class="reel__text reel__text--error">We couldn't make the preview. Please try again.</p>
+      } @else if (r.previewUrl && r.previewIsStale) {
+        <p class="reel__text">You edited your invitation after this preview was made.</p>
+      }
+
+      @if (error()) {
+        <p class="reel__text reel__text--error" role="alert">{{ error() }}</p>
+      }
+
+      @if (!isWorking() && (!r.previewUrl || r.previewIsStale || r.previewStatus === 'FAILED')) {
+        <div class="reel__actions">
+          <button
+            type="button"
+            class="reel__btn"
+            [class.reel__btn--ghost]="r.previewUrl"
+            (click)="create()"
+          >
+            {{ r.previewStatus === 'FAILED' ? 'Try again' : r.previewUrl ? 'Update preview' : 'See video preview' }}
+          </button>
+        </div>
+      }
+    </div>
+  }
+}
