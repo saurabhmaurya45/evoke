@@ -8,7 +8,7 @@ import pytest
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.config import get_settings
+from app.config import Settings, get_settings
 from app.drafts.models import Draft
 from app.events.models import Event, EventStatus
 from app.payments.models import Payment, PaymentStatus
@@ -518,3 +518,8 @@ async def test_publish_makes_no_video_that_was_not_bought(client, db_session, au
         await client.post(f"/v1/events/{event.id}/publish", headers=auth_headers(user))
     ).status_code == 200
     assert (await db_session.execute(select(EventReel))).scalars().all() == []
+
+
+def test_videos_are_on_unless_switched_off():
+    """REELS_ENABLED defaults to true, so a deployment that never sets it offers videos."""
+    assert Settings.model_fields["reels_enabled"].default is True

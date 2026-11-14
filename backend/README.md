@@ -178,7 +178,8 @@ The worker needs `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` and 
 `B2_*` / `PUBLIC_MEDIA_BASE_URL` settings, the same values as the API. Run more containers
 to render more videos at once; each renders one at a time.
 
-To launch: apply the migration, start a worker, then set `REELS_ENABLED=true` on the API.
+Videos are on by default (`REELS_ENABLED` defaults to `true`), so keep a worker running. Set
+`REELS_ENABLED=false` on the API to switch them off, e.g. while the worker is down.
 
 A template gets videos once it has a film in `tools/reel/templates/` and an entry in
 `REEL_FILMS` (`app/reels/service.py`).
