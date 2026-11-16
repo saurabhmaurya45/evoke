@@ -39,8 +39,9 @@ async def test_duplicate_names_get_suffix(client, db_session, auth_headers, razo
     first_pub = (await _checkout(client, headers, first["id"])).json()["data"]["event"]
     assert first_pub["publicSubdomain"] == "arjun-priya"
 
-    second = await _event_with_names(client, db_session, auth_headers(), NAMES)
-    second_pub = (await _checkout(client, headers, second["id"])).json()["data"]["event"]
+    other_headers = auth_headers()
+    second = await _event_with_names(client, db_session, other_headers, NAMES)
+    second_pub = (await _checkout(client, other_headers, second["id"])).json()["data"]["event"]
     assert second_pub["publicSubdomain"] == "arjun-priya-2"
 
 
