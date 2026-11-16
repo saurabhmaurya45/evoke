@@ -25,6 +25,7 @@ class EventOut(CamelModel):
     type: EventType
     title: str
     slug: str
+    public_subdomain: str | None = None
     status: EventStatus
     template_id: uuid.UUID | None
     template_version: int | None
@@ -42,6 +43,7 @@ class InvitationOut(CamelModel):
 
     event_id: uuid.UUID
     slug: str
+    public_subdomain: str | None = None
     title: str
     status: EventStatus
     owner_id: uuid.UUID

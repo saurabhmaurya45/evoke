@@ -8,7 +8,20 @@ import { ComingSoonComponent } from './shared/components/coming-soon/coming-soon
  * routes for not-yet-built features share the ComingSoon component and are
  * scaffolded now so links and structure exist from day one.
  */
+import { weddingSubdomainCanMatch } from './core/guards/wedding-subdomain.guard';
+
 export const routes: Routes = [
+  {
+    // Couple subdomain root (`varun-tanu.theinvitely.in/`) — full-screen viewer, no marketing shell.
+    path: '',
+    pathMatch: 'full',
+    canMatch: [weddingSubdomainCanMatch],
+    loadComponent: () =>
+      import('./features/invitation/pages/invitation-page/invitation-page.component').then(
+        (m) => m.InvitationPageComponent,
+      ),
+    title: 'Your Invitation • theinvitely.in',
+  },
   {
     // Full-screen template preview — rendered outside the marketing shell.
     path: 'preview',

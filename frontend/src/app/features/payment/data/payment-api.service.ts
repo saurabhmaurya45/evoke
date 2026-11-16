@@ -8,6 +8,7 @@ export type BackendEventStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
 export interface PriceQuote {
   readonly eventId: string;
   readonly eventSlug: string;
+  readonly eventPublicSubdomain: string | null;
   readonly eventStatus: BackendEventStatus;
   readonly templateId: string;
   readonly templateSlug: string;

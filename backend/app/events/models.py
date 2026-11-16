@@ -38,6 +38,7 @@ class Event(Base):
     )
     title: Mapped[str] = mapped_column(String(240), nullable=False)
     slug: Mapped[str] = mapped_column(String(160), unique=True, nullable=False)
+    public_subdomain: Mapped[str | None] = mapped_column(String(63), unique=True, nullable=True)
     status: Mapped[EventStatus] = mapped_column(
         Enum(EventStatus, name="event_status"), nullable=False, default=EventStatus.DRAFT
     )

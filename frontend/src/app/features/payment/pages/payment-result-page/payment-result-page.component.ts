@@ -13,7 +13,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { EMPTY, catchError, switchMap, take, takeWhile, timer } from 'rxjs';
-import { environment } from '../../../../../environments/environment';
+import { invitationPublicUrl } from '../../../../core/utils/invitation-public-url';
 import { AnalyticsService } from '../../../../core/services/analytics.service';
 import { SeoService } from '../../../../core/services/seo.service';
 import { ReelDownloadComponent } from '../../../reel/reel-download.component';
@@ -57,8 +57,9 @@ export class PaymentResultPageComponent {
   protected readonly copied = signal(false);
 
   protected readonly inviteUrl = computed(() => {
-    const slug = this.quote()?.eventSlug;
-    return slug ? `${environment.appUrl}/i/${slug}` : '';
+    const q = this.quote();
+    if (!q?.eventSlug) return '';
+    return invitationPublicUrl({ slug: q.eventSlug, publicSubdomain: q.eventPublicSubdomain });
   });
   protected readonly amount = computed(() => {
     const p = this.payment();

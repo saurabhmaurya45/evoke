@@ -53,6 +53,7 @@ class UserSiteOut(CamelModel):
     type: EventType
     title: str
     slug: str
+    public_subdomain: str | None = None
     status: EventStatus
     template_id: uuid.UUID | None
     template_slot_id: str | None = None

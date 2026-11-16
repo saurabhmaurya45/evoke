@@ -28,11 +28,19 @@ from app.shared.errors import (
     ValidationFailedError,
 )
 from app.shared.pagination import Page, PageParams, make_page
+from app.events.subdomain import (
+    fallback_public_subdomain_from_slug,
+    is_reserved_public_subdomain,
+    is_valid_public_subdomain,
+    public_subdomain_candidates,
+    published_subdomain_base,
+)
 from app.templates.models import Template
 from app.users.models import User, UserRole
 
 _SLUG_SUFFIX_ALPHABET = string.ascii_lowercase + string.digits
 _SLUG_CREATE_ATTEMPTS = 5
+_PUBLISHED_SUBDOMAIN_ATTEMPTS = 24
 
 
 def _slugify(title: str) -> str:
@@ -114,6 +122,32 @@ async def assign_published_slug(db: AsyncSession, event: Event) -> None:
         taken = await db.scalar(select(func.count()).where(Event.slug == candidate))
         if not taken:
             event.slug = candidate
+            return
+
+
+async def assign_public_subdomain(db: AsyncSession, event: Event) -> None:
+    """On first publish, assign a stable wedding subdomain (e.g. `varun-tanu`).
+
+    Skips when already set so republishes and edits keep shared links valid.
+    """
+    if event.public_subdomain is not None:
+        return
+
+    draft = (await db.execute(select(Draft).where(Draft.event_id == event.id))).scalar_one_or_none()
+    base = published_subdomain_base(draft.data if draft else {})
+    if base is None:
+        base = fallback_public_subdomain_from_slug(event.slug)
+
+    attempts = 0
+    for candidate in public_subdomain_candidates(base):
+        if is_reserved_public_subdomain(candidate) or not is_valid_public_subdomain(candidate):
+            continue
+        taken = await db.scalar(select(func.count()).where(Event.public_subdomain == candidate))
+        if not taken:
+            event.public_subdomain = candidate
+            return
+        attempts += 1
+        if attempts >= _PUBLISHED_SUBDOMAIN_ATTEMPTS:
             return
 
 
@@ -298,6 +332,14 @@ async def get_event_by_slug(db: AsyncSession, slug: str) -> Event | None:
     return result.scalar_one_or_none()
 
 
+async def get_event_by_public_subdomain(db: AsyncSession, subdomain: str) -> Event | None:
+    """Fetch an event by its public wedding subdomain label."""
+    if not is_valid_public_subdomain(subdomain) or is_reserved_public_subdomain(subdomain):
+        return None
+    result = await db.execute(select(Event).where(Event.public_subdomain == subdomain))
+    return result.scalar_one_or_none()
+
+
 async def resolve_event_template(db: AsyncSession, event: Event) -> Template | None:
     """Find the template an event is built on.
 
@@ -361,6 +403,10 @@ async def publish_event(db: AsyncSession, event_id: uuid.UUID, current_user: Use
     if event.status == EventStatus.ARCHIVED:
         raise ValidationFailedError("An archived event cannot be published.")
     if event.status == EventStatus.PUBLISHED:
+        if event.public_subdomain is None:
+            await assign_public_subdomain(db, event)
+            await db.commit()
+            await db.refresh(event)
         if await queue_video_on_publish(db, event, current_user.id):
             await db.commit()
             await db.refresh(event)
@@ -386,6 +432,7 @@ async def publish_event(db: AsyncSession, event_id: uuid.UUID, current_user: Use
 
     event.status = EventStatus.PUBLISHED
     await assign_published_slug(db, event)
+    await assign_public_subdomain(db, event)
     await log_action(
         db,
         action="EVENT_PUBLISHED",

@@ -14,6 +14,7 @@ from app.config import get_settings
 from app.events.models import Event, EventStatus
 from app.events.schemas import EventOut
 from app.events.service import (
+    assign_public_subdomain,
     assign_published_slug,
     get_event,
     publish_event,
@@ -80,6 +81,7 @@ async def get_quote(db: AsyncSession, user: User, event_id: uuid.UUID) -> PriceQ
     return PriceQuoteOut(
         event_id=event.id,
         event_slug=event.slug,
+        event_public_subdomain=event.public_subdomain,
         event_status=event.status,
         template_id=template.id,
         template_slug=template.slug,
@@ -296,6 +298,7 @@ async def mark_paid(db: AsyncSession, payment: Payment, provider_payment_id: str
     if payment.includes_template and event.status == EventStatus.DRAFT:
         event.status = EventStatus.PUBLISHED
         await assign_published_slug(db, event)
+        await assign_public_subdomain(db, event)
         await log_action(
             db,
             action="EVENT_PUBLISHED",
