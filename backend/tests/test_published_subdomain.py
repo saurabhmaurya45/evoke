@@ -1,8 +1,20 @@
 """Published invitations get a wedding subdomain: `arjun-priya.theinvitely.in`."""
 
+import pytest
+
 from app.events.subdomain import published_subdomain_base
-from tests.test_payments import _checkout
+from app.payments.razorpay_client import get_razorpay_client
+from tests.test_payments import FakeRazorpayClient, _checkout
 from tests.test_published_slug import NAMES, _event_with_names
+
+
+@pytest.fixture
+def razorpay(client):
+    from app.main import app
+
+    fake = FakeRazorpayClient()
+    app.dependency_overrides[get_razorpay_client] = lambda: fake
+    return fake
 
 
 def test_subdomain_base_omits_and():
