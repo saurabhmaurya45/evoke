@@ -21,6 +21,7 @@ class CheckoutRequest(CamelModel):
 class PriceQuoteOut(CamelModel):
     event_id: uuid.UUID
     event_slug: str
+    event_public_subdomain: str | None = None
     event_status: EventStatus
     template_id: uuid.UUID
     template_slug: str

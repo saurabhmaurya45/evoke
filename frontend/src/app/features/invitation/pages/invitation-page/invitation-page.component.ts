@@ -16,11 +16,13 @@ import { WINDOW } from '../../../../core/tokens/window.token';
 import { PREVIEW_PROTOCOL_VERSION, PREVIEW_READY, PREVIEW_UPDATE } from '../../../editor/data/preview-protocol';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { SeoService } from '../../../../core/services/seo.service';
+import { weddingHostLabel } from '../../../../core/utils/invitation-public-url';
 import { environment } from '../../../../../environments/environment';
 
 interface InvitationApiOut {
   eventId: string;
   slug: string;
+  publicSubdomain?: string | null;
   title: string;
   status: string;
   ownerId: string;
@@ -333,8 +335,17 @@ export class InvitationPageComponent implements OnInit {
       robots: 'noindex, nofollow',
     });
 
-    const slug = this.slug();
-    if (!slug) {
+    const routeSlug = this.slug();
+    const bootSlug = this.window?.__TI_INVITATION_SLUG__;
+    const hostLabel = weddingHostLabel();
+    let slug = routeSlug || bootSlug || '';
+    const apiPath = slug
+      ? `v1/i/${slug}`
+      : hostLabel
+        ? `v1/i/by-subdomain/${encodeURIComponent(hostLabel)}`
+        : '';
+
+    if (!apiPath) {
       this.state.set('not-found');
       return;
     }
@@ -342,10 +353,8 @@ export class InvitationPageComponent implements OnInit {
     let invitation: InvitationApiOut | null = null;
     try {
       invitation = await firstValueFrom(
-        this.http.get<InvitationApiOut>(`v1/i/${slug}`).pipe(
+        this.http.get<InvitationApiOut>(apiPath).pipe(
           timeout(REQUEST_TIMEOUT_MS),
-          // Keep showing the loader through transient failures (backend restarting,
-          // flaky network, slow cold start) instead of flashing an error.
           retry({
             count: MAX_RETRIES,
             delay: (err, attempt) =>
@@ -366,6 +375,10 @@ export class InvitationPageComponent implements OnInit {
     } catch {
       this.state.set('error');
       return;
+    }
+
+    if (invitation?.slug) {
+      slug = invitation.slug;
     }
 
     if (!invitation) return;

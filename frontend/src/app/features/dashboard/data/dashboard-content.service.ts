@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { Observable, forkJoin, tap, catchError, of, map } from 'rxjs';
+import { invitationPublicUrl } from '../../../core/utils/invitation-public-url';
 import { environment } from '../../../../environments/environment';
 import { PaymentApiService, type Payment } from '../../payment/data/payment-api.service';
 import type {
@@ -28,6 +29,7 @@ interface UserSiteApiOut {
   type: string;
   title: string;
   slug: string;
+  publicSubdomain: string | null;
   status: string;
   templateId: string | null;
   templateSlotId: string | null;
@@ -211,7 +213,7 @@ export class DashboardContentService {
       templateName: s.title,
       occasion: this.formatType(s.type),
       status: this.mapStatus(s.status),
-      url: `${environment.appUrl}/i/${s.slug}`,
+      url: invitationPublicUrl({ slug: s.slug, publicSubdomain: s.publicSubdomain }),
       createdAt: s.createdAt,
       views: s.views,
       rsvps: s.rsvps,

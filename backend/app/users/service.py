@@ -89,6 +89,7 @@ async def list_my_sites(db: AsyncSession, user: User, params: PageParams) -> Pag
             type=event.type,
             title=event.title,
             slug=event.slug,
+            public_subdomain=event.public_subdomain,
             status=event.status,
             template_id=event.template_id,
             template_slot_id=slot_id,

@@ -12,17 +12,32 @@ export function isValidSlug(slug) {
   return typeof slug === 'string' && /^[a-z0-9][a-z0-9-]{0,119}$/i.test(slug);
 }
 
+const SUBDOMAIN_RE = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/;
+
+export function isValidSubdomain(label) {
+  return typeof label === 'string' && label.length <= 63 && SUBDOMAIN_RE.test(label);
+}
+
 /** The published invitation, or null if it isn't public or the API can't answer within `timeoutMs`. */
-export async function loadInvitation(slug, timeoutMs) {
-  if (!isValidSlug(slug)) return null;
+async function loadPublishedInvitation(path, timeoutMs) {
   try {
-    const response = await fetch(`${API_URL}/v1/i/${encodeURIComponent(slug)}`, { signal: AbortSignal.timeout(timeoutMs) });
+    const response = await fetch(`${API_URL}${path}`, { signal: AbortSignal.timeout(timeoutMs) });
     if (!response.ok) return null;
     const invitation = await response.json();
     return invitation?.status === 'PUBLISHED' ? invitation : null;
   } catch {
     return null;
   }
+}
+
+export async function loadInvitation(slug, timeoutMs) {
+  if (!isValidSlug(slug)) return null;
+  return loadPublishedInvitation(`/v1/i/${encodeURIComponent(slug)}`, timeoutMs);
+}
+
+export async function loadInvitationBySubdomain(subdomain, timeoutMs) {
+  if (!isValidSubdomain(subdomain)) return null;
+  return loadPublishedInvitation(`/v1/i/by-subdomain/${encodeURIComponent(subdomain)}`, timeoutMs);
 }
 
 /**

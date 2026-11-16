@@ -35,3 +35,13 @@ export function withShareTags(shell, { title, description, url, image }) {
   for (const [attribute, key, value] of tags) html = setMeta(html, attribute, key, value);
   return html;
 }
+
+/** Slug for the Angular invitation viewer when the browser is on a wedding subdomain (`/`). */
+export function withInvitationBootstrap(shell, slug) {
+  const safe = JSON.stringify(slug);
+  const tag = `<script>window.__TI_INVITATION_SLUG__=${safe}</script>`;
+  const existing = /<script>window\.__TI_INVITATION_SLUG__=[^<]*<\/script>/i;
+  return existing.test(shell)
+    ? shell.replace(existing, () => tag)
+    : shell.replace('</head>', () => `${tag}\n</head>`);
+}

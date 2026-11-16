@@ -1,36 +1,73 @@
-import { cardVersion, describeCard, loadInvitation } from './_lib/invitation.mjs';
-import { withShareTags } from './_lib/page-tags.mjs';
+import { cardVersion, describeCard, loadInvitation, loadInvitationBySubdomain } from './_lib/invitation.mjs';
+import { withInvitationBootstrap, withShareTags } from './_lib/page-tags.mjs';
 
-// Link-preview crawlers give up quickly, and guests are waiting: past this, serve the plain page.
 const API_TIMEOUT_MS = 1500;
 const CACHE = 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400';
+const NOINDEX = 'noindex, nofollow';
+
+function htmlHeaders({ cache, status, varyHost }) {
+  const headers = {
+    'Content-Type': 'text/html; charset=utf-8',
+    'Cache-Control': cache,
+    'X-Robots-Tag': NOINDEX,
+  };
+  if (varyHost) headers.Vary = 'Host';
+  return { status, headers };
+}
 
 /**
- * Serves /i/:slug. WhatsApp and friends don't run JavaScript, so an invitation's title, description and
- * image have to be in the HTML itself. The page is otherwise the normal app shell, and whatever goes
- * wrong here it still is: an invitation must always open.
+ * Serves /i/:slug and wedding subdomains (via middleware ?subdomain=).
+ * WhatsApp and friends don't run JavaScript, so title/description/image are injected into HTML.
  */
 export async function GET(request) {
   const url = new URL(request.url);
-  const slug = url.searchParams.get('slug') ?? '';
+  const slugParam = url.searchParams.get('slug') ?? '';
+  const subdomainParam = url.searchParams.get('subdomain') ?? '';
+  const forwardedHost = request.headers.get('x-forwarded-host') || url.host;
+  const origin = forwardedHost.includes('://') ? forwardedHost : `https://${forwardedHost}`;
+
   const shellResponse = await fetch(new URL('/index.csr.html', url.origin));
   const shell = await shellResponse.text();
-  const page = (html, cache) =>
-    new Response(html, { status: shellResponse.status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': cache } });
+  const page = (html, { cache, status = shellResponse.status, varyHost = false }) =>
+    new Response(html, htmlHeaders({ cache, status, varyHost }));
 
-  const invitation = await loadInvitation(slug, API_TIMEOUT_MS);
-  // Not cached: a slow API or a just-published invitation shouldn't stick for minutes.
-  if (!invitation) return page(shell, 'public, max-age=0, must-revalidate');
+  const bySubdomain = Boolean(subdomainParam);
+  const invitation = bySubdomain
+    ? await loadInvitationBySubdomain(subdomainParam, API_TIMEOUT_MS)
+    : await loadInvitation(slugParam, API_TIMEOUT_MS);
 
+  if (!invitation) {
+    const cache = bySubdomain ? 'public, max-age=0, must-revalidate' : 'public, max-age=0, must-revalidate';
+    const status = bySubdomain ? 404 : shellResponse.status;
+    return page(shell, { cache, status, varyHost: bySubdomain });
+  }
+
+  const slug = invitation.slug ?? slugParam;
   const card = describeCard(invitation);
-  const origin = `https://${request.headers.get('x-forwarded-host') || url.host}`;
-  return page(
-    withShareTags(shell, {
-      title: card.title,
-      description: card.description,
-      url: `${origin}/i/${slug}`,
-      image: `${origin}/api/invitation-card?slug=${encodeURIComponent(slug)}&v=${cardVersion(card)}`,
-    }),
-    CACHE,
-  );
+  const publicSubdomain = invitation.publicSubdomain ?? invitation.public_subdomain ?? subdomainParam;
+  const shareUrl = publicSubdomain
+    ? `https://${publicSubdomain}.${apexFromOrigin(origin)}/`
+    : `${origin}/i/${slug}`;
+
+  let html = withShareTags(shell, {
+    title: card.title,
+    description: card.description,
+    url: shareUrl,
+    image: `${origin}/api/invitation-card?slug=${encodeURIComponent(slug)}&v=${cardVersion(card)}`,
+  });
+  if (bySubdomain) {
+    html = withInvitationBootstrap(html, slug);
+  }
+
+  return page(html, { cache: CACHE, varyHost: bySubdomain });
+}
+
+function apexFromOrigin(origin) {
+  try {
+    const host = new URL(origin).hostname;
+    const parts = host.split('.');
+    return parts.length >= 2 ? parts.slice(-2).join('.') : host;
+  } catch {
+    return 'theinvitely.in';
+  }
 }
