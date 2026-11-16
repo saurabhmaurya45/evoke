@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.events.models import EventStatus
+from app.events.schemas import InvitationOut
 from app.events.service import get_event_by_public_subdomain, get_event_by_slug
 from app.invitation.service import build_invitation_out
-from app.events.schemas import InvitationOut
 from app.shared.auth.dependencies import get_current_user_optional
 from app.shared.database import get_db
 from app.shared.errors import NotFoundError

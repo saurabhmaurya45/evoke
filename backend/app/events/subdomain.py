@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
-import re
-from typing import Any
-
 import random
+import re
 import unicodedata
+from typing import Any
 
 _GROOM_KEYS = ("groomShort", "groomName")
 _BRIDE_KEYS = ("brideShort", "brideName")

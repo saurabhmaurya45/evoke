@@ -1,11 +1,9 @@
 """Published invitations get a wedding subdomain: `arjun-priya.theinvitely.in`."""
 
 from app.events.subdomain import published_subdomain_base
+
 from tests.test_payments import _checkout
 from tests.test_published_slug import NAMES, _event_with_names
-
-
-NAMES = {"hero": {"groomName": "Arjun Sharma", "brideName": "Priya"}}
 
 
 def test_subdomain_base_omits_and():

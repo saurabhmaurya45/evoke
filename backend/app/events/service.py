@@ -16,6 +16,13 @@ from app.config import get_settings
 from app.drafts.models import Draft
 from app.events.models import Event, EventStatus, EventType
 from app.events.schemas import EventCreate, EventUpdate
+from app.events.subdomain import (
+    fallback_public_subdomain_from_slug,
+    is_reserved_public_subdomain,
+    is_valid_public_subdomain,
+    public_subdomain_candidates,
+    published_subdomain_base,
+)
 from app.payments.models import Payment, PaymentStatus
 from app.payments.pricing import get_template_price, has_paid_payment
 from app.shared.audit import log_action
@@ -28,13 +35,6 @@ from app.shared.errors import (
     ValidationFailedError,
 )
 from app.shared.pagination import Page, PageParams, make_page
-from app.events.subdomain import (
-    fallback_public_subdomain_from_slug,
-    is_reserved_public_subdomain,
-    is_valid_public_subdomain,
-    public_subdomain_candidates,
-    published_subdomain_base,
-)
 from app.templates.models import Template
 from app.users.models import User, UserRole
 
