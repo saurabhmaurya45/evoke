@@ -68,6 +68,11 @@
           "required": true
         },
         {
+          "key": "primaryDate",
+          "label": "Date on the cover & Save the Date (optional, else the first event's date)",
+          "type": "date"
+        },
+        {
           "key": "time",
           "label": "Time",
           "type": "text",
@@ -220,6 +225,17 @@
           "key": "phone2",
           "label": "Phone 2",
           "type": "text"
+        }
+      ]
+    },
+    {
+      "key": "music",
+      "label": "Music",
+      "fields": [
+        {
+          "key": "track",
+          "label": "Background music",
+          "type": "audio"
         }
       ]
     }

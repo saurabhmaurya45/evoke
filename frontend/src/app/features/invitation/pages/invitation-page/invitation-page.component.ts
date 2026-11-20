@@ -396,7 +396,10 @@ export class InvitationPageComponent implements OnInit {
     }
 
     this.pendingData = invitation.draftData;
-    this.safeSrc.set(this.sanitizer.bypassSecurityTrustResourceUrl(schema.previewUrl));
+    // `live=1` tells the template it's the published invitation, not the editor's
+    // preview, so it keeps its opening (e.g. template 6's door) for guests.
+    const sep = schema.previewUrl.includes('?') ? '&' : '?';
+    this.safeSrc.set(this.sanitizer.bypassSecurityTrustResourceUrl(`${schema.previewUrl}${sep}live=1`));
     this.state.set('ready');
 
     // Listen for the iframe's PREVIEW_READY handshake, then push the data once.

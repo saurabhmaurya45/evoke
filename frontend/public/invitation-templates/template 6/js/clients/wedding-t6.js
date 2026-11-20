@@ -1659,9 +1659,11 @@
    * The editor embeds this template and streams the user's form data in via
    * postMessage. We map the section-keyed data onto the body's data-* attributes
    * the template already reads, re-run hydrate(), and (only in the editor) skip
-   * the door-open intro so edits are immediately visible.
+   * the door-open intro so edits are immediately visible. A published invitation
+   * loads the page with ?live=1 and keeps the intro: guests knock, the door opens.
    */
   function initEvokeBridge() {
+    var LIVE = /[?&]live=1(?:&|$)/.test(window.location.search);
     var ATTR_MAP = {
       'couple.groomName': 'data-groom-name',
       'couple.brideName': 'data-bride-name',
@@ -1672,6 +1674,8 @@
       'couple.groomPlace': 'data-groom-place',
       'couple.bridePlace': 'data-bride-place',
       'ceremony.date': 'data-event-date',
+      // Optional: the date on the cover and "Save the date" (otherwise the first event's).
+      'ceremony.primaryDate': 'data-primary-date',
       'ceremony.time': 'data-event-time',
       'ceremony.address': 'data-event-address',
       'ceremony.mapLink': 'data-map-link',
@@ -1742,10 +1746,19 @@
       hydrate();
 
       // Hero names + quote are letter-filled on the intro animation; show them
-      // directly for the editor preview.
-      setText('wed6-hero-groom', getAttr('data-groom-name', ''));
-      setText('wed6-hero-bride', getAttr('data-bride-name', ''));
-      setText('wed6-quote-text', getAttr('data-quote', ''));
+      // directly for the editor preview (or if the intro already ran).
+      if (!LIVE || namesShown) {
+        setText('wed6-hero-groom', getAttr('data-groom-name', ''));
+        setText('wed6-hero-bride', getAttr('data-bride-name', ''));
+      }
+      if (!LIVE) setText('wed6-quote-text', getAttr('data-quote', ''));
+
+      // Background music: the couple's chosen track, if any (else the template's own song).
+      var track = data.music && data.music.track ? String(data.music.track) : '';
+      if (audio && /^https:\/\//i.test(track) && audio.getAttribute('src') !== track) {
+        audio.setAttribute('src', track);
+        try { audio.load(); } catch (e) {}
+      }
 
       // Gallery: set uploaded/URL images directly.
       var gl = (data.gallery && data.gallery.items) || null;
@@ -1768,7 +1781,7 @@
         if (photosSection) photosSection.style.display = hasPhoto ? '' : 'none';
       }
 
-      revealForEditor();
+      if (!LIVE) revealForEditor();
     }
 
     var parentOrigin = document.referrer ? new URL(document.referrer).origin : window.location.origin;
