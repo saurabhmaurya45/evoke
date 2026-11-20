@@ -94,6 +94,8 @@ export function itemMedia(section, list, index, key) {
   const items = (current[section] && current[section][list]) || [];
   const value = items[index] && items[index][key];
   if (isSafeUrl(value)) return value;
+  // The couple sent their own list: a blank picture means none, not the sample's picture.
+  if (pending && pending[section] && Array.isArray(pending[section][list])) return '';
   const defItems = (defaults[section] && defaults[section][list]) || [];
   const fallback = defItems[index] && defItems[index][key];
   return isSafeUrl(fallback) ? fallback : '';
