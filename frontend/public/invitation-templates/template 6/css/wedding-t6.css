@@ -1565,10 +1565,15 @@ body {
   opacity: .8;
 }
 
+/* The oval is stretched behind the names, so long names and family lines grow the
+   frame instead of running over its edges. */
 .wed6-details-couple-art {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: fill;
   opacity: 1;
   pointer-events: none;
   -webkit-user-select: none;
@@ -1577,19 +1582,21 @@ body {
 }
 
 .wed6-details-couple {
-  position: absolute;
-  inset: 10% 11% 11%;
+  position: relative;
+  /* The frame art's own proportions; taller content stretches the frame. */
+  aspect-ratio: 730 / 1126;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
   margin: 0;
-  padding: 0.35rem 0.2rem;
+  /* Kept inside the oval's curves: wide in the middle, narrow at top and bottom. */
+  padding: 27% 15% 30%;
   background: transparent;
   border: 0;
   border-radius: 0;
-  overflow: hidden;
 }
 
 .wed6-details-person {
