@@ -800,8 +800,18 @@
       getAttr('data-event-1-time', '') ||
       getAttr('data-event-time', '11:00 AM');
     var timeStart = eventTimeRaw.split('-')[0].trim();
-    var dateTime = new Date(dateRaw + ' ' + timeStart);
-    if (isNaN(dateTime.getTime())) dateTime = new Date(dateRaw + 'T11:00:00');
+    // Read "YYYY-MM-DD" and a time like "10:00 AM" / "17:30" by hand: browsers disagree on
+    // parsing "2026-12-05 10:00 AM" (Safari can't), and a wrong guess shifts the countdown.
+    var d = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateRaw);
+    var t = /^(\d{1,2})(?:[:.](\d{2}))?\s*([ap])?\.?\s*m?\.?/i.exec(timeStart);
+    var hour = 11, minute = 0;
+    if (t) {
+      hour = parseInt(t[1], 10) % 24;
+      minute = t[2] ? parseInt(t[2], 10) : 0;
+      if (t[3] && t[3].toLowerCase() === 'p' && hour < 12) hour += 12;
+      if (t[3] && t[3].toLowerCase() === 'a' && hour === 12) hour = 0;
+    }
+    var dateTime = d ? new Date(+d[1], +d[2] - 1, +d[3], hour, minute) : new Date(NaN);
     return { dateRaw: dateRaw, dateTime: dateTime };
   }
 
@@ -819,10 +829,12 @@
 
   function startCountdown() {
     if (!countdownEls.days) return;
-    var dateTime = getCountdownTarget().dateTime;
-    if (isNaN(dateTime.getTime())) return;
 
+    // The target is read on every tick: the couple's details arrive after the page starts
+    // (through the editor bridge), and the countdown must follow them, not the sample date.
     function tick() {
+      var dateTime = getCountdownTarget().dateTime;
+      if (isNaN(dateTime.getTime())) return;
       var diff = dateTime.getTime() - Date.now();
       if (diff <= 0) {
         countdownEls.days.textContent = '0';
