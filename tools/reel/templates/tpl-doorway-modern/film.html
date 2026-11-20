@@ -89,11 +89,11 @@ const people = [
 const tlRaw = raw(D?.timeline?.items);
 const cDate = val(D?.ceremony?.date), cTime = val(D?.ceremony?.time), cAddr = val(D?.ceremony?.address);
 // The template's calendar date: the first timeline entry's date, else the ceremony's.
-const calRaw = val(obj(tlRaw[0]).date) || cDate, cal = isoDate(calRaw);
+const calRaw = val(D?.ceremony?.primaryDate) || val(obj(tlRaw[0]).date) || cDate, cal = isoDate(calRaw);
 const heroDate = cal ? fmt(cal, { day: 'numeric', month: 'long', year: 'numeric' }) : calRaw;
 const timeAt = cTime.split('-')[0].trim() ? `AT ${cTime.split('-')[0].trim().toUpperCase()}` : '';
 const quote = para(val(D?.messages?.quote), 22, 7);
-const inviteMsg = para(val(D?.messages?.invitationMessage), 34, 3);
+const inviteMsg = para(val(D?.messages?.invitationMessage), 46, 6);
 const welcome = para(val(D?.messages?.welcomeMessage), 32, 5);
 // "Best wishes from": lines split by "|", each optionally "Label: names".
 const blessings = str(D?.messages?.blessingsFrom).split('|').map((l) => l.trim().replace(/[ \t]+/g, ' ')).filter(Boolean).slice(0, 4).map((l) => {
@@ -348,22 +348,31 @@ const RING_AT = { x: 540, y: 1250 };
   paper(sc);
   const strip = im(sc, IMG.flowerStrip, 1180, 1180 * 335 / 736, 'transform-origin:50% 0');
   const gan = text(sc, '॥ श्री गणेशाय नमः ॥', `font:400 44px ${DEV};color:${ACCENT}`);
-  const msg = inviteMsg.map((l) => text(sc, l, `font:italic 500 46px ${SERIF};color:${SOFT}`, 900));
-  const FH = 1100, FW = FH * 730 / 1126;
-  const frame = im(sc, IMG.frame, FW, FH);
+  const msg = inviteMsg.map((l) => text(sc, l, `font:italic 500 36px ${SERIF};color:${SOFT}`, 960));
+  // The oval and the names in one group: the oval's art stretches to the names (as on the
+  // invitation page), and the group shrinks if it would run into the date below.
+  const fbox = mk(sc, 'div', 'width:1080px;height:1920px');
+  const FW = 1100 * 730 / 1126;
+  const frame = im(fbox, IMG.frame, FW, 1100);
   const blocks = people.map((p) => {
-    const rows = [{ el: text(sc, p.role, `font:800 26px ${BODY};letter-spacing:5px;text-transform:uppercase;color:${ACCENT}`), h: 36 }];
-    rows.push({ el: text(sc, p.name, `font:400 100px ${DISPLAY};color:${INK}`, 520), h: 112, name: true });
-    if (p.prefix) rows.push({ el: text(sc, p.prefix, `font:400 30px ${BODY};color:${SOFT}`, 500), h: 42 });
-    p.parents.forEach((l) => rows.push({ el: text(sc, l, `font:400 30px ${BODY};color:${SOFT}`, 500), h: 42 }));
-    if (p.place) rows.push({ el: text(sc, p.place, `font:italic 500 36px ${SERIF};color:${SOFT}`, 500), h: 46 });
+    const rows = [{ el: text(fbox, p.role, `font:800 26px ${BODY};letter-spacing:5px;text-transform:uppercase;color:${ACCENT}`), h: 36 }];
+    rows.push({ el: text(fbox, p.name, `font:400 100px ${DISPLAY};color:${INK}`, 460), h: 112, name: true });
+    if (p.prefix) rows.push({ el: text(fbox, p.prefix, `font:400 30px ${BODY};color:${SOFT}`, 440), h: 42 });
+    p.parents.forEach((l) => rows.push({ el: text(fbox, l, `font:400 30px ${BODY};color:${SOFT}`, 400), h: 42 }));
+    if (p.place) rows.push({ el: text(fbox, p.place, `font:italic 500 30px ${SERIF};color:${SOFT}`, 380), h: 42 });
     return rows;
   });
-  const amp = text(sc, '&', `font:400 84px ${DISPLAY};color:${ACCENT}`);
+  const amp = text(fbox, '&', `font:400 84px ${DISPLAY};color:${ACCENT}`);
   // The two blocks and the "&" stacked in the oval's middle.
   const all = [...blocks[0], { el: amp, h: 100, gap: 10 }, ...blocks[1].map((r, i) => (i ? r : { ...r, gap: 10 }))];
   let y = 0; all.forEach((r, i) => { if (i) y += r.gap || 0; r.y = y + r.h / 2; y += r.h; });
-  const FY = 1010; all.forEach((r) => { r.y += FY - y / 2; });
+  // The text fills the oval's inner 58%; taller text makes a taller oval.
+  const FH = Math.max(1100, y / 0.58), FY = 960;
+  frame.style.height = `${FH}px`;
+  all.forEach((r) => { r.y += FY - y / 2; });
+  const msgBottom = 375 + inviteMsg.length * 46, top = msgBottom + 15, k = Math.min(1, (1610 - top) / FH);
+  fbox.style.transformOrigin = `540px ${FY - FH / 2}px`;
+  fbox.style.transform = `translateY(${top - (FY - FH / 2)}px) scale(${k})`;
   const month = cal ? text(sc, fmt(cal, { month: 'long' }).toUpperCase(), `font:600 50px ${SERIF};letter-spacing:12px;color:${TITLE}`) : null;
   const wday = cal ? text(sc, fmt(cal, { weekday: 'long' }).toUpperCase(), `font:700 28px ${BODY};letter-spacing:4px;color:${SOFT}`, 330) : null;
   const num = cal ? text(sc, String(cal.getDate()), `font:400 120px ${HEAD};color:${ACCENT}`) : null;
@@ -374,7 +383,7 @@ const RING_AT = { x: 540, y: 1250 };
     // The hanging flowers sway a little, so the page never stands still.
     P(strip, { x: 540 + Math.sin(u * 1.6) * 10, y: 110 - (1 - outC(seg(u, 0, 0.9))) * 260, r: 180 + Math.sin(u * 1.3) * 0.8 });
     rise(gan, u, 0.2, 300);
-    msg.forEach((e, i) => rise(e, u, 0.35 + i * 0.1, 375 + i * 58));
+    msg.forEach((e, i) => rise(e, u, 0.35 + i * 0.08, 375 + i * 46));
     const fp = seg(u, 0.3, 1.1);
     P(frame, { y: FY, s: lerp(0.92, 1, outC(fp)) * (1 + 0.006 * Math.sin(u * 2.2)), a: outC(fp) });
     all.forEach((r, i) => {
