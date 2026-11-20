@@ -45,7 +45,10 @@ export async function GET(request) {
   const slug = invitation.slug ?? slugParam;
   const card = describeCard(invitation);
   const publicSubdomain = invitation.publicSubdomain ?? invitation.public_subdomain ?? subdomainParam;
-  const shareUrl = publicSubdomain
+  // og:url is the address being shared: the subdomain only when the visit came through it.
+  // A /i/{slug} link must not point WhatsApp/Facebook at a subdomain that may not resolve,
+  // or the link preview can fail to show.
+  const shareUrl = bySubdomain && publicSubdomain
     ? `https://${publicSubdomain}.${apexFromOrigin(origin)}/`
     : `${origin}/i/${slug}`;
 
