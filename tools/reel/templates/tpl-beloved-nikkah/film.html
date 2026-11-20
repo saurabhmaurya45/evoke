@@ -461,10 +461,11 @@ const panelGap = (p) => 600 * ioC(cl(p));
   const sc = scene(stage);
   cream(sc);
   const head = heading(sc, 'Event Timeline', 330);
-  // Up to four events get tall cards; more get one-row cards with the time on the right.
+  // Up to four events get tall cards; more get shorter ones. The time sits under the title,
+  // full width, so a long date and time stays readable.
   const n = events.length, compact = n > 4, top = compact ? 500 : 540, room = (compact ? 1500 : 1460) - top;
   const gap = Math.min(250, room / Math.max(1, n)), ch = compact ? gap - 18 : Math.min(190, gap - 26);
-  const tf = compact ? 46 : 56, mf = compact ? 36 : 40;
+  const tf = compact ? 46 : 56, mf = compact ? 32 : 40;
   const LX = 210;
   const line = mk(sc, 'div', `width:4px;background:linear-gradient(180deg,${RED},${REDS})`);
   const items = events.map((ev, i) => {
@@ -474,8 +475,8 @@ const panelGap = (p) => 600 * ioC(cl(p));
     // A long title takes two lines on a tall card.
     const tl = !compact && ev.title.length > 22 ? wrap(ev.title, 2, 1) : [ev.title];
     const tfs = tl.length > 1 ? 44 : tf;
-    const t1 = tl.map((l) => T(sc, l, `font:600 ${tfs}px ${PLAY};color:${RED};text-align:left`, compact && ev.time ? 440 : 640));
-    const t2 = ev.time ? T(sc, ev.time, `font:700 ${mf}px ${SANS};letter-spacing:1px;color:${INKS};text-align:left`, compact ? 200 : 640) : null;
+    const t1 = tl.map((l) => T(sc, l, `font:600 ${tfs}px ${PLAY};color:${RED};text-align:left`, 640));
+    const t2 = ev.time ? T(sc, ev.time, `font:700 ${mf}px ${SANS};letter-spacing:1px;color:${INKS};text-align:left`, 640) : null;
     return { y, dot, card, t1, t2, tfs };
   });
   R.timeline = { sc, f(u, s) {
@@ -497,14 +498,9 @@ const panelGap = (p) => 600 * ioC(cl(p));
         el.style.opacity = op;
       };
       const lh = it.tfs * 1.1, k = it.t1.length;
-      if (compact) {
-        place(it.t1[0], it.y);
-        if (it.t2) place(it.t2, it.y, true);
-      } else {
-        const blockTop = it.y - ((k - 1) * lh + (it.t2 ? mf * 1.4 : 0)) / 2;
-        it.t1.forEach((el, j) => place(el, blockTop + j * lh));
-        if (it.t2) place(it.t2, blockTop + (k - 1) * lh + mf * 1.4);
-      }
+      const blockTop = it.y - ((k - 1) * lh + (it.t2 ? mf * 1.4 : 0)) / 2;
+      it.t1.forEach((el, j) => place(el, blockTop + j * lh));
+      if (it.t2) place(it.t2, blockTop + (k - 1) * lh + mf * 1.4);
     });
   } };
 }
