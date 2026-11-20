@@ -139,11 +139,8 @@ const eBow = im(sE, src('bow'), 1180, 484);
 const eLace = im(sE, src('border'), 1240, 526);
 const eNames = text(sE, `${names[0]} & ${names[1]}`, `font:400 150px ${SCRIPT};color:#ffe9c8`, 960);
 const eMsg = text(sE, D.closing?.message, `font:italic 400 44px ${SERIF};color:#f3dfd0`, 940);
-const eA = text(sE, 'Apni shaadi ka', `font:400 80px ${SERIF};color:#fff`);
-const eB = text(sE, 'aisa invitation banaiye', `font:400 80px ${SERIF};color:#fff`);
-const eLogo = mk(sE, 'div', `font:400 138px ${SERIF};white-space:nowrap;background:linear-gradient(100deg,${GOLD} 0%,#fff2d0 40%,#fff 50%,#fff2d0 60%,${GOLD} 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent`);
-eLogo.textContent = 'theinvitely.in';
-const eRule = mk(sE, 'div', `height:4px;background:linear-gradient(90deg,transparent,${GOLD},transparent)`);
+// The brand logo; no tagline.
+const eLogo = im(sE, '../../lib/watermark-logo.png', 820, 820 * 227 / 640);
 
 // ---- particles, flash, vignette ----
 const cv = document.createElement('canvas');
@@ -308,14 +305,9 @@ function renderEnd(u, d) {
   P(eLace, { y: lerp(2200, 1760, outE(seg(u, 0, 0.7))) });
   P(eNames, { y: 585 }); reveal(eNames, u, 0.1, 0.03);
   P(eMsg, { y: 715 }); reveal(eMsg, u, 0.5, 0.012);
-  P(eA, { y: 880 }); reveal(eA, u, BEAT, 0.025);
-  P(eB, { y: 985 }); reveal(eB, u, BEAT * 1.4, 0.02);
-  const l = outB(seg(u, BEAT * 2.5, BEAT * 3), 1.8);
-  P(eLogo, { y: 1165, s: Math.max(l, 0.001), a: cl(l * 2) });
-  eLogo.style.backgroundPosition = `${lerp(130, -40, seg(u, BEAT * 3, BEAT * 4.6))}% 0`;
-  eLogo.style.filter = 'drop-shadow(0 3px 10px rgba(0,0,0,.5))';
-  eRule.style.width = `${outC(seg(u, BEAT * 3, BEAT * 3.6)) * 720}px`;
-  P(eRule, { y: 1255 });
+  const l = outB(seg(u, BEAT * 1.5, BEAT * 2), 1.8);
+  P(eLogo, { y: 1060, s: Math.max(l, 0.001), a: cl(l * 2) });
+  eLogo.style.filter = 'drop-shadow(0 4px 14px rgba(0,0,0,.5))';
 }
 
 const SCENES = { names: [sN, renderNames], countdown: [sC, renderCountdown], day: [sD, renderDay], venue: [sV, renderVenue], gallery: [sG, renderGallery], end: [sE, renderEnd] };

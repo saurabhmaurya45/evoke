@@ -416,22 +416,14 @@ const CARD_RECT = { w: 0, h: 0, x: 540, y: 0 };
 {
   const sc = scene(stage);
   wine(sc);
-  const a1 = text(sc, 'Apni shaadi ka', `font:600 84px ${NAME};color:#fff;${shadow}`);
-  const a2 = text(sc, 'aisa invitation banaiye', `font:600 84px ${NAME};color:#fff;${shadow}`, 980);
   const halo = mk(sc, 'div', 'width:1100px;height:520px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,180,205,.45),transparent 68%)');
-  const logo = mk(sc, 'div', `font:400 170px ${SCRIPT};white-space:nowrap;background:linear-gradient(100deg,${GOLD} 0%,#ffe8b8 40%,#ffffff 50%,#ffe8b8 60%,${GOLD} 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 30px`);
-  logo.textContent = 'theinvitely.in';
-  const under = mk(sc, 'div', `height:4px;background:linear-gradient(90deg,transparent,${LGOLD},transparent)`);
+  // The brand logo, and nothing else.
+  const logo = im(sc, '../../lib/watermark-logo.png', 820, 820 * 227 / 640);
   R.end = { sc, f(u) {
-    P(a1, { y: 760 }); reveal(a1, u, BEAT, 0.03);
-    P(a2, { y: 870 }); reveal(a2, u, 2 * BEAT, 0.025);
-    const l = outB(seg(u, 4 * BEAT, 4 * BEAT + 0.5), 1.9);
-    P(halo, { y: 1090, s: l * (1 + 0.05 * Math.sin(u * 5)), a: cl(l) * 0.9 });
-    P(logo, { y: 1080, s: Math.max(l, 0.001), a: cl(l * 2) });
-    logo.style.backgroundPosition = `${lerp(130, -40, seg(u, 2.9, 4.3))}% 0`;
-    logo.style.filter = 'drop-shadow(0 3px 10px rgba(0,0,0,.6))';
-    under.style.width = `${outC(seg(u, 2.85, 3.35)) * 700}px`;
-    P(under, { y: 1190 });
+    const l = outB(seg(u, 0.15, 0.75), 1.9);
+    P(halo, { y: 960, s: l * (1 + 0.05 * Math.sin(u * 5)), a: cl(l) * 0.9 });
+    P(logo, { y: 960, s: Math.max(l, 0.001), a: cl(l * 2) });
+    logo.style.filter = 'drop-shadow(0 4px 14px rgba(0,0,0,.45))';
   } };
 }
 

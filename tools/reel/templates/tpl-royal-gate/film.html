@@ -423,23 +423,14 @@ if (events.length > splitAt) eventsScene('events2', splitAt, events.length);
 {
   const sc = scene(stage);
   full(sc, `background:radial-gradient(ellipse at 50% 40%,#8a2a3d 0%,${BURG} 45%,#2a0911 100%)`);
-  const shadow = 'text-shadow:0 2px 14px rgba(20,0,8,.6);';
-  const a1 = text(sc, 'Apni shaadi ka', `font:600 80px ${HEAD};color:#fff;${shadow}`);
-  const a2 = text(sc, 'aisa invitation banaiye', `font:600 66px ${HEAD};color:#fff;${shadow}`, 980);
   const halo = mk(sc, 'div', 'width:1100px;height:520px;border-radius:50%;background:radial-gradient(ellipse,rgba(231,207,122,.3),transparent 68%)');
-  const logo = mk(sc, 'div', `font:400 170px ${SCRIPT};white-space:nowrap;background:linear-gradient(100deg,${GOLD} 0%,#fff3c4 40%,#ffffff 50%,#fff3c4 60%,${GOLD} 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 30px`);
-  logo.textContent = 'theinvitely.in';
-  const under = mk(sc, 'div', `height:4px;background:linear-gradient(90deg,transparent,${GOLD_L},transparent)`);
+  // The brand logo, and nothing else.
+  const logo = im(sc, '../../lib/watermark-logo.png', 820, 820 * 227 / 640);
   R.end = { sc, f(u) {
-    P(a1, { y: 760 }); reveal(a1, u, 0.3 * BEAT, 0.03);
-    P(a2, { y: 870 }); reveal(a2, u, 1.0 * BEAT, 0.025);
-    const l = outB(seg(u, 2 * BEAT, 2 * BEAT + 0.5), 1.9);
-    P(halo, { y: 1090, s: l * (1 + 0.05 * Math.sin(u * 5)), a: cl(l) * 0.9 });
-    P(logo, { y: 1080, s: Math.max(l, 0.001), a: cl(l * 2) });
-    logo.style.backgroundPosition = `${lerp(130, -40, seg(u, 2 * BEAT + 0.3, 2 * BEAT + 1.6))}% 0`;
-    logo.style.filter = 'drop-shadow(0 3px 10px rgba(0,0,0,.6))';
-    under.style.width = `${outC(seg(u, 2 * BEAT + 0.3, 2 * BEAT + 0.8)) * 700}px`;
-    P(under, { y: 1190 });
+    const l = outB(seg(u, 0.15, 0.75), 1.9);
+    P(halo, { y: 960, s: l * (1 + 0.05 * Math.sin(u * 5)), a: cl(l) * 0.9 });
+    P(logo, { y: 960, s: Math.max(l, 0.001), a: cl(l * 2) });
+    logo.style.filter = 'drop-shadow(0 4px 14px rgba(0,0,0,.45))';
   } };
 }
 

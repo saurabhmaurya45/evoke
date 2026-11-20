@@ -395,23 +395,14 @@ function riseLines(els, u, at, top, lh, per = 0.1, x = 540) { els.forEach((e, i)
 {
   const sc = scene(stage);
   full(sc, `background:radial-gradient(ellipse at 50% 40%,#6f8a6a 0%,#4f6a4c 45%,#253523 100%)`);
-  const shadow = 'text-shadow:0 2px 14px rgba(10,20,10,.5);';
-  const a1 = text(sc, 'Apni shaadi ka', `font:400 88px ${TITLE};color:#fff;${shadow}`);
-  const a2 = text(sc, 'aisa invitation banaiye', `font:400 78px ${TITLE};color:#fff;${shadow}`, 980);
   const halo = mk(sc, 'div', 'width:1100px;height:520px;border-radius:50%;background:radial-gradient(ellipse,rgba(236,220,190,.28),transparent 68%)');
-  const logo = mk(sc, 'div', `font:italic 400 150px ${TITLE};white-space:nowrap;background:linear-gradient(100deg,${GOLD} 0%,#fff3dc 40%,#ffffff 50%,#fff3dc 60%,${GOLD} 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 30px`);
-  logo.textContent = 'theinvitely.in';
-  const under = mk(sc, 'div', 'height:4px;background:linear-gradient(90deg,transparent,#ecdcbe,transparent)');
+  // The brand logo, and nothing else.
+  const logo = im(sc, '../../lib/watermark-logo.png', 820, 820 * 227 / 640);
   R.end = { sc, f(u) {
-    P(a1, { y: 760 }); reveal(a1, u, 0.5 * BEAT, 0.03);
-    P(a2, { y: 870 }); reveal(a2, u, 1.5 * BEAT, 0.025);
-    const l = outB(seg(u, 3 * BEAT, 3 * BEAT + 0.5), 1.9);
-    P(halo, { y: 1090, s: l * (1 + 0.05 * Math.sin(u * 5)), a: cl(l) * 0.9 });
-    P(logo, { y: 1080, s: Math.max(l, 0.001), a: cl(l * 2) });
-    logo.style.backgroundPosition = `${lerp(130, -40, seg(u, 3 * BEAT + 0.3, 3 * BEAT + 1.6))}% 0`;
-    logo.style.filter = 'drop-shadow(0 3px 10px rgba(0,0,0,.5))';
-    under.style.width = `${outC(seg(u, 3 * BEAT + 0.3, 3 * BEAT + 0.8)) * 700}px`;
-    P(under, { y: 1190 });
+    const l = outB(seg(u, 0.15, 0.75), 1.9);
+    P(halo, { y: 960, s: l * (1 + 0.05 * Math.sin(u * 5)), a: cl(l) * 0.9 });
+    P(logo, { y: 960, s: Math.max(l, 0.001), a: cl(l * 2) });
+    logo.style.filter = 'drop-shadow(0 4px 14px rgba(0,0,0,.45))';
   } };
 }
 

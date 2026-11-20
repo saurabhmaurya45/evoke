@@ -517,26 +517,18 @@ const MEET = (startOf('paths') ?? 0) + 5 * BEAT;
 {
   const sc = scene(stage), bg = backdrop(sc, 91);
   const rc = ringLayer(sc);
-  const a1 = text(sc, 'Apni shaadi ka', `font:600 80px ${SERIF};letter-spacing:2px;color:#fff;${glow}`);
-  const a2 = text(sc, 'aisa invitation banaiye', `font:600 80px ${SERIF};letter-spacing:2px;color:#fff;${glow}`, 980);
   const halo = mk(sc, 'div', 'width:1100px;height:520px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,210,130,.45),transparent 68%)');
-  const logo = mk(sc, 'div', `font:600 150px ${ITAL};white-space:nowrap;background:linear-gradient(100deg,${GOLD} 0%,${PALE} 40%,#ffffff 50%,${PALE} 60%,${GOLD} 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent`);
-  logo.textContent = 'theinvitely.in';
-  const under = mk(sc, 'div', `height:4px;background:linear-gradient(90deg,transparent,${GOLD},transparent)`);
+  // The brand logo, and nothing else.
+  const logo = im(sc, '../../lib/watermark-logo.png', 820, 820 * 227 / 640);
   R.end = { sc, f(u) {
     bg(u, { a: 0.16, y: 560, s: 1.1 - u * 0.02 });
     rc.clearRect(0, 0, 1080, 1920);
     const g = outB(seg(u, 0.1, 0.8), 1.4);
     drawRings(rc, 470, 560, 120 * Math.max(0.001, g), u + 4, 0, cl(g * 2));
-    P(a1, { y: 860 }); reveal(a1, u, BEAT, 0.03);
-    P(a2, { y: 965 }); reveal(a2, u, 2 * BEAT, 0.025);
-    const l = outB(seg(u, 4 * BEAT, 4 * BEAT + 0.5), 1.9);
-    P(halo, { y: 1170, s: l * (1 + 0.05 * Math.sin(u * 5)), a: cl(l) * 0.9 });
-    P(logo, { y: 1165, s: Math.max(l, 0.001), a: cl(l * 2) });
-    logo.style.backgroundPosition = `${lerp(130, -40, seg(u, 2.9, 4.3))}% 0`;
-    logo.style.filter = 'drop-shadow(0 3px 10px rgba(0,0,0,.7))';
-    under.style.width = `${outC(seg(u, 2.85, 3.35)) * 720}px`;
-    P(under, { y: 1258 });
+    const l = outB(seg(u, 0.5, 1.1), 1.9);
+    P(halo, { y: 1060, s: l * (1 + 0.05 * Math.sin(u * 5)), a: cl(l) * 0.9 });
+    P(logo, { y: 1060, s: Math.max(l, 0.001), a: cl(l * 2) });
+    logo.style.filter = 'drop-shadow(0 4px 14px rgba(0,0,0,.6))';
   } };
 }
 
