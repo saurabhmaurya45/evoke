@@ -657,6 +657,8 @@
     if (!audio || !song || !song.src) return;
     var source = audio.querySelector('source');
     if (!source) return;
+    // Unchanged: keep playing instead of restarting the song on every update.
+    if (source.getAttribute('src') === song.src) return;
     source.src = song.src;
     audio.load();
   }
@@ -1388,21 +1390,32 @@
     scratchCanvas.addEventListener('touchend', onEnd);
   }
 
+  // The wedding's date and start time, read fresh each time: the couple's details arrive
+  // after the page starts (through the editor bridge). The ceremony's own date and time
+  // win over the first programme item's; times like "10:00 AM" are parsed by hand, as
+  // browsers disagree on "2026-12-05 10:00 AM".
+  function countdownTarget() {
+    var dateRaw = getAttr('data-event-date', '') || getEventDateRaw(1) || '2026-08-15';
+    var timeRaw = getAttr('data-event-time', '') || getAttr('data-event-1-time', '') || '11:00 AM';
+    var d = /^(\d{4})-(\d{2})-(\d{2})/.exec(dateRaw);
+    var t = /(\d{1,2})(?:[:.](\d{2}))?\s*([ap])\.?\s*m/i.exec(timeRaw) || /(\d{1,2})[:.](\d{2})/.exec(timeRaw);
+    var hour = 11, minute = 0;
+    if (t) {
+      hour = parseInt(t[1], 10) % 24;
+      minute = t[2] ? parseInt(t[2], 10) : 0;
+      if (t[3] && t[3].toLowerCase() === 'p' && hour < 12) hour += 12;
+      if (t[3] && t[3].toLowerCase() === 'a' && hour === 12) hour = 0;
+    }
+    return d ? new Date(+d[1], +d[2] - 1, +d[3], hour, minute) : new Date(NaN);
+  }
+
   function startCountdown() {
     if (!countdownEls.days) return;
 
-    var dateRaw = getEventDateRaw(1) || getAttr('data-event-date', '2026-08-15');
-    var eventTimeRaw = getAttr('data-event-1-time', '') || getAttr('data-event-time', '11:00 AM - 6:00 PM');
-    var timeStart = eventTimeRaw.split('-')[0].trim();
-    var dateTime = new Date(dateRaw + ' ' + timeStart);
-
-    if (isNaN(dateTime.getTime())) {
-      dateTime = new Date(dateRaw + 'T11:00:00');
-    }
-
     function tick() {
-      var now = new Date().getTime();
-      var diff = dateTime.getTime() - now;
+      var dateTime = countdownTarget();
+      if (isNaN(dateTime.getTime())) return;
+      var diff = dateTime.getTime() - Date.now();
 
       if (diff <= 0) {
         countdownEls.days.textContent = '0';
@@ -1611,6 +1624,10 @@
       }
 
       hydrate();
+
+      // Background music: the couple's chosen track, if any (else the template's own song).
+      var track = data.music && data.music.track ? String(data.music.track) : '';
+      if (/^https:\/\//i.test(track)) setAudioSource({ src: track });
 
       // Render every event (not just the 4 static slots) after hydrate() so this
       // wins over hydrateTimeline()'s fixed-slot output.
