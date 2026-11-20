@@ -924,6 +924,10 @@
     setText('wed2-invitation-message', getAttr('data-invitation-message', ''));
     setText('wed2-groom-name', groomDisplay);
     setText('wed2-bride-name', brideDisplay);
+    // Full names (two words, or long) don't fit the staggered left/right layout inside the
+    // ring: centre both, one above the other, as the template's centred layout does.
+    var longNames = [groomDisplay, brideDisplay].some(function (n) { n = String(n || '').trim(); return n.indexOf(' ') > 0 || n.length > 9; });
+    body.classList.toggle('wed2-ring-names-center', longNames);
     fitRing();
     setText('wed2-details-groom-name', groomName);
     setText('wed2-details-bride-name', brideName);
