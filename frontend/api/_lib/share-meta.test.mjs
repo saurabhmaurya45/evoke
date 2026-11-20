@@ -113,3 +113,19 @@ test('text a user typed cannot break out of the tags', () => {
   assert.ok(!html.includes('<script>'));
   assert.ok(html.includes(escapeHtml(nasty)));
 });
+
+test('the invitation goes into the page as data that user text cannot break out of', async () => {
+  const { withInvitationData } = await import('./page-tags.mjs');
+  const invitation = { slug: 'a-b', draftData: { couple: { brideName: '</script><script>alert(1)</script>\u2028' } } };
+  const html = withInvitationData('<head></head>', invitation);
+  assert.equal(html.match(/<script>/g).length, 1, 'only our own script tag');
+  const json = html.slice(html.indexOf('=') + 1, html.indexOf('</script>'));
+  assert.deepEqual(JSON.parse(json), invitation);
+});
+
+test('signed, expiring media links keep the invitation out of the cached page', async () => {
+  const { hasSignedMedia } = await import('./page-tags.mjs');
+  assert.ok(hasSignedMedia({ draftData: { g: 'https://x/a.jpg?X-Amz-Signature=abc' } }));
+  assert.ok(!hasSignedMedia({ draftData: { g: 'https://pub.r2.dev/public/a.jpg' } }));
+  assert.ok(!hasSignedMedia({}));
+});

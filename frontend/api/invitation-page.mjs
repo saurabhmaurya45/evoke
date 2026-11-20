@@ -1,5 +1,5 @@
 import { cardVersion, describeCard, loadInvitation, loadInvitationBySubdomain } from './_lib/invitation.mjs';
-import { withInvitationBootstrap, withShareTags } from './_lib/page-tags.mjs';
+import { hasSignedMedia, withInvitationBootstrap, withInvitationData, withShareTags } from './_lib/page-tags.mjs';
 
 const API_TIMEOUT_MS = 1500;
 const CACHE = 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400';
@@ -60,6 +60,9 @@ export async function GET(request) {
   });
   if (bySubdomain) {
     html = withInvitationBootstrap(html, slug);
+  }
+  if (!hasSignedMedia(invitation)) {
+    html = withInvitationData(html, invitation);
   }
 
   return page(html, { cache: CACHE, varyHost: bySubdomain });

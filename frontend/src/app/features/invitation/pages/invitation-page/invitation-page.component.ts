@@ -350,9 +350,11 @@ export class InvitationPageComponent implements OnInit {
       return;
     }
 
-    let invitation: InvitationApiOut | null = null;
+    // Usually already in the page, so guests don't wait on the backend starting up.
+    const inline = this.takeInlineInvitation(slug);
+    let invitation: InvitationApiOut | null = inline;
     try {
-      invitation = await firstValueFrom(
+      invitation ??= await firstValueFrom(
         this.http.get<InvitationApiOut>(apiPath).pipe(
           timeout(REQUEST_TIMEOUT_MS),
           retry({
@@ -433,6 +435,49 @@ export class InvitationPageComponent implements OnInit {
     setTimeout(() => {
       this.frameEl = this.window?.document.querySelector('iframe.inv-frame') ?? null;
     }, 0);
+
+    if (inline) {
+      void this.refreshFromApi(apiPath, inline);
+    }
+  }
+
+  /**
+   * The invitation the page was served with, if it's the one being opened. Read once: after an in-app
+   * navigation it would be stale.
+   */
+  private takeInlineInvitation(slug: string): InvitationApiOut | null {
+    const value = this.window?.__TI_INVITATION__ as InvitationApiOut | undefined;
+    if (this.window) {
+      delete this.window.__TI_INVITATION__;
+    }
+    if (!value || typeof value !== 'object' || !value.templateSlotId || !value.draftData) {
+      return null;
+    }
+    return !slug || value.slug === slug ? value : null;
+  }
+
+  /**
+   * The page can be a few minutes old (it's cached), so ask the backend for the latest version and show
+   * any newer edits. Guests never wait for this, and a failure just leaves what's already shown.
+   */
+  private async refreshFromApi(apiPath: string, shown: InvitationApiOut): Promise<void> {
+    const fresh = await firstValueFrom(
+      this.http.get<InvitationApiOut>(apiPath).pipe(
+        timeout(REQUEST_TIMEOUT_MS),
+        catchError(() => of(null)),
+      ),
+    );
+    if (
+      !fresh?.draftData ||
+      fresh.templateSlotId !== shown.templateSlotId ||
+      JSON.stringify(fresh.draftData) === JSON.stringify(shown.draftData)
+    ) {
+      return;
+    }
+    this.pendingData = fresh.draftData;
+    if (this.isReady) {
+      this.pushData();
+    }
   }
 
   private pushData(): void {
