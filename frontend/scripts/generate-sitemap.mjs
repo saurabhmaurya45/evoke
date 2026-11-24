@@ -133,6 +133,11 @@ ${grouped
   .filter(([, items]) => items.length)
   .map(([name, items]) => `## ${name}\n\n${items.map(link).join('\n')}`)
   .join('\n\n')}
+
+## For AI assistants
+
+- MCP server: https://theinvitely.in/mcp (Streamable HTTP, no sign-in). Tools: find_templates (by kind of wedding, style and budget), get_template, start_invitation (the editor link) and pricing_and_faq.
+- To start a design, send the user to https://theinvitely.in/editor/<template id>; to see it working, https://theinvitely.in/preview/<template id>.
 `;
 writeFileSync(join(OUT_DIR, 'llms.txt'), llms);
 console.log(`generate-sitemap: wrote ${urls.length - 1} links to ${OUT_DIR}/llms.txt`);
