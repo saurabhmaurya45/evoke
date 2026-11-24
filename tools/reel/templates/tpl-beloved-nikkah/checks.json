@@ -20,7 +20,6 @@
       "Reception",
       "Lunch",
       "Grand Rose Event Hall,",
-      "Counting Down",
       "Together",
       "Blessed",
       "blessings",
@@ -28,7 +27,8 @@
     ],
     "reject": [
       "In the name of Allah",
-      "Bismillah"
+      "Bismillah",
+      "Counting Down"
     ]
   },
   {
@@ -109,7 +109,6 @@
       "Venue",
       "Umaid Bhawan Palace,",
       "Jodhpur",
-      "Counting Down",
       "Roka",
       "Forever",
       "pheras",
@@ -126,7 +125,8 @@
       "tranquility",
       "Rajesh & Mrs Sunita",
       "In the name of Allah",
-      "Bismillah"
+      "Bismillah",
+      "Counting Down"
     ]
   },
   {
@@ -147,8 +147,8 @@
       "शुभ विवाह",
       "Event Timeline",
       "Venue",
-      "Counting Down",
-      "Best wishes from"
+      "Best wishes from",
+      "Counting Down"
     ]
   },
   {
@@ -210,7 +210,8 @@
       "Save the Date"
     ],
     "reject": [
-      "seven vows"
+      "seven vows",
+      "Counting Down"
     ]
   },
   {
@@ -273,8 +274,8 @@
     ],
     "reject": [
       "Save the Date",
-      "Counting Down",
-      "7:00 PM onwards"
+      "7:00 PM onwards",
+      "Counting Down"
     ]
   },
   {
@@ -337,7 +338,8 @@
     ],
     "reject": [
       "शुभ विवाह",
-      "Son of"
+      "Son of",
+      "Counting Down"
     ]
   },
   {
@@ -402,7 +404,8 @@
     "reject": [
       "Son of",
       "Daughter of",
-      "Kavita"
+      "Kavita",
+      "Counting Down"
     ]
   },
   {
@@ -452,7 +455,8 @@
     ],
     "reject": [
       "Event Timeline",
-      "Haldi"
+      "Haldi",
+      "Counting Down"
     ]
   },
   {
@@ -510,12 +514,11 @@
         ]
       }
     },
-    "want": [
-      "Counting Down"
-    ],
+    "want": [],
     "reject": [
       "Venue",
-      "Jodhpur"
+      "Jodhpur",
+      "Counting Down"
     ]
   },
   {
@@ -560,11 +563,10 @@
         "items": []
       }
     },
-    "want": [
-      "Counting Down"
-    ],
+    "want": [],
     "reject": [
-      "Roka"
+      "Roka",
+      "Counting Down"
     ]
   },
   {
@@ -735,12 +737,11 @@
         ]
       }
     },
-    "want": [
-      "Counting Down"
-    ],
+    "want": [],
     "reject": [
       "Best wishes from",
-      "pheras"
+      "pheras",
+      "Counting Down"
     ]
   },
   {
@@ -788,9 +789,9 @@
       "शुभ विवाह",
       "Event Timeline",
       "Venue",
-      "Counting Down",
       "Best wishes from",
-      "8 PM"
+      "8 PM",
+      "Counting Down"
     ]
   },
   {
@@ -856,6 +857,9 @@
       "Haldi & Mehendi Morning",
       "Old Haveli Courtyard",
       "सगाई"
+    ],
+    "reject": [
+      "Counting Down"
     ]
   },
   {
@@ -954,7 +958,8 @@
     ],
     "reject": [
       "Haldi",
-      "Roka"
+      "Roka",
+      "Counting Down"
     ]
   },
   {
@@ -1047,7 +1052,8 @@
     ],
     "reject": [
       "Five",
-      "Six"
+      "Six",
+      "Counting Down"
     ]
   },
   {
@@ -1109,6 +1115,9 @@
       "friends forever",
       "celebrate with you",
       "Best wishes from"
+    ],
+    "reject": [
+      "Counting Down"
     ]
   }
 ]

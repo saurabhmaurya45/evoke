@@ -70,7 +70,9 @@ if (date) add('date', BAR, 'scroll');
 if (gPar || bPar) add('details', BAR, 'frame');
 if (events.length) add('timeline', events.length > 4 ? 2 * BAR : BAR, 'thread');
 if (address) add('venue', BAR, 'pin');
-if (left > 0 || captions.length) add('count', BAR, 'swing');
+// No countdown: a video can't tick, so its number would be wrong once it's shared.
+// The scene still shows the polaroids when the couple have captions.
+if (captions.length) add('count', BAR, 'swing');
 if (message) add('message', message.length > 110 ? 2 * BAR : BAR, 'petals');
 add('end', 6 * BEAT, 'bloom');
 let acc = 0;
@@ -552,7 +554,7 @@ const PIN = { x: 540, y: 820 };
 {
   const sc = scene(stage);
   wine(sc);
-  const counting = left > 0, k = captions.length;
+  const counting = false, k = captions.length;
   const head = counting ? heading(sc, 'Counting Down', 340, '#f8d7de') : null;
   const CY = k ? 640 : 900;
   const cells = counting ? ['Days', 'Hours', 'Minutes', 'Seconds'].map((lab) => {
