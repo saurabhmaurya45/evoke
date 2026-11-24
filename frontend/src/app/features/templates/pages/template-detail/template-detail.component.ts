@@ -49,9 +49,14 @@ export class TemplateDetailComponent {
       const path = `/templates/${info.slug}`;
       // Short name + tradition: "Temple Bells — South Indian Wedding Invitation Template".
       // (The full name's subtitle would repeat or contradict the label.)
-      const title = `${tpl.name.split(' — ')[0]} — ${info.label} Invitation Template`;
+      // A label that starts with the name ("Lace Classic", "Embroidered Garden") would repeat it.
+      const short = tpl.name.split(' — ')[0];
+      let kind = info.label.toLowerCase().startsWith(short.toLowerCase()) ? info.label.slice(short.length).trim() : info.label;
+      if (!/wedding|nikah|engagement/i.test(kind)) kind = `${kind} Wedding`.trim();
+      const title = `${short} — ${kind} Invitation Template`;
       const url = `${environment.appUrl}${path}`;
-      const image = `${environment.appUrl}${tpl.previewPoster ?? ''}`;
+      // Posters may be site paths or full links (R2); only a path gets the site in front.
+      const image = new URL(tpl.previewPoster ?? '/', environment.appUrl).toString();
       this.seo.apply({
         title,
         description: info.summary,
