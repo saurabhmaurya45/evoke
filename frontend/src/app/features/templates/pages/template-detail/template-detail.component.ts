@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, input } f
 import { RouterLink } from '@angular/router';
 import { SeoService } from '../../../../core/services/seo.service';
 import { TEMPLATE_KEYWORDS } from '../../../../core/constants/seo.constants';
+import { APP_NAME } from '../../../../core/constants/app.constants';
 import { environment } from '../../../../../environments/environment';
 import { TemplateCatalogService, formatPrice } from '../../data/template-catalog.service';
 import { templateSeoBySlug } from '../../data/template-seo.data';
@@ -75,15 +76,37 @@ export class TemplateDetailComponent {
           inLanguage: 'en-IN',
           isPartOf: { '@id': `${environment.appUrl}/#website` },
           primaryImageOfPage: { '@type': 'ImageObject', url: image, width: 560, height: 316 },
-          mainEntity: {
-            '@type': 'CreativeWork',
-            name: tpl.name,
-            genre: `${info.label} invitation`,
-            description: info.summary,
-            image,
-            keywords: info.keywords.join(', '),
-            creator: { '@id': `${environment.appUrl}/#organization` },
-          },
+          mainEntity: this.pricesKnown()
+            ? {
+                // Product + Offer lets Google show the price in results. Added only once the
+                // real price has loaded: prerendered HTML has no prices (see pricesKnown),
+                // and a Product without an offer fails Google's product-snippet check.
+                '@type': 'Product',
+                '@id': `${url}#product`,
+                name: tpl.name,
+                description: info.summary,
+                image,
+                category: `${info.label} invitation website template`,
+                keywords: info.keywords.join(', '),
+                brand: { '@type': 'Brand', name: APP_NAME },
+                offers: {
+                  '@type': 'Offer',
+                  url,
+                  price: tpl.pricing === 'free' ? '0' : (tpl.price / 100).toFixed(2),
+                  priceCurrency: 'INR',
+                  availability: 'https://schema.org/InStock',
+                  seller: { '@id': `${environment.appUrl}/#organization` },
+                },
+              }
+            : {
+                '@type': 'CreativeWork',
+                name: tpl.name,
+                genre: `${info.label} invitation`,
+                description: info.summary,
+                image,
+                keywords: info.keywords.join(', '),
+                creator: { '@id': `${environment.appUrl}/#organization` },
+              },
         },
         this.seo.breadcrumbSchema([
           { name: 'Home', path: '/' },
