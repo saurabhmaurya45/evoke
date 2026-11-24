@@ -110,7 +110,11 @@ test('HTTP: POST answers JSON, notifications get 202, GET is 405, bad JSON is 40
   assert.deepEqual((await ok.json()).result, {});
   const note = await handleHttp(post(JSON.stringify({ jsonrpc: '2.0', method: 'notifications/initialized' })));
   assert.equal(note.status, 202);
-  assert.equal((await handleHttp(new Request('https://theinvitely.in/mcp'))).status, 405);
+  assert.equal((await handleHttp(new Request('https://theinvitely.in/mcp', { headers: { Accept: 'text/event-stream' } }))).status, 405);
+  const page = await handleHttp(new Request('https://theinvitely.in/mcp', { headers: { Accept: 'text/html,application/xhtml+xml' } }));
+  assert.equal(page.status, 200);
+  const html = await page.text();
+  for (const t of TOOLS) assert.ok(html.includes(t.name), `docs page lists ${t.name}`);
   assert.equal((await handleHttp(post('{not json'))).status, 400);
   const opts = await handleHttp(new Request('https://theinvitely.in/mcp', { method: 'OPTIONS' }));
   assert.equal(opts.status, 204);

@@ -17,13 +17,16 @@ const PRICE_CACHE_MS = 5 * 60 * 1000;
 const API_TIMEOUT_MS = 2500;
 const SERVER_INFO = { name: 'theinvitely', title: 'theinvitely.in — Wedding Invitation Websites', version: '1.0.0' };
 
-const INSTRUCTIONS = `theinvitely.in makes wedding invitation websites for Indian weddings (Hindu, Sikh/Punjabi,
-Muslim Nikah, South Indian, Christian and modern), sent to guests as one link on WhatsApp.
-Use these tools when someone wants to make a wedding or engagement invitation, an e-invite, a wedding
-website or a digital wedding card. Call find_templates to suggest designs that fit their wedding,
-get_template for one design's details, start_invitation to give them the link that opens it in the
-editor, and pricing_and_faq for prices and common questions. Always give the user the links so they
-can see the designs themselves.`;
+const INSTRUCTIONS = `theinvitely.in makes ready-to-send wedding and engagement invitation websites for Indian
+weddings (Hindu, Sikh Anand Karaj, Punjabi, Muslim Nikah, South Indian, Christian, royal and modern). The couple
+fills in a guided editor and gets one link to share on WhatsApp, with music, a countdown, every event with
+Google Maps directions, and RSVP, hosted for them, with no code or design work.
+
+These tools are relevant when someone wants a wedding or engagement invitation, e-invite, digital wedding card,
+save the date or wedding website that guests open from a link. find_templates lists designs by kind of wedding,
+style and budget; get_template describes one design; start_invitation returns the link that opens a design in
+the editor; pricing_and_faq covers prices and common questions. Every result includes preview and editor links
+the user can open to see the designs.`;
 
 // ---- links ---------------------------------------------------------------------------------
 
@@ -127,9 +130,10 @@ export const TOOLS = [
     name: 'find_templates',
     title: 'Find wedding invitation templates',
     description:
-      'Suggests theinvitely.in wedding and engagement invitation website designs that fit a couple: by kind of wedding ' +
-      '(Hindu, Sikh, Punjabi, Muslim Nikah, South Indian, Christian, modern, royal…), style words, and budget. ' +
-      'Returns each design with its price and links to see it, preview it live and start it.',
+      'Lists theinvitely.in designs for a wedding or engagement invitation website, e-invite or digital wedding card ' +
+      '(a hosted page guests open from one WhatsApp link, with events, maps, music and RSVP). Filters by kind of wedding ' +
+      '(Hindu, Sikh Anand Karaj, Punjabi, Muslim Nikah, South Indian, Christian, royal, modern), style words and budget ' +
+      'in rupees. Returns each design with its price and links to its page, a live preview and the editor.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -151,7 +155,7 @@ export const TOOLS = [
   {
     name: 'start_invitation',
     title: 'Start an invitation',
-    description: 'Gives the link that opens a design in the theinvitely.in editor, where the couple fill in their details, preview and publish. Share this link with the user.',
+    description: 'Returns the link that opens a theinvitely.in design in its editor, where the couple fill in names, families, events and venues, preview it, and publish it as a shareable link.',
     inputSchema: { type: 'object', properties: { template: TEMPLATE_ARG }, required: ['template'], additionalProperties: false },
     annotations: { readOnlyHint: true, openWorldHint: false, idempotentHint: true },
   },
@@ -273,13 +277,58 @@ export async function handleMessage(msg, ctx = {}) {
         return { jsonrpc: '2.0', id, result: { content: [{ type: 'text', text: out.text }], structuredContent: out.data } };
       } catch (e) {
         if (e instanceof ToolInputError) return { jsonrpc: '2.0', id, result: { content: [{ type: 'text', text: e.message }], isError: true } };
-        return rpcError(id, -32603, 'Internal error');
+        return rpcError(id, -32603, `${name} failed while reading the template catalog; try again, or browse ${link('/templates')}`);
       }
     }
     default:
       return rpcError(id, -32601, `Method not found: ${method}`);
   }
 }
+
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+const DOCS_HTML = `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>theinvitely MCP connector</title>
+<meta name="description" content="Connect Claude to theinvitely.in to find wedding invitation website designs, prices and editor links.">
+<style>
+:root{--bg:#fffaf3;--fg:#2b1d14;--muted:#6b5a4c;--accent:#8a1c2b;--card:#fff;--line:#ead9c6}
+@media (prefers-color-scheme:dark){:root{--bg:#17110d;--fg:#f3e9de;--muted:#bfae9d;--accent:#e7a35c;--card:#211812;--line:#3a2b20}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:720px;margin:0 auto;padding:40px 16px 64px}
+h1{font-size:28px;margin:0 0 4px}h2{font-size:19px;margin:32px 0 8px}p,li{color:var(--muted)}strong{color:var(--fg)}
+code{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:2px 6px;font-size:14px;color:var(--fg);word-break:break-all}
+a{color:var(--accent)}table{width:100%;border-collapse:collapse;font-size:15px}td{border-top:1px solid var(--line);padding:8px 8px 8px 0;vertical-align:top;color:var(--muted)}td:first-child{white-space:nowrap}
+</style></head><body><main>
+<h1>theinvitely MCP connector</h1>
+<p>Connects Claude and other MCP clients to <a href="${SITE}">theinvitely.in</a>, which makes wedding and engagement invitation websites for Indian weddings. Ask for an invitation and get matching designs, prices, live previews and a link to start one in the editor.</p>
+
+<h2>Add it to Claude</h2>
+<ol>
+<li>Open <strong>Settings → Connectors → Add custom connector</strong> on claude.ai.</li>
+<li>Name: <code>theinvitely</code>. URL: <code>${SITE}/mcp</code></li>
+<li>Choose <strong>No sign-in</strong> and save. Then switch it on in a chat from the <strong>+</strong> menu.</li>
+</ol>
+<p>Other MCP clients: Streamable HTTP transport at <code>${SITE}/mcp</code> (JSON-RPC over POST, stateless, no authentication).</p>
+
+<h2>Try asking</h2>
+<ul>
+<li>“Suggest a Sikh wedding invitation website under ₹700.”</li>
+<li>“Show me free wedding invitation designs.”</li>
+<li>“I want a Nikah e-invite. How do I start one?”</li>
+<li>“How much does a theinvitely invitation cost, and can guests RSVP?”</li>
+</ul>
+
+<h2>Tools</h2>
+<p>All tools are read-only. They do not create accounts, take payments or change anything.</p>
+<table>${TOOLS.map((t) => `<tr><td><code>${esc(t.name)}</code></td><td>${esc(t.description)}</td></tr>`).join('')}</table>
+
+<h2>Data and privacy</h2>
+<p>The connector only receives what Claude sends a tool: a short search phrase, a budget, or a template id. It stores nothing, needs no sign-in and asks for no personal details. Standard request logs are kept by our hosting provider. See the <a href="${SITE}/privacy">privacy policy</a> and <a href="${SITE}/terms">terms</a>.</p>
+
+<h2>Support</h2>
+<p>Questions or problems: <a href="${SITE}/contact">${SITE.replace('https://', '')}/contact</a>.</p>
+</main></body></html>`;
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -295,6 +344,11 @@ const json = (body, status = 200) =>
 export async function handleHttp(request, ctx = {}) {
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });
   if (request.method === 'GET') {
+    // A person in a browser gets the setup page (it doubles as the connector's public docs).
+    const accept = request.headers.get('accept') ?? '';
+    if (accept.includes('text/html')) {
+      return new Response(DOCS_HTML, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=300' } });
+    }
     // No server-to-client stream: a stateless server answers every request in its response.
     return new Response('This MCP server is stateless: send JSON-RPC messages with POST.', {
       status: 405,
