@@ -14,7 +14,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:ci": "ng test --watch=false --browsers=ChromeHeadless",
-    "test:api": "node --test api/_lib/share-meta.test.mjs",
+    "test:api": "node scripts/generate-mcp-catalog.mjs --check && node --test api/_lib/share-meta.test.mjs api/_lib/mcp.test.mjs",
     "test:e2e": "playwright test",
     "lint": "ng lint",
     "lint:styles": "stylelint \"src/**/*.scss\"",

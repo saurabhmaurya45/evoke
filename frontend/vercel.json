@@ -18,6 +18,10 @@
       "destination": "/api/invitation-page?slug=:slug"
     },
     {
+      "source": "/mcp",
+      "destination": "/api/mcp"
+    },
+    {
       "source": "/:path((?!.*\\.).*)",
       "destination": "/index.csr.html"
     }
