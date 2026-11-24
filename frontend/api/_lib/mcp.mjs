@@ -122,7 +122,7 @@ export function score(t, query) {
 
 const TEMPLATE_ARG = {
   type: 'string',
-  description: 'The template id (e.g. "tpl-royal-gate") or its page slug (e.g. "royal-gate-sikh-wedding"), as returned by find_templates.',
+  description: 'The template id (e.g. "tpl-royal-gate") or its page slug (e.g. "royal-gate-sikh-wedding").',
 };
 
 export const TOOLS = [
