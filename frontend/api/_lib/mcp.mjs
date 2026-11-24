@@ -347,12 +347,13 @@ export async function handleHttp(request, ctx = {}) {
     // A person in a browser gets the setup page (it doubles as the connector's public docs).
     const accept = request.headers.get('accept') ?? '';
     if (accept.includes('text/html')) {
-      return new Response(DOCS_HTML, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=300' } });
+      // Not cached by the CDN: the same URL must still answer MCP clients' GETs with 405.
+      return new Response(DOCS_HTML, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', Vary: 'Accept' } });
     }
     // No server-to-client stream: a stateless server answers every request in its response.
     return new Response('This MCP server is stateless: send JSON-RPC messages with POST.', {
       status: 405,
-      headers: { ...CORS, Allow: 'POST, OPTIONS', 'Content-Type': 'text/plain; charset=utf-8' },
+      headers: { ...CORS, Allow: 'POST, OPTIONS', 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store', Vary: 'Accept' },
     });
   }
   if (request.method !== 'POST') return new Response(null, { status: 405, headers: { ...CORS, Allow: 'POST, OPTIONS' } });
